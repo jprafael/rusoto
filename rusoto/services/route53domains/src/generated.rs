@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type AddressLine = String;
 #[derive(Default,Debug,Clone,Deserialize)]
             pub struct BillingRecord {
@@ -2470,95 +2471,95 @@ ViewBillingError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>"]
-                fn check_domain_availability(&self, input: &CheckDomainAvailabilityRequest)  -> Result<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError>;
+                fn check_domain_availability(&self, input: &CheckDomainAvailabilityRequest)  -> Box<Future<Item = CheckDomainAvailabilityResponse, Error = CheckDomainAvailabilityError>>;
                 
 
                 #[doc="<p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-                fn delete_tags_for_domain(&self, input: &DeleteTagsForDomainRequest)  -> Result<DeleteTagsForDomainResponse, DeleteTagsForDomainError>;
+                fn delete_tags_for_domain(&self, input: &DeleteTagsForDomainRequest)  -> Box<Future<Item = DeleteTagsForDomainResponse, Error = DeleteTagsForDomainError>>;
                 
 
                 #[doc="<p>This operation disables automatic renewal of domain registration for the specified domain.</p>"]
-                fn disable_domain_auto_renew(&self, input: &DisableDomainAutoRenewRequest)  -> Result<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError>;
+                fn disable_domain_auto_renew(&self, input: &DisableDomainAutoRenewRequest)  -> Box<Future<Item = DisableDomainAutoRenewResponse, Error = DisableDomainAutoRenewError>>;
                 
 
                 #[doc="<p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn disable_domain_transfer_lock(&self, input: &DisableDomainTransferLockRequest)  -> Result<DisableDomainTransferLockResponse, DisableDomainTransferLockError>;
+                fn disable_domain_transfer_lock(&self, input: &DisableDomainTransferLockRequest)  -> Box<Future<Item = DisableDomainTransferLockResponse, Error = DisableDomainTransferLockError>>;
                 
 
                 #[doc="<p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href=\"http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times\">\"Renewal, restoration, and deletion times\"</a> on the website for our registrar partner, Gandi. Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>"]
-                fn enable_domain_auto_renew(&self, input: &EnableDomainAutoRenewRequest)  -> Result<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError>;
+                fn enable_domain_auto_renew(&self, input: &EnableDomainAutoRenewRequest)  -> Box<Future<Item = EnableDomainAutoRenewResponse, Error = EnableDomainAutoRenewError>>;
                 
 
                 #[doc="<p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn enable_domain_transfer_lock(&self, input: &EnableDomainTransferLockRequest)  -> Result<EnableDomainTransferLockResponse, EnableDomainTransferLockError>;
+                fn enable_domain_transfer_lock(&self, input: &EnableDomainTransferLockRequest)  -> Box<Future<Item = EnableDomainTransferLockResponse, Error = EnableDomainTransferLockError>>;
                 
 
                 #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>"]
-                fn get_contact_reachability_status(&self, input: &GetContactReachabilityStatusRequest)  -> Result<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError>;
+                fn get_contact_reachability_status(&self, input: &GetContactReachabilityStatusRequest)  -> Box<Future<Item = GetContactReachabilityStatusResponse, Error = GetContactReachabilityStatusError>>;
                 
 
                 #[doc="<p>This operation returns detailed information about the domain. The domain's contact information is also returned as part of the output.</p>"]
-                fn get_domain_detail(&self, input: &GetDomainDetailRequest)  -> Result<GetDomainDetailResponse, GetDomainDetailError>;
+                fn get_domain_detail(&self, input: &GetDomainDetailRequest)  -> Box<Future<Item = GetDomainDetailResponse, Error = GetDomainDetailError>>;
                 
 
                 #[doc="<p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p> <p> Parameters: <ul><li>DomainName (string): The basis for your domain suggestion search, a string with (or without) top-level domain specified.</li> <li>SuggestionCount (int): The number of domain suggestions to be returned, maximum 50, minimum 1.</li> <li>OnlyAvailable (bool): If true, availability check will be performed on suggestion results, and only available domains will be returned. If false, suggestions will be returned without checking whether the domain is actually available, and caller will have to call checkDomainAvailability for each suggestion to determine availability for registration.</li> </ul> </p>"]
-                fn get_domain_suggestions(&self, input: &GetDomainSuggestionsRequest)  -> Result<GetDomainSuggestionsResponse, GetDomainSuggestionsError>;
+                fn get_domain_suggestions(&self, input: &GetDomainSuggestionsRequest)  -> Box<Future<Item = GetDomainSuggestionsResponse, Error = GetDomainSuggestionsError>>;
                 
 
                 #[doc="<p>This operation returns the current status of an operation that is not completed.</p>"]
-                fn get_operation_detail(&self, input: &GetOperationDetailRequest)  -> Result<GetOperationDetailResponse, GetOperationDetailError>;
+                fn get_operation_detail(&self, input: &GetOperationDetailRequest)  -> Box<Future<Item = GetOperationDetailResponse, Error = GetOperationDetailError>>;
                 
 
                 #[doc="<p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>"]
-                fn list_domains(&self, input: &ListDomainsRequest)  -> Result<ListDomainsResponse, ListDomainsError>;
+                fn list_domains(&self, input: &ListDomainsRequest)  -> Box<Future<Item = ListDomainsResponse, Error = ListDomainsError>>;
                 
 
                 #[doc="<p>This operation returns the operation IDs of operations that are not yet complete.</p>"]
-                fn list_operations(&self, input: &ListOperationsRequest)  -> Result<ListOperationsResponse, ListOperationsError>;
+                fn list_operations(&self, input: &ListOperationsRequest)  -> Box<Future<Item = ListOperationsResponse, Error = ListOperationsError>>;
                 
 
                 #[doc="<p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-                fn list_tags_for_domain(&self, input: &ListTagsForDomainRequest)  -> Result<ListTagsForDomainResponse, ListTagsForDomainError>;
+                fn list_tags_for_domain(&self, input: &ListTagsForDomainRequest)  -> Box<Future<Item = ListTagsForDomainResponse, Error = ListTagsForDomainError>>;
                 
 
                 #[doc="<p>This operation registers a domain. Domains are registered by the AWS registrar partner, Gandi. For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</li> <li>Enables autorenew, so your domain registration will renew automatically each year. We'll notify you in advance of the renewal date so you can choose whether to renew the registration.</li> <li>Optionally enables privacy protection, so WHOIS queries return contact information for our registrar partner, Gandi, instead of the information you entered for registrant, admin, and tech contacts.</li> <li>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</li> <li>Charges your AWS account an amount based on the top-level domain. For more information, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</li> </ul>"]
-                fn register_domain(&self, input: &RegisterDomainRequest)  -> Result<RegisterDomainResponse, RegisterDomainError>;
+                fn register_domain(&self, input: &RegisterDomainRequest)  -> Box<Future<Item = RegisterDomainResponse, Error = RegisterDomainError>>;
                 
 
                 #[doc="<p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href=\"http://docs.aws.amazon.com/console/route53/domain-renew\">Renewing Registration for a Domain</a> in the Amazon Route 53 documentation.</p>"]
-                fn renew_domain(&self, input: &RenewDomainRequest)  -> Result<RenewDomainResponse, RenewDomainError>;
+                fn renew_domain(&self, input: &RenewDomainRequest)  -> Box<Future<Item = RenewDomainResponse, Error = RenewDomainError>>;
                 
 
                 #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact. </p>"]
-                fn resend_contact_reachability_email(&self, input: &ResendContactReachabilityEmailRequest)  -> Result<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError>;
+                fn resend_contact_reachability_email(&self, input: &ResendContactReachabilityEmailRequest)  -> Box<Future<Item = ResendContactReachabilityEmailResponse, Error = ResendContactReachabilityEmailError>>;
                 
 
                 #[doc="<p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>"]
-                fn retrieve_domain_auth_code(&self, input: &RetrieveDomainAuthCodeRequest)  -> Result<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError>;
+                fn retrieve_domain_auth_code(&self, input: &RetrieveDomainAuthCodeRequest)  -> Box<Future<Item = RetrieveDomainAuthCodeResponse, Error = RetrieveDomainAuthCodeError>>;
                 
 
                 #[doc="<p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered with the AWS registrar partner, Gandi.</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html\">Transferring Registration for a Domain to Amazon Route 53</a> in the Amazon Route 53 Developer Guide.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <note>Caution! If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</note> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>"]
-                fn transfer_domain(&self, input: &TransferDomainRequest)  -> Result<TransferDomainResponse, TransferDomainError>;
+                fn transfer_domain(&self, input: &TransferDomainRequest)  -> Box<Future<Item = TransferDomainResponse, Error = TransferDomainError>>;
                 
 
                 #[doc="<p>This operation updates the contact information for a particular domain. Information for at least one contact (registrant, administrator, or technical) must be supplied for update.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn update_domain_contact(&self, input: &UpdateDomainContactRequest)  -> Result<UpdateDomainContactResponse, UpdateDomainContactError>;
+                fn update_domain_contact(&self, input: &UpdateDomainContactRequest)  -> Box<Future<Item = UpdateDomainContactResponse, Error = UpdateDomainContactError>>;
                 
 
                 #[doc="<p>This operation updates the specified domain contact's privacy setting. When the privacy option is enabled, personal information such as postal or email address is hidden from the results of a public WHOIS query. The privacy services are provided by the AWS registrar, Gandi. For more information, see the <a href=\"http://www.gandi.net/domain/whois/?currency=USD&amp;amp;lang=en\">Gandi privacy features</a>.</p> <p>This operation only affects the privacy of the specified contact type (registrant, administrator, or tech). Successful acceptance returns an operation ID that you can use with GetOperationDetail to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn update_domain_contact_privacy(&self, input: &UpdateDomainContactPrivacyRequest)  -> Result<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError>;
+                fn update_domain_contact_privacy(&self, input: &UpdateDomainContactPrivacyRequest)  -> Box<Future<Item = UpdateDomainContactPrivacyResponse, Error = UpdateDomainContactPrivacyError>>;
                 
 
                 #[doc="<p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain. </p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn update_domain_nameservers(&self, input: &UpdateDomainNameserversRequest)  -> Result<UpdateDomainNameserversResponse, UpdateDomainNameserversError>;
+                fn update_domain_nameservers(&self, input: &UpdateDomainNameserversRequest)  -> Box<Future<Item = UpdateDomainNameserversResponse, Error = UpdateDomainNameserversError>>;
                 
 
                 #[doc="<p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-                fn update_tags_for_domain(&self, input: &UpdateTagsForDomainRequest)  -> Result<UpdateTagsForDomainResponse, UpdateTagsForDomainError>;
+                fn update_tags_for_domain(&self, input: &UpdateTagsForDomainRequest)  -> Box<Future<Item = UpdateTagsForDomainResponse, Error = UpdateTagsForDomainError>>;
                 
 
                 #[doc="<p>This operation returns all the domain-related billing records for the current AWS account for a specified period</p>"]
-                fn view_billing(&self, input: &ViewBillingRequest)  -> Result<ViewBillingResponse, ViewBillingError>;
+                fn view_billing(&self, input: &ViewBillingRequest)  -> Box<Future<Item = ViewBillingResponse, Error = ViewBillingError>>;
                 
 }
 /// A client for the Amazon Route 53 Domains API.
@@ -2582,7 +2583,7 @@ ViewBillingError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>"]
-                fn check_domain_availability(&self, input: &CheckDomainAvailabilityRequest)  -> Result<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError> {
+                fn check_domain_availability(&self, input: &CheckDomainAvailabilityRequest)  -> Box<Future<Item = CheckDomainAvailabilityResponse, Error = CheckDomainAvailabilityError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2590,21 +2591,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CheckDomainAvailabilityError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CheckDomainAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CheckDomainAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CheckDomainAvailabilityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CheckDomainAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CheckDomainAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-                fn delete_tags_for_domain(&self, input: &DeleteTagsForDomainRequest)  -> Result<DeleteTagsForDomainResponse, DeleteTagsForDomainError> {
+                fn delete_tags_for_domain(&self, input: &DeleteTagsForDomainRequest)  -> Box<Future<Item = DeleteTagsForDomainResponse, Error = DeleteTagsForDomainError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2612,21 +2623,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTagsForDomainError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteTagsForDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTagsForDomainError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteTagsForDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation disables automatic renewal of domain registration for the specified domain.</p>"]
-                fn disable_domain_auto_renew(&self, input: &DisableDomainAutoRenewRequest)  -> Result<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError> {
+                fn disable_domain_auto_renew(&self, input: &DisableDomainAutoRenewRequest)  -> Box<Future<Item = DisableDomainAutoRenewResponse, Error = DisableDomainAutoRenewError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2634,21 +2655,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableDomainAutoRenewError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DisableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableDomainAutoRenewError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DisableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DisableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn disable_domain_transfer_lock(&self, input: &DisableDomainTransferLockRequest)  -> Result<DisableDomainTransferLockResponse, DisableDomainTransferLockError> {
+                fn disable_domain_transfer_lock(&self, input: &DisableDomainTransferLockRequest)  -> Box<Future<Item = DisableDomainTransferLockResponse, Error = DisableDomainTransferLockError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2656,21 +2687,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableDomainTransferLockError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DisableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableDomainTransferLockError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DisableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DisableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href=\"http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times\">\"Renewal, restoration, and deletion times\"</a> on the website for our registrar partner, Gandi. Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>"]
-                fn enable_domain_auto_renew(&self, input: &EnableDomainAutoRenewRequest)  -> Result<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError> {
+                fn enable_domain_auto_renew(&self, input: &EnableDomainAutoRenewRequest)  -> Box<Future<Item = EnableDomainAutoRenewResponse, Error = EnableDomainAutoRenewError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2678,21 +2719,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableDomainAutoRenewError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(EnableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableDomainAutoRenewError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<EnableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(EnableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn enable_domain_transfer_lock(&self, input: &EnableDomainTransferLockRequest)  -> Result<EnableDomainTransferLockResponse, EnableDomainTransferLockError> {
+                fn enable_domain_transfer_lock(&self, input: &EnableDomainTransferLockRequest)  -> Box<Future<Item = EnableDomainTransferLockResponse, Error = EnableDomainTransferLockError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2700,21 +2751,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableDomainTransferLockError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(EnableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableDomainTransferLockError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<EnableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(EnableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>"]
-                fn get_contact_reachability_status(&self, input: &GetContactReachabilityStatusRequest)  -> Result<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError> {
+                fn get_contact_reachability_status(&self, input: &GetContactReachabilityStatusRequest)  -> Box<Future<Item = GetContactReachabilityStatusResponse, Error = GetContactReachabilityStatusError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2722,21 +2783,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetContactReachabilityStatusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetContactReachabilityStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetContactReachabilityStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetContactReachabilityStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetContactReachabilityStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetContactReachabilityStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation returns detailed information about the domain. The domain's contact information is also returned as part of the output.</p>"]
-                fn get_domain_detail(&self, input: &GetDomainDetailRequest)  -> Result<GetDomainDetailResponse, GetDomainDetailError> {
+                fn get_domain_detail(&self, input: &GetDomainDetailRequest)  -> Box<Future<Item = GetDomainDetailResponse, Error = GetDomainDetailError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2744,21 +2815,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDomainDetailError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDomainDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDomainDetailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDomainDetailError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDomainDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDomainDetailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p> <p> Parameters: <ul><li>DomainName (string): The basis for your domain suggestion search, a string with (or without) top-level domain specified.</li> <li>SuggestionCount (int): The number of domain suggestions to be returned, maximum 50, minimum 1.</li> <li>OnlyAvailable (bool): If true, availability check will be performed on suggestion results, and only available domains will be returned. If false, suggestions will be returned without checking whether the domain is actually available, and caller will have to call checkDomainAvailability for each suggestion to determine availability for registration.</li> </ul> </p>"]
-                fn get_domain_suggestions(&self, input: &GetDomainSuggestionsRequest)  -> Result<GetDomainSuggestionsResponse, GetDomainSuggestionsError> {
+                fn get_domain_suggestions(&self, input: &GetDomainSuggestionsRequest)  -> Box<Future<Item = GetDomainSuggestionsResponse, Error = GetDomainSuggestionsError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2766,21 +2847,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDomainSuggestionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDomainSuggestionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDomainSuggestionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDomainSuggestionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDomainSuggestionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDomainSuggestionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation returns the current status of an operation that is not completed.</p>"]
-                fn get_operation_detail(&self, input: &GetOperationDetailRequest)  -> Result<GetOperationDetailResponse, GetOperationDetailError> {
+                fn get_operation_detail(&self, input: &GetOperationDetailRequest)  -> Box<Future<Item = GetOperationDetailResponse, Error = GetOperationDetailError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2788,21 +2879,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetOperationDetailError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOperationDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetOperationDetailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetOperationDetailError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetOperationDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetOperationDetailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>"]
-                fn list_domains(&self, input: &ListDomainsRequest)  -> Result<ListDomainsResponse, ListDomainsError> {
+                fn list_domains(&self, input: &ListDomainsRequest)  -> Box<Future<Item = ListDomainsResponse, Error = ListDomainsError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2810,21 +2911,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDomainsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDomainsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDomainsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDomainsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation returns the operation IDs of operations that are not yet complete.</p>"]
-                fn list_operations(&self, input: &ListOperationsRequest)  -> Result<ListOperationsResponse, ListOperationsError> {
+                fn list_operations(&self, input: &ListOperationsRequest)  -> Box<Future<Item = ListOperationsResponse, Error = ListOperationsError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2832,21 +2943,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListOperationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOperationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListOperationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListOperationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListOperationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListOperationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-                fn list_tags_for_domain(&self, input: &ListTagsForDomainRequest)  -> Result<ListTagsForDomainResponse, ListTagsForDomainError> {
+                fn list_tags_for_domain(&self, input: &ListTagsForDomainRequest)  -> Box<Future<Item = ListTagsForDomainResponse, Error = ListTagsForDomainError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2854,21 +2975,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForDomainError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListTagsForDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForDomainError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListTagsForDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation registers a domain. Domains are registered by the AWS registrar partner, Gandi. For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</li> <li>Enables autorenew, so your domain registration will renew automatically each year. We'll notify you in advance of the renewal date so you can choose whether to renew the registration.</li> <li>Optionally enables privacy protection, so WHOIS queries return contact information for our registrar partner, Gandi, instead of the information you entered for registrant, admin, and tech contacts.</li> <li>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</li> <li>Charges your AWS account an amount based on the top-level domain. For more information, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</li> </ul>"]
-                fn register_domain(&self, input: &RegisterDomainRequest)  -> Result<RegisterDomainResponse, RegisterDomainError> {
+                fn register_domain(&self, input: &RegisterDomainRequest)  -> Box<Future<Item = RegisterDomainResponse, Error = RegisterDomainError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2876,21 +3007,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterDomainError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RegisterDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterDomainError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RegisterDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RegisterDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href=\"http://docs.aws.amazon.com/console/route53/domain-renew\">Renewing Registration for a Domain</a> in the Amazon Route 53 documentation.</p>"]
-                fn renew_domain(&self, input: &RenewDomainRequest)  -> Result<RenewDomainResponse, RenewDomainError> {
+                fn renew_domain(&self, input: &RenewDomainRequest)  -> Box<Future<Item = RenewDomainResponse, Error = RenewDomainError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2898,21 +3039,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RenewDomainError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RenewDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RenewDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RenewDomainError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RenewDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RenewDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact. </p>"]
-                fn resend_contact_reachability_email(&self, input: &ResendContactReachabilityEmailRequest)  -> Result<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError> {
+                fn resend_contact_reachability_email(&self, input: &ResendContactReachabilityEmailRequest)  -> Box<Future<Item = ResendContactReachabilityEmailResponse, Error = ResendContactReachabilityEmailError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2920,21 +3071,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResendContactReachabilityEmailError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ResendContactReachabilityEmailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ResendContactReachabilityEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResendContactReachabilityEmailError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ResendContactReachabilityEmailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ResendContactReachabilityEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>"]
-                fn retrieve_domain_auth_code(&self, input: &RetrieveDomainAuthCodeRequest)  -> Result<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError> {
+                fn retrieve_domain_auth_code(&self, input: &RetrieveDomainAuthCodeRequest)  -> Box<Future<Item = RetrieveDomainAuthCodeResponse, Error = RetrieveDomainAuthCodeError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2942,21 +3103,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RetrieveDomainAuthCodeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetrieveDomainAuthCodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RetrieveDomainAuthCodeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RetrieveDomainAuthCodeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RetrieveDomainAuthCodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RetrieveDomainAuthCodeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered with the AWS registrar partner, Gandi.</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html\">Transferring Registration for a Domain to Amazon Route 53</a> in the Amazon Route 53 Developer Guide.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <note>Caution! If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</note> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>"]
-                fn transfer_domain(&self, input: &TransferDomainRequest)  -> Result<TransferDomainResponse, TransferDomainError> {
+                fn transfer_domain(&self, input: &TransferDomainRequest)  -> Box<Future<Item = TransferDomainResponse, Error = TransferDomainError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2964,21 +3135,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TransferDomainError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TransferDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(TransferDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TransferDomainError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<TransferDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(TransferDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation updates the contact information for a particular domain. Information for at least one contact (registrant, administrator, or technical) must be supplied for update.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn update_domain_contact(&self, input: &UpdateDomainContactRequest)  -> Result<UpdateDomainContactResponse, UpdateDomainContactError> {
+                fn update_domain_contact(&self, input: &UpdateDomainContactRequest)  -> Box<Future<Item = UpdateDomainContactResponse, Error = UpdateDomainContactError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2986,21 +3167,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateDomainContactError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainContactResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateDomainContactError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateDomainContactError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateDomainContactResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateDomainContactError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation updates the specified domain contact's privacy setting. When the privacy option is enabled, personal information such as postal or email address is hidden from the results of a public WHOIS query. The privacy services are provided by the AWS registrar, Gandi. For more information, see the <a href=\"http://www.gandi.net/domain/whois/?currency=USD&amp;amp;lang=en\">Gandi privacy features</a>.</p> <p>This operation only affects the privacy of the specified contact type (registrant, administrator, or tech). Successful acceptance returns an operation ID that you can use with GetOperationDetail to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn update_domain_contact_privacy(&self, input: &UpdateDomainContactPrivacyRequest)  -> Result<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError> {
+                fn update_domain_contact_privacy(&self, input: &UpdateDomainContactPrivacyRequest)  -> Box<Future<Item = UpdateDomainContactPrivacyResponse, Error = UpdateDomainContactPrivacyError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3008,21 +3199,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateDomainContactPrivacyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainContactPrivacyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateDomainContactPrivacyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateDomainContactPrivacyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateDomainContactPrivacyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateDomainContactPrivacyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain. </p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-                fn update_domain_nameservers(&self, input: &UpdateDomainNameserversRequest)  -> Result<UpdateDomainNameserversResponse, UpdateDomainNameserversError> {
+                fn update_domain_nameservers(&self, input: &UpdateDomainNameserversRequest)  -> Box<Future<Item = UpdateDomainNameserversResponse, Error = UpdateDomainNameserversError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3030,21 +3231,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateDomainNameserversError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainNameserversResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateDomainNameserversError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateDomainNameserversError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateDomainNameserversResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateDomainNameserversError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-                fn update_tags_for_domain(&self, input: &UpdateTagsForDomainRequest)  -> Result<UpdateTagsForDomainResponse, UpdateTagsForDomainError> {
+                fn update_tags_for_domain(&self, input: &UpdateTagsForDomainRequest)  -> Box<Future<Item = UpdateTagsForDomainResponse, Error = UpdateTagsForDomainError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3052,21 +3263,31 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateTagsForDomainError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateTagsForDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateTagsForDomainError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateTagsForDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This operation returns all the domain-related billing records for the current AWS account for a specified period</p>"]
-                fn view_billing(&self, input: &ViewBillingRequest)  -> Result<ViewBillingResponse, ViewBillingError> {
+                fn view_billing(&self, input: &ViewBillingRequest)  -> Box<Future<Item = ViewBillingResponse, Error = ViewBillingError>> {
                     let mut request = SignedRequest::new("POST", "route53domains", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3074,16 +3295,26 @@ ViewBillingError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ViewBillingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ViewBillingResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ViewBillingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ViewBillingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ViewBillingResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ViewBillingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

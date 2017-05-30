@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -9547,151 +9557,151 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Cancels in-progress environment configuration update or application version deployment.</p>"]
-                fn abort_environment_update(&self, input: &AbortEnvironmentUpdateMessage) -> Result<(), AbortEnvironmentUpdateError>;
+                fn abort_environment_update(&self, input: &AbortEnvironmentUpdateMessage) -> Box<Future<Item = (), Error = AbortEnvironmentUpdateError>>;
                 
 
                 #[doc="<p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>"]
-                fn apply_environment_managed_action(&self, input: &ApplyEnvironmentManagedActionRequest) -> Result<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError>;
+                fn apply_environment_managed_action(&self, input: &ApplyEnvironmentManagedActionRequest) -> Box<Future<Item = ApplyEnvironmentManagedActionResult, Error = ApplyEnvironmentManagedActionError>>;
                 
 
                 #[doc="<p>Checks if the specified CNAME is available.</p>"]
-                fn check_dns_availability(&self, input: &CheckDNSAvailabilityMessage) -> Result<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError>;
+                fn check_dns_availability(&self, input: &CheckDNSAvailabilityMessage) -> Box<Future<Item = CheckDNSAvailabilityResultMessage, Error = CheckDNSAvailabilityError>>;
                 
 
                 #[doc="<p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html\">Compose Environments</a> for details.</p>"]
-                fn compose_environments(&self, input: &ComposeEnvironmentsMessage) -> Result<EnvironmentDescriptionsMessage, ComposeEnvironmentsError>;
+                fn compose_environments(&self, input: &ComposeEnvironmentsMessage) -> Box<Future<Item = EnvironmentDescriptionsMessage, Error = ComposeEnvironmentsError>>;
                 
 
                 #[doc="<p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>"]
-                fn create_application(&self, input: &CreateApplicationMessage) -> Result<ApplicationDescriptionMessage, CreateApplicationError>;
+                fn create_application(&self, input: &CreateApplicationMessage) -> Box<Future<Item = ApplicationDescriptionMessage, Error = CreateApplicationError>>;
                 
 
                 #[doc="<p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note>"]
-                fn create_application_version(&self, input: &CreateApplicationVersionMessage) -> Result<ApplicationVersionDescriptionMessage, CreateApplicationVersionError>;
+                fn create_application_version(&self, input: &CreateApplicationVersionMessage) -> Box<Future<Item = ApplicationVersionDescriptionMessage, Error = CreateApplicationVersionError>>;
                 
 
                 #[doc="<p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul>"]
-                fn create_configuration_template(&self, input: &CreateConfigurationTemplateMessage) -> Result<ConfigurationSettingsDescription, CreateConfigurationTemplateError>;
+                fn create_configuration_template(&self, input: &CreateConfigurationTemplateMessage) -> Box<Future<Item = ConfigurationSettingsDescription, Error = CreateConfigurationTemplateError>>;
                 
 
                 #[doc="<p>Launches an environment for the specified application using the specified configuration.</p>"]
-                fn create_environment(&self, input: &CreateEnvironmentMessage) -> Result<EnvironmentDescription, CreateEnvironmentError>;
+                fn create_environment(&self, input: &CreateEnvironmentMessage) -> Box<Future<Item = EnvironmentDescription, Error = CreateEnvironmentError>>;
                 
 
                 #[doc="<p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>"]
-                fn create_storage_location(&self) -> Result<CreateStorageLocationResultMessage, CreateStorageLocationError>;
+                fn create_storage_location(&self) -> Box<Future<Item = CreateStorageLocationResultMessage, Error = CreateStorageLocationError>>;
                 
 
                 #[doc="<p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note>"]
-                fn delete_application(&self, input: &DeleteApplicationMessage) -> Result<(), DeleteApplicationError>;
+                fn delete_application(&self, input: &DeleteApplicationMessage) -> Box<Future<Item = (), Error = DeleteApplicationError>>;
                 
 
                 #[doc="<p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note>"]
-                fn delete_application_version(&self, input: &DeleteApplicationVersionMessage) -> Result<(), DeleteApplicationVersionError>;
+                fn delete_application_version(&self, input: &DeleteApplicationVersionMessage) -> Box<Future<Item = (), Error = DeleteApplicationVersionError>>;
                 
 
                 #[doc="<p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment's copy of the template without affecting the running environment.</p> </note>"]
-                fn delete_configuration_template(&self, input: &DeleteConfigurationTemplateMessage) -> Result<(), DeleteConfigurationTemplateError>;
+                fn delete_configuration_template(&self, input: &DeleteConfigurationTemplateMessage) -> Box<Future<Item = (), Error = DeleteConfigurationTemplateError>>;
                 
 
                 #[doc="<p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>"]
-                fn delete_environment_configuration(&self, input: &DeleteEnvironmentConfigurationMessage) -> Result<(), DeleteEnvironmentConfigurationError>;
+                fn delete_environment_configuration(&self, input: &DeleteEnvironmentConfigurationMessage) -> Box<Future<Item = (), Error = DeleteEnvironmentConfigurationError>>;
                 
 
                 #[doc="<p>Retrieve a list of application versions.</p>"]
-                fn describe_application_versions(&self, input: &DescribeApplicationVersionsMessage) -> Result<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError>;
+                fn describe_application_versions(&self, input: &DescribeApplicationVersionsMessage) -> Box<Future<Item = ApplicationVersionDescriptionsMessage, Error = DescribeApplicationVersionsError>>;
                 
 
                 #[doc="<p>Returns the descriptions of existing applications.</p>"]
-                fn describe_applications(&self, input: &DescribeApplicationsMessage) -> Result<ApplicationDescriptionsMessage, DescribeApplicationsError>;
+                fn describe_applications(&self, input: &DescribeApplicationsMessage) -> Box<Future<Item = ApplicationDescriptionsMessage, Error = DescribeApplicationsError>>;
                 
 
                 #[doc="<p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>"]
-                fn describe_configuration_options(&self, input: &DescribeConfigurationOptionsMessage) -> Result<ConfigurationOptionsDescription, DescribeConfigurationOptionsError>;
+                fn describe_configuration_options(&self, input: &DescribeConfigurationOptionsMessage) -> Box<Future<Item = ConfigurationOptionsDescription, Error = DescribeConfigurationOptionsError>>;
                 
 
                 #[doc="<p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul>"]
-                fn describe_configuration_settings(&self, input: &DescribeConfigurationSettingsMessage) -> Result<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError>;
+                fn describe_configuration_settings(&self, input: &DescribeConfigurationSettingsMessage) -> Box<Future<Item = ConfigurationSettingsDescriptions, Error = DescribeConfigurationSettingsError>>;
                 
 
                 #[doc="<p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>"]
-                fn describe_environment_health(&self, input: &DescribeEnvironmentHealthRequest) -> Result<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError>;
+                fn describe_environment_health(&self, input: &DescribeEnvironmentHealthRequest) -> Box<Future<Item = DescribeEnvironmentHealthResult, Error = DescribeEnvironmentHealthError>>;
                 
 
                 #[doc="<p>Lists an environment's completed and failed managed actions.</p>"]
-                fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmentManagedActionHistoryRequest) -> Result<DescribeEnvironmentManagedActionHistoryResult, DescribeEnvironmentManagedActionHistoryError>;
+                fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmentManagedActionHistoryRequest) -> Box<Future<Item = DescribeEnvironmentManagedActionHistoryResult, Error = DescribeEnvironmentManagedActionHistoryError>>;
                 
 
                 #[doc="<p>Lists an environment's upcoming and in-progress managed actions.</p>"]
-                fn describe_environment_managed_actions(&self, input: &DescribeEnvironmentManagedActionsRequest) -> Result<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>;
+                fn describe_environment_managed_actions(&self, input: &DescribeEnvironmentManagedActionsRequest) -> Box<Future<Item = DescribeEnvironmentManagedActionsResult, Error = DescribeEnvironmentManagedActionsError>>;
                 
 
                 #[doc="<p>Returns AWS resources for this environment.</p>"]
-                fn describe_environment_resources(&self, input: &DescribeEnvironmentResourcesMessage) -> Result<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>;
+                fn describe_environment_resources(&self, input: &DescribeEnvironmentResourcesMessage) -> Box<Future<Item = EnvironmentResourceDescriptionsMessage, Error = DescribeEnvironmentResourcesError>>;
                 
 
                 #[doc="<p>Returns descriptions for existing environments.</p>"]
-                fn describe_environments(&self, input: &DescribeEnvironmentsMessage) -> Result<EnvironmentDescriptionsMessage, DescribeEnvironmentsError>;
+                fn describe_environments(&self, input: &DescribeEnvironmentsMessage) -> Box<Future<Item = EnvironmentDescriptionsMessage, Error = DescribeEnvironmentsError>>;
                 
 
                 #[doc="<p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note>"]
-                fn describe_events(&self, input: &DescribeEventsMessage) -> Result<EventDescriptionsMessage, DescribeEventsError>;
+                fn describe_events(&self, input: &DescribeEventsMessage) -> Box<Future<Item = EventDescriptionsMessage, Error = DescribeEventsError>>;
                 
 
                 #[doc="<p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html\">enhanced health reporting</a>.</p>"]
-                fn describe_instances_health(&self, input: &DescribeInstancesHealthRequest) -> Result<DescribeInstancesHealthResult, DescribeInstancesHealthError>;
+                fn describe_instances_health(&self, input: &DescribeInstancesHealthRequest) -> Box<Future<Item = DescribeInstancesHealthResult, Error = DescribeInstancesHealthError>>;
                 
 
                 #[doc="<p>Returns a list of the available solution stack names.</p>"]
-                fn list_available_solution_stacks(&self) -> Result<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError>;
+                fn list_available_solution_stacks(&self) -> Box<Future<Item = ListAvailableSolutionStacksResultMessage, Error = ListAvailableSolutionStacksError>>;
                 
 
                 #[doc="<p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>"]
-                fn rebuild_environment(&self, input: &RebuildEnvironmentMessage) -> Result<(), RebuildEnvironmentError>;
+                fn rebuild_environment(&self, input: &RebuildEnvironmentMessage) -> Box<Future<Item = (), Error = RebuildEnvironmentError>>;
                 
 
                 #[doc="<p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul>"]
-                fn request_environment_info(&self, input: &RequestEnvironmentInfoMessage) -> Result<(), RequestEnvironmentInfoError>;
+                fn request_environment_info(&self, input: &RequestEnvironmentInfoMessage) -> Box<Future<Item = (), Error = RequestEnvironmentInfoError>>;
                 
 
                 #[doc="<p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>"]
-                fn restart_app_server(&self, input: &RestartAppServerMessage) -> Result<(), RestartAppServerError>;
+                fn restart_app_server(&self, input: &RestartAppServerMessage) -> Box<Future<Item = (), Error = RestartAppServerError>>;
                 
 
                 #[doc="<p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul>"]
-                fn retrieve_environment_info(&self, input: &RetrieveEnvironmentInfoMessage) -> Result<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError>;
+                fn retrieve_environment_info(&self, input: &RetrieveEnvironmentInfoMessage) -> Box<Future<Item = RetrieveEnvironmentInfoResultMessage, Error = RetrieveEnvironmentInfoError>>;
                 
 
                 #[doc="<p>Swaps the CNAMEs of two environments.</p>"]
-                fn swap_environment_cnam_es(&self, input: &SwapEnvironmentCNAMEsMessage) -> Result<(), SwapEnvironmentCNAMEsError>;
+                fn swap_environment_cnam_es(&self, input: &SwapEnvironmentCNAMEsMessage) -> Box<Future<Item = (), Error = SwapEnvironmentCNAMEsError>>;
                 
 
                 #[doc="<p>Terminates the specified environment.</p>"]
-                fn terminate_environment(&self, input: &TerminateEnvironmentMessage) -> Result<EnvironmentDescription, TerminateEnvironmentError>;
+                fn terminate_environment(&self, input: &TerminateEnvironmentMessage) -> Box<Future<Item = EnvironmentDescription, Error = TerminateEnvironmentError>>;
                 
 
                 #[doc="<p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note>"]
-                fn update_application(&self, input: &UpdateApplicationMessage) -> Result<ApplicationDescriptionMessage, UpdateApplicationError>;
+                fn update_application(&self, input: &UpdateApplicationMessage) -> Box<Future<Item = ApplicationDescriptionMessage, Error = UpdateApplicationError>>;
                 
 
                 #[doc="<p>Modifies lifecycle settings for an application.</p>"]
-                fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourceLifecycleMessage) -> Result<ApplicationResourceLifecycleDescriptionMessage, UpdateApplicationResourceLifecycleError>;
+                fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourceLifecycleMessage) -> Box<Future<Item = ApplicationResourceLifecycleDescriptionMessage, Error = UpdateApplicationResourceLifecycleError>>;
                 
 
                 #[doc="<p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note>"]
-                fn update_application_version(&self, input: &UpdateApplicationVersionMessage) -> Result<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError>;
+                fn update_application_version(&self, input: &UpdateApplicationVersionMessage) -> Box<Future<Item = ApplicationVersionDescriptionMessage, Error = UpdateApplicationVersionError>>;
                 
 
                 #[doc="<p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul>"]
-                fn update_configuration_template(&self, input: &UpdateConfigurationTemplateMessage) -> Result<ConfigurationSettingsDescription, UpdateConfigurationTemplateError>;
+                fn update_configuration_template(&self, input: &UpdateConfigurationTemplateMessage) -> Box<Future<Item = ConfigurationSettingsDescription, Error = UpdateConfigurationTemplateError>>;
                 
 
                 #[doc="<p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>"]
-                fn update_environment(&self, input: &UpdateEnvironmentMessage) -> Result<EnvironmentDescription, UpdateEnvironmentError>;
+                fn update_environment(&self, input: &UpdateEnvironmentMessage) -> Box<Future<Item = EnvironmentDescription, Error = UpdateEnvironmentError>>;
                 
 
                 #[doc="<p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>"]
-                fn validate_configuration_settings(&self, input: &ValidateConfigurationSettingsMessage) -> Result<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>;
+                fn validate_configuration_settings(&self, input: &ValidateConfigurationSettingsMessage) -> Box<Future<Item = ConfigurationSettingsValidationMessages, Error = ValidateConfigurationSettingsError>>;
                 
 }
 /// A client for the Elastic Beanstalk API.
@@ -9715,7 +9725,7 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Cancels in-progress environment configuration update or application version deployment.</p>"]
-                fn abort_environment_update(&self, input: &AbortEnvironmentUpdateMessage) -> Result<(), AbortEnvironmentUpdateError> {
+                fn abort_environment_update(&self, input: &AbortEnvironmentUpdateMessage) -> Box<Future<Item = (), Error = AbortEnvironmentUpdateError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -9724,22 +9734,31 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     AbortEnvironmentUpdateMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AbortEnvironmentUpdateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AbortEnvironmentUpdateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AbortEnvironmentUpdateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AbortEnvironmentUpdateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>"]
-                fn apply_environment_managed_action(&self, input: &ApplyEnvironmentManagedActionRequest) -> Result<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError> {
+                fn apply_environment_managed_action(&self, input: &ApplyEnvironmentManagedActionRequest) -> Box<Future<Item = ApplyEnvironmentManagedActionResult, Error = ApplyEnvironmentManagedActionError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -9748,11 +9767,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     ApplyEnvironmentManagedActionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ApplyEnvironmentManagedActionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ApplyEnvironmentManagedActionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9764,23 +9791,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ApplyEnvironmentManagedActionResultDeserializer::deserialize("ApplyEnvironmentManagedActionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ApplyEnvironmentManagedActionResultDeserializer::deserialize("ApplyEnvironmentManagedActionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ApplyEnvironmentManagedActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ApplyEnvironmentManagedActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Checks if the specified CNAME is available.</p>"]
-                fn check_dns_availability(&self, input: &CheckDNSAvailabilityMessage) -> Result<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError> {
+                fn check_dns_availability(&self, input: &CheckDNSAvailabilityMessage) -> Box<Future<Item = CheckDNSAvailabilityResultMessage, Error = CheckDNSAvailabilityError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -9789,11 +9817,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     CheckDNSAvailabilityMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CheckDNSAvailabilityError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CheckDNSAvailabilityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9805,23 +9841,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CheckDNSAvailabilityResultMessageDeserializer::deserialize("CheckDNSAvailabilityResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CheckDNSAvailabilityResultMessageDeserializer::deserialize("CheckDNSAvailabilityResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CheckDNSAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CheckDNSAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html\">Compose Environments</a> for details.</p>"]
-                fn compose_environments(&self, input: &ComposeEnvironmentsMessage) -> Result<EnvironmentDescriptionsMessage, ComposeEnvironmentsError> {
+                fn compose_environments(&self, input: &ComposeEnvironmentsMessage) -> Box<Future<Item = EnvironmentDescriptionsMessage, Error = ComposeEnvironmentsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -9830,11 +9867,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     ComposeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ComposeEnvironmentsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ComposeEnvironmentsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9846,23 +9891,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EnvironmentDescriptionsMessageDeserializer::deserialize("ComposeEnvironmentsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EnvironmentDescriptionsMessageDeserializer::deserialize("ComposeEnvironmentsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ComposeEnvironmentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ComposeEnvironmentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>"]
-                fn create_application(&self, input: &CreateApplicationMessage) -> Result<ApplicationDescriptionMessage, CreateApplicationError> {
+                fn create_application(&self, input: &CreateApplicationMessage) -> Box<Future<Item = ApplicationDescriptionMessage, Error = CreateApplicationError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -9871,11 +9917,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     CreateApplicationMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateApplicationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9887,23 +9941,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ApplicationDescriptionMessageDeserializer::deserialize("CreateApplicationResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ApplicationDescriptionMessageDeserializer::deserialize("CreateApplicationResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note>"]
-                fn create_application_version(&self, input: &CreateApplicationVersionMessage) -> Result<ApplicationVersionDescriptionMessage, CreateApplicationVersionError> {
+                fn create_application_version(&self, input: &CreateApplicationVersionMessage) -> Box<Future<Item = ApplicationVersionDescriptionMessage, Error = CreateApplicationVersionError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -9912,11 +9967,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     CreateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateApplicationVersionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateApplicationVersionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9928,23 +9991,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ApplicationVersionDescriptionMessageDeserializer::deserialize("CreateApplicationVersionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ApplicationVersionDescriptionMessageDeserializer::deserialize("CreateApplicationVersionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateApplicationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateApplicationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul>"]
-                fn create_configuration_template(&self, input: &CreateConfigurationTemplateMessage) -> Result<ConfigurationSettingsDescription, CreateConfigurationTemplateError> {
+                fn create_configuration_template(&self, input: &CreateConfigurationTemplateMessage) -> Box<Future<Item = ConfigurationSettingsDescription, Error = CreateConfigurationTemplateError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -9953,11 +10017,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     CreateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateConfigurationTemplateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateConfigurationTemplateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9969,23 +10041,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ConfigurationSettingsDescriptionDeserializer::deserialize("CreateConfigurationTemplateResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ConfigurationSettingsDescriptionDeserializer::deserialize("CreateConfigurationTemplateResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateConfigurationTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateConfigurationTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Launches an environment for the specified application using the specified configuration.</p>"]
-                fn create_environment(&self, input: &CreateEnvironmentMessage) -> Result<EnvironmentDescription, CreateEnvironmentError> {
+                fn create_environment(&self, input: &CreateEnvironmentMessage) -> Box<Future<Item = EnvironmentDescription, Error = CreateEnvironmentError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -9994,11 +10067,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     CreateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateEnvironmentError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateEnvironmentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10010,23 +10091,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EnvironmentDescriptionDeserializer::deserialize("CreateEnvironmentResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EnvironmentDescriptionDeserializer::deserialize("CreateEnvironmentResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>"]
-                fn create_storage_location(&self) -> Result<CreateStorageLocationResultMessage, CreateStorageLocationError> {
+                fn create_storage_location(&self) -> Box<Future<Item = CreateStorageLocationResultMessage, Error = CreateStorageLocationError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10035,11 +10117,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateStorageLocationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateStorageLocationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10051,23 +10141,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateStorageLocationResultMessageDeserializer::deserialize("CreateStorageLocationResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateStorageLocationResultMessageDeserializer::deserialize("CreateStorageLocationResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateStorageLocationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateStorageLocationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note>"]
-                fn delete_application(&self, input: &DeleteApplicationMessage) -> Result<(), DeleteApplicationError> {
+                fn delete_application(&self, input: &DeleteApplicationMessage) -> Box<Future<Item = (), Error = DeleteApplicationError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10076,22 +10167,31 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DeleteApplicationMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteApplicationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note>"]
-                fn delete_application_version(&self, input: &DeleteApplicationVersionMessage) -> Result<(), DeleteApplicationVersionError> {
+                fn delete_application_version(&self, input: &DeleteApplicationVersionMessage) -> Box<Future<Item = (), Error = DeleteApplicationVersionError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10100,22 +10200,31 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DeleteApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteApplicationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteApplicationVersionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteApplicationVersionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteApplicationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment's copy of the template without affecting the running environment.</p> </note>"]
-                fn delete_configuration_template(&self, input: &DeleteConfigurationTemplateMessage) -> Result<(), DeleteConfigurationTemplateError> {
+                fn delete_configuration_template(&self, input: &DeleteConfigurationTemplateMessage) -> Box<Future<Item = (), Error = DeleteConfigurationTemplateError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10124,22 +10233,31 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DeleteConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteConfigurationTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteConfigurationTemplateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteConfigurationTemplateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteConfigurationTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>"]
-                fn delete_environment_configuration(&self, input: &DeleteEnvironmentConfigurationMessage) -> Result<(), DeleteEnvironmentConfigurationError> {
+                fn delete_environment_configuration(&self, input: &DeleteEnvironmentConfigurationMessage) -> Box<Future<Item = (), Error = DeleteEnvironmentConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10148,22 +10266,31 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DeleteEnvironmentConfigurationMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteEnvironmentConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteEnvironmentConfigurationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteEnvironmentConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteEnvironmentConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieve a list of application versions.</p>"]
-                fn describe_application_versions(&self, input: &DescribeApplicationVersionsMessage) -> Result<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError> {
+                fn describe_application_versions(&self, input: &DescribeApplicationVersionsMessage) -> Box<Future<Item = ApplicationVersionDescriptionsMessage, Error = DescribeApplicationVersionsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10172,11 +10299,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeApplicationVersionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeApplicationVersionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeApplicationVersionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10188,23 +10323,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ApplicationVersionDescriptionsMessageDeserializer::deserialize("DescribeApplicationVersionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ApplicationVersionDescriptionsMessageDeserializer::deserialize("DescribeApplicationVersionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeApplicationVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeApplicationVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the descriptions of existing applications.</p>"]
-                fn describe_applications(&self, input: &DescribeApplicationsMessage) -> Result<ApplicationDescriptionsMessage, DescribeApplicationsError> {
+                fn describe_applications(&self, input: &DescribeApplicationsMessage) -> Box<Future<Item = ApplicationDescriptionsMessage, Error = DescribeApplicationsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10213,11 +10349,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeApplicationsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeApplicationsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeApplicationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10229,23 +10373,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ApplicationDescriptionsMessageDeserializer::deserialize("DescribeApplicationsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ApplicationDescriptionsMessageDeserializer::deserialize("DescribeApplicationsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>"]
-                fn describe_configuration_options(&self, input: &DescribeConfigurationOptionsMessage) -> Result<ConfigurationOptionsDescription, DescribeConfigurationOptionsError> {
+                fn describe_configuration_options(&self, input: &DescribeConfigurationOptionsMessage) -> Box<Future<Item = ConfigurationOptionsDescription, Error = DescribeConfigurationOptionsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10254,11 +10399,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConfigurationOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConfigurationOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10270,23 +10423,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ConfigurationOptionsDescriptionDeserializer::deserialize("DescribeConfigurationOptionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ConfigurationOptionsDescriptionDeserializer::deserialize("DescribeConfigurationOptionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeConfigurationOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeConfigurationOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul>"]
-                fn describe_configuration_settings(&self, input: &DescribeConfigurationSettingsMessage) -> Result<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError> {
+                fn describe_configuration_settings(&self, input: &DescribeConfigurationSettingsMessage) -> Box<Future<Item = ConfigurationSettingsDescriptions, Error = DescribeConfigurationSettingsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10295,11 +10449,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConfigurationSettingsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConfigurationSettingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10311,23 +10473,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ConfigurationSettingsDescriptionsDeserializer::deserialize("DescribeConfigurationSettingsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ConfigurationSettingsDescriptionsDeserializer::deserialize("DescribeConfigurationSettingsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeConfigurationSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeConfigurationSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>"]
-                fn describe_environment_health(&self, input: &DescribeEnvironmentHealthRequest) -> Result<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError> {
+                fn describe_environment_health(&self, input: &DescribeEnvironmentHealthRequest) -> Box<Future<Item = DescribeEnvironmentHealthResult, Error = DescribeEnvironmentHealthError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10336,11 +10499,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeEnvironmentHealthRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEnvironmentHealthError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEnvironmentHealthError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10352,23 +10523,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeEnvironmentHealthResultDeserializer::deserialize("DescribeEnvironmentHealthResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeEnvironmentHealthResultDeserializer::deserialize("DescribeEnvironmentHealthResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEnvironmentHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEnvironmentHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists an environment's completed and failed managed actions.</p>"]
-                fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmentManagedActionHistoryRequest) -> Result<DescribeEnvironmentManagedActionHistoryResult, DescribeEnvironmentManagedActionHistoryError> {
+                fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmentManagedActionHistoryRequest) -> Box<Future<Item = DescribeEnvironmentManagedActionHistoryResult, Error = DescribeEnvironmentManagedActionHistoryError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10377,11 +10549,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeEnvironmentManagedActionHistoryRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEnvironmentManagedActionHistoryError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEnvironmentManagedActionHistoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10393,23 +10573,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize("DescribeEnvironmentManagedActionHistoryResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize("DescribeEnvironmentManagedActionHistoryResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEnvironmentManagedActionHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEnvironmentManagedActionHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists an environment's upcoming and in-progress managed actions.</p>"]
-                fn describe_environment_managed_actions(&self, input: &DescribeEnvironmentManagedActionsRequest) -> Result<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError> {
+                fn describe_environment_managed_actions(&self, input: &DescribeEnvironmentManagedActionsRequest) -> Box<Future<Item = DescribeEnvironmentManagedActionsResult, Error = DescribeEnvironmentManagedActionsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10418,11 +10599,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeEnvironmentManagedActionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEnvironmentManagedActionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEnvironmentManagedActionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10434,23 +10623,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeEnvironmentManagedActionsResultDeserializer::deserialize("DescribeEnvironmentManagedActionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeEnvironmentManagedActionsResultDeserializer::deserialize("DescribeEnvironmentManagedActionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEnvironmentManagedActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEnvironmentManagedActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns AWS resources for this environment.</p>"]
-                fn describe_environment_resources(&self, input: &DescribeEnvironmentResourcesMessage) -> Result<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError> {
+                fn describe_environment_resources(&self, input: &DescribeEnvironmentResourcesMessage) -> Box<Future<Item = EnvironmentResourceDescriptionsMessage, Error = DescribeEnvironmentResourcesError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10459,11 +10649,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeEnvironmentResourcesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEnvironmentResourcesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEnvironmentResourcesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10475,23 +10673,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EnvironmentResourceDescriptionsMessageDeserializer::deserialize("DescribeEnvironmentResourcesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EnvironmentResourceDescriptionsMessageDeserializer::deserialize("DescribeEnvironmentResourcesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEnvironmentResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEnvironmentResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns descriptions for existing environments.</p>"]
-                fn describe_environments(&self, input: &DescribeEnvironmentsMessage) -> Result<EnvironmentDescriptionsMessage, DescribeEnvironmentsError> {
+                fn describe_environments(&self, input: &DescribeEnvironmentsMessage) -> Box<Future<Item = EnvironmentDescriptionsMessage, Error = DescribeEnvironmentsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10500,11 +10699,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEnvironmentsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEnvironmentsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10516,23 +10723,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EnvironmentDescriptionsMessageDeserializer::deserialize("DescribeEnvironmentsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EnvironmentDescriptionsMessageDeserializer::deserialize("DescribeEnvironmentsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEnvironmentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEnvironmentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note>"]
-                fn describe_events(&self, input: &DescribeEventsMessage) -> Result<EventDescriptionsMessage, DescribeEventsError> {
+                fn describe_events(&self, input: &DescribeEventsMessage) -> Box<Future<Item = EventDescriptionsMessage, Error = DescribeEventsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10541,11 +10749,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEventsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEventsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10557,23 +10773,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EventDescriptionsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EventDescriptionsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html\">enhanced health reporting</a>.</p>"]
-                fn describe_instances_health(&self, input: &DescribeInstancesHealthRequest) -> Result<DescribeInstancesHealthResult, DescribeInstancesHealthError> {
+                fn describe_instances_health(&self, input: &DescribeInstancesHealthRequest) -> Box<Future<Item = DescribeInstancesHealthResult, Error = DescribeInstancesHealthError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10582,11 +10799,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     DescribeInstancesHealthRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInstancesHealthError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInstancesHealthError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10598,23 +10823,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeInstancesHealthResultDeserializer::deserialize("DescribeInstancesHealthResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeInstancesHealthResultDeserializer::deserialize("DescribeInstancesHealthResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeInstancesHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeInstancesHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the available solution stack names.</p>"]
-                fn list_available_solution_stacks(&self) -> Result<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError> {
+                fn list_available_solution_stacks(&self) -> Box<Future<Item = ListAvailableSolutionStacksResultMessage, Error = ListAvailableSolutionStacksError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10623,11 +10849,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAvailableSolutionStacksError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAvailableSolutionStacksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10639,23 +10873,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListAvailableSolutionStacksResultMessageDeserializer::deserialize("ListAvailableSolutionStacksResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListAvailableSolutionStacksResultMessageDeserializer::deserialize("ListAvailableSolutionStacksResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListAvailableSolutionStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListAvailableSolutionStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>"]
-                fn rebuild_environment(&self, input: &RebuildEnvironmentMessage) -> Result<(), RebuildEnvironmentError> {
+                fn rebuild_environment(&self, input: &RebuildEnvironmentMessage) -> Box<Future<Item = (), Error = RebuildEnvironmentError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10664,22 +10899,31 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     RebuildEnvironmentMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RebuildEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RebuildEnvironmentError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RebuildEnvironmentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RebuildEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul>"]
-                fn request_environment_info(&self, input: &RequestEnvironmentInfoMessage) -> Result<(), RequestEnvironmentInfoError> {
+                fn request_environment_info(&self, input: &RequestEnvironmentInfoMessage) -> Box<Future<Item = (), Error = RequestEnvironmentInfoError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10688,22 +10932,31 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     RequestEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RequestEnvironmentInfoError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RequestEnvironmentInfoError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RequestEnvironmentInfoError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RequestEnvironmentInfoError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>"]
-                fn restart_app_server(&self, input: &RestartAppServerMessage) -> Result<(), RestartAppServerError> {
+                fn restart_app_server(&self, input: &RestartAppServerMessage) -> Box<Future<Item = (), Error = RestartAppServerError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10712,22 +10965,31 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     RestartAppServerMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RestartAppServerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestartAppServerError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestartAppServerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RestartAppServerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul>"]
-                fn retrieve_environment_info(&self, input: &RetrieveEnvironmentInfoMessage) -> Result<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError> {
+                fn retrieve_environment_info(&self, input: &RetrieveEnvironmentInfoMessage) -> Box<Future<Item = RetrieveEnvironmentInfoResultMessage, Error = RetrieveEnvironmentInfoError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10736,11 +10998,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     RetrieveEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RetrieveEnvironmentInfoError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RetrieveEnvironmentInfoError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10752,23 +11022,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RetrieveEnvironmentInfoResultMessageDeserializer::deserialize("RetrieveEnvironmentInfoResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RetrieveEnvironmentInfoResultMessageDeserializer::deserialize("RetrieveEnvironmentInfoResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RetrieveEnvironmentInfoError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RetrieveEnvironmentInfoError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Swaps the CNAMEs of two environments.</p>"]
-                fn swap_environment_cnam_es(&self, input: &SwapEnvironmentCNAMEsMessage) -> Result<(), SwapEnvironmentCNAMEsError> {
+                fn swap_environment_cnam_es(&self, input: &SwapEnvironmentCNAMEsMessage) -> Box<Future<Item = (), Error = SwapEnvironmentCNAMEsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10777,22 +11048,31 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     SwapEnvironmentCNAMEsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SwapEnvironmentCNAMEsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SwapEnvironmentCNAMEsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SwapEnvironmentCNAMEsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SwapEnvironmentCNAMEsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Terminates the specified environment.</p>"]
-                fn terminate_environment(&self, input: &TerminateEnvironmentMessage) -> Result<EnvironmentDescription, TerminateEnvironmentError> {
+                fn terminate_environment(&self, input: &TerminateEnvironmentMessage) -> Box<Future<Item = EnvironmentDescription, Error = TerminateEnvironmentError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10801,11 +11081,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     TerminateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TerminateEnvironmentError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TerminateEnvironmentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10817,23 +11105,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EnvironmentDescriptionDeserializer::deserialize("TerminateEnvironmentResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EnvironmentDescriptionDeserializer::deserialize("TerminateEnvironmentResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(TerminateEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(TerminateEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note>"]
-                fn update_application(&self, input: &UpdateApplicationMessage) -> Result<ApplicationDescriptionMessage, UpdateApplicationError> {
+                fn update_application(&self, input: &UpdateApplicationMessage) -> Box<Future<Item = ApplicationDescriptionMessage, Error = UpdateApplicationError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10842,11 +11131,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     UpdateApplicationMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateApplicationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10858,23 +11155,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ApplicationDescriptionMessageDeserializer::deserialize("UpdateApplicationResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ApplicationDescriptionMessageDeserializer::deserialize("UpdateApplicationResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies lifecycle settings for an application.</p>"]
-                fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourceLifecycleMessage) -> Result<ApplicationResourceLifecycleDescriptionMessage, UpdateApplicationResourceLifecycleError> {
+                fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourceLifecycleMessage) -> Box<Future<Item = ApplicationResourceLifecycleDescriptionMessage, Error = UpdateApplicationResourceLifecycleError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10883,11 +11181,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     UpdateApplicationResourceLifecycleMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateApplicationResourceLifecycleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateApplicationResourceLifecycleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10899,23 +11205,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize("UpdateApplicationResourceLifecycleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize("UpdateApplicationResourceLifecycleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateApplicationResourceLifecycleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateApplicationResourceLifecycleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note>"]
-                fn update_application_version(&self, input: &UpdateApplicationVersionMessage) -> Result<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError> {
+                fn update_application_version(&self, input: &UpdateApplicationVersionMessage) -> Box<Future<Item = ApplicationVersionDescriptionMessage, Error = UpdateApplicationVersionError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10924,11 +11231,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     UpdateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateApplicationVersionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateApplicationVersionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10940,23 +11255,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ApplicationVersionDescriptionMessageDeserializer::deserialize("UpdateApplicationVersionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ApplicationVersionDescriptionMessageDeserializer::deserialize("UpdateApplicationVersionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateApplicationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateApplicationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul>"]
-                fn update_configuration_template(&self, input: &UpdateConfigurationTemplateMessage) -> Result<ConfigurationSettingsDescription, UpdateConfigurationTemplateError> {
+                fn update_configuration_template(&self, input: &UpdateConfigurationTemplateMessage) -> Box<Future<Item = ConfigurationSettingsDescription, Error = UpdateConfigurationTemplateError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -10965,11 +11281,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     UpdateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateConfigurationTemplateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateConfigurationTemplateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10981,23 +11305,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ConfigurationSettingsDescriptionDeserializer::deserialize("UpdateConfigurationTemplateResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ConfigurationSettingsDescriptionDeserializer::deserialize("UpdateConfigurationTemplateResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateConfigurationTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateConfigurationTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>"]
-                fn update_environment(&self, input: &UpdateEnvironmentMessage) -> Result<EnvironmentDescription, UpdateEnvironmentError> {
+                fn update_environment(&self, input: &UpdateEnvironmentMessage) -> Box<Future<Item = EnvironmentDescription, Error = UpdateEnvironmentError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -11006,11 +11331,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     UpdateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateEnvironmentError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateEnvironmentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11022,23 +11355,24 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EnvironmentDescriptionDeserializer::deserialize("UpdateEnvironmentResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EnvironmentDescriptionDeserializer::deserialize("UpdateEnvironmentResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>"]
-                fn validate_configuration_settings(&self, input: &ValidateConfigurationSettingsMessage) -> Result<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError> {
+                fn validate_configuration_settings(&self, input: &ValidateConfigurationSettingsMessage) -> Box<Future<Item = ConfigurationSettingsValidationMessages, Error = ValidateConfigurationSettingsError>> {
                     let mut request = SignedRequest::new("POST", "elasticbeanstalk", self.region, "/");
                     let mut params = Params::new();
 
@@ -11047,11 +11381,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                     ValidateConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ValidateConfigurationSettingsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ValidateConfigurationSettingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11063,18 +11405,19 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ConfigurationSettingsValidationMessagesDeserializer::deserialize("ValidateConfigurationSettingsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ConfigurationSettingsValidationMessagesDeserializer::deserialize("ValidateConfigurationSettingsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ValidateConfigurationSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ValidateConfigurationSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -11091,67 +11434,12 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             
             
         #[test]
-        fn test_parse_valid_elasticbeanstalk_check_dns_availability() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-check-dns-availability.xml");
+        fn test_parse_valid_elasticbeanstalk_describe_configuration_options() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-describe-configuration-options.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CheckDNSAvailabilityMessage::default();
-            let result = client.check_dns_availability(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_elasticbeanstalk_create_application_version() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-application-version.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateApplicationVersionMessage::default();
-            let result = client.create_application_version(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_elasticbeanstalk_create_application() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-application.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateApplicationMessage::default();
-            let result = client.create_application(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_elasticbeanstalk_create_configuration_template() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-configuration-template.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateConfigurationTemplateMessage::default();
-            let result = client.create_configuration_template(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_elasticbeanstalk_create_environment() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-environment.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateEnvironmentMessage::default();
-            let result = client.create_environment(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_elasticbeanstalk_create_storage_location() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-storage-location.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            
-            let result = client.create_storage_location();
+            let request = DescribeConfigurationOptionsMessage::default();
+            let result = client.describe_configuration_options(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -11168,12 +11456,45 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
 
 
         #[test]
+        fn test_parse_valid_elasticbeanstalk_create_storage_location() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-storage-location.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            
+            let result = client.create_storage_location();
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_elasticbeanstalk_create_application() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-application.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateApplicationMessage::default();
+            let result = client.create_application(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
         fn test_parse_valid_elasticbeanstalk_describe_application_versions() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-describe-application-versions.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = DescribeApplicationVersionsMessage::default();
             let result = client.describe_application_versions(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_elasticbeanstalk_update_application_version() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-update-application-version.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = UpdateApplicationVersionMessage::default();
+            let result = client.update_application_version(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -11190,12 +11511,67 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_elasticbeanstalk_describe_configuration_options() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-describe-configuration-options.xml");
+        fn test_parse_valid_elasticbeanstalk_update_application() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-update-application.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeConfigurationOptionsMessage::default();
-            let result = client.describe_configuration_options(&request);
+            let request = UpdateApplicationMessage::default();
+            let result = client.update_application(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_elasticbeanstalk_create_application_version() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-application-version.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateApplicationVersionMessage::default();
+            let result = client.create_application_version(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_elasticbeanstalk_retrieve_environment_info() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-retrieve-environment-info.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = RetrieveEnvironmentInfoMessage::default();
+            let result = client.retrieve_environment_info(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_elasticbeanstalk_list_available_solution_stacks() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-list-available-solution-stacks.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            
+            let result = client.list_available_solution_stacks();
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_elasticbeanstalk_create_environment() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-environment.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateEnvironmentMessage::default();
+            let result = client.create_environment(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_elasticbeanstalk_create_configuration_template() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-create-configuration-template.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateConfigurationTemplateMessage::default();
+            let result = client.create_configuration_template(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -11223,23 +11599,12 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_elasticbeanstalk_list_available_solution_stacks() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-list-available-solution-stacks.xml");
+        fn test_parse_valid_elasticbeanstalk_check_dns_availability() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-check-dns-availability.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            
-            let result = client.list_available_solution_stacks();
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_elasticbeanstalk_retrieve_environment_info() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-retrieve-environment-info.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = RetrieveEnvironmentInfoMessage::default();
-            let result = client.retrieve_environment_info(&request);
+            let request = CheckDNSAvailabilityMessage::default();
+            let result = client.check_dns_availability(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -11251,28 +11616,6 @@ ValidateConfigurationSettingsError::Unknown(ref cause) => cause
             let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = TerminateEnvironmentMessage::default();
             let result = client.terminate_environment(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_elasticbeanstalk_update_application_version() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-update-application-version.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = UpdateApplicationVersionMessage::default();
-            let result = client.update_application_version(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_elasticbeanstalk_update_application() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "elasticbeanstalk-update-application.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = UpdateApplicationMessage::default();
-            let result = client.update_application(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

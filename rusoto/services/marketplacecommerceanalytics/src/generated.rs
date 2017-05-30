@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type CustomerDefinedValues = ::std::collections::HashMap<OptionalKey, OptionalValue>;
 pub type DataSetPublicationDate = f64;
 pub type DataSetRequestId = String;
@@ -229,11 +230,11 @@ StartSupportDataExportError::Unknown(ref cause) => cause
         
 
                 #[doc="Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data_set_type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy."]
-                fn generate_data_set(&self, input: &GenerateDataSetRequest)  -> Result<GenerateDataSetResult, GenerateDataSetError>;
+                fn generate_data_set(&self, input: &GenerateDataSetRequest)  -> Box<Future<Item = GenerateDataSetResult, Error = GenerateDataSetError>>;
                 
 
                 #[doc="Given a data set type and a from date, asynchronously publishes the requested customer support data to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data_set_type}_YYYY-MM-DD'T'HH-mm-ss'Z'.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy."]
-                fn start_support_data_export(&self, input: &StartSupportDataExportRequest)  -> Result<StartSupportDataExportResult, StartSupportDataExportError>;
+                fn start_support_data_export(&self, input: &StartSupportDataExportRequest)  -> Box<Future<Item = StartSupportDataExportResult, Error = StartSupportDataExportError>>;
                 
 }
 /// A client for the AWS Marketplace Commerce Analytics API.
@@ -257,7 +258,7 @@ StartSupportDataExportError::Unknown(ref cause) => cause
         
 
                 #[doc="Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data_set_type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy."]
-                fn generate_data_set(&self, input: &GenerateDataSetRequest)  -> Result<GenerateDataSetResult, GenerateDataSetError> {
+                fn generate_data_set(&self, input: &GenerateDataSetRequest)  -> Box<Future<Item = GenerateDataSetResult, Error = GenerateDataSetError>> {
                     let mut request = SignedRequest::new("POST", "marketplacecommerceanalytics", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -265,21 +266,31 @@ StartSupportDataExportError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GenerateDataSetError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GenerateDataSetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GenerateDataSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GenerateDataSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GenerateDataSetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GenerateDataSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="Given a data set type and a from date, asynchronously publishes the requested customer support data to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data_set_type}_YYYY-MM-DD'T'HH-mm-ss'Z'.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy."]
-                fn start_support_data_export(&self, input: &StartSupportDataExportRequest)  -> Result<StartSupportDataExportResult, StartSupportDataExportError> {
+                fn start_support_data_export(&self, input: &StartSupportDataExportRequest)  -> Box<Future<Item = StartSupportDataExportResult, Error = StartSupportDataExportError>> {
                     let mut request = SignedRequest::new("POST", "marketplacecommerceanalytics", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -287,16 +298,26 @@ StartSupportDataExportError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StartSupportDataExportError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartSupportDataExportResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StartSupportDataExportError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StartSupportDataExportError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StartSupportDataExportResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StartSupportDataExportError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

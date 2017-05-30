@@ -19,6 +19,17 @@
             use rusoto_core::xmlerror::*;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
+
             enum DeserializerNext {
                 Close,
                 Skip,
@@ -10266,199 +10277,199 @@ UpdateTrafficPolicyInstanceError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can't convert a public hosted zone into a private hosted zone.</p> </important> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/associatevpc</code> resource. The request body must include a document with an <code>AssociateVPCWithHostedZoneRequest</code> element. The response contains a <code>ChangeInfo</code> data type that you can use to track the progress of the request. </p> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note>"]
-                fn associate_vpc_with_hosted_zone(&self, input: &AssociateVPCWithHostedZoneRequest) -> Result<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError>;
+                fn associate_vpc_with_hosted_zone(&self, input: &AssociateVPCWithHostedZoneRequest) -> Box<Future<Item = AssociateVPCWithHostedZoneResponse, Error = AssociateVPCWithHostedZoneError>>;
                 
 
                 #[doc="<p>Create, change, update, or delete authoritative DNS information on all Amazon Route 53 servers. Send a <code>POST</code> request to: </p> <p> <code>/2013-04-01/hostedzone/<i>Amazon Route 53 hosted Zone ID</i>/rrset</code> resource. </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Amazon Route 53 either makes all or none of the changes in a change batch request. This ensures that Amazon Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Amazon Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Amazon Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <note> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Amazon Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html\">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </note> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Amazon Route 53 updates it with the values in the request. </p> </li> </ul> <p>The values that you need to include in the request depend on the type of resource record set that you're creating, deleting, or updating:</p> <p> <b>Basic resource record sets (excluding alias, failover, geolocation, latency, and weighted resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> </ul> <p> <b>Failover, geolocation, latency, or weighted resource record sets (excluding alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> <li> <p> <code>SetIdentifier</code> </p> </li> </ul> <p> <b>Alias resource record sets (including failover alias, geolocation alias, latency alias, and weighted alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>AliasTarget</code> (includes <code>DNSName</code>, <code>EvaluateTargetHealth</code>, and <code>HostedZoneId</code>)</p> </li> <li> <p> <code>SetIdentifier</code> (for failover, geolocation, latency, and weighted resource record sets)</p> </li> </ul> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Amazon Route 53 propagates your changes to all of the Amazon Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Amazon Route 53 name servers in a few minutes. In rare circumstances, propagation can take up to 30 minutes. For more information, see <a>GetChange</a> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html\">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
-                fn change_resource_record_sets(&self, input: &ChangeResourceRecordSetsRequest) -> Result<ChangeResourceRecordSetsResponse, ChangeResourceRecordSetsError>;
+                fn change_resource_record_sets(&self, input: &ChangeResourceRecordSetsRequest) -> Box<Future<Item = ChangeResourceRecordSetsResponse, Error = ChangeResourceRecordSetsError>>;
                 
 
                 #[doc="<p>Adds, edits, or deletes tags for a health check or a hosted zone.</p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
-                fn change_tags_for_resource(&self, input: &ChangeTagsForResourceRequest) -> Result<ChangeTagsForResourceResponse, ChangeTagsForResourceError>;
+                fn change_tags_for_resource(&self, input: &ChangeTagsForResourceRequest) -> Box<Future<Item = ChangeTagsForResourceResponse, Error = ChangeTagsForResourceError>>;
                 
 
                 #[doc="<p>Creates a new health check.</p> <p>To create a new health check, send a <code>POST</code> request to the <code>/2013-04-01/healthcheck</code> resource. The request body must include a document with a <code>CreateHealthCheckRequest</code> element. The response returns the <code>CreateHealthCheckResponse</code> element, containing the health check ID specified when adding health check to a resource record set. For information about adding health checks to resource record sets, see <a>ResourceRecordSet$HealthCheckId</a> in <a>ChangeResourceRecordSets</a>. </p> <p>If you are registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to an Amazon Route 53 health check.</p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Amazon Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html\">Amazon CloudWatch User Guide</a>.</p> </li> </ul>"]
-                fn create_health_check(&self, input: &CreateHealthCheckRequest) -> Result<CreateHealthCheckResponse, CreateHealthCheckError>;
+                fn create_health_check(&self, input: &CreateHealthCheckRequest) -> Box<Future<Item = CreateHealthCheckResponse, Error = CreateHealthCheckError>>;
                 
 
                 #[doc="<p>Creates a new public hosted zone, used to specify how the Domain Name System (DNS) routes traffic on the Internet for a domain, such as example.com, and its subdomains. </p> <important> <p>Public hosted zones can't be converted to a private hosted zone or vice versa. Instead, create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone</code> resource. The request body must include a document with a <code>CreateHostedZoneRequest</code> element. The response returns the <code>CreateHostedZoneResponse</code> element containing metadata about the hosted zone.</p> <p>Fore more information about charges for hosted zones, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD).</p> </li> <li> <p>Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html\">NS and SOA Records that Amazon Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> <li> <p>If your domain is registered with a registrar other than Amazon Route 53, you must update the name servers with your registrar to make Amazon Route 53 your DNS service. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/creating-migrating.html\">Configuring Amazon Route 53 as your DNS Service</a> in the <i>Amazon Route 53 Developer's Guide</i>.</p> </li> </ul> <p>After creating a zone, its initial status is <code>PENDING</code>. This means that it is not yet available on all DNS servers. The status of the zone changes to <code>INSYNC</code> when the NS and SOA records are available on all Amazon Route 53 DNS servers. </p> <p>When trying to create a hosted zone using a reusable delegation set, specify an optional DelegationSetId, and Amazon Route 53 would assign those 4 NS records for the zone, instead of allotting a new one.</p>"]
-                fn create_hosted_zone(&self, input: &CreateHostedZoneRequest) -> Result<CreateHostedZoneResponse, CreateHostedZoneError>;
+                fn create_hosted_zone(&self, input: &CreateHostedZoneRequest) -> Box<Future<Item = CreateHostedZoneResponse, Error = CreateHostedZoneError>>;
                 
 
                 #[doc="<p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/delegationset</code> resource. The request body must include a document with a <code>CreateReusableDelegationSetRequest</code> element.</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone/</p> </note> <p>For more information, including a procedure on how to create and configure a reusable delegation set (also known as white label name servers), see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html\">Configuring White Label Name Servers</a>.</p>"]
-                fn create_reusable_delegation_set(&self, input: &CreateReusableDelegationSetRequest) -> Result<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError>;
+                fn create_reusable_delegation_set(&self, input: &CreateReusableDelegationSetRequest) -> Box<Future<Item = CreateReusableDelegationSetResponse, Error = CreateReusableDelegationSetError>>;
                 
 
                 #[doc="<p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy</code> resource. The request body must include a document with a <code>CreateTrafficPolicyRequest</code> element. The response includes the <code>CreateTrafficPolicyResponse</code> element, which contains information about the new traffic policy.</p>"]
-                fn create_traffic_policy(&self, input: &CreateTrafficPolicyRequest) -> Result<CreateTrafficPolicyResponse, CreateTrafficPolicyError>;
+                fn create_traffic_policy(&self, input: &CreateTrafficPolicyRequest) -> Box<Future<Item = CreateTrafficPolicyResponse, Error = CreateTrafficPolicyError>>;
                 
 
                 #[doc="<p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicyinstance</code> resource. The request body must include a document with a <code>CreateTrafficPolicyRequest</code> element. The response returns the <code>CreateTrafficPolicyInstanceResponse</code> element, which contains information about the traffic policy instance.</p>"]
-                fn create_traffic_policy_instance(&self, input: &CreateTrafficPolicyInstanceRequest) -> Result<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError>;
+                fn create_traffic_policy_instance(&self, input: &CreateTrafficPolicyInstanceRequest) -> Box<Future<Item = CreateTrafficPolicyInstanceResponse, Error = CreateTrafficPolicyInstanceError>>;
                 
 
                 #[doc="<p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy/</code> resource. The request body includes a document with a <code>CreateTrafficPolicyVersionRequest</code> element. The response returns the <code>CreateTrafficPolicyVersionResponse</code> element, which contains information about the new version of the traffic policy.</p>"]
-                fn create_traffic_policy_version(&self, input: &CreateTrafficPolicyVersionRequest) -> Result<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError>;
+                fn create_traffic_policy_version(&self, input: &CreateTrafficPolicyVersionRequest) -> Box<Future<Item = CreateTrafficPolicyVersionResponse, Error = CreateTrafficPolicyVersionError>>;
                 
 
                 #[doc="<p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation</code> resource. The request body must include a document with a <code>CreateVPCAssociationAuthorizationRequest</code> element. The response contains information about the authorization.</p>"]
-                fn create_vpc_association_authorization(&self, input: &CreateVPCAssociationAuthorizationRequest) -> Result<CreateVPCAssociationAuthorizationResponse, CreateVPCAssociationAuthorizationError>;
+                fn create_vpc_association_authorization(&self, input: &CreateVPCAssociationAuthorizationRequest) -> Box<Future<Item = CreateVPCAssociationAuthorizationResponse, Error = CreateVPCAssociationAuthorizationError>>;
                 
 
                 #[doc="<p>Deletes a health check. Send a <code>DELETE</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html\">Replacing and Deleting Health Checks</a> in the Amazon Route 53 Developer Guide.</p> </important>"]
-                fn delete_health_check(&self, input: &DeleteHealthCheckRequest) -> Result<DeleteHealthCheckResponse, DeleteHealthCheckError>;
+                fn delete_health_check(&self, input: &DeleteHealthCheckRequest) -> Box<Future<Item = DeleteHealthCheckResponse, Error = DeleteHealthCheckError>>;
                 
 
                 #[doc="<p>Deletes a hosted zone. Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/hostedzone/<i>hosted zone ID</i> </code> resource.</p> <important> <p>Delete a hosted zone only if there are no resource record sets other than the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, delete them before deleting the hosted zone. If you try to delete a hosted zone that contains other resource record sets, Amazon Route 53 denies your request with a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a>ChangeResourceRecordSets</a>.</p> </important>"]
-                fn delete_hosted_zone(&self, input: &DeleteHostedZoneRequest) -> Result<DeleteHostedZoneResponse, DeleteHostedZoneError>;
+                fn delete_hosted_zone(&self, input: &DeleteHostedZoneRequest) -> Box<Future<Item = DeleteHostedZoneResponse, Error = DeleteHostedZoneError>>;
                 
 
                 #[doc="<p>Deletes a reusable delegation set. Send a <code>DELETE</code> request to the <code>/2013-04-01/delegationset/<i>delegation set ID</i> </code> resource.</p> <important> <p> You can delete a reusable delegation set only if there are no associated hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, run the <a>GetReusableDelegationSet</a> action and specify the ID of the reusable delegation set that you want to delete.</p>"]
-                fn delete_reusable_delegation_set(&self, input: &DeleteReusableDelegationSetRequest) -> Result<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError>;
+                fn delete_reusable_delegation_set(&self, input: &DeleteReusableDelegationSetRequest) -> Box<Future<Item = DeleteReusableDelegationSetResponse, Error = DeleteReusableDelegationSetError>>;
                 
 
                 #[doc="<p>Deletes a traffic policy.</p> <p>Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p>"]
-                fn delete_traffic_policy(&self, input: &DeleteTrafficPolicyRequest) -> Result<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError>;
+                fn delete_traffic_policy(&self, input: &DeleteTrafficPolicyRequest) -> Box<Future<Item = DeleteTrafficPolicyResponse, Error = DeleteTrafficPolicyError>>;
                 
 
                 #[doc="<p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <p>Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy/<i>traffic policy instance ID</i> </code> resource.</p> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
-                fn delete_traffic_policy_instance(&self, input: &DeleteTrafficPolicyInstanceRequest) -> Result<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError>;
+                fn delete_traffic_policy_instance(&self, input: &DeleteTrafficPolicyInstanceRequest) -> Box<Future<Item = DeleteTrafficPolicyInstanceResponse, Error = DeleteTrafficPolicyInstanceError>>;
                 
 
                 #[doc="<p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won't disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important> <p>Send a <code>DELETE</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/deauthorizevpcassociation</code> resource. The request body must include a document with a <code>DeleteVPCAssociationAuthorizationRequest</code> element.</p>"]
-                fn delete_vpc_association_authorization(&self, input: &DeleteVPCAssociationAuthorizationRequest) -> Result<DeleteVPCAssociationAuthorizationResponse, DeleteVPCAssociationAuthorizationError>;
+                fn delete_vpc_association_authorization(&self, input: &DeleteVPCAssociationAuthorizationRequest) -> Box<Future<Item = DeleteVPCAssociationAuthorizationResponse, Error = DeleteVPCAssociationAuthorizationError>>;
                 
 
                 #[doc="<p>Disassociates a VPC from a Amazon Route 53 private hosted zone. </p> <note> <p>You can't disassociate the last VPC from a private hosted zone.</p> </note> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/disassociatevpc</code> resource. The request body must include a document with a <code>DisassociateVPCFromHostedZoneRequest</code> element. The response includes a <code>DisassociateVPCFromHostedZoneResponse</code> element.</p> <important> <p>You can't disassociate a VPC from a private hosted zone when only one VPC is associated with the hosted zone. You also can't convert a private hosted zone into a public hosted zone.</p> </important>"]
-                fn disassociate_vpc_from_hosted_zone(&self, input: &DisassociateVPCFromHostedZoneRequest) -> Result<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError>;
+                fn disassociate_vpc_from_hosted_zone(&self, input: &DisassociateVPCFromHostedZoneRequest) -> Box<Future<Item = DisassociateVPCFromHostedZoneResponse, Error = DisassociateVPCFromHostedZoneError>>;
                 
 
                 #[doc="<p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not replicated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have replicated to all Amazon Route 53 DNS servers. </p> </li> </ul>"]
-                fn get_change(&self, input: &GetChangeRequest) -> Result<GetChangeResponse, GetChangeError>;
+                fn get_change(&self, input: &GetChangeRequest) -> Box<Future<Item = GetChangeResponse, Error = GetChangeError>>;
                 
 
                 #[doc="<p>Retrieves a list of the IP ranges used by Amazon Route 53 health checkers to check the health of your resources. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/checkeripranges</code> resource. Use these IP addresses to configure router and firewall rules to allow health checkers to check the health of your resources.</p>"]
-                fn get_checker_ip_ranges(&self, input: &GetCheckerIpRangesRequest) -> Result<GetCheckerIpRangesResponse, GetCheckerIpRangesError>;
+                fn get_checker_ip_ranges(&self, input: &GetCheckerIpRangesRequest) -> Box<Future<Item = GetCheckerIpRangesResponse, Error = GetCheckerIpRangesError>>;
                 
 
                 #[doc="<p>Retrieves a single geo location. Send a <code>GET</code> request to the <code>/2013-04-01/geolocation</code> resource with one of these options: continentcode | countrycode | countrycode and subdivisioncode.</p>"]
-                fn get_geo_location(&self, input: &GetGeoLocationRequest) -> Result<GetGeoLocationResponse, GetGeoLocationError>;
+                fn get_geo_location(&self, input: &GetGeoLocationRequest) -> Box<Future<Item = GetGeoLocationResponse, Error = GetGeoLocationError>>;
                 
 
                 #[doc="<p>Gets information about a specified health check. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource. For more information about using the console to perform this operation, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> in the Amazon Route 53 Developer Guide.</p>"]
-                fn get_health_check(&self, input: &GetHealthCheckRequest) -> Result<GetHealthCheckResponse, GetHealthCheckError>;
+                fn get_health_check(&self, input: &GetHealthCheckRequest) -> Box<Future<Item = GetHealthCheckResponse, Error = GetHealthCheckError>>;
                 
 
                 #[doc="<p>To retrieve a count of all your health checks, send a <code>GET</code> request to the <code>/2013-04-01/healthcheckcount</code> resource.</p>"]
-                fn get_health_check_count(&self, input: &GetHealthCheckCountRequest) -> Result<GetHealthCheckCountResponse, GetHealthCheckCountError>;
+                fn get_health_check_count(&self, input: &GetHealthCheckCountRequest) -> Box<Future<Item = GetHealthCheckCountResponse, Error = GetHealthCheckCountError>>;
                 
 
                 #[doc="<p>If you want to learn why a health check is currently failing or why it failed most recently (if at all), you can get the failure reason for the most recent failure. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/healthcheck/<i>health check ID</i>/lastfailurereason</code> resource.</p>"]
-                fn get_health_check_last_failure_reason(&self, input: &GetHealthCheckLastFailureReasonRequest) -> Result<GetHealthCheckLastFailureReasonResponse, GetHealthCheckLastFailureReasonError>;
+                fn get_health_check_last_failure_reason(&self, input: &GetHealthCheckLastFailureReasonRequest) -> Box<Future<Item = GetHealthCheckLastFailureReasonResponse, Error = GetHealthCheckLastFailureReasonError>>;
                 
 
                 #[doc="<p>Gets status of a specified health check. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i>/status</code> resource. You can use this call to get a health check's current status. </p>"]
-                fn get_health_check_status(&self, input: &GetHealthCheckStatusRequest) -> Result<GetHealthCheckStatusResponse, GetHealthCheckStatusError>;
+                fn get_health_check_status(&self, input: &GetHealthCheckStatusRequest) -> Box<Future<Item = GetHealthCheckStatusResponse, Error = GetHealthCheckStatusError>>;
                 
 
                 #[doc="<p>Retrieves the delegation set for a hosted zone, including the four name servers assigned to the hosted zone. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/hostedzone/<i>hosted zone ID</i> </code> resource. </p>"]
-                fn get_hosted_zone(&self, input: &GetHostedZoneRequest) -> Result<GetHostedZoneResponse, GetHostedZoneError>;
+                fn get_hosted_zone(&self, input: &GetHostedZoneRequest) -> Box<Future<Item = GetHostedZoneResponse, Error = GetHostedZoneError>>;
                 
 
                 #[doc="<p>Retrieves a count of all your hosted zones. Send a <code>GET</code> request to the <code>/2013-04-01/hostedzonecount</code> resource.</p>"]
-                fn get_hosted_zone_count(&self, input: &GetHostedZoneCountRequest) -> Result<GetHostedZoneCountResponse, GetHostedZoneCountError>;
+                fn get_hosted_zone_count(&self, input: &GetHostedZoneCountRequest) -> Box<Future<Item = GetHostedZoneCountResponse, Error = GetHostedZoneCountError>>;
                 
 
                 #[doc="<p>Retrieves the reusable delegation set. Send a <code>GET</code> request to the <code>/2013-04-01/delegationset/<i>delegation set ID</i> </code> resource.</p>"]
-                fn get_reusable_delegation_set(&self, input: &GetReusableDelegationSetRequest) -> Result<GetReusableDelegationSetResponse, GetReusableDelegationSetError>;
+                fn get_reusable_delegation_set(&self, input: &GetReusableDelegationSetRequest) -> Box<Future<Item = GetReusableDelegationSetResponse, Error = GetReusableDelegationSetError>>;
                 
 
                 #[doc="<p>Gets information about a specific traffic policy version.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p>"]
-                fn get_traffic_policy(&self, input: &GetTrafficPolicyRequest) -> Result<GetTrafficPolicyResponse, GetTrafficPolicyError>;
+                fn get_traffic_policy(&self, input: &GetTrafficPolicyRequest) -> Box<Future<Item = GetTrafficPolicyResponse, Error = GetTrafficPolicyError>>;
                 
 
                 #[doc="<p>Gets information about a specified traffic policy instance.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
-                fn get_traffic_policy_instance(&self, input: &GetTrafficPolicyInstanceRequest) -> Result<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError>;
+                fn get_traffic_policy_instance(&self, input: &GetTrafficPolicyInstanceRequest) -> Box<Future<Item = GetTrafficPolicyInstanceResponse, Error = GetTrafficPolicyInstanceError>>;
                 
 
                 #[doc="<p>Gets the number of traffic policy instances that are associated with the current AWS account.</p> <p>To get the number of traffic policy instances, send a <code>GET</code> request to the <code>/2013-04-01/trafficpolicyinstancecount</code> resource.</p>"]
-                fn get_traffic_policy_instance_count(&self, input: &GetTrafficPolicyInstanceCountRequest) -> Result<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError>;
+                fn get_traffic_policy_instance_count(&self, input: &GetTrafficPolicyInstanceCountRequest) -> Box<Future<Item = GetTrafficPolicyInstanceCountResponse, Error = GetTrafficPolicyInstanceCountError>>;
                 
 
                 #[doc="<p>Retrieves a list of supported geo locations. Send a <code>GET</code> request to the <code>/2013-04-01/geolocations</code> resource. The response to this request includes a <code>GeoLocationDetailsList</code> element for each location that Amazon Route 53 supports.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country. </p>"]
-                fn list_geo_locations(&self, input: &ListGeoLocationsRequest) -> Result<ListGeoLocationsResponse, ListGeoLocationsError>;
+                fn list_geo_locations(&self, input: &ListGeoLocationsRequest) -> Box<Future<Item = ListGeoLocationsResponse, Error = ListGeoLocationsError>>;
                 
 
                 #[doc="<p>Retrieve a list of your health checks. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck</code> resource. The response to this request includes a <code>HealthChecks</code> element with zero or more <code>HealthCheck</code> child elements. By default, the list of health checks is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the health check that the list begins with.</p> <p>For information about listing health checks using the Amazon Route 53 console, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a>.</p>"]
-                fn list_health_checks(&self, input: &ListHealthChecksRequest) -> Result<ListHealthChecksResponse, ListHealthChecksError>;
+                fn list_health_checks(&self, input: &ListHealthChecksRequest) -> Box<Future<Item = ListHealthChecksResponse, Error = ListHealthChecksError>>;
                 
 
                 #[doc="<p>To retrieve a list of your public and private hosted zones, send a <code>GET</code> request to the <code>/2013-04-01/hostedzone</code> resource. The response to this request includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100. The response includes four values that help navigate from one group of <code>maxitems</code> hosted zones to the next:</p> <ul> <li> <p> <code>MaxItems</code> is the value specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> </li> <li> <p> <code>NextMarker</code> is the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZones</code>, and specify the value of the <code>NextMarker</code> element in the marker parameter. </p> <p>If <code>IsTruncated</code> is false, the <code>NextMarker</code> element is omitted from the response.</p> </li> <li> <p>If you're making the second or subsequent call to <code>ListHostedZones</code>, the <code>Marker</code> element matches the value that you specified in the <code>marker</code> parameter in the previous request.</p> </li> </ul>"]
-                fn list_hosted_zones(&self, input: &ListHostedZonesRequest) -> Result<ListHostedZonesResponse, ListHostedZonesError>;
+                fn list_hosted_zones(&self, input: &ListHostedZonesRequest) -> Box<Future<Item = ListHostedZonesResponse, Error = ListHostedZonesError>>;
                 
 
                 #[doc="<p>Retrieves a list of your hosted zones in lexicographic order. Send a <code>GET</code> request to the <code>/2013-04-01/hostedzonesbyname</code> resource. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <ul> <li> <p> <code>com.example.www.</code> </p> </li> </ul> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for example.com, specify ex\\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <ul> <li> <p> <code>com.ex\\344mple.</code> </p> </li> </ul> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the Amazon Route 53 Developer Guide.</p> <p>Amazon Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul>"]
-                fn list_hosted_zones_by_name(&self, input: &ListHostedZonesByNameRequest) -> Result<ListHostedZonesByNameResponse, ListHostedZonesByNameError>;
+                fn list_hosted_zones_by_name(&self, input: &ListHostedZonesByNameRequest) -> Box<Future<Item = ListHostedZonesByNameResponse, Error = ListHostedZonesByNameError>>;
                 
 
                 #[doc="<p>Lists the resource record sets in a specified hosted zone.</p> <p> <code>ListResourceRecordSets</code> returns up to 100 resource record sets at a time in ASCII order, beginning at a position specified by the <code>name</code> and <code>type</code> elements. The action sorts results first by DNS name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>When multiple records have the same DNS name, the action sorts results by the record type.</p> <p>You can use the name and type elements to adjust the beginning position of the list of resource record sets returned:</p> <dl> <dt>If you do not specify Name or Type</dt> <dd> <p>The results begin with the first resource record set that the hosted zone contains.</p> </dd> <dt>If you specify Name but not Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>.</p> </dd> <dt>If you specify Type but not Name</dt> <dd> <p>Amazon Route 53 returns the <code>InvalidInput</code> error.</p> </dd> <dt>If you specify both Name and Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>, and whose type is greater than or equal to <code>Type</code>.</p> </dd> </dl> <p>This action returns the most current version of the records. This includes records that are <code>PENDING</code>, and that are not yet available on all Amazon Route 53 DNS servers.</p> <p>To ensure that you get an accurate listing of the resource record sets for a hosted zone at a point in time, do not submit a <code>ChangeResourceRecordSets</code> request while you're paging through the results of a <code>ListResourceRecordSets</code> request. If you do, some pages may display results without the latest changes while other pages display results with the latest changes.</p>"]
-                fn list_resource_record_sets(&self, input: &ListResourceRecordSetsRequest) -> Result<ListResourceRecordSetsResponse, ListResourceRecordSetsError>;
+                fn list_resource_record_sets(&self, input: &ListResourceRecordSetsRequest) -> Box<Future<Item = ListResourceRecordSetsResponse, Error = ListResourceRecordSetsError>>;
                 
 
                 #[doc="<p>To retrieve a list of your reusable delegation sets, send a <code>GET</code> request to the <code>/2013-04-01/delegationset</code> resource. The response to this request includes a <code>DelegationSets</code> element with zero, one, or multiple <code>DelegationSet</code> child elements. By default, the list of delegation sets is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the delegation set that the list begins with. </p> <note> <p> Amazon Route 53 returns a maximum of 100 items. If you set MaxItems to a value greater than 100, Amazon Route 53 returns only the first 100.</p> </note>"]
-                fn list_reusable_delegation_sets(&self, input: &ListReusableDelegationSetsRequest) -> Result<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError>;
+                fn list_reusable_delegation_sets(&self, input: &ListReusableDelegationSetsRequest) -> Box<Future<Item = ListReusableDelegationSetsResponse, Error = ListReusableDelegationSetsError>>;
                 
 
                 #[doc="<p>Lists tags for one health check or hosted zone. </p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest) -> Box<Future<Item = ListTagsForResourceResponse, Error = ListTagsForResourceError>>;
                 
 
                 #[doc="<p>Lists tags for up to 10 health checks or hosted zones.</p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
-                fn list_tags_for_resources(&self, input: &ListTagsForResourcesRequest) -> Result<ListTagsForResourcesResponse, ListTagsForResourcesError>;
+                fn list_tags_for_resources(&self, input: &ListTagsForResourcesRequest) -> Box<Future<Item = ListTagsForResourcesResponse, Error = ListTagsForResourcesError>>;
                 
 
                 #[doc="<p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policies, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p> <p>The response includes three values that help you navigate from one group of <code>maxitems</code> traffic policies to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policies associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy that is associated with the current account.</p> </li> <li> <p> <b>TrafficPolicyIdMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyIdMarker</code> is the ID of the first traffic policy in the next group of <code>MaxItems</code> traffic policies. If you want to list more traffic policies, make another call to <code>ListTrafficPolicies</code>, and specify the value of the <code>TrafficPolicyIdMarker</code> element from the response in the <code>TrafficPolicyIdMarker</code> request parameter.</p> <p>If <code>IsTruncated</code> is <code>false</code>, the <code>TrafficPolicyIdMarker</code> element is omitted from the response.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> </ul>"]
-                fn list_traffic_policies(&self, input: &ListTrafficPoliciesRequest) -> Result<ListTrafficPoliciesResponse, ListTrafficPoliciesError>;
+                fn list_traffic_policies(&self, input: &ListTrafficPoliciesRequest) -> Box<Future<Item = ListTrafficPoliciesResponse, Error = ListTrafficPoliciesError>>;
                 
 
                 #[doc="<p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes five values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy instances associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the current account.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>HostedZoneIdMarker</b>, <b>TrafficPolicyInstanceNameMarker</b>, and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these three values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstances</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
-                fn list_traffic_policy_instances(&self, input: &ListTrafficPolicyInstancesRequest) -> Result<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError>;
+                fn list_traffic_policy_instances(&self, input: &ListTrafficPolicyInstancesRequest) -> Box<Future<Item = ListTrafficPolicyInstancesResponse, Error = ListTrafficPolicyInstancesError>>;
                 
 
                 #[doc="<p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource and include the ID of the hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes four values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code/>IsTruncated in the response is <code>true</code>, there are more traffic policy instances associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the current account.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>TrafficPolicyInstanceNameMarker</b> and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these two values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstancesByHostedZone</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
-                fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError>;
+                fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Box<Future<Item = ListTrafficPolicyInstancesByHostedZoneResponse, Error = ListTrafficPolicyInstancesByHostedZoneError>>;
                 
 
                 #[doc="<p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Route 53 API version</i>/trafficpolicyinstance</code> resource and include the ID and version of the traffic policy.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes five values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy instances associated with the specified traffic policy.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the specified traffic policy.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>HostedZoneIdMarker</b>, <b>TrafficPolicyInstanceNameMarker</b>, and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstancesByPolicy</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
-                fn list_traffic_policy_instances_by_policy(&self, input: &ListTrafficPolicyInstancesByPolicyRequest) -> Result<ListTrafficPolicyInstancesByPolicyResponse, ListTrafficPolicyInstancesByPolicyError>;
+                fn list_traffic_policy_instances_by_policy(&self, input: &ListTrafficPolicyInstancesByPolicyRequest) -> Box<Future<Item = ListTrafficPolicyInstancesByPolicyResponse, Error = ListTrafficPolicyInstancesByPolicyError>>;
                 
 
                 #[doc="<p>Gets information about all of the versions for a specified traffic policy.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource and specify the ID of the traffic policy for which you want to list versions.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policies, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p> <p>The response includes three values that help you navigate from one group of <code>maxitems</code> traffic policies to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy versions associated with the specified traffic policy.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy version that is associated with the specified traffic policy.</p> </li> <li> <p> <b>TrafficPolicyVersionMarker</b> </p> <p>The ID of the next traffic policy version that is associated with the current AWS account. If you want to list more traffic policies, make another call to <code>ListTrafficPolicyVersions</code>, and specify the value of the <code>TrafficPolicyVersionMarker</code> element in the <code>TrafficPolicyVersionMarker</code> request parameter.</p> <p>If <code>IsTruncated</code> is <code>false</code>, Amazon Route 53 omits the <code>TrafficPolicyVersionMarker</code> element from the response.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> </ul>"]
-                fn list_traffic_policy_versions(&self, input: &ListTrafficPolicyVersionsRequest) -> Result<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError>;
+                fn list_traffic_policy_versions(&self, input: &ListTrafficPolicyVersionsRequest) -> Box<Future<Item = ListTrafficPolicyVersionsResponse, Error = ListTrafficPolicyVersionsError>>;
                 
 
                 #[doc="<p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>Send a <code>GET</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation</code> resource. The response to this request includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p> <p>Amazon Route 53 returns up to 50 VPCs per page. To return fewer VPCs per page, include the <code>MaxResults</code> parameter: </p> <p> <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation?MaxItems=<i>VPCs per page</i> </code> </p> <p>If the response includes a <code>NextToken</code> element, there are more VPCs to list. To get the next page of VPCs, submit another <code>ListVPCAssociationAuthorizations</code> request, and include the value of the <code>NextToken</code> element from the response in the <code>NextToken</code> request parameter:</p> <p> <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation?MaxItems=<i>VPCs per page</i>&amp;NextToken=<i/> </code> </p>"]
-                fn list_vpc_association_authorizations(&self, input: &ListVPCAssociationAuthorizationsRequest) -> Result<ListVPCAssociationAuthorizationsResponse, ListVPCAssociationAuthorizationsError>;
+                fn list_vpc_association_authorizations(&self, input: &ListVPCAssociationAuthorizationsRequest) -> Box<Future<Item = ListVPCAssociationAuthorizationsResponse, Error = ListVPCAssociationAuthorizationsError>>;
                 
 
                 #[doc="<p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>"]
-                fn test_dns_answer(&self, input: &TestDNSAnswerRequest) -> Result<TestDNSAnswerResponse, TestDNSAnswerError>;
+                fn test_dns_answer(&self, input: &TestDNSAnswerRequest) -> Box<Future<Item = TestDNSAnswerResponse, Error = TestDNSAnswerError>>;
                 
 
                 #[doc="<p>Updates an existing health check.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource. The request body must include a document with an <code>UpdateHealthCheckRequest</code> element. For more information about updating health checks, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html\">Creating, Updating, and Deleting Health Checks</a> in the Amazon Route 53 Developer Guide.</p>"]
-                fn update_health_check(&self, input: &UpdateHealthCheckRequest) -> Result<UpdateHealthCheckResponse, UpdateHealthCheckError>;
+                fn update_health_check(&self, input: &UpdateHealthCheckRequest) -> Box<Future<Item = UpdateHealthCheckResponse, Error = UpdateHealthCheckError>>;
                 
 
                 #[doc="<p>Updates the hosted zone comment. Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i> </code> resource. </p>"]
-                fn update_hosted_zone_comment(&self, input: &UpdateHostedZoneCommentRequest) -> Result<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError>;
+                fn update_hosted_zone_comment(&self, input: &UpdateHostedZoneCommentRequest) -> Box<Future<Item = UpdateHostedZoneCommentResponse, Error = UpdateHostedZoneCommentError>>;
                 
 
                 #[doc="<p>Updates the comment for a specified traffic policy version.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy/</code> resource.</p> <p>The request body must include a document with an <code>UpdateTrafficPolicyCommentRequest</code> element.</p>"]
-                fn update_traffic_policy_comment(&self, input: &UpdateTrafficPolicyCommentRequest) -> Result<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError>;
+                fn update_traffic_policy_comment(&self, input: &UpdateTrafficPolicyCommentRequest) -> Box<Future<Item = UpdateTrafficPolicyCommentResponse, Error = UpdateTrafficPolicyCommentError>>;
                 
 
                 #[doc="<p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicyinstance/<i>traffic policy ID</i> </code> resource. The request body must include a document with an <code>UpdateTrafficPolicyInstanceRequest</code> element.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Amazon Route 53 performs the following operations:</p> <ol> <li> <p>Amazon Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how substantial the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Amazon Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Amazon Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol>"]
-                fn update_traffic_policy_instance(&self, input: &UpdateTrafficPolicyInstanceRequest) -> Result<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError>;
+                fn update_traffic_policy_instance(&self, input: &UpdateTrafficPolicyInstanceRequest) -> Box<Future<Item = UpdateTrafficPolicyInstanceResponse, Error = UpdateTrafficPolicyInstanceError>>;
                 
 }
 /// A client for the Route 53 API.
@@ -10482,7 +10493,7 @@ UpdateTrafficPolicyInstanceError::Unknown(ref cause) => cause
         
 #[doc="<p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can't convert a public hosted zone into a private hosted zone.</p> </important> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/associatevpc</code> resource. The request body must include a document with an <code>AssociateVPCWithHostedZoneRequest</code> element. The response contains a <code>ChangeInfo</code> data type that you can use to track the progress of the request. </p> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note>"]
                 #[allow(unused_variables, warnings)]
-                fn associate_vpc_with_hosted_zone(&self, input: &AssociateVPCWithHostedZoneRequest) -> Result<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError> {
+                fn associate_vpc_with_hosted_zone(&self, input: &AssociateVPCWithHostedZoneRequest) -> Box<Future<Item = AssociateVPCWithHostedZoneResponse, Error = AssociateVPCWithHostedZoneError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}/associatevpc".to_string();
 
@@ -10496,13 +10507,20 @@ UpdateTrafficPolicyInstanceError::Unknown(ref cause) => cause
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AssociateVPCWithHostedZoneError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AssociateVPCWithHostedZoneError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10514,19 +10532,22 @@ UpdateTrafficPolicyInstanceError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AssociateVPCWithHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AssociateVPCWithHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(AssociateVPCWithHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(AssociateVPCWithHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Create, change, update, or delete authoritative DNS information on all Amazon Route 53 servers. Send a <code>POST</code> request to: </p> <p> <code>/2013-04-01/hostedzone/<i>Amazon Route 53 hosted Zone ID</i>/rrset</code> resource. </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Amazon Route 53 either makes all or none of the changes in a change batch request. This ensures that Amazon Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Amazon Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Amazon Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <note> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Amazon Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html\">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </note> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Amazon Route 53 updates it with the values in the request. </p> </li> </ul> <p>The values that you need to include in the request depend on the type of resource record set that you're creating, deleting, or updating:</p> <p> <b>Basic resource record sets (excluding alias, failover, geolocation, latency, and weighted resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> </ul> <p> <b>Failover, geolocation, latency, or weighted resource record sets (excluding alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> <li> <p> <code>SetIdentifier</code> </p> </li> </ul> <p> <b>Alias resource record sets (including failover alias, geolocation alias, latency alias, and weighted alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>AliasTarget</code> (includes <code>DNSName</code>, <code>EvaluateTargetHealth</code>, and <code>HostedZoneId</code>)</p> </li> <li> <p> <code>SetIdentifier</code> (for failover, geolocation, latency, and weighted resource record sets)</p> </li> </ul> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Amazon Route 53 propagates your changes to all of the Amazon Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Amazon Route 53 name servers in a few minutes. In rare circumstances, propagation can take up to 30 minutes. For more information, see <a>GetChange</a> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html\">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn change_resource_record_sets(&self, input: &ChangeResourceRecordSetsRequest) -> Result<ChangeResourceRecordSetsResponse, ChangeResourceRecordSetsError> {
+                fn change_resource_record_sets(&self, input: &ChangeResourceRecordSetsRequest) -> Box<Future<Item = ChangeResourceRecordSetsResponse, Error = ChangeResourceRecordSetsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}/rrset/".to_string();
 
@@ -10540,13 +10561,20 @@ UpdateTrafficPolicyInstanceError::Unknown(ref cause) => cause
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ChangeResourceRecordSetsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ChangeResourceRecordSetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10558,19 +10586,22 @@ UpdateTrafficPolicyInstanceError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ChangeResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ChangeResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ChangeResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ChangeResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Adds, edits, or deletes tags for a health check or a hosted zone.</p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn change_tags_for_resource(&self, input: &ChangeTagsForResourceRequest) -> Result<ChangeTagsForResourceResponse, ChangeTagsForResourceError> {
+                fn change_tags_for_resource(&self, input: &ChangeTagsForResourceRequest) -> Box<Future<Item = ChangeTagsForResourceResponse, Error = ChangeTagsForResourceError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/tags/{ResourceType}/{ResourceId}".to_string();
 
@@ -10585,13 +10616,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ChangeTagsForResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ChangeTagsForResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10603,19 +10641,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ChangeTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ChangeTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ChangeTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ChangeTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Creates a new health check.</p> <p>To create a new health check, send a <code>POST</code> request to the <code>/2013-04-01/healthcheck</code> resource. The request body must include a document with a <code>CreateHealthCheckRequest</code> element. The response returns the <code>CreateHealthCheckResponse</code> element, containing the health check ID specified when adding health check to a resource record set. For information about adding health checks to resource record sets, see <a>ResourceRecordSet$HealthCheckId</a> in <a>ChangeResourceRecordSets</a>. </p> <p>If you are registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to an Amazon Route 53 health check.</p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Amazon Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html\">Amazon CloudWatch User Guide</a>.</p> </li> </ul>"]
                 #[allow(unused_variables, warnings)]
-                fn create_health_check(&self, input: &CreateHealthCheckRequest) -> Result<CreateHealthCheckResponse, CreateHealthCheckError> {
+                fn create_health_check(&self, input: &CreateHealthCheckRequest) -> Box<Future<Item = CreateHealthCheckResponse, Error = CreateHealthCheckError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/healthcheck".to_string();
 
@@ -10629,13 +10670,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateHealthCheckError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateHealthCheckError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10647,20 +10695,23 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            let value = response.headers.get("Location").unwrap().to_owned();
+                                    let value = response.headers.get("Location").unwrap().to_owned();
                  result.location = value;
-                            Ok(result)
-                        },
-                        _ => Err(CreateHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Creates a new public hosted zone, used to specify how the Domain Name System (DNS) routes traffic on the Internet for a domain, such as example.com, and its subdomains. </p> <important> <p>Public hosted zones can't be converted to a private hosted zone or vice versa. Instead, create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone</code> resource. The request body must include a document with a <code>CreateHostedZoneRequest</code> element. The response returns the <code>CreateHostedZoneResponse</code> element containing metadata about the hosted zone.</p> <p>Fore more information about charges for hosted zones, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD).</p> </li> <li> <p>Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html\">NS and SOA Records that Amazon Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> <li> <p>If your domain is registered with a registrar other than Amazon Route 53, you must update the name servers with your registrar to make Amazon Route 53 your DNS service. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/creating-migrating.html\">Configuring Amazon Route 53 as your DNS Service</a> in the <i>Amazon Route 53 Developer's Guide</i>.</p> </li> </ul> <p>After creating a zone, its initial status is <code>PENDING</code>. This means that it is not yet available on all DNS servers. The status of the zone changes to <code>INSYNC</code> when the NS and SOA records are available on all Amazon Route 53 DNS servers. </p> <p>When trying to create a hosted zone using a reusable delegation set, specify an optional DelegationSetId, and Amazon Route 53 would assign those 4 NS records for the zone, instead of allotting a new one.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_hosted_zone(&self, input: &CreateHostedZoneRequest) -> Result<CreateHostedZoneResponse, CreateHostedZoneError> {
+                fn create_hosted_zone(&self, input: &CreateHostedZoneRequest) -> Box<Future<Item = CreateHostedZoneResponse, Error = CreateHostedZoneError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone".to_string();
 
@@ -10674,13 +10725,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateHostedZoneError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateHostedZoneError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10692,20 +10750,23 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            let value = response.headers.get("Location").unwrap().to_owned();
+                                    let value = response.headers.get("Location").unwrap().to_owned();
                  result.location = value;
-                            Ok(result)
-                        },
-                        _ => Err(CreateHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/delegationset</code> resource. The request body must include a document with a <code>CreateReusableDelegationSetRequest</code> element.</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone/</p> </note> <p>For more information, including a procedure on how to create and configure a reusable delegation set (also known as white label name servers), see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html\">Configuring White Label Name Servers</a>.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_reusable_delegation_set(&self, input: &CreateReusableDelegationSetRequest) -> Result<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError> {
+                fn create_reusable_delegation_set(&self, input: &CreateReusableDelegationSetRequest) -> Box<Future<Item = CreateReusableDelegationSetResponse, Error = CreateReusableDelegationSetError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/delegationset".to_string();
 
@@ -10719,13 +10780,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateReusableDelegationSetError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateReusableDelegationSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10737,20 +10805,23 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            let value = response.headers.get("Location").unwrap().to_owned();
+                                    let value = response.headers.get("Location").unwrap().to_owned();
                  result.location = value;
-                            Ok(result)
-                        },
-                        _ => Err(CreateReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy</code> resource. The request body must include a document with a <code>CreateTrafficPolicyRequest</code> element. The response includes the <code>CreateTrafficPolicyResponse</code> element, which contains information about the new traffic policy.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_traffic_policy(&self, input: &CreateTrafficPolicyRequest) -> Result<CreateTrafficPolicyResponse, CreateTrafficPolicyError> {
+                fn create_traffic_policy(&self, input: &CreateTrafficPolicyRequest) -> Box<Future<Item = CreateTrafficPolicyResponse, Error = CreateTrafficPolicyError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicy".to_string();
 
@@ -10764,13 +10835,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTrafficPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTrafficPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10782,20 +10860,23 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            let value = response.headers.get("Location").unwrap().to_owned();
+                                    let value = response.headers.get("Location").unwrap().to_owned();
                  result.location = value;
-                            Ok(result)
-                        },
-                        _ => Err(CreateTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicyinstance</code> resource. The request body must include a document with a <code>CreateTrafficPolicyRequest</code> element. The response returns the <code>CreateTrafficPolicyInstanceResponse</code> element, which contains information about the traffic policy instance.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_traffic_policy_instance(&self, input: &CreateTrafficPolicyInstanceRequest) -> Result<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError> {
+                fn create_traffic_policy_instance(&self, input: &CreateTrafficPolicyInstanceRequest) -> Box<Future<Item = CreateTrafficPolicyInstanceResponse, Error = CreateTrafficPolicyInstanceError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicyinstance".to_string();
 
@@ -10809,13 +10890,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTrafficPolicyInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTrafficPolicyInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10827,20 +10915,23 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            let value = response.headers.get("Location").unwrap().to_owned();
+                                    let value = response.headers.get("Location").unwrap().to_owned();
                  result.location = value;
-                            Ok(result)
-                        },
-                        _ => Err(CreateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy/</code> resource. The request body includes a document with a <code>CreateTrafficPolicyVersionRequest</code> element. The response returns the <code>CreateTrafficPolicyVersionResponse</code> element, which contains information about the new version of the traffic policy.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_traffic_policy_version(&self, input: &CreateTrafficPolicyVersionRequest) -> Result<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError> {
+                fn create_traffic_policy_version(&self, input: &CreateTrafficPolicyVersionRequest) -> Box<Future<Item = CreateTrafficPolicyVersionResponse, Error = CreateTrafficPolicyVersionError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicy/{Id}".to_string();
 
@@ -10854,13 +10945,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTrafficPolicyVersionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTrafficPolicyVersionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10872,20 +10970,23 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateTrafficPolicyVersionResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateTrafficPolicyVersionResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            let value = response.headers.get("Location").unwrap().to_owned();
+                                    let value = response.headers.get("Location").unwrap().to_owned();
                  result.location = value;
-                            Ok(result)
-                        },
-                        _ => Err(CreateTrafficPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateTrafficPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation</code> resource. The request body must include a document with a <code>CreateVPCAssociationAuthorizationRequest</code> element. The response contains information about the authorization.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_vpc_association_authorization(&self, input: &CreateVPCAssociationAuthorizationRequest) -> Result<CreateVPCAssociationAuthorizationResponse, CreateVPCAssociationAuthorizationError> {
+                fn create_vpc_association_authorization(&self, input: &CreateVPCAssociationAuthorizationRequest) -> Box<Future<Item = CreateVPCAssociationAuthorizationResponse, Error = CreateVPCAssociationAuthorizationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}/authorizevpcassociation".to_string();
 
@@ -10899,13 +11000,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateVPCAssociationAuthorizationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateVPCAssociationAuthorizationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10917,19 +11025,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(CreateVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Deletes a health check. Send a <code>DELETE</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html\">Replacing and Deleting Health Checks</a> in the Amazon Route 53 Developer Guide.</p> </important>"]
                 #[allow(unused_variables, warnings)]
-                fn delete_health_check(&self, input: &DeleteHealthCheckRequest) -> Result<DeleteHealthCheckResponse, DeleteHealthCheckError> {
+                fn delete_health_check(&self, input: &DeleteHealthCheckRequest) -> Box<Future<Item = DeleteHealthCheckResponse, Error = DeleteHealthCheckError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}".to_string();
 
@@ -10943,13 +11054,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteHealthCheckError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteHealthCheckError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -10961,19 +11079,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Deletes a hosted zone. Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/hostedzone/<i>hosted zone ID</i> </code> resource.</p> <important> <p>Delete a hosted zone only if there are no resource record sets other than the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, delete them before deleting the hosted zone. If you try to delete a hosted zone that contains other resource record sets, Amazon Route 53 denies your request with a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a>ChangeResourceRecordSets</a>.</p> </important>"]
                 #[allow(unused_variables, warnings)]
-                fn delete_hosted_zone(&self, input: &DeleteHostedZoneRequest) -> Result<DeleteHostedZoneResponse, DeleteHostedZoneError> {
+                fn delete_hosted_zone(&self, input: &DeleteHostedZoneRequest) -> Box<Future<Item = DeleteHostedZoneResponse, Error = DeleteHostedZoneError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}".to_string();
 
@@ -10987,13 +11108,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteHostedZoneError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteHostedZoneError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11005,19 +11133,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Deletes a reusable delegation set. Send a <code>DELETE</code> request to the <code>/2013-04-01/delegationset/<i>delegation set ID</i> </code> resource.</p> <important> <p> You can delete a reusable delegation set only if there are no associated hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, run the <a>GetReusableDelegationSet</a> action and specify the ID of the reusable delegation set that you want to delete.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn delete_reusable_delegation_set(&self, input: &DeleteReusableDelegationSetRequest) -> Result<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError> {
+                fn delete_reusable_delegation_set(&self, input: &DeleteReusableDelegationSetRequest) -> Box<Future<Item = DeleteReusableDelegationSetResponse, Error = DeleteReusableDelegationSetError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/delegationset/{Id}".to_string();
 
@@ -11031,13 +11162,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteReusableDelegationSetError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteReusableDelegationSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11049,19 +11187,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Deletes a traffic policy.</p> <p>Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn delete_traffic_policy(&self, input: &DeleteTrafficPolicyRequest) -> Result<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError> {
+                fn delete_traffic_policy(&self, input: &DeleteTrafficPolicyRequest) -> Box<Future<Item = DeleteTrafficPolicyResponse, Error = DeleteTrafficPolicyError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicy/{Id}/{Version}".to_string();
 
@@ -11076,13 +11217,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTrafficPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTrafficPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11094,19 +11242,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <p>Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy/<i>traffic policy instance ID</i> </code> resource.</p> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
                 #[allow(unused_variables, warnings)]
-                fn delete_traffic_policy_instance(&self, input: &DeleteTrafficPolicyInstanceRequest) -> Result<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError> {
+                fn delete_traffic_policy_instance(&self, input: &DeleteTrafficPolicyInstanceRequest) -> Box<Future<Item = DeleteTrafficPolicyInstanceResponse, Error = DeleteTrafficPolicyInstanceError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicyinstance/{Id}".to_string();
 
@@ -11120,13 +11271,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTrafficPolicyInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTrafficPolicyInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11138,19 +11296,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won't disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important> <p>Send a <code>DELETE</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/deauthorizevpcassociation</code> resource. The request body must include a document with a <code>DeleteVPCAssociationAuthorizationRequest</code> element.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn delete_vpc_association_authorization(&self, input: &DeleteVPCAssociationAuthorizationRequest) -> Result<DeleteVPCAssociationAuthorizationResponse, DeleteVPCAssociationAuthorizationError> {
+                fn delete_vpc_association_authorization(&self, input: &DeleteVPCAssociationAuthorizationRequest) -> Box<Future<Item = DeleteVPCAssociationAuthorizationResponse, Error = DeleteVPCAssociationAuthorizationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}/deauthorizevpcassociation".to_string();
 
@@ -11164,13 +11325,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVPCAssociationAuthorizationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVPCAssociationAuthorizationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11182,19 +11350,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Disassociates a VPC from a Amazon Route 53 private hosted zone. </p> <note> <p>You can't disassociate the last VPC from a private hosted zone.</p> </note> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/disassociatevpc</code> resource. The request body must include a document with a <code>DisassociateVPCFromHostedZoneRequest</code> element. The response includes a <code>DisassociateVPCFromHostedZoneResponse</code> element.</p> <important> <p>You can't disassociate a VPC from a private hosted zone when only one VPC is associated with the hosted zone. You also can't convert a private hosted zone into a public hosted zone.</p> </important>"]
                 #[allow(unused_variables, warnings)]
-                fn disassociate_vpc_from_hosted_zone(&self, input: &DisassociateVPCFromHostedZoneRequest) -> Result<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError> {
+                fn disassociate_vpc_from_hosted_zone(&self, input: &DisassociateVPCFromHostedZoneRequest) -> Box<Future<Item = DisassociateVPCFromHostedZoneResponse, Error = DisassociateVPCFromHostedZoneError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}/disassociatevpc".to_string();
 
@@ -11208,13 +11379,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisassociateVPCFromHostedZoneError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisassociateVPCFromHostedZoneError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11226,19 +11404,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DisassociateVPCFromHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DisassociateVPCFromHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not replicated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have replicated to all Amazon Route 53 DNS servers. </p> </li> </ul>"]
                 #[allow(unused_variables, warnings)]
-                fn get_change(&self, input: &GetChangeRequest) -> Result<GetChangeResponse, GetChangeError> {
+                fn get_change(&self, input: &GetChangeRequest) -> Box<Future<Item = GetChangeResponse, Error = GetChangeError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/change/{Id}".to_string();
 
@@ -11252,13 +11433,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetChangeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetChangeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11270,19 +11458,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetChangeResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetChangeResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetChangeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetChangeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Retrieves a list of the IP ranges used by Amazon Route 53 health checkers to check the health of your resources. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/checkeripranges</code> resource. Use these IP addresses to configure router and firewall rules to allow health checkers to check the health of your resources.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_checker_ip_ranges(&self, input: &GetCheckerIpRangesRequest) -> Result<GetCheckerIpRangesResponse, GetCheckerIpRangesError> {
+                fn get_checker_ip_ranges(&self, input: &GetCheckerIpRangesRequest) -> Box<Future<Item = GetCheckerIpRangesResponse, Error = GetCheckerIpRangesError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/checkeripranges".to_string();
 
@@ -11296,13 +11487,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetCheckerIpRangesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetCheckerIpRangesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11314,19 +11512,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetCheckerIpRangesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetCheckerIpRangesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetCheckerIpRangesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetCheckerIpRangesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Retrieves a single geo location. Send a <code>GET</code> request to the <code>/2013-04-01/geolocation</code> resource with one of these options: continentcode | countrycode | countrycode and subdivisioncode.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_geo_location(&self, input: &GetGeoLocationRequest) -> Result<GetGeoLocationResponse, GetGeoLocationError> {
+                fn get_geo_location(&self, input: &GetGeoLocationRequest) -> Box<Future<Item = GetGeoLocationResponse, Error = GetGeoLocationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/geolocation".to_string();
 
@@ -11351,13 +11552,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetGeoLocationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetGeoLocationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11369,19 +11577,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetGeoLocationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetGeoLocationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetGeoLocationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetGeoLocationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets information about a specified health check. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource. For more information about using the console to perform this operation, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> in the Amazon Route 53 Developer Guide.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_health_check(&self, input: &GetHealthCheckRequest) -> Result<GetHealthCheckResponse, GetHealthCheckError> {
+                fn get_health_check(&self, input: &GetHealthCheckRequest) -> Box<Future<Item = GetHealthCheckResponse, Error = GetHealthCheckError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}".to_string();
 
@@ -11395,13 +11606,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetHealthCheckError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetHealthCheckError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11413,19 +11631,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>To retrieve a count of all your health checks, send a <code>GET</code> request to the <code>/2013-04-01/healthcheckcount</code> resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_health_check_count(&self, input: &GetHealthCheckCountRequest) -> Result<GetHealthCheckCountResponse, GetHealthCheckCountError> {
+                fn get_health_check_count(&self, input: &GetHealthCheckCountRequest) -> Box<Future<Item = GetHealthCheckCountResponse, Error = GetHealthCheckCountError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/healthcheckcount".to_string();
 
@@ -11439,13 +11660,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetHealthCheckCountError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetHealthCheckCountError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11457,19 +11685,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetHealthCheckCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetHealthCheckCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetHealthCheckCountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetHealthCheckCountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>If you want to learn why a health check is currently failing or why it failed most recently (if at all), you can get the failure reason for the most recent failure. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/healthcheck/<i>health check ID</i>/lastfailurereason</code> resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_health_check_last_failure_reason(&self, input: &GetHealthCheckLastFailureReasonRequest) -> Result<GetHealthCheckLastFailureReasonResponse, GetHealthCheckLastFailureReasonError> {
+                fn get_health_check_last_failure_reason(&self, input: &GetHealthCheckLastFailureReasonRequest) -> Box<Future<Item = GetHealthCheckLastFailureReasonResponse, Error = GetHealthCheckLastFailureReasonError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}/lastfailurereason".to_string();
 
@@ -11483,13 +11714,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetHealthCheckLastFailureReasonError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetHealthCheckLastFailureReasonError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11501,19 +11739,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetHealthCheckLastFailureReasonError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetHealthCheckLastFailureReasonError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets status of a specified health check. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i>/status</code> resource. You can use this call to get a health check's current status. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_health_check_status(&self, input: &GetHealthCheckStatusRequest) -> Result<GetHealthCheckStatusResponse, GetHealthCheckStatusError> {
+                fn get_health_check_status(&self, input: &GetHealthCheckStatusRequest) -> Box<Future<Item = GetHealthCheckStatusResponse, Error = GetHealthCheckStatusError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}/status".to_string();
 
@@ -11527,13 +11768,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetHealthCheckStatusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetHealthCheckStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11545,19 +11793,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetHealthCheckStatusResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetHealthCheckStatusResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetHealthCheckStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetHealthCheckStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Retrieves the delegation set for a hosted zone, including the four name servers assigned to the hosted zone. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/hostedzone/<i>hosted zone ID</i> </code> resource. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_hosted_zone(&self, input: &GetHostedZoneRequest) -> Result<GetHostedZoneResponse, GetHostedZoneError> {
+                fn get_hosted_zone(&self, input: &GetHostedZoneRequest) -> Box<Future<Item = GetHostedZoneResponse, Error = GetHostedZoneError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}".to_string();
 
@@ -11571,13 +11822,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetHostedZoneError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetHostedZoneError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11589,19 +11847,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Retrieves a count of all your hosted zones. Send a <code>GET</code> request to the <code>/2013-04-01/hostedzonecount</code> resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_hosted_zone_count(&self, input: &GetHostedZoneCountRequest) -> Result<GetHostedZoneCountResponse, GetHostedZoneCountError> {
+                fn get_hosted_zone_count(&self, input: &GetHostedZoneCountRequest) -> Box<Future<Item = GetHostedZoneCountResponse, Error = GetHostedZoneCountError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzonecount".to_string();
 
@@ -11615,13 +11876,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetHostedZoneCountError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetHostedZoneCountError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11633,19 +11901,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetHostedZoneCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetHostedZoneCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetHostedZoneCountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetHostedZoneCountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Retrieves the reusable delegation set. Send a <code>GET</code> request to the <code>/2013-04-01/delegationset/<i>delegation set ID</i> </code> resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_reusable_delegation_set(&self, input: &GetReusableDelegationSetRequest) -> Result<GetReusableDelegationSetResponse, GetReusableDelegationSetError> {
+                fn get_reusable_delegation_set(&self, input: &GetReusableDelegationSetRequest) -> Box<Future<Item = GetReusableDelegationSetResponse, Error = GetReusableDelegationSetError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/delegationset/{Id}".to_string();
 
@@ -11659,13 +11930,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetReusableDelegationSetError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetReusableDelegationSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11677,19 +11955,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets information about a specific traffic policy version.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_traffic_policy(&self, input: &GetTrafficPolicyRequest) -> Result<GetTrafficPolicyResponse, GetTrafficPolicyError> {
+                fn get_traffic_policy(&self, input: &GetTrafficPolicyRequest) -> Box<Future<Item = GetTrafficPolicyResponse, Error = GetTrafficPolicyError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicy/{Id}/{Version}".to_string();
 
@@ -11704,13 +11985,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetTrafficPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetTrafficPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11722,19 +12010,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets information about a specified traffic policy instance.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
                 #[allow(unused_variables, warnings)]
-                fn get_traffic_policy_instance(&self, input: &GetTrafficPolicyInstanceRequest) -> Result<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError> {
+                fn get_traffic_policy_instance(&self, input: &GetTrafficPolicyInstanceRequest) -> Box<Future<Item = GetTrafficPolicyInstanceResponse, Error = GetTrafficPolicyInstanceError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicyinstance/{Id}".to_string();
 
@@ -11748,13 +12039,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetTrafficPolicyInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetTrafficPolicyInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11766,19 +12064,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets the number of traffic policy instances that are associated with the current AWS account.</p> <p>To get the number of traffic policy instances, send a <code>GET</code> request to the <code>/2013-04-01/trafficpolicyinstancecount</code> resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_traffic_policy_instance_count(&self, input: &GetTrafficPolicyInstanceCountRequest) -> Result<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError> {
+                fn get_traffic_policy_instance_count(&self, input: &GetTrafficPolicyInstanceCountRequest) -> Box<Future<Item = GetTrafficPolicyInstanceCountResponse, Error = GetTrafficPolicyInstanceCountError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicyinstancecount".to_string();
 
@@ -11792,13 +12093,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetTrafficPolicyInstanceCountError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetTrafficPolicyInstanceCountError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11810,19 +12118,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetTrafficPolicyInstanceCountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetTrafficPolicyInstanceCountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Retrieves a list of supported geo locations. Send a <code>GET</code> request to the <code>/2013-04-01/geolocations</code> resource. The response to this request includes a <code>GeoLocationDetailsList</code> element for each location that Amazon Route 53 supports.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_geo_locations(&self, input: &ListGeoLocationsRequest) -> Result<ListGeoLocationsResponse, ListGeoLocationsError> {
+                fn list_geo_locations(&self, input: &ListGeoLocationsRequest) -> Box<Future<Item = ListGeoLocationsResponse, Error = ListGeoLocationsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/geolocations".to_string();
 
@@ -11851,13 +12162,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListGeoLocationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListGeoLocationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11869,19 +12187,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListGeoLocationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListGeoLocationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListGeoLocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListGeoLocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Retrieve a list of your health checks. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck</code> resource. The response to this request includes a <code>HealthChecks</code> element with zero or more <code>HealthCheck</code> child elements. By default, the list of health checks is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the health check that the list begins with.</p> <p>For information about listing health checks using the Amazon Route 53 console, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a>.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_health_checks(&self, input: &ListHealthChecksRequest) -> Result<ListHealthChecksResponse, ListHealthChecksError> {
+                fn list_health_checks(&self, input: &ListHealthChecksRequest) -> Box<Future<Item = ListHealthChecksResponse, Error = ListHealthChecksError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/healthcheck".to_string();
 
@@ -11902,13 +12223,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListHealthChecksError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListHealthChecksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11920,19 +12248,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListHealthChecksResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListHealthChecksResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListHealthChecksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListHealthChecksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>To retrieve a list of your public and private hosted zones, send a <code>GET</code> request to the <code>/2013-04-01/hostedzone</code> resource. The response to this request includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100. The response includes four values that help navigate from one group of <code>maxitems</code> hosted zones to the next:</p> <ul> <li> <p> <code>MaxItems</code> is the value specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> </li> <li> <p> <code>NextMarker</code> is the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZones</code>, and specify the value of the <code>NextMarker</code> element in the marker parameter. </p> <p>If <code>IsTruncated</code> is false, the <code>NextMarker</code> element is omitted from the response.</p> </li> <li> <p>If you're making the second or subsequent call to <code>ListHostedZones</code>, the <code>Marker</code> element matches the value that you specified in the <code>marker</code> parameter in the previous request.</p> </li> </ul>"]
                 #[allow(unused_variables, warnings)]
-                fn list_hosted_zones(&self, input: &ListHostedZonesRequest) -> Result<ListHostedZonesResponse, ListHostedZonesError> {
+                fn list_hosted_zones(&self, input: &ListHostedZonesRequest) -> Box<Future<Item = ListHostedZonesResponse, Error = ListHostedZonesError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone".to_string();
 
@@ -11957,13 +12288,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListHostedZonesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListHostedZonesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -11975,19 +12313,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListHostedZonesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListHostedZonesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListHostedZonesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListHostedZonesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Retrieves a list of your hosted zones in lexicographic order. Send a <code>GET</code> request to the <code>/2013-04-01/hostedzonesbyname</code> resource. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <ul> <li> <p> <code>com.example.www.</code> </p> </li> </ul> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for example.com, specify ex\\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <ul> <li> <p> <code>com.ex\\344mple.</code> </p> </li> </ul> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the Amazon Route 53 Developer Guide.</p> <p>Amazon Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul>"]
                 #[allow(unused_variables, warnings)]
-                fn list_hosted_zones_by_name(&self, input: &ListHostedZonesByNameRequest) -> Result<ListHostedZonesByNameResponse, ListHostedZonesByNameError> {
+                fn list_hosted_zones_by_name(&self, input: &ListHostedZonesByNameRequest) -> Box<Future<Item = ListHostedZonesByNameResponse, Error = ListHostedZonesByNameError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzonesbyname".to_string();
 
@@ -12012,13 +12353,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListHostedZonesByNameError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListHostedZonesByNameError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12030,19 +12378,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListHostedZonesByNameResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListHostedZonesByNameResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListHostedZonesByNameError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListHostedZonesByNameError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Lists the resource record sets in a specified hosted zone.</p> <p> <code>ListResourceRecordSets</code> returns up to 100 resource record sets at a time in ASCII order, beginning at a position specified by the <code>name</code> and <code>type</code> elements. The action sorts results first by DNS name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>When multiple records have the same DNS name, the action sorts results by the record type.</p> <p>You can use the name and type elements to adjust the beginning position of the list of resource record sets returned:</p> <dl> <dt>If you do not specify Name or Type</dt> <dd> <p>The results begin with the first resource record set that the hosted zone contains.</p> </dd> <dt>If you specify Name but not Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>.</p> </dd> <dt>If you specify Type but not Name</dt> <dd> <p>Amazon Route 53 returns the <code>InvalidInput</code> error.</p> </dd> <dt>If you specify both Name and Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>, and whose type is greater than or equal to <code>Type</code>.</p> </dd> </dl> <p>This action returns the most current version of the records. This includes records that are <code>PENDING</code>, and that are not yet available on all Amazon Route 53 DNS servers.</p> <p>To ensure that you get an accurate listing of the resource record sets for a hosted zone at a point in time, do not submit a <code>ChangeResourceRecordSets</code> request while you're paging through the results of a <code>ListResourceRecordSets</code> request. If you do, some pages may display results without the latest changes while other pages display results with the latest changes.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_resource_record_sets(&self, input: &ListResourceRecordSetsRequest) -> Result<ListResourceRecordSetsResponse, ListResourceRecordSetsError> {
+                fn list_resource_record_sets(&self, input: &ListResourceRecordSetsRequest) -> Box<Future<Item = ListResourceRecordSetsResponse, Error = ListResourceRecordSetsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}/rrset".to_string();
 
@@ -12071,13 +12422,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListResourceRecordSetsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListResourceRecordSetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12089,19 +12447,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>To retrieve a list of your reusable delegation sets, send a <code>GET</code> request to the <code>/2013-04-01/delegationset</code> resource. The response to this request includes a <code>DelegationSets</code> element with zero, one, or multiple <code>DelegationSet</code> child elements. By default, the list of delegation sets is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the delegation set that the list begins with. </p> <note> <p> Amazon Route 53 returns a maximum of 100 items. If you set MaxItems to a value greater than 100, Amazon Route 53 returns only the first 100.</p> </note>"]
                 #[allow(unused_variables, warnings)]
-                fn list_reusable_delegation_sets(&self, input: &ListReusableDelegationSetsRequest) -> Result<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError> {
+                fn list_reusable_delegation_sets(&self, input: &ListReusableDelegationSetsRequest) -> Box<Future<Item = ListReusableDelegationSetsResponse, Error = ListReusableDelegationSetsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/delegationset".to_string();
 
@@ -12122,13 +12483,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListReusableDelegationSetsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListReusableDelegationSetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12140,19 +12508,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListReusableDelegationSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListReusableDelegationSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListReusableDelegationSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListReusableDelegationSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Lists tags for one health check or hosted zone. </p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest) -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest) -> Box<Future<Item = ListTagsForResourceResponse, Error = ListTagsForResourceError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/tags/{ResourceType}/{ResourceId}".to_string();
 
@@ -12167,13 +12538,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12185,19 +12563,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Lists tags for up to 10 health checks or hosted zones.</p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_tags_for_resources(&self, input: &ListTagsForResourcesRequest) -> Result<ListTagsForResourcesResponse, ListTagsForResourcesError> {
+                fn list_tags_for_resources(&self, input: &ListTagsForResourcesRequest) -> Box<Future<Item = ListTagsForResourcesResponse, Error = ListTagsForResourcesError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/tags/{ResourceType}".to_string();
 
@@ -12211,13 +12592,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForResourcesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForResourcesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12229,19 +12617,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListTagsForResourcesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListTagsForResourcesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListTagsForResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListTagsForResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policies, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p> <p>The response includes three values that help you navigate from one group of <code>maxitems</code> traffic policies to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policies associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy that is associated with the current account.</p> </li> <li> <p> <b>TrafficPolicyIdMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyIdMarker</code> is the ID of the first traffic policy in the next group of <code>MaxItems</code> traffic policies. If you want to list more traffic policies, make another call to <code>ListTrafficPolicies</code>, and specify the value of the <code>TrafficPolicyIdMarker</code> element from the response in the <code>TrafficPolicyIdMarker</code> request parameter.</p> <p>If <code>IsTruncated</code> is <code>false</code>, the <code>TrafficPolicyIdMarker</code> element is omitted from the response.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> </ul>"]
                 #[allow(unused_variables, warnings)]
-                fn list_traffic_policies(&self, input: &ListTrafficPoliciesRequest) -> Result<ListTrafficPoliciesResponse, ListTrafficPoliciesError> {
+                fn list_traffic_policies(&self, input: &ListTrafficPoliciesRequest) -> Box<Future<Item = ListTrafficPoliciesResponse, Error = ListTrafficPoliciesError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicies".to_string();
 
@@ -12262,13 +12653,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTrafficPoliciesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTrafficPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12280,19 +12678,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListTrafficPoliciesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListTrafficPoliciesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListTrafficPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListTrafficPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes five values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy instances associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the current account.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>HostedZoneIdMarker</b>, <b>TrafficPolicyInstanceNameMarker</b>, and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these three values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstances</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
                 #[allow(unused_variables, warnings)]
-                fn list_traffic_policy_instances(&self, input: &ListTrafficPolicyInstancesRequest) -> Result<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError> {
+                fn list_traffic_policy_instances(&self, input: &ListTrafficPolicyInstancesRequest) -> Box<Future<Item = ListTrafficPolicyInstancesResponse, Error = ListTrafficPolicyInstancesError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicyinstances".to_string();
 
@@ -12321,13 +12722,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTrafficPolicyInstancesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTrafficPolicyInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12339,19 +12747,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListTrafficPolicyInstancesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListTrafficPolicyInstancesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListTrafficPolicyInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListTrafficPolicyInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource and include the ID of the hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes four values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code/>IsTruncated in the response is <code>true</code>, there are more traffic policy instances associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the current account.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>TrafficPolicyInstanceNameMarker</b> and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these two values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstancesByHostedZone</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
                 #[allow(unused_variables, warnings)]
-                fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError> {
+                fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Box<Future<Item = ListTrafficPolicyInstancesByHostedZoneResponse, Error = ListTrafficPolicyInstancesByHostedZoneError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicyinstances/hostedzone".to_string();
 
@@ -12377,13 +12788,20 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTrafficPolicyInstancesByHostedZoneError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTrafficPolicyInstancesByHostedZoneError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12395,19 +12813,22 @@ request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_stri
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListTrafficPolicyInstancesByHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Route 53 API version</i>/trafficpolicyinstance</code> resource and include the ID and version of the traffic policy.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes five values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy instances associated with the specified traffic policy.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the specified traffic policy.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>HostedZoneIdMarker</b>, <b>TrafficPolicyInstanceNameMarker</b>, and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstancesByPolicy</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
                 #[allow(unused_variables, warnings)]
-                fn list_traffic_policy_instances_by_policy(&self, input: &ListTrafficPolicyInstancesByPolicyRequest) -> Result<ListTrafficPolicyInstancesByPolicyResponse, ListTrafficPolicyInstancesByPolicyError> {
+                fn list_traffic_policy_instances_by_policy(&self, input: &ListTrafficPolicyInstancesByPolicyRequest) -> Box<Future<Item = ListTrafficPolicyInstancesByPolicyResponse, Error = ListTrafficPolicyInstancesByPolicyError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicyinstances/trafficpolicy".to_string();
 
@@ -12438,13 +12859,20 @@ params.put("version", &input.traffic_policy_version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTrafficPolicyInstancesByPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTrafficPolicyInstancesByPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12456,19 +12884,22 @@ params.put("version", &input.traffic_policy_version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListTrafficPolicyInstancesByPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListTrafficPolicyInstancesByPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets information about all of the versions for a specified traffic policy.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource and specify the ID of the traffic policy for which you want to list versions.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policies, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p> <p>The response includes three values that help you navigate from one group of <code>maxitems</code> traffic policies to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy versions associated with the specified traffic policy.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy version that is associated with the specified traffic policy.</p> </li> <li> <p> <b>TrafficPolicyVersionMarker</b> </p> <p>The ID of the next traffic policy version that is associated with the current AWS account. If you want to list more traffic policies, make another call to <code>ListTrafficPolicyVersions</code>, and specify the value of the <code>TrafficPolicyVersionMarker</code> element in the <code>TrafficPolicyVersionMarker</code> request parameter.</p> <p>If <code>IsTruncated</code> is <code>false</code>, Amazon Route 53 omits the <code>TrafficPolicyVersionMarker</code> element from the response.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> </ul>"]
                 #[allow(unused_variables, warnings)]
-                fn list_traffic_policy_versions(&self, input: &ListTrafficPolicyVersionsRequest) -> Result<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError> {
+                fn list_traffic_policy_versions(&self, input: &ListTrafficPolicyVersionsRequest) -> Box<Future<Item = ListTrafficPolicyVersionsResponse, Error = ListTrafficPolicyVersionsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicies/{Id}/versions".to_string();
 
@@ -12489,13 +12920,20 @@ params.put("version", &input.traffic_policy_version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTrafficPolicyVersionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTrafficPolicyVersionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12507,19 +12945,22 @@ params.put("version", &input.traffic_policy_version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListTrafficPolicyVersionsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListTrafficPolicyVersionsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListTrafficPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListTrafficPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>Send a <code>GET</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation</code> resource. The response to this request includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p> <p>Amazon Route 53 returns up to 50 VPCs per page. To return fewer VPCs per page, include the <code>MaxResults</code> parameter: </p> <p> <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation?MaxItems=<i>VPCs per page</i> </code> </p> <p>If the response includes a <code>NextToken</code> element, there are more VPCs to list. To get the next page of VPCs, submit another <code>ListVPCAssociationAuthorizations</code> request, and include the value of the <code>NextToken</code> element from the response in the <code>NextToken</code> request parameter:</p> <p> <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation?MaxItems=<i>VPCs per page</i>&amp;NextToken=<i/> </code> </p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_vpc_association_authorizations(&self, input: &ListVPCAssociationAuthorizationsRequest) -> Result<ListVPCAssociationAuthorizationsResponse, ListVPCAssociationAuthorizationsError> {
+                fn list_vpc_association_authorizations(&self, input: &ListVPCAssociationAuthorizationsRequest) -> Box<Future<Item = ListVPCAssociationAuthorizationsResponse, Error = ListVPCAssociationAuthorizationsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}/authorizevpcassociation".to_string();
 
@@ -12540,13 +12981,20 @@ params.put("version", &input.traffic_policy_version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListVPCAssociationAuthorizationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListVPCAssociationAuthorizationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12558,19 +13006,22 @@ params.put("version", &input.traffic_policy_version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListVPCAssociationAuthorizationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListVPCAssociationAuthorizationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn test_dns_answer(&self, input: &TestDNSAnswerRequest) -> Result<TestDNSAnswerResponse, TestDNSAnswerError> {
+                fn test_dns_answer(&self, input: &TestDNSAnswerRequest) -> Box<Future<Item = TestDNSAnswerResponse, Error = TestDNSAnswerError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/testdnsanswer".to_string();
 
@@ -12598,13 +13049,20 @@ params.put("recordtype", &input.record_type.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TestDNSAnswerError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TestDNSAnswerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12616,19 +13074,22 @@ params.put("recordtype", &input.record_type.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(TestDNSAnswerResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(TestDNSAnswerResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(TestDNSAnswerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(TestDNSAnswerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Updates an existing health check.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource. The request body must include a document with an <code>UpdateHealthCheckRequest</code> element. For more information about updating health checks, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html\">Creating, Updating, and Deleting Health Checks</a> in the Amazon Route 53 Developer Guide.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn update_health_check(&self, input: &UpdateHealthCheckRequest) -> Result<UpdateHealthCheckResponse, UpdateHealthCheckError> {
+                fn update_health_check(&self, input: &UpdateHealthCheckRequest) -> Box<Future<Item = UpdateHealthCheckResponse, Error = UpdateHealthCheckError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}".to_string();
 
@@ -12642,13 +13103,20 @@ params.put("recordtype", &input.record_type.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateHealthCheckError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateHealthCheckError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12660,19 +13128,22 @@ params.put("recordtype", &input.record_type.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UpdateHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UpdateHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(UpdateHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(UpdateHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Updates the hosted zone comment. Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i> </code> resource. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn update_hosted_zone_comment(&self, input: &UpdateHostedZoneCommentRequest) -> Result<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError> {
+                fn update_hosted_zone_comment(&self, input: &UpdateHostedZoneCommentRequest) -> Box<Future<Item = UpdateHostedZoneCommentResponse, Error = UpdateHostedZoneCommentError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/hostedzone/{Id}".to_string();
 
@@ -12686,13 +13157,20 @@ params.put("recordtype", &input.record_type.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateHostedZoneCommentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateHostedZoneCommentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12704,19 +13182,22 @@ params.put("recordtype", &input.record_type.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UpdateHostedZoneCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UpdateHostedZoneCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(UpdateHostedZoneCommentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(UpdateHostedZoneCommentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Updates the comment for a specified traffic policy version.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy/</code> resource.</p> <p>The request body must include a document with an <code>UpdateTrafficPolicyCommentRequest</code> element.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn update_traffic_policy_comment(&self, input: &UpdateTrafficPolicyCommentRequest) -> Result<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError> {
+                fn update_traffic_policy_comment(&self, input: &UpdateTrafficPolicyCommentRequest) -> Box<Future<Item = UpdateTrafficPolicyCommentResponse, Error = UpdateTrafficPolicyCommentError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicy/{Id}/{Version}".to_string();
 
@@ -12731,13 +13212,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateTrafficPolicyCommentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateTrafficPolicyCommentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12749,19 +13237,22 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UpdateTrafficPolicyCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UpdateTrafficPolicyCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(UpdateTrafficPolicyCommentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(UpdateTrafficPolicyCommentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicyinstance/<i>traffic policy ID</i> </code> resource. The request body must include a document with an <code>UpdateTrafficPolicyInstanceRequest</code> element.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Amazon Route 53 performs the following operations:</p> <ol> <li> <p>Amazon Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how substantial the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Amazon Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Amazon Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol>"]
                 #[allow(unused_variables, warnings)]
-                fn update_traffic_policy_instance(&self, input: &UpdateTrafficPolicyInstanceRequest) -> Result<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError> {
+                fn update_traffic_policy_instance(&self, input: &UpdateTrafficPolicyInstanceRequest) -> Box<Future<Item = UpdateTrafficPolicyInstanceResponse, Error = UpdateTrafficPolicyInstanceError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2013-04-01/trafficpolicyinstance/{Id}".to_string();
 
@@ -12775,13 +13266,20 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateTrafficPolicyInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateTrafficPolicyInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -12793,14 +13291,17 @@ request_uri = request_uri.replace("{Version}", &input.version.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(UpdateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(UpdateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

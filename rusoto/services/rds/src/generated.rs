@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -19855,347 +19865,347 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Associates an Identity and Access Management (IAM) role from an Aurora DB cluster. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html\">Authorizing Amazon Aurora to Access Other AWS Services On Your Behalf</a>.</p>"]
-                fn add_role_to_db_cluster(&self, input: &AddRoleToDBClusterMessage) -> Result<(), AddRoleToDBClusterError>;
+                fn add_role_to_db_cluster(&self, input: &AddRoleToDBClusterMessage) -> Box<Future<Item = (), Error = AddRoleToDBClusterError>>;
                 
 
                 #[doc="<p>Adds a source identifier to an existing RDS event notification subscription.</p>"]
-                fn add_source_identifier_to_subscription(&self, input: &AddSourceIdentifierToSubscriptionMessage) -> Result<AddSourceIdentifierToSubscriptionResult, AddSourceIdentifierToSubscriptionError>;
+                fn add_source_identifier_to_subscription(&self, input: &AddSourceIdentifierToSubscriptionMessage) -> Box<Future<Item = AddSourceIdentifierToSubscriptionResult, Error = AddSourceIdentifierToSubscriptionError>>;
                 
 
                 #[doc="<p>Adds metadata tags to an Amazon RDS resource. These tags can also be used with cost allocation reporting to track cost associated with Amazon RDS resources, or used in a Condition statement in an IAM policy for Amazon RDS.</p> <p>For an overview on tagging Amazon RDS resources, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html\">Tagging Amazon RDS Resources</a>.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceMessage) -> Result<(), AddTagsToResourceError>;
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceMessage) -> Box<Future<Item = (), Error = AddTagsToResourceError>>;
                 
 
                 #[doc="<p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>"]
-                fn apply_pending_maintenance_action(&self, input: &ApplyPendingMaintenanceActionMessage) -> Result<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError>;
+                fn apply_pending_maintenance_action(&self, input: &ApplyPendingMaintenanceActionMessage) -> Box<Future<Item = ApplyPendingMaintenanceActionResult, Error = ApplyPendingMaintenanceActionError>>;
                 
 
                 #[doc="<p>Enables ingress to a DBSecurityGroup using one of two forms of authorization. First, EC2 or VPC security groups can be added to the DBSecurityGroup if the application using the database is running on EC2 or VPC instances. Second, IP ranges are available if the application accessing your database is running on the Internet. Required parameters for this API are one of CIDR range, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId for non-VPC).</p> <note> <p>You cannot authorize ingress from an EC2 security group in one region to an Amazon RDS DB instance in another. You cannot authorize ingress from a VPC security group in one VPC to an Amazon RDS DB instance in another.</p> </note> <p>For an overview of CIDR ranges, go to the <a href=\"http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Wikipedia Tutorial</a>. </p>"]
-                fn authorize_db_security_group_ingress(&self, input: &AuthorizeDBSecurityGroupIngressMessage) -> Result<AuthorizeDBSecurityGroupIngressResult, AuthorizeDBSecurityGroupIngressError>;
+                fn authorize_db_security_group_ingress(&self, input: &AuthorizeDBSecurityGroupIngressMessage) -> Box<Future<Item = AuthorizeDBSecurityGroupIngressResult, Error = AuthorizeDBSecurityGroupIngressError>>;
                 
 
                 #[doc="<p>Copies the specified DB cluster parameter group.</p>"]
-                fn copy_db_cluster_parameter_group(&self, input: &CopyDBClusterParameterGroupMessage) -> Result<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError>;
+                fn copy_db_cluster_parameter_group(&self, input: &CopyDBClusterParameterGroupMessage) -> Box<Future<Item = CopyDBClusterParameterGroupResult, Error = CopyDBClusterParameterGroupError>>;
                 
 
                 #[doc="<p>Creates a snapshot of a DB cluster. For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn copy_db_cluster_snapshot(&self, input: &CopyDBClusterSnapshotMessage) -> Result<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError>;
+                fn copy_db_cluster_snapshot(&self, input: &CopyDBClusterSnapshotMessage) -> Box<Future<Item = CopyDBClusterSnapshotResult, Error = CopyDBClusterSnapshotError>>;
                 
 
                 #[doc="<p>Copies the specified DB parameter group.</p>"]
-                fn copy_db_parameter_group(&self, input: &CopyDBParameterGroupMessage) -> Result<CopyDBParameterGroupResult, CopyDBParameterGroupError>;
+                fn copy_db_parameter_group(&self, input: &CopyDBParameterGroupMessage) -> Box<Future<Item = CopyDBParameterGroupResult, Error = CopyDBParameterGroupError>>;
                 
 
                 #[doc="<p>Copies the specified DB snapshot. The source DB snapshot must be in the \"available\" state.</p> <p>To copy a DB snapshot from a shared manual DB snapshot, <code>SourceDBSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB snapshot.</p> <p>You can copy an encrypted DB snapshot from another AWS Region. In that case, the region where you call the <code>CopyDBSnapshot</code> action is the destination region for the encrypted DB snapshot to be copied to. To copy an encrypted DB snapshot from another region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (KMS) key identifier for the key to use to encrypt the copy of the DB snapshot in the destination region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBSnapshot</code> action to be called in the source region where the DB snapshot will be copied from. The presigned URL must be a valid request for the <code>CopyDBSnapshot</code> API action that can be executed in the source region that contains the encrypted DB snapshot to be copied.</p> <p>The presigned URL request must contain the following parameter values:</p> <ul> <li> <p> <code>DestinationRegion</code> - The AWS Region that the encrypted DB snapshot will be copied to. This region is the same one where the <code>CopyDBSnapshot</code> action is called that contains this presigned URL. </p> <p>For example, if you copy an encrypted DB snapshot from the us-west-2 region to the us-east-1 region, then you will call the <code>CopyDBSnapshot</code> action in the us-east-1 region and provide a presigned URL that contains a call to the <code>CopyDBSnapshot</code> action in the us-west-2 region. For this example, the <code>DestinationRegion</code> in the presigned URL must be set to the us-east-1 region.</p> </li> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB snapshot in the destination region. This identifier is the same for both the <code>CopyDBSnapshot</code> action that is called in the destination region, and the action contained in the presigned URL.</p> </li> <li> <p> <code>SourceDBSnapshotIdentifier</code> - The DB snapshot identifier for the encrypted snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source region. For example, if you copy an encrypted DB snapshot from the us-west-2 region, then your <code>SourceDBSnapshotIdentifier</code> looks like this example: <code>arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html\"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\"> Signature Version 4 Signing Process</a>.</p> </li> <li> <p> <code>TargetDBSnapshotIdentifier</code> - The identifier for the new copy of the DB snapshot in the destination region.</p> </li> <li> <p> <code>SourceDBSnapshotIdentifier</code> - The DB snapshot identifier for the encrypted snapshot to be copied. This identifier must be in the ARN format for the source region and is the same value as the <code>SourceDBSnapshotIdentifier</code> in the presigned URL. </p> </li> </ul> <p>For more information on copying encrypted snapshots from one region to another, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.Encrypted.CrossRegion\"> Copying an Encrypted DB Snapshot to Another Region</a> in the Amazon RDS User Guide.</p>"]
-                fn copy_db_snapshot(&self, input: &CopyDBSnapshotMessage) -> Result<CopyDBSnapshotResult, CopyDBSnapshotError>;
+                fn copy_db_snapshot(&self, input: &CopyDBSnapshotMessage) -> Box<Future<Item = CopyDBSnapshotResult, Error = CopyDBSnapshotError>>;
                 
 
                 #[doc="<p>Copies the specified option group.</p>"]
-                fn copy_option_group(&self, input: &CopyOptionGroupMessage) -> Result<CopyOptionGroupResult, CopyOptionGroupError>;
+                fn copy_option_group(&self, input: &CopyOptionGroupMessage) -> Box<Future<Item = CopyOptionGroupResult, Error = CopyOptionGroupError>>;
                 
 
                 #[doc="<p>Creates a new Amazon Aurora DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn create_db_cluster(&self, input: &CreateDBClusterMessage) -> Result<CreateDBClusterResult, CreateDBClusterError>;
+                fn create_db_cluster(&self, input: &CreateDBClusterMessage) -> Box<Future<Item = CreateDBClusterResult, Error = CreateDBClusterError>>;
                 
 
                 #[doc="<p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you've created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect. </p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href=\"https://console.aws.amazon.com/rds/\">Amazon RDS console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn create_db_cluster_parameter_group(&self, input: &CreateDBClusterParameterGroupMessage) -> Result<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError>;
+                fn create_db_cluster_parameter_group(&self, input: &CreateDBClusterParameterGroupMessage) -> Box<Future<Item = CreateDBClusterParameterGroupResult, Error = CreateDBClusterParameterGroupError>>;
                 
 
                 #[doc="<p>Creates a snapshot of a DB cluster. For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn create_db_cluster_snapshot(&self, input: &CreateDBClusterSnapshotMessage) -> Result<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError>;
+                fn create_db_cluster_snapshot(&self, input: &CreateDBClusterSnapshotMessage) -> Box<Future<Item = CreateDBClusterSnapshotResult, Error = CreateDBClusterSnapshotError>>;
                 
 
                 #[doc="<p>Creates a new DB instance.</p>"]
-                fn create_db_instance(&self, input: &CreateDBInstanceMessage) -> Result<CreateDBInstanceResult, CreateDBInstanceError>;
+                fn create_db_instance(&self, input: &CreateDBInstanceMessage) -> Box<Future<Item = CreateDBInstanceResult, Error = CreateDBInstanceError>>;
                 
 
                 #[doc="<p>Creates a DB instance for a DB instance running MySQL, MariaDB, or PostgreSQL that acts as a Read Replica of a source DB instance.</p> <p>All Read Replica DB instances are created as Single-AZ deployments with backups disabled. All other DB instance attributes (including DB security groups and DB parameter groups) are inherited from the source DB instance, except as specified below.</p> <important> <p>The source DB instance must have backup retention enabled.</p> </important>"]
-                fn create_db_instance_read_replica(&self, input: &CreateDBInstanceReadReplicaMessage) -> Result<CreateDBInstanceReadReplicaResult, CreateDBInstanceReadReplicaError>;
+                fn create_db_instance_read_replica(&self, input: &CreateDBInstanceReadReplicaMessage) -> Box<Future<Item = CreateDBInstanceReadReplicaResult, Error = CreateDBInstanceReadReplicaError>>;
                 
 
                 #[doc="<p>Creates a new DB parameter group.</p> <p> A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you've created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect. </p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href=\"https://console.aws.amazon.com/rds/\">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important>"]
-                fn create_db_parameter_group(&self, input: &CreateDBParameterGroupMessage) -> Result<CreateDBParameterGroupResult, CreateDBParameterGroupError>;
+                fn create_db_parameter_group(&self, input: &CreateDBParameterGroupMessage) -> Box<Future<Item = CreateDBParameterGroupResult, Error = CreateDBParameterGroupError>>;
                 
 
                 #[doc="<p>Creates a new DB security group. DB security groups control access to a DB instance.</p>"]
-                fn create_db_security_group(&self, input: &CreateDBSecurityGroupMessage) -> Result<CreateDBSecurityGroupResult, CreateDBSecurityGroupError>;
+                fn create_db_security_group(&self, input: &CreateDBSecurityGroupMessage) -> Box<Future<Item = CreateDBSecurityGroupResult, Error = CreateDBSecurityGroupError>>;
                 
 
                 #[doc="<p>Creates a DBSnapshot. The source DBInstance must be in \"available\" state.</p>"]
-                fn create_db_snapshot(&self, input: &CreateDBSnapshotMessage) -> Result<CreateDBSnapshotResult, CreateDBSnapshotError>;
+                fn create_db_snapshot(&self, input: &CreateDBSnapshotMessage) -> Box<Future<Item = CreateDBSnapshotResult, Error = CreateDBSnapshotError>>;
                 
 
                 #[doc="<p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the region.</p>"]
-                fn create_db_subnet_group(&self, input: &CreateDBSubnetGroupMessage) -> Result<CreateDBSubnetGroupResult, CreateDBSubnetGroupError>;
+                fn create_db_subnet_group(&self, input: &CreateDBSubnetGroupMessage) -> Box<Future<Item = CreateDBSubnetGroupResult, Error = CreateDBSubnetGroupError>>;
                 
 
                 #[doc="<p>Creates an RDS event notification subscription. This action requires a topic ARN (Amazon Resource Name) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (SourceType) you want to be notified of, provide a list of RDS sources (SourceIds) that triggers the events, and provide a list of event categories (EventCategories) for events you want to be notified of. For example, you can specify SourceType = db-instance, SourceIds = mydbinstance1, mydbinstance2 and EventCategories = Availability, Backup.</p> <p>If you specify both the SourceType and SourceIds, such as SourceType = db-instance and SourceIdentifier = myDBInstance1, you will be notified of all the db-instance events for the specified source. If you specify a SourceType but do not specify a SourceIdentifier, you will receive notice of the events for that source type for all your RDS sources. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all RDS sources belonging to your customer account.</p>"]
-                fn create_event_subscription(&self, input: &CreateEventSubscriptionMessage) -> Result<CreateEventSubscriptionResult, CreateEventSubscriptionError>;
+                fn create_event_subscription(&self, input: &CreateEventSubscriptionMessage) -> Box<Future<Item = CreateEventSubscriptionResult, Error = CreateEventSubscriptionError>>;
                 
 
                 #[doc="<p>Creates a new option group. You can create up to 20 option groups.</p>"]
-                fn create_option_group(&self, input: &CreateOptionGroupMessage) -> Result<CreateOptionGroupResult, CreateOptionGroupError>;
+                fn create_option_group(&self, input: &CreateOptionGroupMessage) -> Box<Future<Item = CreateOptionGroupResult, Error = CreateOptionGroupError>>;
                 
 
                 #[doc="<p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and cannot be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn delete_db_cluster(&self, input: &DeleteDBClusterMessage) -> Result<DeleteDBClusterResult, DeleteDBClusterError>;
+                fn delete_db_cluster(&self, input: &DeleteDBClusterMessage) -> Box<Future<Item = DeleteDBClusterResult, Error = DeleteDBClusterError>>;
                 
 
                 #[doc="<p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted cannot be associated with any DB clusters.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn delete_db_cluster_parameter_group(&self, input: &DeleteDBClusterParameterGroupMessage) -> Result<(), DeleteDBClusterParameterGroupError>;
+                fn delete_db_cluster_parameter_group(&self, input: &DeleteDBClusterParameterGroupMessage) -> Box<Future<Item = (), Error = DeleteDBClusterParameterGroupError>>;
                 
 
                 #[doc="<p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn delete_db_cluster_snapshot(&self, input: &DeleteDBClusterSnapshotMessage) -> Result<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError>;
+                fn delete_db_cluster_snapshot(&self, input: &DeleteDBClusterSnapshotMessage) -> Box<Future<Item = DeleteDBClusterSnapshotResult, Error = DeleteDBClusterSnapshotError>>;
                 
 
                 #[doc="<p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and cannot be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon RDS DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action cannot be canceled or reverted once submitted. </p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of an Amazon Aurora DB cluster, you cannot delete the DB instance if the following are true:</p> <ul> <li> <p>The DB cluster is a Read Replica of another Amazon Aurora DB cluster.</p> </li> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul> <p>To delete a DB instance in this case, first call the <a>PromoteReadReplicaDBCluster</a> API action to promote the DB cluster so it's no longer a Read Replica. After the promotion completes, then call the <code>DeleteDBInstance</code> API action to delete the final instance in the DB cluster.</p>"]
-                fn delete_db_instance(&self, input: &DeleteDBInstanceMessage) -> Result<DeleteDBInstanceResult, DeleteDBInstanceError>;
+                fn delete_db_instance(&self, input: &DeleteDBInstanceMessage) -> Box<Future<Item = DeleteDBInstanceResult, Error = DeleteDBInstanceError>>;
                 
 
                 #[doc="<p>Deletes a specified DBParameterGroup. The DBParameterGroup to be deleted cannot be associated with any DB instances.</p>"]
-                fn delete_db_parameter_group(&self, input: &DeleteDBParameterGroupMessage) -> Result<(), DeleteDBParameterGroupError>;
+                fn delete_db_parameter_group(&self, input: &DeleteDBParameterGroupMessage) -> Box<Future<Item = (), Error = DeleteDBParameterGroupError>>;
                 
 
                 #[doc="<p>Deletes a DB security group.</p> <note> <p>The specified DB security group must not be associated with any DB instances.</p> </note>"]
-                fn delete_db_security_group(&self, input: &DeleteDBSecurityGroupMessage) -> Result<(), DeleteDBSecurityGroupError>;
+                fn delete_db_security_group(&self, input: &DeleteDBSecurityGroupMessage) -> Box<Future<Item = (), Error = DeleteDBSecurityGroupError>>;
                 
 
                 #[doc="<p>Deletes a DBSnapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DBSnapshot must be in the <code>available</code> state to be deleted.</p> </note>"]
-                fn delete_db_snapshot(&self, input: &DeleteDBSnapshotMessage) -> Result<DeleteDBSnapshotResult, DeleteDBSnapshotError>;
+                fn delete_db_snapshot(&self, input: &DeleteDBSnapshotMessage) -> Box<Future<Item = DeleteDBSnapshotResult, Error = DeleteDBSnapshotError>>;
                 
 
                 #[doc="<p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note>"]
-                fn delete_db_subnet_group(&self, input: &DeleteDBSubnetGroupMessage) -> Result<(), DeleteDBSubnetGroupError>;
+                fn delete_db_subnet_group(&self, input: &DeleteDBSubnetGroupMessage) -> Box<Future<Item = (), Error = DeleteDBSubnetGroupError>>;
                 
 
                 #[doc="<p>Deletes an RDS event notification subscription.</p>"]
-                fn delete_event_subscription(&self, input: &DeleteEventSubscriptionMessage) -> Result<DeleteEventSubscriptionResult, DeleteEventSubscriptionError>;
+                fn delete_event_subscription(&self, input: &DeleteEventSubscriptionMessage) -> Box<Future<Item = DeleteEventSubscriptionResult, Error = DeleteEventSubscriptionError>>;
                 
 
                 #[doc="<p>Deletes an existing option group.</p>"]
-                fn delete_option_group(&self, input: &DeleteOptionGroupMessage) -> Result<(), DeleteOptionGroupError>;
+                fn delete_option_group(&self, input: &DeleteOptionGroupMessage) -> Box<Future<Item = (), Error = DeleteOptionGroupError>>;
                 
 
                 #[doc="<p>Lists all of the attributes for a customer account. The attributes include Amazon RDS quotas for the account, such as the number of DB instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>"]
-                fn describe_account_attributes(&self, input: &DescribeAccountAttributesMessage) -> Result<AccountAttributesMessage, DescribeAccountAttributesError>;
+                fn describe_account_attributes(&self, input: &DescribeAccountAttributesMessage) -> Box<Future<Item = AccountAttributesMessage, Error = DescribeAccountAttributesError>>;
                 
 
                 #[doc="<p>Lists the set of CA certificates provided by Amazon RDS for this AWS account.</p>"]
-                fn describe_certificates(&self, input: &DescribeCertificatesMessage) -> Result<CertificateMessage, DescribeCertificatesError>;
+                fn describe_certificates(&self, input: &DescribeCertificatesMessage) -> Box<Future<Item = CertificateMessage, Error = DescribeCertificatesError>>;
                 
 
                 #[doc="<p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_db_cluster_parameter_groups(&self, input: &DescribeDBClusterParameterGroupsMessage) -> Result<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError>;
+                fn describe_db_cluster_parameter_groups(&self, input: &DescribeDBClusterParameterGroupsMessage) -> Box<Future<Item = DBClusterParameterGroupsMessage, Error = DescribeDBClusterParameterGroupsError>>;
                 
 
                 #[doc="<p>Returns the detailed parameter list for a particular DB cluster parameter group.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_db_cluster_parameters(&self, input: &DescribeDBClusterParametersMessage) -> Result<DBClusterParameterGroupDetails, DescribeDBClusterParametersError>;
+                fn describe_db_cluster_parameters(&self, input: &DescribeDBClusterParametersMessage) -> Box<Future<Item = DBClusterParameterGroupDetails, Error = DescribeDBClusterParametersError>>;
                 
 
                 #[doc="<p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB cluster snapshot, or to make the manual DB cluster snapshot public or private, use the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>"]
-                fn describe_db_cluster_snapshot_attributes(&self, input: &DescribeDBClusterSnapshotAttributesMessage) -> Result<DescribeDBClusterSnapshotAttributesResult, DescribeDBClusterSnapshotAttributesError>;
+                fn describe_db_cluster_snapshot_attributes(&self, input: &DescribeDBClusterSnapshotAttributesMessage) -> Box<Future<Item = DescribeDBClusterSnapshotAttributesResult, Error = DescribeDBClusterSnapshotAttributesError>>;
                 
 
                 #[doc="<p>Returns information about DB cluster snapshots. This API action supports pagination.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_db_cluster_snapshots(&self, input: &DescribeDBClusterSnapshotsMessage) -> Result<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError>;
+                fn describe_db_cluster_snapshots(&self, input: &DescribeDBClusterSnapshotsMessage) -> Box<Future<Item = DBClusterSnapshotMessage, Error = DescribeDBClusterSnapshotsError>>;
                 
 
                 #[doc="<p>Returns information about provisioned Aurora DB clusters. This API supports pagination.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_db_clusters(&self, input: &DescribeDBClustersMessage) -> Result<DBClusterMessage, DescribeDBClustersError>;
+                fn describe_db_clusters(&self, input: &DescribeDBClustersMessage) -> Box<Future<Item = DBClusterMessage, Error = DescribeDBClustersError>>;
                 
 
                 #[doc="<p>Returns a list of the available DB engines.</p>"]
-                fn describe_db_engine_versions(&self, input: &DescribeDBEngineVersionsMessage) -> Result<DBEngineVersionMessage, DescribeDBEngineVersionsError>;
+                fn describe_db_engine_versions(&self, input: &DescribeDBEngineVersionsMessage) -> Box<Future<Item = DBEngineVersionMessage, Error = DescribeDBEngineVersionsError>>;
                 
 
                 #[doc="<p>Returns information about provisioned RDS instances. This API supports pagination.</p>"]
-                fn describe_db_instances(&self, input: &DescribeDBInstancesMessage) -> Result<DBInstanceMessage, DescribeDBInstancesError>;
+                fn describe_db_instances(&self, input: &DescribeDBInstancesMessage) -> Box<Future<Item = DBInstanceMessage, Error = DescribeDBInstancesError>>;
                 
 
                 #[doc="<p>Returns a list of DB log files for the DB instance.</p>"]
-                fn describe_db_log_files(&self, input: &DescribeDBLogFilesMessage) -> Result<DescribeDBLogFilesResponse, DescribeDBLogFilesError>;
+                fn describe_db_log_files(&self, input: &DescribeDBLogFilesMessage) -> Box<Future<Item = DescribeDBLogFilesResponse, Error = DescribeDBLogFilesError>>;
                 
 
                 #[doc="<p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>"]
-                fn describe_db_parameter_groups(&self, input: &DescribeDBParameterGroupsMessage) -> Result<DBParameterGroupsMessage, DescribeDBParameterGroupsError>;
+                fn describe_db_parameter_groups(&self, input: &DescribeDBParameterGroupsMessage) -> Box<Future<Item = DBParameterGroupsMessage, Error = DescribeDBParameterGroupsError>>;
                 
 
                 #[doc="<p>Returns the detailed parameter list for a particular DB parameter group.</p>"]
-                fn describe_db_parameters(&self, input: &DescribeDBParametersMessage) -> Result<DBParameterGroupDetails, DescribeDBParametersError>;
+                fn describe_db_parameters(&self, input: &DescribeDBParametersMessage) -> Box<Future<Item = DBParameterGroupDetails, Error = DescribeDBParametersError>>;
                 
 
                 #[doc="<p> Returns a list of <code>DBSecurityGroup</code> descriptions. If a <code>DBSecurityGroupName</code> is specified, the list will contain only the descriptions of the specified DB security group. </p>"]
-                fn describe_db_security_groups(&self, input: &DescribeDBSecurityGroupsMessage) -> Result<DBSecurityGroupMessage, DescribeDBSecurityGroupsError>;
+                fn describe_db_security_groups(&self, input: &DescribeDBSecurityGroupsMessage) -> Box<Future<Item = DBSecurityGroupMessage, Error = DescribeDBSecurityGroupsError>>;
                 
 
                 #[doc="<p>Returns a list of DB snapshot attribute names and values for a manual DB snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB snapshot, or to make the manual DB snapshot public or private, use the <a>ModifyDBSnapshotAttribute</a> API action.</p>"]
-                fn describe_db_snapshot_attributes(&self, input: &DescribeDBSnapshotAttributesMessage) -> Result<DescribeDBSnapshotAttributesResult, DescribeDBSnapshotAttributesError>;
+                fn describe_db_snapshot_attributes(&self, input: &DescribeDBSnapshotAttributesMessage) -> Box<Future<Item = DescribeDBSnapshotAttributesResult, Error = DescribeDBSnapshotAttributesError>>;
                 
 
                 #[doc="<p>Returns information about DB snapshots. This API action supports pagination.</p>"]
-                fn describe_db_snapshots(&self, input: &DescribeDBSnapshotsMessage) -> Result<DBSnapshotMessage, DescribeDBSnapshotsError>;
+                fn describe_db_snapshots(&self, input: &DescribeDBSnapshotsMessage) -> Box<Future<Item = DBSnapshotMessage, Error = DescribeDBSnapshotsError>>;
                 
 
                 #[doc="<p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href=\"http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Wikipedia Tutorial</a>. </p>"]
-                fn describe_db_subnet_groups(&self, input: &DescribeDBSubnetGroupsMessage) -> Result<DBSubnetGroupMessage, DescribeDBSubnetGroupsError>;
+                fn describe_db_subnet_groups(&self, input: &DescribeDBSubnetGroupsMessage) -> Box<Future<Item = DBSubnetGroupMessage, Error = DescribeDBSubnetGroupsError>>;
                 
 
                 #[doc="<p>Returns the default engine and system parameter information for the cluster database engine.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefaultClusterParametersMessage) -> Result<DescribeEngineDefaultClusterParametersResult, DescribeEngineDefaultClusterParametersError>;
+                fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefaultClusterParametersMessage) -> Box<Future<Item = DescribeEngineDefaultClusterParametersResult, Error = DescribeEngineDefaultClusterParametersError>>;
                 
 
                 #[doc="<p>Returns the default engine and system parameter information for the specified database engine.</p>"]
-                fn describe_engine_default_parameters(&self, input: &DescribeEngineDefaultParametersMessage) -> Result<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>;
+                fn describe_engine_default_parameters(&self, input: &DescribeEngineDefaultParametersMessage) -> Box<Future<Item = DescribeEngineDefaultParametersResult, Error = DescribeEngineDefaultParametersError>>;
                 
 
                 #[doc="<p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in the <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html\"> Events</a> topic in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_event_categories(&self, input: &DescribeEventCategoriesMessage) -> Result<EventCategoriesMessage, DescribeEventCategoriesError>;
+                fn describe_event_categories(&self, input: &DescribeEventCategoriesMessage) -> Box<Future<Item = EventCategoriesMessage, Error = DescribeEventCategoriesError>>;
                 
 
                 #[doc="<p>Lists all the subscription descriptions for a customer account. The description for a subscription includes SubscriptionName, SNSTopicARN, CustomerID, SourceType, SourceID, CreationTime, and Status.</p> <p>If you specify a SubscriptionName, lists the description for that subscription.</p>"]
-                fn describe_event_subscriptions(&self, input: &DescribeEventSubscriptionsMessage) -> Result<EventSubscriptionsMessage, DescribeEventSubscriptionsError>;
+                fn describe_event_subscriptions(&self, input: &DescribeEventSubscriptionsMessage) -> Box<Future<Item = EventSubscriptionsMessage, Error = DescribeEventSubscriptionsError>>;
                 
 
                 #[doc="<p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>"]
-                fn describe_events(&self, input: &DescribeEventsMessage) -> Result<EventsMessage, DescribeEventsError>;
+                fn describe_events(&self, input: &DescribeEventsMessage) -> Box<Future<Item = EventsMessage, Error = DescribeEventsError>>;
                 
 
                 #[doc="<p>Describes all available options.</p>"]
-                fn describe_option_group_options(&self, input: &DescribeOptionGroupOptionsMessage) -> Result<OptionGroupOptionsMessage, DescribeOptionGroupOptionsError>;
+                fn describe_option_group_options(&self, input: &DescribeOptionGroupOptionsMessage) -> Box<Future<Item = OptionGroupOptionsMessage, Error = DescribeOptionGroupOptionsError>>;
                 
 
                 #[doc="<p>Describes the available option groups.</p>"]
-                fn describe_option_groups(&self, input: &DescribeOptionGroupsMessage) -> Result<OptionGroups, DescribeOptionGroupsError>;
+                fn describe_option_groups(&self, input: &DescribeOptionGroupsMessage) -> Box<Future<Item = OptionGroups, Error = DescribeOptionGroupsError>>;
                 
 
                 #[doc="<p>Returns a list of orderable DB instance options for the specified engine.</p>"]
-                fn describe_orderable_db_instance_options(&self, input: &DescribeOrderableDBInstanceOptionsMessage) -> Result<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError>;
+                fn describe_orderable_db_instance_options(&self, input: &DescribeOrderableDBInstanceOptionsMessage) -> Box<Future<Item = OrderableDBInstanceOptionsMessage, Error = DescribeOrderableDBInstanceOptionsError>>;
                 
 
                 #[doc="<p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>"]
-                fn describe_pending_maintenance_actions(&self, input: &DescribePendingMaintenanceActionsMessage) -> Result<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>;
+                fn describe_pending_maintenance_actions(&self, input: &DescribePendingMaintenanceActionsMessage) -> Box<Future<Item = PendingMaintenanceActionsMessage, Error = DescribePendingMaintenanceActionsError>>;
                 
 
                 #[doc="<p>Returns information about reserved DB instances for this account, or about a specified reserved DB instance.</p>"]
-                fn describe_reserved_db_instances(&self, input: &DescribeReservedDBInstancesMessage) -> Result<ReservedDBInstanceMessage, DescribeReservedDBInstancesError>;
+                fn describe_reserved_db_instances(&self, input: &DescribeReservedDBInstancesMessage) -> Box<Future<Item = ReservedDBInstanceMessage, Error = DescribeReservedDBInstancesError>>;
                 
 
                 #[doc="<p>Lists available reserved DB instance offerings.</p>"]
-                fn describe_reserved_db_instances_offerings(&self, input: &DescribeReservedDBInstancesOfferingsMessage) -> Result<ReservedDBInstancesOfferingMessage, DescribeReservedDBInstancesOfferingsError>;
+                fn describe_reserved_db_instances_offerings(&self, input: &DescribeReservedDBInstancesOfferingsMessage) -> Box<Future<Item = ReservedDBInstancesOfferingMessage, Error = DescribeReservedDBInstancesOfferingsError>>;
                 
 
                 #[doc="<p>Returns a list of the source AWS regions where the current AWS region can create a Read Replica or copy a DB snapshot from. This API action supports pagination.</p>"]
-                fn describe_source_regions(&self, input: &DescribeSourceRegionsMessage) -> Result<SourceRegionMessage, DescribeSourceRegionsError>;
+                fn describe_source_regions(&self, input: &DescribeSourceRegionsMessage) -> Box<Future<Item = SourceRegionMessage, Error = DescribeSourceRegionsError>>;
                 
 
                 #[doc="<p>Downloads all or a portion of the specified log file, up to 1 MB in size.</p>"]
-                fn download_db_log_file_portion(&self, input: &DownloadDBLogFilePortionMessage) -> Result<DownloadDBLogFilePortionDetails, DownloadDBLogFilePortionError>;
+                fn download_db_log_file_portion(&self, input: &DownloadDBLogFilePortionMessage) -> Box<Future<Item = DownloadDBLogFilePortionDetails, Error = DownloadDBLogFilePortionError>>;
                 
 
                 #[doc="<p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Aurora Replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>Amazon Aurora will automatically fail over to an Aurora Replica, if one exists, when the primary instance fails. You can force a failover when you want to simulate a failure of a primary instance for testing. Because each instance in a DB cluster has its own endpoint address, you will need to clean up and re-establish any existing connections that use those endpoint addresses when the failover is complete.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn failover_db_cluster(&self, input: &FailoverDBClusterMessage) -> Result<FailoverDBClusterResult, FailoverDBClusterError>;
+                fn failover_db_cluster(&self, input: &FailoverDBClusterMessage) -> Box<Future<Item = FailoverDBClusterResult, Error = FailoverDBClusterError>>;
                 
 
                 #[doc="<p>Lists all tags on an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html\">Tagging Amazon RDS Resources</a>.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceMessage) -> Result<TagListMessage, ListTagsForResourceError>;
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceMessage) -> Box<Future<Item = TagListMessage, Error = ListTagsForResourceError>>;
                 
 
                 #[doc="<p>Modify a setting for an Amazon Aurora DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn modify_db_cluster(&self, input: &ModifyDBClusterMessage) -> Result<ModifyDBClusterResult, ModifyDBClusterError>;
+                fn modify_db_cluster(&self, input: &ModifyDBClusterMessage) -> Box<Future<Item = ModifyDBClusterResult, Error = ModifyDBClusterError>>;
                 
 
                 #[doc="<p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href=\"https://console.aws.amazon.com/rds/\">Amazon RDS console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important>"]
-                fn modify_db_cluster_parameter_group(&self, input: &ModifyDBClusterParameterGroupMessage) -> Result<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError>;
+                fn modify_db_cluster_parameter_group(&self, input: &ModifyDBClusterParameterGroupMessage) -> Box<Future<Item = DBClusterParameterGroupNameMessage, Error = ModifyDBClusterParameterGroupError>>;
                 
 
                 #[doc="<p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot public or private, use the <a>DescribeDBClusterSnapshotAttributes</a> API action.</p> <p>If a manual DB cluster snapshot is encrypted, it cannot be shared.</p>"]
-                fn modify_db_cluster_snapshot_attribute(&self, input: &ModifyDBClusterSnapshotAttributeMessage) -> Result<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>;
+                fn modify_db_cluster_snapshot_attribute(&self, input: &ModifyDBClusterSnapshotAttributeMessage) -> Box<Future<Item = ModifyDBClusterSnapshotAttributeResult, Error = ModifyDBClusterSnapshotAttributeError>>;
                 
 
                 #[doc="<p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request.</p>"]
-                fn modify_db_instance(&self, input: &ModifyDBInstanceMessage) -> Result<ModifyDBInstanceResult, ModifyDBInstanceError>;
+                fn modify_db_instance(&self, input: &ModifyDBInstanceMessage) -> Box<Future<Item = ModifyDBInstanceResult, Error = ModifyDBInstanceError>>;
                 
 
                 #[doc="<p> Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href=\"https://console.aws.amazon.com/rds/\">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important>"]
-                fn modify_db_parameter_group(&self, input: &ModifyDBParameterGroupMessage) -> Result<DBParameterGroupNameMessage, ModifyDBParameterGroupError>;
+                fn modify_db_parameter_group(&self, input: &ModifyDBParameterGroupMessage) -> Box<Future<Item = DBParameterGroupNameMessage, Error = ModifyDBParameterGroupError>>;
                 
 
                 #[doc="<p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <a>DescribeDBSnapshotAttributes</a> API action.</p> <p>If the manual DB snapshot is encrypted, it cannot be shared.</p>"]
-                fn modify_db_snapshot_attribute(&self, input: &ModifyDBSnapshotAttributeMessage) -> Result<ModifyDBSnapshotAttributeResult, ModifyDBSnapshotAttributeError>;
+                fn modify_db_snapshot_attribute(&self, input: &ModifyDBSnapshotAttributeMessage) -> Box<Future<Item = ModifyDBSnapshotAttributeResult, Error = ModifyDBSnapshotAttributeError>>;
                 
 
                 #[doc="<p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the region.</p>"]
-                fn modify_db_subnet_group(&self, input: &ModifyDBSubnetGroupMessage) -> Result<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError>;
+                fn modify_db_subnet_group(&self, input: &ModifyDBSubnetGroupMessage) -> Box<Future<Item = ModifyDBSubnetGroupResult, Error = ModifyDBSubnetGroupError>>;
                 
 
                 #[doc="<p>Modifies an existing RDS event notification subscription. Note that you cannot modify the source identifiers using this call; to change source identifiers for a subscription, use the <a>AddSourceIdentifierToSubscription</a> and <a>RemoveSourceIdentifierFromSubscription</a> calls.</p> <p>You can see a list of the event categories for a given SourceType in the <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html\">Events</a> topic in the Amazon RDS User Guide or by using the <b>DescribeEventCategories</b> action.</p>"]
-                fn modify_event_subscription(&self, input: &ModifyEventSubscriptionMessage) -> Result<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
+                fn modify_event_subscription(&self, input: &ModifyEventSubscriptionMessage) -> Box<Future<Item = ModifyEventSubscriptionResult, Error = ModifyEventSubscriptionError>>;
                 
 
                 #[doc="<p>Modifies an existing option group.</p>"]
-                fn modify_option_group(&self, input: &ModifyOptionGroupMessage) -> Result<ModifyOptionGroupResult, ModifyOptionGroupError>;
+                fn modify_option_group(&self, input: &ModifyOptionGroupMessage) -> Box<Future<Item = ModifyOptionGroupResult, Error = ModifyOptionGroupError>>;
                 
 
                 #[doc="<p>Promotes a Read Replica DB instance to a standalone DB instance.</p> <note> <p>We recommend that you enable automated backups on your Read Replica before promoting the Read Replica. This ensures that no backup is taken during the promotion process. Once the instance is promoted to a primary instance, backups are taken based on your backup settings.</p> </note>"]
-                fn promote_read_replica(&self, input: &PromoteReadReplicaMessage) -> Result<PromoteReadReplicaResult, PromoteReadReplicaError>;
+                fn promote_read_replica(&self, input: &PromoteReadReplicaMessage) -> Box<Future<Item = PromoteReadReplicaResult, Error = PromoteReadReplicaError>>;
                 
 
                 #[doc="<p>Promotes a Read Replica DB cluster to a standalone DB cluster.</p>"]
-                fn promote_read_replica_db_cluster(&self, input: &PromoteReadReplicaDBClusterMessage) -> Result<PromoteReadReplicaDBClusterResult, PromoteReadReplicaDBClusterError>;
+                fn promote_read_replica_db_cluster(&self, input: &PromoteReadReplicaDBClusterMessage) -> Box<Future<Item = PromoteReadReplicaDBClusterResult, Error = PromoteReadReplicaDBClusterError>>;
                 
 
                 #[doc="<p>Purchases a reserved DB instance offering.</p>"]
-                fn purchase_reserved_db_instances_offering(&self, input: &PurchaseReservedDBInstancesOfferingMessage) -> Result<PurchaseReservedDBInstancesOfferingResult, PurchaseReservedDBInstancesOfferingError>;
+                fn purchase_reserved_db_instances_offering(&self, input: &PurchaseReservedDBInstancesOfferingMessage) -> Box<Future<Item = PurchaseReservedDBInstancesOfferingResult, Error = PurchaseReservedDBInstancesOfferingError>>;
                 
 
                 #[doc="<p>Rebooting a DB instance restarts the database engine service. A reboot also applies to the DB instance any modifications to the associated DB parameter group that were pending. Rebooting a DB instance results in a momentary outage of the instance, during which the DB instance status is set to rebooting. If the RDS instance is configured for MultiAZ, it is possible that the reboot will be conducted through a failover. An Amazon RDS event is created when the reboot is completed.</p> <p>If your DB instance is deployed in multiple Availability Zones, you can force a failover from one AZ to the other during the reboot. You might force a failover to test the availability of your DB instance deployment or to restore operations to the original AZ after a failover occurs.</p> <p>The time required to reboot is a function of the specific database engine's crash recovery process. To improve the reboot time, we recommend that you reduce database activities as much as possible during the reboot process to reduce rollback activity for in-transit transactions.</p>"]
-                fn reboot_db_instance(&self, input: &RebootDBInstanceMessage) -> Result<RebootDBInstanceResult, RebootDBInstanceError>;
+                fn reboot_db_instance(&self, input: &RebootDBInstanceMessage) -> Box<Future<Item = RebootDBInstanceResult, Error = RebootDBInstanceError>>;
                 
 
                 #[doc="<p>Disassociates an Identity and Access Management (IAM) role from an Aurora DB cluster. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html\">Authorizing Amazon Aurora to Access Other AWS Services On Your Behalf</a>.</p>"]
-                fn remove_role_from_db_cluster(&self, input: &RemoveRoleFromDBClusterMessage) -> Result<(), RemoveRoleFromDBClusterError>;
+                fn remove_role_from_db_cluster(&self, input: &RemoveRoleFromDBClusterMessage) -> Box<Future<Item = (), Error = RemoveRoleFromDBClusterError>>;
                 
 
                 #[doc="<p>Removes a source identifier from an existing RDS event notification subscription.</p>"]
-                fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentifierFromSubscriptionMessage) -> Result<RemoveSourceIdentifierFromSubscriptionResult, RemoveSourceIdentifierFromSubscriptionError>;
+                fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentifierFromSubscriptionMessage) -> Box<Future<Item = RemoveSourceIdentifierFromSubscriptionResult, Error = RemoveSourceIdentifierFromSubscriptionError>>;
                 
 
                 #[doc="<p>Removes metadata tags from an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html\">Tagging Amazon RDS Resources</a>.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceMessage) -> Result<(), RemoveTagsFromResourceError>;
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceMessage) -> Box<Future<Item = (), Error = RemoveTagsFromResourceError>>;
                 
 
                 #[doc="<p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <a>RebootDBInstance</a> request. You must call <a>RebootDBInstance</a> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn reset_db_cluster_parameter_group(&self, input: &ResetDBClusterParameterGroupMessage) -> Result<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError>;
+                fn reset_db_cluster_parameter_group(&self, input: &ResetDBClusterParameterGroupMessage) -> Box<Future<Item = DBClusterParameterGroupNameMessage, Error = ResetDBClusterParameterGroupError>>;
                 
 
                 #[doc="<p> Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. </p>"]
-                fn reset_db_parameter_group(&self, input: &ResetDBParameterGroupMessage) -> Result<DBParameterGroupNameMessage, ResetDBParameterGroupError>;
+                fn reset_db_parameter_group(&self, input: &ResetDBParameterGroupMessage) -> Box<Future<Item = DBParameterGroupNameMessage, Error = ResetDBParameterGroupError>>;
                 
 
                 #[doc="<p>Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href=\"AmazonRDS/latest/UserGuide/Aurora.Migrate.MySQL.html#Aurora.Migrate.MySQL.S3\">Migrating Data from MySQL by Using an Amazon S3 Bucket</a>.</p>"]
-                fn restore_db_cluster_from_s3(&self, input: &RestoreDBClusterFromS3Message) -> Result<RestoreDBClusterFromS3Result, RestoreDBClusterFromS3Error>;
+                fn restore_db_cluster_from_s3(&self, input: &RestoreDBClusterFromS3Message) -> Box<Future<Item = RestoreDBClusterFromS3Result, Error = RestoreDBClusterFromS3Error>>;
                 
 
                 #[doc="<p>Creates a new DB cluster from a DB cluster snapshot. The target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn restore_db_cluster_from_snapshot(&self, input: &RestoreDBClusterFromSnapshotMessage) -> Result<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError>;
+                fn restore_db_cluster_from_snapshot(&self, input: &RestoreDBClusterFromSnapshotMessage) -> Box<Future<Item = RestoreDBClusterFromSnapshotResult, Error = RestoreDBClusterFromSnapshotError>>;
                 
 
                 #[doc="<p> Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn restore_db_cluster_to_point_in_time(&self, input: &RestoreDBClusterToPointInTimeMessage) -> Result<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError>;
+                fn restore_db_cluster_to_point_in_time(&self, input: &RestoreDBClusterToPointInTimeMessage) -> Box<Future<Item = RestoreDBClusterToPointInTimeResult, Error = RestoreDBClusterToPointInTimeError>>;
                 
 
                 #[doc="<p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with the most of original configuration with the default security group and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored AZ deployment and not a single-AZ deployment.</p> <p>If your intent is to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS does not allow two DB instances with the same name. Once you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you will replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p>"]
-                fn restore_db_instance_from_db_snapshot(&self, input: &RestoreDBInstanceFromDBSnapshotMessage) -> Result<RestoreDBInstanceFromDBSnapshotResult, RestoreDBInstanceFromDBSnapshotError>;
+                fn restore_db_instance_from_db_snapshot(&self, input: &RestoreDBInstanceFromDBSnapshotMessage) -> Box<Future<Item = RestoreDBInstanceFromDBSnapshotResult, Error = RestoreDBInstanceFromDBSnapshotError>>;
                 
 
                 #[doc="<p>Restores a DB instance to an arbitrary point in time. You can restore to any point in time before the time identified by the LatestRestorableTime property. You can restore to a point up to the number of days specified by the BackupRetentionPeriod property.</p> <p>The target database is created with most of the original configuration, but in a system-selected availability zone, with the default security group, the default subnet group, and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored deployment and not a single-AZ deployment.</p>"]
-                fn restore_db_instance_to_point_in_time(&self, input: &RestoreDBInstanceToPointInTimeMessage) -> Result<RestoreDBInstanceToPointInTimeResult, RestoreDBInstanceToPointInTimeError>;
+                fn restore_db_instance_to_point_in_time(&self, input: &RestoreDBInstanceToPointInTimeMessage) -> Box<Future<Item = RestoreDBInstanceToPointInTimeResult, Error = RestoreDBInstanceToPointInTimeError>>;
                 
 
                 #[doc="<p>Revokes ingress from a DBSecurityGroup for previously authorized IP ranges or EC2 or VPC Security Groups. Required parameters for this API are one of CIDRIP, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId).</p>"]
-                fn revoke_db_security_group_ingress(&self, input: &RevokeDBSecurityGroupIngressMessage) -> Result<RevokeDBSecurityGroupIngressResult, RevokeDBSecurityGroupIngressError>;
+                fn revoke_db_security_group_ingress(&self, input: &RevokeDBSecurityGroupIngressMessage) -> Box<Future<Item = RevokeDBSecurityGroupIngressResult, Error = RevokeDBSecurityGroupIngressError>>;
                 
 }
 /// A client for the Amazon RDS API.
@@ -20219,7 +20229,7 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Associates an Identity and Access Management (IAM) role from an Aurora DB cluster. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html\">Authorizing Amazon Aurora to Access Other AWS Services On Your Behalf</a>.</p>"]
-                fn add_role_to_db_cluster(&self, input: &AddRoleToDBClusterMessage) -> Result<(), AddRoleToDBClusterError> {
+                fn add_role_to_db_cluster(&self, input: &AddRoleToDBClusterMessage) -> Box<Future<Item = (), Error = AddRoleToDBClusterError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20228,22 +20238,31 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     AddRoleToDBClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddRoleToDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddRoleToDBClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddRoleToDBClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AddRoleToDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds a source identifier to an existing RDS event notification subscription.</p>"]
-                fn add_source_identifier_to_subscription(&self, input: &AddSourceIdentifierToSubscriptionMessage) -> Result<AddSourceIdentifierToSubscriptionResult, AddSourceIdentifierToSubscriptionError> {
+                fn add_source_identifier_to_subscription(&self, input: &AddSourceIdentifierToSubscriptionMessage) -> Box<Future<Item = AddSourceIdentifierToSubscriptionResult, Error = AddSourceIdentifierToSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20252,11 +20271,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     AddSourceIdentifierToSubscriptionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddSourceIdentifierToSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddSourceIdentifierToSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20268,23 +20295,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AddSourceIdentifierToSubscriptionResultDeserializer::deserialize("AddSourceIdentifierToSubscriptionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AddSourceIdentifierToSubscriptionResultDeserializer::deserialize("AddSourceIdentifierToSubscriptionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddSourceIdentifierToSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AddSourceIdentifierToSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds metadata tags to an Amazon RDS resource. These tags can also be used with cost allocation reporting to track cost associated with Amazon RDS resources, or used in a Condition statement in an IAM policy for Amazon RDS.</p> <p>For an overview on tagging Amazon RDS resources, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html\">Tagging Amazon RDS Resources</a>.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceMessage) -> Result<(), AddTagsToResourceError> {
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceMessage) -> Box<Future<Item = (), Error = AddTagsToResourceError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20293,22 +20321,31 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddTagsToResourceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddTagsToResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>"]
-                fn apply_pending_maintenance_action(&self, input: &ApplyPendingMaintenanceActionMessage) -> Result<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError> {
+                fn apply_pending_maintenance_action(&self, input: &ApplyPendingMaintenanceActionMessage) -> Box<Future<Item = ApplyPendingMaintenanceActionResult, Error = ApplyPendingMaintenanceActionError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20317,11 +20354,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ApplyPendingMaintenanceActionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ApplyPendingMaintenanceActionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ApplyPendingMaintenanceActionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20333,23 +20378,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ApplyPendingMaintenanceActionResultDeserializer::deserialize("ApplyPendingMaintenanceActionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ApplyPendingMaintenanceActionResultDeserializer::deserialize("ApplyPendingMaintenanceActionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ApplyPendingMaintenanceActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ApplyPendingMaintenanceActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables ingress to a DBSecurityGroup using one of two forms of authorization. First, EC2 or VPC security groups can be added to the DBSecurityGroup if the application using the database is running on EC2 or VPC instances. Second, IP ranges are available if the application accessing your database is running on the Internet. Required parameters for this API are one of CIDR range, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId for non-VPC).</p> <note> <p>You cannot authorize ingress from an EC2 security group in one region to an Amazon RDS DB instance in another. You cannot authorize ingress from a VPC security group in one VPC to an Amazon RDS DB instance in another.</p> </note> <p>For an overview of CIDR ranges, go to the <a href=\"http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Wikipedia Tutorial</a>. </p>"]
-                fn authorize_db_security_group_ingress(&self, input: &AuthorizeDBSecurityGroupIngressMessage) -> Result<AuthorizeDBSecurityGroupIngressResult, AuthorizeDBSecurityGroupIngressError> {
+                fn authorize_db_security_group_ingress(&self, input: &AuthorizeDBSecurityGroupIngressMessage) -> Box<Future<Item = AuthorizeDBSecurityGroupIngressResult, Error = AuthorizeDBSecurityGroupIngressError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20358,11 +20404,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     AuthorizeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AuthorizeDBSecurityGroupIngressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AuthorizeDBSecurityGroupIngressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20374,23 +20428,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AuthorizeDBSecurityGroupIngressResultDeserializer::deserialize("AuthorizeDBSecurityGroupIngressResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AuthorizeDBSecurityGroupIngressResultDeserializer::deserialize("AuthorizeDBSecurityGroupIngressResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AuthorizeDBSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AuthorizeDBSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Copies the specified DB cluster parameter group.</p>"]
-                fn copy_db_cluster_parameter_group(&self, input: &CopyDBClusterParameterGroupMessage) -> Result<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError> {
+                fn copy_db_cluster_parameter_group(&self, input: &CopyDBClusterParameterGroupMessage) -> Box<Future<Item = CopyDBClusterParameterGroupResult, Error = CopyDBClusterParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20399,11 +20454,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CopyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopyDBClusterParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopyDBClusterParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20415,23 +20478,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CopyDBClusterParameterGroupResultDeserializer::deserialize("CopyDBClusterParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CopyDBClusterParameterGroupResultDeserializer::deserialize("CopyDBClusterParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CopyDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CopyDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a snapshot of a DB cluster. For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn copy_db_cluster_snapshot(&self, input: &CopyDBClusterSnapshotMessage) -> Result<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError> {
+                fn copy_db_cluster_snapshot(&self, input: &CopyDBClusterSnapshotMessage) -> Box<Future<Item = CopyDBClusterSnapshotResult, Error = CopyDBClusterSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20440,11 +20504,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CopyDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopyDBClusterSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopyDBClusterSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20456,23 +20528,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CopyDBClusterSnapshotResultDeserializer::deserialize("CopyDBClusterSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CopyDBClusterSnapshotResultDeserializer::deserialize("CopyDBClusterSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CopyDBClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CopyDBClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Copies the specified DB parameter group.</p>"]
-                fn copy_db_parameter_group(&self, input: &CopyDBParameterGroupMessage) -> Result<CopyDBParameterGroupResult, CopyDBParameterGroupError> {
+                fn copy_db_parameter_group(&self, input: &CopyDBParameterGroupMessage) -> Box<Future<Item = CopyDBParameterGroupResult, Error = CopyDBParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20481,11 +20554,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CopyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopyDBParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopyDBParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20497,23 +20578,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CopyDBParameterGroupResultDeserializer::deserialize("CopyDBParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CopyDBParameterGroupResultDeserializer::deserialize("CopyDBParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CopyDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CopyDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Copies the specified DB snapshot. The source DB snapshot must be in the \"available\" state.</p> <p>To copy a DB snapshot from a shared manual DB snapshot, <code>SourceDBSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB snapshot.</p> <p>You can copy an encrypted DB snapshot from another AWS Region. In that case, the region where you call the <code>CopyDBSnapshot</code> action is the destination region for the encrypted DB snapshot to be copied to. To copy an encrypted DB snapshot from another region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (KMS) key identifier for the key to use to encrypt the copy of the DB snapshot in the destination region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBSnapshot</code> action to be called in the source region where the DB snapshot will be copied from. The presigned URL must be a valid request for the <code>CopyDBSnapshot</code> API action that can be executed in the source region that contains the encrypted DB snapshot to be copied.</p> <p>The presigned URL request must contain the following parameter values:</p> <ul> <li> <p> <code>DestinationRegion</code> - The AWS Region that the encrypted DB snapshot will be copied to. This region is the same one where the <code>CopyDBSnapshot</code> action is called that contains this presigned URL. </p> <p>For example, if you copy an encrypted DB snapshot from the us-west-2 region to the us-east-1 region, then you will call the <code>CopyDBSnapshot</code> action in the us-east-1 region and provide a presigned URL that contains a call to the <code>CopyDBSnapshot</code> action in the us-west-2 region. For this example, the <code>DestinationRegion</code> in the presigned URL must be set to the us-east-1 region.</p> </li> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB snapshot in the destination region. This identifier is the same for both the <code>CopyDBSnapshot</code> action that is called in the destination region, and the action contained in the presigned URL.</p> </li> <li> <p> <code>SourceDBSnapshotIdentifier</code> - The DB snapshot identifier for the encrypted snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source region. For example, if you copy an encrypted DB snapshot from the us-west-2 region, then your <code>SourceDBSnapshotIdentifier</code> looks like this example: <code>arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html\"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\"> Signature Version 4 Signing Process</a>.</p> </li> <li> <p> <code>TargetDBSnapshotIdentifier</code> - The identifier for the new copy of the DB snapshot in the destination region.</p> </li> <li> <p> <code>SourceDBSnapshotIdentifier</code> - The DB snapshot identifier for the encrypted snapshot to be copied. This identifier must be in the ARN format for the source region and is the same value as the <code>SourceDBSnapshotIdentifier</code> in the presigned URL. </p> </li> </ul> <p>For more information on copying encrypted snapshots from one region to another, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.Encrypted.CrossRegion\"> Copying an Encrypted DB Snapshot to Another Region</a> in the Amazon RDS User Guide.</p>"]
-                fn copy_db_snapshot(&self, input: &CopyDBSnapshotMessage) -> Result<CopyDBSnapshotResult, CopyDBSnapshotError> {
+                fn copy_db_snapshot(&self, input: &CopyDBSnapshotMessage) -> Box<Future<Item = CopyDBSnapshotResult, Error = CopyDBSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20522,11 +20604,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CopyDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopyDBSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopyDBSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20538,23 +20628,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CopyDBSnapshotResultDeserializer::deserialize("CopyDBSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CopyDBSnapshotResultDeserializer::deserialize("CopyDBSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CopyDBSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CopyDBSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Copies the specified option group.</p>"]
-                fn copy_option_group(&self, input: &CopyOptionGroupMessage) -> Result<CopyOptionGroupResult, CopyOptionGroupError> {
+                fn copy_option_group(&self, input: &CopyOptionGroupMessage) -> Box<Future<Item = CopyOptionGroupResult, Error = CopyOptionGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20563,11 +20654,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CopyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopyOptionGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopyOptionGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20579,23 +20678,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CopyOptionGroupResultDeserializer::deserialize("CopyOptionGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CopyOptionGroupResultDeserializer::deserialize("CopyOptionGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CopyOptionGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CopyOptionGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new Amazon Aurora DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn create_db_cluster(&self, input: &CreateDBClusterMessage) -> Result<CreateDBClusterResult, CreateDBClusterError> {
+                fn create_db_cluster(&self, input: &CreateDBClusterMessage) -> Box<Future<Item = CreateDBClusterResult, Error = CreateDBClusterError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20604,11 +20704,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateDBClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDBClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDBClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20620,23 +20728,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDBClusterResultDeserializer::deserialize("CreateDBClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDBClusterResultDeserializer::deserialize("CreateDBClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you've created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect. </p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href=\"https://console.aws.amazon.com/rds/\">Amazon RDS console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn create_db_cluster_parameter_group(&self, input: &CreateDBClusterParameterGroupMessage) -> Result<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError> {
+                fn create_db_cluster_parameter_group(&self, input: &CreateDBClusterParameterGroupMessage) -> Box<Future<Item = CreateDBClusterParameterGroupResult, Error = CreateDBClusterParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20645,11 +20754,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDBClusterParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDBClusterParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20661,23 +20778,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDBClusterParameterGroupResultDeserializer::deserialize("CreateDBClusterParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDBClusterParameterGroupResultDeserializer::deserialize("CreateDBClusterParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a snapshot of a DB cluster. For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn create_db_cluster_snapshot(&self, input: &CreateDBClusterSnapshotMessage) -> Result<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError> {
+                fn create_db_cluster_snapshot(&self, input: &CreateDBClusterSnapshotMessage) -> Box<Future<Item = CreateDBClusterSnapshotResult, Error = CreateDBClusterSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20686,11 +20804,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDBClusterSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDBClusterSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20702,23 +20828,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDBClusterSnapshotResultDeserializer::deserialize("CreateDBClusterSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDBClusterSnapshotResultDeserializer::deserialize("CreateDBClusterSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDBClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDBClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new DB instance.</p>"]
-                fn create_db_instance(&self, input: &CreateDBInstanceMessage) -> Result<CreateDBInstanceResult, CreateDBInstanceError> {
+                fn create_db_instance(&self, input: &CreateDBInstanceMessage) -> Box<Future<Item = CreateDBInstanceResult, Error = CreateDBInstanceError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20727,11 +20854,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateDBInstanceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDBInstanceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDBInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20743,23 +20878,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDBInstanceResultDeserializer::deserialize("CreateDBInstanceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDBInstanceResultDeserializer::deserialize("CreateDBInstanceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDBInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDBInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a DB instance for a DB instance running MySQL, MariaDB, or PostgreSQL that acts as a Read Replica of a source DB instance.</p> <p>All Read Replica DB instances are created as Single-AZ deployments with backups disabled. All other DB instance attributes (including DB security groups and DB parameter groups) are inherited from the source DB instance, except as specified below.</p> <important> <p>The source DB instance must have backup retention enabled.</p> </important>"]
-                fn create_db_instance_read_replica(&self, input: &CreateDBInstanceReadReplicaMessage) -> Result<CreateDBInstanceReadReplicaResult, CreateDBInstanceReadReplicaError> {
+                fn create_db_instance_read_replica(&self, input: &CreateDBInstanceReadReplicaMessage) -> Box<Future<Item = CreateDBInstanceReadReplicaResult, Error = CreateDBInstanceReadReplicaError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20768,11 +20904,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateDBInstanceReadReplicaMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDBInstanceReadReplicaError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDBInstanceReadReplicaError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20784,23 +20928,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDBInstanceReadReplicaResultDeserializer::deserialize("CreateDBInstanceReadReplicaResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDBInstanceReadReplicaResultDeserializer::deserialize("CreateDBInstanceReadReplicaResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDBInstanceReadReplicaError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDBInstanceReadReplicaError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new DB parameter group.</p> <p> A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you've created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect. </p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href=\"https://console.aws.amazon.com/rds/\">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important>"]
-                fn create_db_parameter_group(&self, input: &CreateDBParameterGroupMessage) -> Result<CreateDBParameterGroupResult, CreateDBParameterGroupError> {
+                fn create_db_parameter_group(&self, input: &CreateDBParameterGroupMessage) -> Box<Future<Item = CreateDBParameterGroupResult, Error = CreateDBParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20809,11 +20954,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDBParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDBParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20825,23 +20978,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDBParameterGroupResultDeserializer::deserialize("CreateDBParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDBParameterGroupResultDeserializer::deserialize("CreateDBParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new DB security group. DB security groups control access to a DB instance.</p>"]
-                fn create_db_security_group(&self, input: &CreateDBSecurityGroupMessage) -> Result<CreateDBSecurityGroupResult, CreateDBSecurityGroupError> {
+                fn create_db_security_group(&self, input: &CreateDBSecurityGroupMessage) -> Box<Future<Item = CreateDBSecurityGroupResult, Error = CreateDBSecurityGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20850,11 +21004,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDBSecurityGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDBSecurityGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20866,23 +21028,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDBSecurityGroupResultDeserializer::deserialize("CreateDBSecurityGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDBSecurityGroupResultDeserializer::deserialize("CreateDBSecurityGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDBSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDBSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a DBSnapshot. The source DBInstance must be in \"available\" state.</p>"]
-                fn create_db_snapshot(&self, input: &CreateDBSnapshotMessage) -> Result<CreateDBSnapshotResult, CreateDBSnapshotError> {
+                fn create_db_snapshot(&self, input: &CreateDBSnapshotMessage) -> Box<Future<Item = CreateDBSnapshotResult, Error = CreateDBSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20891,11 +21054,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDBSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDBSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20907,23 +21078,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDBSnapshotResultDeserializer::deserialize("CreateDBSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDBSnapshotResultDeserializer::deserialize("CreateDBSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDBSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDBSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the region.</p>"]
-                fn create_db_subnet_group(&self, input: &CreateDBSubnetGroupMessage) -> Result<CreateDBSubnetGroupResult, CreateDBSubnetGroupError> {
+                fn create_db_subnet_group(&self, input: &CreateDBSubnetGroupMessage) -> Box<Future<Item = CreateDBSubnetGroupResult, Error = CreateDBSubnetGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20932,11 +21104,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDBSubnetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDBSubnetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20948,23 +21128,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDBSubnetGroupResultDeserializer::deserialize("CreateDBSubnetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDBSubnetGroupResultDeserializer::deserialize("CreateDBSubnetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDBSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDBSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an RDS event notification subscription. This action requires a topic ARN (Amazon Resource Name) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (SourceType) you want to be notified of, provide a list of RDS sources (SourceIds) that triggers the events, and provide a list of event categories (EventCategories) for events you want to be notified of. For example, you can specify SourceType = db-instance, SourceIds = mydbinstance1, mydbinstance2 and EventCategories = Availability, Backup.</p> <p>If you specify both the SourceType and SourceIds, such as SourceType = db-instance and SourceIdentifier = myDBInstance1, you will be notified of all the db-instance events for the specified source. If you specify a SourceType but do not specify a SourceIdentifier, you will receive notice of the events for that source type for all your RDS sources. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all RDS sources belonging to your customer account.</p>"]
-                fn create_event_subscription(&self, input: &CreateEventSubscriptionMessage) -> Result<CreateEventSubscriptionResult, CreateEventSubscriptionError> {
+                fn create_event_subscription(&self, input: &CreateEventSubscriptionMessage) -> Box<Future<Item = CreateEventSubscriptionResult, Error = CreateEventSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -20973,11 +21154,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateEventSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateEventSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20989,23 +21178,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateEventSubscriptionResultDeserializer::deserialize("CreateEventSubscriptionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateEventSubscriptionResultDeserializer::deserialize("CreateEventSubscriptionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new option group. You can create up to 20 option groups.</p>"]
-                fn create_option_group(&self, input: &CreateOptionGroupMessage) -> Result<CreateOptionGroupResult, CreateOptionGroupError> {
+                fn create_option_group(&self, input: &CreateOptionGroupMessage) -> Box<Future<Item = CreateOptionGroupResult, Error = CreateOptionGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21014,11 +21204,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateOptionGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateOptionGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateOptionGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21030,23 +21228,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateOptionGroupResultDeserializer::deserialize("CreateOptionGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateOptionGroupResultDeserializer::deserialize("CreateOptionGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateOptionGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateOptionGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and cannot be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn delete_db_cluster(&self, input: &DeleteDBClusterMessage) -> Result<DeleteDBClusterResult, DeleteDBClusterError> {
+                fn delete_db_cluster(&self, input: &DeleteDBClusterMessage) -> Box<Future<Item = DeleteDBClusterResult, Error = DeleteDBClusterError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21055,11 +21254,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteDBClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDBClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDBClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21071,23 +21278,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteDBClusterResultDeserializer::deserialize("DeleteDBClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteDBClusterResultDeserializer::deserialize("DeleteDBClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted cannot be associated with any DB clusters.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn delete_db_cluster_parameter_group(&self, input: &DeleteDBClusterParameterGroupMessage) -> Result<(), DeleteDBClusterParameterGroupError> {
+                fn delete_db_cluster_parameter_group(&self, input: &DeleteDBClusterParameterGroupMessage) -> Box<Future<Item = (), Error = DeleteDBClusterParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21096,22 +21304,31 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDBClusterParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDBClusterParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn delete_db_cluster_snapshot(&self, input: &DeleteDBClusterSnapshotMessage) -> Result<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError> {
+                fn delete_db_cluster_snapshot(&self, input: &DeleteDBClusterSnapshotMessage) -> Box<Future<Item = DeleteDBClusterSnapshotResult, Error = DeleteDBClusterSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21120,11 +21337,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDBClusterSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDBClusterSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21136,23 +21361,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteDBClusterSnapshotResultDeserializer::deserialize("DeleteDBClusterSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteDBClusterSnapshotResultDeserializer::deserialize("DeleteDBClusterSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDBClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDBClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and cannot be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon RDS DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action cannot be canceled or reverted once submitted. </p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of an Amazon Aurora DB cluster, you cannot delete the DB instance if the following are true:</p> <ul> <li> <p>The DB cluster is a Read Replica of another Amazon Aurora DB cluster.</p> </li> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul> <p>To delete a DB instance in this case, first call the <a>PromoteReadReplicaDBCluster</a> API action to promote the DB cluster so it's no longer a Read Replica. After the promotion completes, then call the <code>DeleteDBInstance</code> API action to delete the final instance in the DB cluster.</p>"]
-                fn delete_db_instance(&self, input: &DeleteDBInstanceMessage) -> Result<DeleteDBInstanceResult, DeleteDBInstanceError> {
+                fn delete_db_instance(&self, input: &DeleteDBInstanceMessage) -> Box<Future<Item = DeleteDBInstanceResult, Error = DeleteDBInstanceError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21161,11 +21387,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteDBInstanceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDBInstanceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDBInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21177,23 +21411,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteDBInstanceResultDeserializer::deserialize("DeleteDBInstanceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteDBInstanceResultDeserializer::deserialize("DeleteDBInstanceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDBInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDBInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a specified DBParameterGroup. The DBParameterGroup to be deleted cannot be associated with any DB instances.</p>"]
-                fn delete_db_parameter_group(&self, input: &DeleteDBParameterGroupMessage) -> Result<(), DeleteDBParameterGroupError> {
+                fn delete_db_parameter_group(&self, input: &DeleteDBParameterGroupMessage) -> Box<Future<Item = (), Error = DeleteDBParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21202,22 +21437,31 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDBParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDBParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a DB security group.</p> <note> <p>The specified DB security group must not be associated with any DB instances.</p> </note>"]
-                fn delete_db_security_group(&self, input: &DeleteDBSecurityGroupMessage) -> Result<(), DeleteDBSecurityGroupError> {
+                fn delete_db_security_group(&self, input: &DeleteDBSecurityGroupMessage) -> Box<Future<Item = (), Error = DeleteDBSecurityGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21226,22 +21470,31 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDBSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDBSecurityGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDBSecurityGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDBSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a DBSnapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DBSnapshot must be in the <code>available</code> state to be deleted.</p> </note>"]
-                fn delete_db_snapshot(&self, input: &DeleteDBSnapshotMessage) -> Result<DeleteDBSnapshotResult, DeleteDBSnapshotError> {
+                fn delete_db_snapshot(&self, input: &DeleteDBSnapshotMessage) -> Box<Future<Item = DeleteDBSnapshotResult, Error = DeleteDBSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21250,11 +21503,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDBSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDBSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21266,23 +21527,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteDBSnapshotResultDeserializer::deserialize("DeleteDBSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteDBSnapshotResultDeserializer::deserialize("DeleteDBSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDBSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDBSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note>"]
-                fn delete_db_subnet_group(&self, input: &DeleteDBSubnetGroupMessage) -> Result<(), DeleteDBSubnetGroupError> {
+                fn delete_db_subnet_group(&self, input: &DeleteDBSubnetGroupMessage) -> Box<Future<Item = (), Error = DeleteDBSubnetGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21291,22 +21553,31 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDBSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDBSubnetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDBSubnetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDBSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an RDS event notification subscription.</p>"]
-                fn delete_event_subscription(&self, input: &DeleteEventSubscriptionMessage) -> Result<DeleteEventSubscriptionResult, DeleteEventSubscriptionError> {
+                fn delete_event_subscription(&self, input: &DeleteEventSubscriptionMessage) -> Box<Future<Item = DeleteEventSubscriptionResult, Error = DeleteEventSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21315,11 +21586,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteEventSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteEventSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21331,23 +21610,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteEventSubscriptionResultDeserializer::deserialize("DeleteEventSubscriptionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteEventSubscriptionResultDeserializer::deserialize("DeleteEventSubscriptionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an existing option group.</p>"]
-                fn delete_option_group(&self, input: &DeleteOptionGroupMessage) -> Result<(), DeleteOptionGroupError> {
+                fn delete_option_group(&self, input: &DeleteOptionGroupMessage) -> Box<Future<Item = (), Error = DeleteOptionGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21356,22 +21636,31 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteOptionGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteOptionGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteOptionGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteOptionGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteOptionGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all of the attributes for a customer account. The attributes include Amazon RDS quotas for the account, such as the number of DB instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>"]
-                fn describe_account_attributes(&self, input: &DescribeAccountAttributesMessage) -> Result<AccountAttributesMessage, DescribeAccountAttributesError> {
+                fn describe_account_attributes(&self, input: &DescribeAccountAttributesMessage) -> Box<Future<Item = AccountAttributesMessage, Error = DescribeAccountAttributesError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21380,11 +21669,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeAccountAttributesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAccountAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAccountAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21396,23 +21693,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AccountAttributesMessageDeserializer::deserialize("DescribeAccountAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AccountAttributesMessageDeserializer::deserialize("DescribeAccountAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the set of CA certificates provided by Amazon RDS for this AWS account.</p>"]
-                fn describe_certificates(&self, input: &DescribeCertificatesMessage) -> Result<CertificateMessage, DescribeCertificatesError> {
+                fn describe_certificates(&self, input: &DescribeCertificatesMessage) -> Box<Future<Item = CertificateMessage, Error = DescribeCertificatesError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21421,11 +21719,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeCertificatesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCertificatesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCertificatesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21437,23 +21743,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CertificateMessageDeserializer::deserialize("DescribeCertificatesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CertificateMessageDeserializer::deserialize("DescribeCertificatesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_db_cluster_parameter_groups(&self, input: &DescribeDBClusterParameterGroupsMessage) -> Result<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError> {
+                fn describe_db_cluster_parameter_groups(&self, input: &DescribeDBClusterParameterGroupsMessage) -> Box<Future<Item = DBClusterParameterGroupsMessage, Error = DescribeDBClusterParameterGroupsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21462,11 +21769,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBClusterParameterGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBClusterParameterGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21478,23 +21793,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBClusterParameterGroupsMessageDeserializer::deserialize("DescribeDBClusterParameterGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBClusterParameterGroupsMessageDeserializer::deserialize("DescribeDBClusterParameterGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBClusterParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBClusterParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the detailed parameter list for a particular DB cluster parameter group.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_db_cluster_parameters(&self, input: &DescribeDBClusterParametersMessage) -> Result<DBClusterParameterGroupDetails, DescribeDBClusterParametersError> {
+                fn describe_db_cluster_parameters(&self, input: &DescribeDBClusterParametersMessage) -> Box<Future<Item = DBClusterParameterGroupDetails, Error = DescribeDBClusterParametersError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21503,11 +21819,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBClusterParametersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBClusterParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBClusterParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21519,23 +21843,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBClusterParameterGroupDetailsDeserializer::deserialize("DescribeDBClusterParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBClusterParameterGroupDetailsDeserializer::deserialize("DescribeDBClusterParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB cluster snapshot, or to make the manual DB cluster snapshot public or private, use the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>"]
-                fn describe_db_cluster_snapshot_attributes(&self, input: &DescribeDBClusterSnapshotAttributesMessage) -> Result<DescribeDBClusterSnapshotAttributesResult, DescribeDBClusterSnapshotAttributesError> {
+                fn describe_db_cluster_snapshot_attributes(&self, input: &DescribeDBClusterSnapshotAttributesMessage) -> Box<Future<Item = DescribeDBClusterSnapshotAttributesResult, Error = DescribeDBClusterSnapshotAttributesError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21544,11 +21869,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBClusterSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBClusterSnapshotAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBClusterSnapshotAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21560,23 +21893,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize("DescribeDBClusterSnapshotAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize("DescribeDBClusterSnapshotAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBClusterSnapshotAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBClusterSnapshotAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about DB cluster snapshots. This API action supports pagination.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_db_cluster_snapshots(&self, input: &DescribeDBClusterSnapshotsMessage) -> Result<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError> {
+                fn describe_db_cluster_snapshots(&self, input: &DescribeDBClusterSnapshotsMessage) -> Box<Future<Item = DBClusterSnapshotMessage, Error = DescribeDBClusterSnapshotsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21585,11 +21919,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBClusterSnapshotsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBClusterSnapshotsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21601,23 +21943,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBClusterSnapshotMessageDeserializer::deserialize("DescribeDBClusterSnapshotsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBClusterSnapshotMessageDeserializer::deserialize("DescribeDBClusterSnapshotsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBClusterSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBClusterSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about provisioned Aurora DB clusters. This API supports pagination.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_db_clusters(&self, input: &DescribeDBClustersMessage) -> Result<DBClusterMessage, DescribeDBClustersError> {
+                fn describe_db_clusters(&self, input: &DescribeDBClustersMessage) -> Box<Future<Item = DBClusterMessage, Error = DescribeDBClustersError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21626,11 +21969,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBClustersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBClustersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBClustersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21642,23 +21993,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBClusterMessageDeserializer::deserialize("DescribeDBClustersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBClusterMessageDeserializer::deserialize("DescribeDBClustersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the available DB engines.</p>"]
-                fn describe_db_engine_versions(&self, input: &DescribeDBEngineVersionsMessage) -> Result<DBEngineVersionMessage, DescribeDBEngineVersionsError> {
+                fn describe_db_engine_versions(&self, input: &DescribeDBEngineVersionsMessage) -> Box<Future<Item = DBEngineVersionMessage, Error = DescribeDBEngineVersionsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21667,11 +22019,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBEngineVersionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBEngineVersionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21683,23 +22043,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBEngineVersionMessageDeserializer::deserialize("DescribeDBEngineVersionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBEngineVersionMessageDeserializer::deserialize("DescribeDBEngineVersionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBEngineVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBEngineVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about provisioned RDS instances. This API supports pagination.</p>"]
-                fn describe_db_instances(&self, input: &DescribeDBInstancesMessage) -> Result<DBInstanceMessage, DescribeDBInstancesError> {
+                fn describe_db_instances(&self, input: &DescribeDBInstancesMessage) -> Box<Future<Item = DBInstanceMessage, Error = DescribeDBInstancesError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21708,11 +22069,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBInstancesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21724,23 +22093,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBInstanceMessageDeserializer::deserialize("DescribeDBInstancesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBInstanceMessageDeserializer::deserialize("DescribeDBInstancesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of DB log files for the DB instance.</p>"]
-                fn describe_db_log_files(&self, input: &DescribeDBLogFilesMessage) -> Result<DescribeDBLogFilesResponse, DescribeDBLogFilesError> {
+                fn describe_db_log_files(&self, input: &DescribeDBLogFilesMessage) -> Box<Future<Item = DescribeDBLogFilesResponse, Error = DescribeDBLogFilesError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21749,11 +22119,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBLogFilesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBLogFilesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBLogFilesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21765,23 +22143,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeDBLogFilesResponseDeserializer::deserialize("DescribeDBLogFilesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeDBLogFilesResponseDeserializer::deserialize("DescribeDBLogFilesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBLogFilesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBLogFilesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>"]
-                fn describe_db_parameter_groups(&self, input: &DescribeDBParameterGroupsMessage) -> Result<DBParameterGroupsMessage, DescribeDBParameterGroupsError> {
+                fn describe_db_parameter_groups(&self, input: &DescribeDBParameterGroupsMessage) -> Box<Future<Item = DBParameterGroupsMessage, Error = DescribeDBParameterGroupsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21790,11 +22169,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBParameterGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBParameterGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21806,23 +22193,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBParameterGroupsMessageDeserializer::deserialize("DescribeDBParameterGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBParameterGroupsMessageDeserializer::deserialize("DescribeDBParameterGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the detailed parameter list for a particular DB parameter group.</p>"]
-                fn describe_db_parameters(&self, input: &DescribeDBParametersMessage) -> Result<DBParameterGroupDetails, DescribeDBParametersError> {
+                fn describe_db_parameters(&self, input: &DescribeDBParametersMessage) -> Box<Future<Item = DBParameterGroupDetails, Error = DescribeDBParametersError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21831,11 +22219,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBParametersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21847,23 +22243,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBParameterGroupDetailsDeserializer::deserialize("DescribeDBParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBParameterGroupDetailsDeserializer::deserialize("DescribeDBParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Returns a list of <code>DBSecurityGroup</code> descriptions. If a <code>DBSecurityGroupName</code> is specified, the list will contain only the descriptions of the specified DB security group. </p>"]
-                fn describe_db_security_groups(&self, input: &DescribeDBSecurityGroupsMessage) -> Result<DBSecurityGroupMessage, DescribeDBSecurityGroupsError> {
+                fn describe_db_security_groups(&self, input: &DescribeDBSecurityGroupsMessage) -> Box<Future<Item = DBSecurityGroupMessage, Error = DescribeDBSecurityGroupsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21872,11 +22269,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBSecurityGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBSecurityGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21888,23 +22293,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBSecurityGroupMessageDeserializer::deserialize("DescribeDBSecurityGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBSecurityGroupMessageDeserializer::deserialize("DescribeDBSecurityGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of DB snapshot attribute names and values for a manual DB snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB snapshot, or to make the manual DB snapshot public or private, use the <a>ModifyDBSnapshotAttribute</a> API action.</p>"]
-                fn describe_db_snapshot_attributes(&self, input: &DescribeDBSnapshotAttributesMessage) -> Result<DescribeDBSnapshotAttributesResult, DescribeDBSnapshotAttributesError> {
+                fn describe_db_snapshot_attributes(&self, input: &DescribeDBSnapshotAttributesMessage) -> Box<Future<Item = DescribeDBSnapshotAttributesResult, Error = DescribeDBSnapshotAttributesError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21913,11 +22319,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBSnapshotAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBSnapshotAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21929,23 +22343,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeDBSnapshotAttributesResultDeserializer::deserialize("DescribeDBSnapshotAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeDBSnapshotAttributesResultDeserializer::deserialize("DescribeDBSnapshotAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBSnapshotAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBSnapshotAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about DB snapshots. This API action supports pagination.</p>"]
-                fn describe_db_snapshots(&self, input: &DescribeDBSnapshotsMessage) -> Result<DBSnapshotMessage, DescribeDBSnapshotsError> {
+                fn describe_db_snapshots(&self, input: &DescribeDBSnapshotsMessage) -> Box<Future<Item = DBSnapshotMessage, Error = DescribeDBSnapshotsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21954,11 +22369,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBSnapshotsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBSnapshotsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBSnapshotsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21970,23 +22393,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBSnapshotMessageDeserializer::deserialize("DescribeDBSnapshotsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBSnapshotMessageDeserializer::deserialize("DescribeDBSnapshotsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href=\"http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Wikipedia Tutorial</a>. </p>"]
-                fn describe_db_subnet_groups(&self, input: &DescribeDBSubnetGroupsMessage) -> Result<DBSubnetGroupMessage, DescribeDBSubnetGroupsError> {
+                fn describe_db_subnet_groups(&self, input: &DescribeDBSubnetGroupsMessage) -> Box<Future<Item = DBSubnetGroupMessage, Error = DescribeDBSubnetGroupsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -21995,11 +22419,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeDBSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDBSubnetGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDBSubnetGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22011,23 +22443,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBSubnetGroupMessageDeserializer::deserialize("DescribeDBSubnetGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBSubnetGroupMessageDeserializer::deserialize("DescribeDBSubnetGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDBSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDBSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the default engine and system parameter information for the cluster database engine.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefaultClusterParametersMessage) -> Result<DescribeEngineDefaultClusterParametersResult, DescribeEngineDefaultClusterParametersError> {
+                fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefaultClusterParametersMessage) -> Box<Future<Item = DescribeEngineDefaultClusterParametersResult, Error = DescribeEngineDefaultClusterParametersError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22036,11 +22469,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeEngineDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEngineDefaultClusterParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEngineDefaultClusterParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22052,23 +22493,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeEngineDefaultClusterParametersResultDeserializer::deserialize("DescribeEngineDefaultClusterParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeEngineDefaultClusterParametersResultDeserializer::deserialize("DescribeEngineDefaultClusterParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEngineDefaultClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEngineDefaultClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the default engine and system parameter information for the specified database engine.</p>"]
-                fn describe_engine_default_parameters(&self, input: &DescribeEngineDefaultParametersMessage) -> Result<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError> {
+                fn describe_engine_default_parameters(&self, input: &DescribeEngineDefaultParametersMessage) -> Box<Future<Item = DescribeEngineDefaultParametersResult, Error = DescribeEngineDefaultParametersError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22077,11 +22519,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEngineDefaultParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEngineDefaultParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22093,23 +22543,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeEngineDefaultParametersResultDeserializer::deserialize("DescribeEngineDefaultParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeEngineDefaultParametersResultDeserializer::deserialize("DescribeEngineDefaultParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEngineDefaultParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEngineDefaultParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in the <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html\"> Events</a> topic in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn describe_event_categories(&self, input: &DescribeEventCategoriesMessage) -> Result<EventCategoriesMessage, DescribeEventCategoriesError> {
+                fn describe_event_categories(&self, input: &DescribeEventCategoriesMessage) -> Box<Future<Item = EventCategoriesMessage, Error = DescribeEventCategoriesError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22118,11 +22569,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEventCategoriesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEventCategoriesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22134,23 +22593,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EventCategoriesMessageDeserializer::deserialize("DescribeEventCategoriesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EventCategoriesMessageDeserializer::deserialize("DescribeEventCategoriesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all the subscription descriptions for a customer account. The description for a subscription includes SubscriptionName, SNSTopicARN, CustomerID, SourceType, SourceID, CreationTime, and Status.</p> <p>If you specify a SubscriptionName, lists the description for that subscription.</p>"]
-                fn describe_event_subscriptions(&self, input: &DescribeEventSubscriptionsMessage) -> Result<EventSubscriptionsMessage, DescribeEventSubscriptionsError> {
+                fn describe_event_subscriptions(&self, input: &DescribeEventSubscriptionsMessage) -> Box<Future<Item = EventSubscriptionsMessage, Error = DescribeEventSubscriptionsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22159,11 +22619,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEventSubscriptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEventSubscriptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22175,23 +22643,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EventSubscriptionsMessageDeserializer::deserialize("DescribeEventSubscriptionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EventSubscriptionsMessageDeserializer::deserialize("DescribeEventSubscriptionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>"]
-                fn describe_events(&self, input: &DescribeEventsMessage) -> Result<EventsMessage, DescribeEventsError> {
+                fn describe_events(&self, input: &DescribeEventsMessage) -> Box<Future<Item = EventsMessage, Error = DescribeEventsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22200,11 +22669,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEventsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEventsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22216,23 +22693,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes all available options.</p>"]
-                fn describe_option_group_options(&self, input: &DescribeOptionGroupOptionsMessage) -> Result<OptionGroupOptionsMessage, DescribeOptionGroupOptionsError> {
+                fn describe_option_group_options(&self, input: &DescribeOptionGroupOptionsMessage) -> Box<Future<Item = OptionGroupOptionsMessage, Error = DescribeOptionGroupOptionsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22241,11 +22719,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeOptionGroupOptionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeOptionGroupOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeOptionGroupOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22257,23 +22743,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(OptionGroupOptionsMessageDeserializer::deserialize("DescribeOptionGroupOptionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(OptionGroupOptionsMessageDeserializer::deserialize("DescribeOptionGroupOptionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeOptionGroupOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeOptionGroupOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the available option groups.</p>"]
-                fn describe_option_groups(&self, input: &DescribeOptionGroupsMessage) -> Result<OptionGroups, DescribeOptionGroupsError> {
+                fn describe_option_groups(&self, input: &DescribeOptionGroupsMessage) -> Box<Future<Item = OptionGroups, Error = DescribeOptionGroupsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22282,11 +22769,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeOptionGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeOptionGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeOptionGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22298,23 +22793,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(OptionGroupsDeserializer::deserialize("DescribeOptionGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(OptionGroupsDeserializer::deserialize("DescribeOptionGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeOptionGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeOptionGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of orderable DB instance options for the specified engine.</p>"]
-                fn describe_orderable_db_instance_options(&self, input: &DescribeOrderableDBInstanceOptionsMessage) -> Result<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError> {
+                fn describe_orderable_db_instance_options(&self, input: &DescribeOrderableDBInstanceOptionsMessage) -> Box<Future<Item = OrderableDBInstanceOptionsMessage, Error = DescribeOrderableDBInstanceOptionsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22323,11 +22819,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeOrderableDBInstanceOptionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeOrderableDBInstanceOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeOrderableDBInstanceOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22339,23 +22843,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(OrderableDBInstanceOptionsMessageDeserializer::deserialize("DescribeOrderableDBInstanceOptionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(OrderableDBInstanceOptionsMessageDeserializer::deserialize("DescribeOrderableDBInstanceOptionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeOrderableDBInstanceOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeOrderableDBInstanceOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>"]
-                fn describe_pending_maintenance_actions(&self, input: &DescribePendingMaintenanceActionsMessage) -> Result<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError> {
+                fn describe_pending_maintenance_actions(&self, input: &DescribePendingMaintenanceActionsMessage) -> Box<Future<Item = PendingMaintenanceActionsMessage, Error = DescribePendingMaintenanceActionsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22364,11 +22869,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribePendingMaintenanceActionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribePendingMaintenanceActionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribePendingMaintenanceActionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22380,23 +22893,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PendingMaintenanceActionsMessageDeserializer::deserialize("DescribePendingMaintenanceActionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PendingMaintenanceActionsMessageDeserializer::deserialize("DescribePendingMaintenanceActionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribePendingMaintenanceActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribePendingMaintenanceActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about reserved DB instances for this account, or about a specified reserved DB instance.</p>"]
-                fn describe_reserved_db_instances(&self, input: &DescribeReservedDBInstancesMessage) -> Result<ReservedDBInstanceMessage, DescribeReservedDBInstancesError> {
+                fn describe_reserved_db_instances(&self, input: &DescribeReservedDBInstancesMessage) -> Box<Future<Item = ReservedDBInstanceMessage, Error = DescribeReservedDBInstancesError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22405,11 +22919,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeReservedDBInstancesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedDBInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedDBInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22421,23 +22943,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ReservedDBInstanceMessageDeserializer::deserialize("DescribeReservedDBInstancesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ReservedDBInstanceMessageDeserializer::deserialize("DescribeReservedDBInstancesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedDBInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedDBInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists available reserved DB instance offerings.</p>"]
-                fn describe_reserved_db_instances_offerings(&self, input: &DescribeReservedDBInstancesOfferingsMessage) -> Result<ReservedDBInstancesOfferingMessage, DescribeReservedDBInstancesOfferingsError> {
+                fn describe_reserved_db_instances_offerings(&self, input: &DescribeReservedDBInstancesOfferingsMessage) -> Box<Future<Item = ReservedDBInstancesOfferingMessage, Error = DescribeReservedDBInstancesOfferingsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22446,11 +22969,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeReservedDBInstancesOfferingsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedDBInstancesOfferingsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedDBInstancesOfferingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22462,23 +22993,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ReservedDBInstancesOfferingMessageDeserializer::deserialize("DescribeReservedDBInstancesOfferingsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ReservedDBInstancesOfferingMessageDeserializer::deserialize("DescribeReservedDBInstancesOfferingsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedDBInstancesOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedDBInstancesOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the source AWS regions where the current AWS region can create a Read Replica or copy a DB snapshot from. This API action supports pagination.</p>"]
-                fn describe_source_regions(&self, input: &DescribeSourceRegionsMessage) -> Result<SourceRegionMessage, DescribeSourceRegionsError> {
+                fn describe_source_regions(&self, input: &DescribeSourceRegionsMessage) -> Box<Future<Item = SourceRegionMessage, Error = DescribeSourceRegionsError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22487,11 +23019,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeSourceRegionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSourceRegionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSourceRegionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22503,23 +23043,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SourceRegionMessageDeserializer::deserialize("DescribeSourceRegionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SourceRegionMessageDeserializer::deserialize("DescribeSourceRegionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSourceRegionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSourceRegionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Downloads all or a portion of the specified log file, up to 1 MB in size.</p>"]
-                fn download_db_log_file_portion(&self, input: &DownloadDBLogFilePortionMessage) -> Result<DownloadDBLogFilePortionDetails, DownloadDBLogFilePortionError> {
+                fn download_db_log_file_portion(&self, input: &DownloadDBLogFilePortionMessage) -> Box<Future<Item = DownloadDBLogFilePortionDetails, Error = DownloadDBLogFilePortionError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22528,11 +23069,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     DownloadDBLogFilePortionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DownloadDBLogFilePortionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DownloadDBLogFilePortionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22544,23 +23093,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DownloadDBLogFilePortionDetailsDeserializer::deserialize("DownloadDBLogFilePortionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DownloadDBLogFilePortionDetailsDeserializer::deserialize("DownloadDBLogFilePortionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DownloadDBLogFilePortionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DownloadDBLogFilePortionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Aurora Replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>Amazon Aurora will automatically fail over to an Aurora Replica, if one exists, when the primary instance fails. You can force a failover when you want to simulate a failure of a primary instance for testing. Because each instance in a DB cluster has its own endpoint address, you will need to clean up and re-establish any existing connections that use those endpoint addresses when the failover is complete.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn failover_db_cluster(&self, input: &FailoverDBClusterMessage) -> Result<FailoverDBClusterResult, FailoverDBClusterError> {
+                fn failover_db_cluster(&self, input: &FailoverDBClusterMessage) -> Box<Future<Item = FailoverDBClusterResult, Error = FailoverDBClusterError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22569,11 +23119,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     FailoverDBClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(FailoverDBClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| FailoverDBClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22585,23 +23143,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(FailoverDBClusterResultDeserializer::deserialize("FailoverDBClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(FailoverDBClusterResultDeserializer::deserialize("FailoverDBClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(FailoverDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(FailoverDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all tags on an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html\">Tagging Amazon RDS Resources</a>.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceMessage) -> Result<TagListMessage, ListTagsForResourceError> {
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceMessage) -> Box<Future<Item = TagListMessage, Error = ListTagsForResourceError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22610,11 +23169,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForResourceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22626,23 +23193,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(TagListMessageDeserializer::deserialize("ListTagsForResourceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(TagListMessageDeserializer::deserialize("ListTagsForResourceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modify a setting for an Amazon Aurora DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn modify_db_cluster(&self, input: &ModifyDBClusterMessage) -> Result<ModifyDBClusterResult, ModifyDBClusterError> {
+                fn modify_db_cluster(&self, input: &ModifyDBClusterMessage) -> Box<Future<Item = ModifyDBClusterResult, Error = ModifyDBClusterError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22651,11 +23219,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyDBClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyDBClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyDBClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22667,23 +23243,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyDBClusterResultDeserializer::deserialize("ModifyDBClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyDBClusterResultDeserializer::deserialize("ModifyDBClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href=\"https://console.aws.amazon.com/rds/\">Amazon RDS console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important>"]
-                fn modify_db_cluster_parameter_group(&self, input: &ModifyDBClusterParameterGroupMessage) -> Result<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError> {
+                fn modify_db_cluster_parameter_group(&self, input: &ModifyDBClusterParameterGroupMessage) -> Box<Future<Item = DBClusterParameterGroupNameMessage, Error = ModifyDBClusterParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22692,11 +23269,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyDBClusterParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyDBClusterParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22708,23 +23293,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBClusterParameterGroupNameMessageDeserializer::deserialize("ModifyDBClusterParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBClusterParameterGroupNameMessageDeserializer::deserialize("ModifyDBClusterParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot public or private, use the <a>DescribeDBClusterSnapshotAttributes</a> API action.</p> <p>If a manual DB cluster snapshot is encrypted, it cannot be shared.</p>"]
-                fn modify_db_cluster_snapshot_attribute(&self, input: &ModifyDBClusterSnapshotAttributeMessage) -> Result<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError> {
+                fn modify_db_cluster_snapshot_attribute(&self, input: &ModifyDBClusterSnapshotAttributeMessage) -> Box<Future<Item = ModifyDBClusterSnapshotAttributeResult, Error = ModifyDBClusterSnapshotAttributeError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22733,11 +23319,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyDBClusterSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyDBClusterSnapshotAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyDBClusterSnapshotAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22749,23 +23343,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize("ModifyDBClusterSnapshotAttributeResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize("ModifyDBClusterSnapshotAttributeResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyDBClusterSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyDBClusterSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request.</p>"]
-                fn modify_db_instance(&self, input: &ModifyDBInstanceMessage) -> Result<ModifyDBInstanceResult, ModifyDBInstanceError> {
+                fn modify_db_instance(&self, input: &ModifyDBInstanceMessage) -> Box<Future<Item = ModifyDBInstanceResult, Error = ModifyDBInstanceError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22774,11 +23369,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyDBInstanceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyDBInstanceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyDBInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22790,23 +23393,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyDBInstanceResultDeserializer::deserialize("ModifyDBInstanceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyDBInstanceResultDeserializer::deserialize("ModifyDBInstanceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyDBInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyDBInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href=\"https://console.aws.amazon.com/rds/\">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important>"]
-                fn modify_db_parameter_group(&self, input: &ModifyDBParameterGroupMessage) -> Result<DBParameterGroupNameMessage, ModifyDBParameterGroupError> {
+                fn modify_db_parameter_group(&self, input: &ModifyDBParameterGroupMessage) -> Box<Future<Item = DBParameterGroupNameMessage, Error = ModifyDBParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22815,11 +23419,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyDBParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyDBParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22831,23 +23443,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBParameterGroupNameMessageDeserializer::deserialize("ModifyDBParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBParameterGroupNameMessageDeserializer::deserialize("ModifyDBParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <a>DescribeDBSnapshotAttributes</a> API action.</p> <p>If the manual DB snapshot is encrypted, it cannot be shared.</p>"]
-                fn modify_db_snapshot_attribute(&self, input: &ModifyDBSnapshotAttributeMessage) -> Result<ModifyDBSnapshotAttributeResult, ModifyDBSnapshotAttributeError> {
+                fn modify_db_snapshot_attribute(&self, input: &ModifyDBSnapshotAttributeMessage) -> Box<Future<Item = ModifyDBSnapshotAttributeResult, Error = ModifyDBSnapshotAttributeError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22856,11 +23469,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyDBSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyDBSnapshotAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyDBSnapshotAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22872,23 +23493,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyDBSnapshotAttributeResultDeserializer::deserialize("ModifyDBSnapshotAttributeResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyDBSnapshotAttributeResultDeserializer::deserialize("ModifyDBSnapshotAttributeResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyDBSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyDBSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the region.</p>"]
-                fn modify_db_subnet_group(&self, input: &ModifyDBSubnetGroupMessage) -> Result<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError> {
+                fn modify_db_subnet_group(&self, input: &ModifyDBSubnetGroupMessage) -> Box<Future<Item = ModifyDBSubnetGroupResult, Error = ModifyDBSubnetGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22897,11 +23519,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyDBSubnetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyDBSubnetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22913,23 +23543,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyDBSubnetGroupResultDeserializer::deserialize("ModifyDBSubnetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyDBSubnetGroupResultDeserializer::deserialize("ModifyDBSubnetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyDBSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyDBSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies an existing RDS event notification subscription. Note that you cannot modify the source identifiers using this call; to change source identifiers for a subscription, use the <a>AddSourceIdentifierToSubscription</a> and <a>RemoveSourceIdentifierFromSubscription</a> calls.</p> <p>You can see a list of the event categories for a given SourceType in the <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html\">Events</a> topic in the Amazon RDS User Guide or by using the <b>DescribeEventCategories</b> action.</p>"]
-                fn modify_event_subscription(&self, input: &ModifyEventSubscriptionMessage) -> Result<ModifyEventSubscriptionResult, ModifyEventSubscriptionError> {
+                fn modify_event_subscription(&self, input: &ModifyEventSubscriptionMessage) -> Box<Future<Item = ModifyEventSubscriptionResult, Error = ModifyEventSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22938,11 +23569,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyEventSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyEventSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22954,23 +23593,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyEventSubscriptionResultDeserializer::deserialize("ModifyEventSubscriptionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyEventSubscriptionResultDeserializer::deserialize("ModifyEventSubscriptionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies an existing option group.</p>"]
-                fn modify_option_group(&self, input: &ModifyOptionGroupMessage) -> Result<ModifyOptionGroupResult, ModifyOptionGroupError> {
+                fn modify_option_group(&self, input: &ModifyOptionGroupMessage) -> Box<Future<Item = ModifyOptionGroupResult, Error = ModifyOptionGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -22979,11 +23619,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyOptionGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyOptionGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22995,23 +23643,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyOptionGroupResultDeserializer::deserialize("ModifyOptionGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyOptionGroupResultDeserializer::deserialize("ModifyOptionGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyOptionGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyOptionGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Promotes a Read Replica DB instance to a standalone DB instance.</p> <note> <p>We recommend that you enable automated backups on your Read Replica before promoting the Read Replica. This ensures that no backup is taken during the promotion process. Once the instance is promoted to a primary instance, backups are taken based on your backup settings.</p> </note>"]
-                fn promote_read_replica(&self, input: &PromoteReadReplicaMessage) -> Result<PromoteReadReplicaResult, PromoteReadReplicaError> {
+                fn promote_read_replica(&self, input: &PromoteReadReplicaMessage) -> Box<Future<Item = PromoteReadReplicaResult, Error = PromoteReadReplicaError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23020,11 +23669,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     PromoteReadReplicaMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PromoteReadReplicaError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PromoteReadReplicaError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23036,23 +23693,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PromoteReadReplicaResultDeserializer::deserialize("PromoteReadReplicaResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PromoteReadReplicaResultDeserializer::deserialize("PromoteReadReplicaResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PromoteReadReplicaError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PromoteReadReplicaError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Promotes a Read Replica DB cluster to a standalone DB cluster.</p>"]
-                fn promote_read_replica_db_cluster(&self, input: &PromoteReadReplicaDBClusterMessage) -> Result<PromoteReadReplicaDBClusterResult, PromoteReadReplicaDBClusterError> {
+                fn promote_read_replica_db_cluster(&self, input: &PromoteReadReplicaDBClusterMessage) -> Box<Future<Item = PromoteReadReplicaDBClusterResult, Error = PromoteReadReplicaDBClusterError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23061,11 +23719,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     PromoteReadReplicaDBClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PromoteReadReplicaDBClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PromoteReadReplicaDBClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23077,23 +23743,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PromoteReadReplicaDBClusterResultDeserializer::deserialize("PromoteReadReplicaDBClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PromoteReadReplicaDBClusterResultDeserializer::deserialize("PromoteReadReplicaDBClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PromoteReadReplicaDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PromoteReadReplicaDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Purchases a reserved DB instance offering.</p>"]
-                fn purchase_reserved_db_instances_offering(&self, input: &PurchaseReservedDBInstancesOfferingMessage) -> Result<PurchaseReservedDBInstancesOfferingResult, PurchaseReservedDBInstancesOfferingError> {
+                fn purchase_reserved_db_instances_offering(&self, input: &PurchaseReservedDBInstancesOfferingMessage) -> Box<Future<Item = PurchaseReservedDBInstancesOfferingResult, Error = PurchaseReservedDBInstancesOfferingError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23102,11 +23769,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     PurchaseReservedDBInstancesOfferingMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PurchaseReservedDBInstancesOfferingError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PurchaseReservedDBInstancesOfferingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23118,23 +23793,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PurchaseReservedDBInstancesOfferingResultDeserializer::deserialize("PurchaseReservedDBInstancesOfferingResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PurchaseReservedDBInstancesOfferingResultDeserializer::deserialize("PurchaseReservedDBInstancesOfferingResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PurchaseReservedDBInstancesOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PurchaseReservedDBInstancesOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Rebooting a DB instance restarts the database engine service. A reboot also applies to the DB instance any modifications to the associated DB parameter group that were pending. Rebooting a DB instance results in a momentary outage of the instance, during which the DB instance status is set to rebooting. If the RDS instance is configured for MultiAZ, it is possible that the reboot will be conducted through a failover. An Amazon RDS event is created when the reboot is completed.</p> <p>If your DB instance is deployed in multiple Availability Zones, you can force a failover from one AZ to the other during the reboot. You might force a failover to test the availability of your DB instance deployment or to restore operations to the original AZ after a failover occurs.</p> <p>The time required to reboot is a function of the specific database engine's crash recovery process. To improve the reboot time, we recommend that you reduce database activities as much as possible during the reboot process to reduce rollback activity for in-transit transactions.</p>"]
-                fn reboot_db_instance(&self, input: &RebootDBInstanceMessage) -> Result<RebootDBInstanceResult, RebootDBInstanceError> {
+                fn reboot_db_instance(&self, input: &RebootDBInstanceMessage) -> Box<Future<Item = RebootDBInstanceResult, Error = RebootDBInstanceError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23143,11 +23819,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RebootDBInstanceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RebootDBInstanceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RebootDBInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23159,23 +23843,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RebootDBInstanceResultDeserializer::deserialize("RebootDBInstanceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RebootDBInstanceResultDeserializer::deserialize("RebootDBInstanceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RebootDBInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RebootDBInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disassociates an Identity and Access Management (IAM) role from an Aurora DB cluster. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html\">Authorizing Amazon Aurora to Access Other AWS Services On Your Behalf</a>.</p>"]
-                fn remove_role_from_db_cluster(&self, input: &RemoveRoleFromDBClusterMessage) -> Result<(), RemoveRoleFromDBClusterError> {
+                fn remove_role_from_db_cluster(&self, input: &RemoveRoleFromDBClusterMessage) -> Box<Future<Item = (), Error = RemoveRoleFromDBClusterError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23184,22 +23869,31 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RemoveRoleFromDBClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemoveRoleFromDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveRoleFromDBClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveRoleFromDBClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RemoveRoleFromDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes a source identifier from an existing RDS event notification subscription.</p>"]
-                fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentifierFromSubscriptionMessage) -> Result<RemoveSourceIdentifierFromSubscriptionResult, RemoveSourceIdentifierFromSubscriptionError> {
+                fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentifierFromSubscriptionMessage) -> Box<Future<Item = RemoveSourceIdentifierFromSubscriptionResult, Error = RemoveSourceIdentifierFromSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23208,11 +23902,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RemoveSourceIdentifierFromSubscriptionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveSourceIdentifierFromSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveSourceIdentifierFromSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23224,23 +23926,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize("RemoveSourceIdentifierFromSubscriptionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize("RemoveSourceIdentifierFromSubscriptionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemoveSourceIdentifierFromSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RemoveSourceIdentifierFromSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes metadata tags from an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html\">Tagging Amazon RDS Resources</a>.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceMessage) -> Result<(), RemoveTagsFromResourceError> {
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceMessage) -> Box<Future<Item = (), Error = RemoveTagsFromResourceError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23249,22 +23952,31 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveTagsFromResourceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveTagsFromResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <a>RebootDBInstance</a> request. You must call <a>RebootDBInstance</a> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn reset_db_cluster_parameter_group(&self, input: &ResetDBClusterParameterGroupMessage) -> Result<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError> {
+                fn reset_db_cluster_parameter_group(&self, input: &ResetDBClusterParameterGroupMessage) -> Box<Future<Item = DBClusterParameterGroupNameMessage, Error = ResetDBClusterParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23273,11 +23985,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ResetDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetDBClusterParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetDBClusterParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23289,23 +24009,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBClusterParameterGroupNameMessageDeserializer::deserialize("ResetDBClusterParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBClusterParameterGroupNameMessageDeserializer::deserialize("ResetDBClusterParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResetDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResetDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. </p>"]
-                fn reset_db_parameter_group(&self, input: &ResetDBParameterGroupMessage) -> Result<DBParameterGroupNameMessage, ResetDBParameterGroupError> {
+                fn reset_db_parameter_group(&self, input: &ResetDBParameterGroupMessage) -> Box<Future<Item = DBParameterGroupNameMessage, Error = ResetDBParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23314,11 +24035,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     ResetDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetDBParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetDBParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23330,23 +24059,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DBParameterGroupNameMessageDeserializer::deserialize("ResetDBParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DBParameterGroupNameMessageDeserializer::deserialize("ResetDBParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResetDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResetDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href=\"AmazonRDS/latest/UserGuide/Aurora.Migrate.MySQL.html#Aurora.Migrate.MySQL.S3\">Migrating Data from MySQL by Using an Amazon S3 Bucket</a>.</p>"]
-                fn restore_db_cluster_from_s3(&self, input: &RestoreDBClusterFromS3Message) -> Result<RestoreDBClusterFromS3Result, RestoreDBClusterFromS3Error> {
+                fn restore_db_cluster_from_s3(&self, input: &RestoreDBClusterFromS3Message) -> Box<Future<Item = RestoreDBClusterFromS3Result, Error = RestoreDBClusterFromS3Error>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23355,11 +24085,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RestoreDBClusterFromS3MessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreDBClusterFromS3Error::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreDBClusterFromS3Error::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23371,23 +24109,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RestoreDBClusterFromS3ResultDeserializer::deserialize("RestoreDBClusterFromS3Result", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RestoreDBClusterFromS3ResultDeserializer::deserialize("RestoreDBClusterFromS3Result", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RestoreDBClusterFromS3Error::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RestoreDBClusterFromS3Error::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new DB cluster from a DB cluster snapshot. The target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn restore_db_cluster_from_snapshot(&self, input: &RestoreDBClusterFromSnapshotMessage) -> Result<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError> {
+                fn restore_db_cluster_from_snapshot(&self, input: &RestoreDBClusterFromSnapshotMessage) -> Box<Future<Item = RestoreDBClusterFromSnapshotResult, Error = RestoreDBClusterFromSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23396,11 +24135,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RestoreDBClusterFromSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreDBClusterFromSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreDBClusterFromSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23412,23 +24159,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RestoreDBClusterFromSnapshotResultDeserializer::deserialize("RestoreDBClusterFromSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RestoreDBClusterFromSnapshotResultDeserializer::deserialize("RestoreDBClusterFromSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RestoreDBClusterFromSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RestoreDBClusterFromSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
-                fn restore_db_cluster_to_point_in_time(&self, input: &RestoreDBClusterToPointInTimeMessage) -> Result<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError> {
+                fn restore_db_cluster_to_point_in_time(&self, input: &RestoreDBClusterToPointInTimeMessage) -> Box<Future<Item = RestoreDBClusterToPointInTimeResult, Error = RestoreDBClusterToPointInTimeError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23437,11 +24185,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RestoreDBClusterToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreDBClusterToPointInTimeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreDBClusterToPointInTimeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23453,23 +24209,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RestoreDBClusterToPointInTimeResultDeserializer::deserialize("RestoreDBClusterToPointInTimeResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RestoreDBClusterToPointInTimeResultDeserializer::deserialize("RestoreDBClusterToPointInTimeResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RestoreDBClusterToPointInTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RestoreDBClusterToPointInTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with the most of original configuration with the default security group and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored AZ deployment and not a single-AZ deployment.</p> <p>If your intent is to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS does not allow two DB instances with the same name. Once you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you will replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p>"]
-                fn restore_db_instance_from_db_snapshot(&self, input: &RestoreDBInstanceFromDBSnapshotMessage) -> Result<RestoreDBInstanceFromDBSnapshotResult, RestoreDBInstanceFromDBSnapshotError> {
+                fn restore_db_instance_from_db_snapshot(&self, input: &RestoreDBInstanceFromDBSnapshotMessage) -> Box<Future<Item = RestoreDBInstanceFromDBSnapshotResult, Error = RestoreDBInstanceFromDBSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23478,11 +24235,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RestoreDBInstanceFromDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreDBInstanceFromDBSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreDBInstanceFromDBSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23494,23 +24259,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RestoreDBInstanceFromDBSnapshotResultDeserializer::deserialize("RestoreDBInstanceFromDBSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RestoreDBInstanceFromDBSnapshotResultDeserializer::deserialize("RestoreDBInstanceFromDBSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RestoreDBInstanceFromDBSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RestoreDBInstanceFromDBSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Restores a DB instance to an arbitrary point in time. You can restore to any point in time before the time identified by the LatestRestorableTime property. You can restore to a point up to the number of days specified by the BackupRetentionPeriod property.</p> <p>The target database is created with most of the original configuration, but in a system-selected availability zone, with the default security group, the default subnet group, and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored deployment and not a single-AZ deployment.</p>"]
-                fn restore_db_instance_to_point_in_time(&self, input: &RestoreDBInstanceToPointInTimeMessage) -> Result<RestoreDBInstanceToPointInTimeResult, RestoreDBInstanceToPointInTimeError> {
+                fn restore_db_instance_to_point_in_time(&self, input: &RestoreDBInstanceToPointInTimeMessage) -> Box<Future<Item = RestoreDBInstanceToPointInTimeResult, Error = RestoreDBInstanceToPointInTimeError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23519,11 +24285,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RestoreDBInstanceToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreDBInstanceToPointInTimeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreDBInstanceToPointInTimeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23535,23 +24309,24 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RestoreDBInstanceToPointInTimeResultDeserializer::deserialize("RestoreDBInstanceToPointInTimeResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RestoreDBInstanceToPointInTimeResultDeserializer::deserialize("RestoreDBInstanceToPointInTimeResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RestoreDBInstanceToPointInTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RestoreDBInstanceToPointInTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Revokes ingress from a DBSecurityGroup for previously authorized IP ranges or EC2 or VPC Security Groups. Required parameters for this API are one of CIDRIP, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId).</p>"]
-                fn revoke_db_security_group_ingress(&self, input: &RevokeDBSecurityGroupIngressMessage) -> Result<RevokeDBSecurityGroupIngressResult, RevokeDBSecurityGroupIngressError> {
+                fn revoke_db_security_group_ingress(&self, input: &RevokeDBSecurityGroupIngressMessage) -> Box<Future<Item = RevokeDBSecurityGroupIngressResult, Error = RevokeDBSecurityGroupIngressError>> {
                     let mut request = SignedRequest::new("POST", "rds", self.region, "/");
                     let mut params = Params::new();
 
@@ -23560,11 +24335,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                     RevokeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RevokeDBSecurityGroupIngressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RevokeDBSecurityGroupIngressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23576,18 +24359,19 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RevokeDBSecurityGroupIngressResultDeserializer::deserialize("RevokeDBSecurityGroupIngressResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RevokeDBSecurityGroupIngressResultDeserializer::deserialize("RevokeDBSecurityGroupIngressResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RevokeDBSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RevokeDBSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -23613,17 +24397,6 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
         }
             
         #[test]
-        fn test_parse_valid_rds_describe_db_engine_versions() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-db-engine-versions.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeDBEngineVersionsMessage::default();
-            let result = client.describe_db_engine_versions(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
         fn test_parse_valid_rds_describe_db_instances() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-db-instances.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
@@ -23635,12 +24408,34 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_rds_describe_db_parameter_groups() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-db-parameter-groups.xml");
+        fn test_parse_valid_rds_describe_option_groups() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-option-groups.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeDBParameterGroupsMessage::default();
-            let result = client.describe_db_parameter_groups(&request);
+            let request = DescribeOptionGroupsMessage::default();
+            let result = client.describe_option_groups(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_rds_describe_db_subnet_groups() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-db-subnet-groups.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeDBSubnetGroupsMessage::default();
+            let result = client.describe_db_subnet_groups(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_rds_describe_reserved_db_instances() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-reserved-db-instances.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeReservedDBInstancesMessage::default();
+            let result = client.describe_reserved_db_instances(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -23668,56 +24463,12 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_rds_describe_db_subnet_groups() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-db-subnet-groups.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeDBSubnetGroupsMessage::default();
-            let result = client.describe_db_subnet_groups(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_rds_describe_event_categories() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-event-categories.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeEventCategoriesMessage::default();
-            let result = client.describe_event_categories(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
         fn test_parse_valid_rds_describe_event_subscriptions() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-event-subscriptions.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = DescribeEventSubscriptionsMessage::default();
             let result = client.describe_event_subscriptions(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_rds_describe_events() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-events.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeEventsMessage::default();
-            let result = client.describe_events(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_rds_describe_option_groups() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-option-groups.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeOptionGroupsMessage::default();
-            let result = client.describe_option_groups(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -23734,12 +24485,45 @@ RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_rds_describe_reserved_db_instances() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-reserved-db-instances.xml");
+        fn test_parse_valid_rds_describe_event_categories() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-event-categories.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeReservedDBInstancesMessage::default();
-            let result = client.describe_reserved_db_instances(&request);
+            let request = DescribeEventCategoriesMessage::default();
+            let result = client.describe_event_categories(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_rds_describe_events() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-events.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeEventsMessage::default();
+            let result = client.describe_events(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_rds_describe_db_engine_versions() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-db-engine-versions.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeDBEngineVersionsMessage::default();
+            let result = client.describe_db_engine_versions(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_rds_describe_db_parameter_groups() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "rds-describe-db-parameter-groups.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeDBParameterGroupsMessage::default();
+            let result = client.describe_db_parameter_groups(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

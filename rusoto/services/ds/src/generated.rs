@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type AccessUrl = String;
 #[derive(Default,Debug,Clone,Serialize)]
             pub struct AddIpRoutesRequest {
@@ -4305,155 +4306,155 @@ VerifyTrustError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn add_ip_routes(&self, input: &AddIpRoutesRequest)  -> Result<AddIpRoutesResult, AddIpRoutesError>;
+                fn add_ip_routes(&self, input: &AddIpRoutesRequest)  -> Box<Future<Item = AddIpRoutesResult, Error = AddIpRoutesError>>;
                 
 
                 #[doc="<p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Result<AddTagsToResourceResult, AddTagsToResourceError>;
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Box<Future<Item = AddTagsToResourceResult, Error = AddTagsToResourceError>>;
                 
 
                 #[doc="<p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>"]
-                fn cancel_schema_extension(&self, input: &CancelSchemaExtensionRequest)  -> Result<CancelSchemaExtensionResult, CancelSchemaExtensionError>;
+                fn cancel_schema_extension(&self, input: &CancelSchemaExtensionRequest)  -> Box<Future<Item = CancelSchemaExtensionResult, Error = CancelSchemaExtensionError>>;
                 
 
                 #[doc="<p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn connect_directory(&self, input: &ConnectDirectoryRequest)  -> Result<ConnectDirectoryResult, ConnectDirectoryError>;
+                fn connect_directory(&self, input: &ConnectDirectoryRequest)  -> Box<Future<Item = ConnectDirectoryResult, Error = ConnectDirectoryError>>;
                 
 
                 #[doc="<p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important>"]
-                fn create_alias(&self, input: &CreateAliasRequest)  -> Result<CreateAliasResult, CreateAliasError>;
+                fn create_alias(&self, input: &CreateAliasRequest)  -> Box<Future<Item = CreateAliasResult, Error = CreateAliasError>>;
                 
 
                 #[doc="<p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>"]
-                fn create_computer(&self, input: &CreateComputerRequest)  -> Result<CreateComputerResult, CreateComputerError>;
+                fn create_computer(&self, input: &CreateComputerRequest)  -> Box<Future<Item = CreateComputerResult, Error = CreateComputerError>>;
                 
 
                 #[doc="<p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>"]
-                fn create_conditional_forwarder(&self, input: &CreateConditionalForwarderRequest)  -> Result<CreateConditionalForwarderResult, CreateConditionalForwarderError>;
+                fn create_conditional_forwarder(&self, input: &CreateConditionalForwarderRequest)  -> Box<Future<Item = CreateConditionalForwarderResult, Error = CreateConditionalForwarderError>>;
                 
 
                 #[doc="<p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn create_directory(&self, input: &CreateDirectoryRequest)  -> Result<CreateDirectoryResult, CreateDirectoryError>;
+                fn create_directory(&self, input: &CreateDirectoryRequest)  -> Box<Future<Item = CreateDirectoryResult, Error = CreateDirectoryError>>;
                 
 
                 #[doc="<p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn create_microsoft_ad(&self, input: &CreateMicrosoftADRequest)  -> Result<CreateMicrosoftADResult, CreateMicrosoftADError>;
+                fn create_microsoft_ad(&self, input: &CreateMicrosoftADRequest)  -> Box<Future<Item = CreateMicrosoftADResult, Error = CreateMicrosoftADError>>;
                 
 
                 #[doc="<p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note>"]
-                fn create_snapshot(&self, input: &CreateSnapshotRequest)  -> Result<CreateSnapshotResult, CreateSnapshotError>;
+                fn create_snapshot(&self, input: &CreateSnapshotRequest)  -> Box<Future<Item = CreateSnapshotResult, Error = CreateSnapshotError>>;
                 
 
                 #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>"]
-                fn create_trust(&self, input: &CreateTrustRequest)  -> Result<CreateTrustResult, CreateTrustError>;
+                fn create_trust(&self, input: &CreateTrustRequest)  -> Box<Future<Item = CreateTrustResult, Error = CreateTrustError>>;
                 
 
                 #[doc="<p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>"]
-                fn delete_conditional_forwarder(&self, input: &DeleteConditionalForwarderRequest)  -> Result<DeleteConditionalForwarderResult, DeleteConditionalForwarderError>;
+                fn delete_conditional_forwarder(&self, input: &DeleteConditionalForwarderRequest)  -> Box<Future<Item = DeleteConditionalForwarderResult, Error = DeleteConditionalForwarderError>>;
                 
 
                 #[doc="<p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn delete_directory(&self, input: &DeleteDirectoryRequest)  -> Result<DeleteDirectoryResult, DeleteDirectoryError>;
+                fn delete_directory(&self, input: &DeleteDirectoryRequest)  -> Box<Future<Item = DeleteDirectoryResult, Error = DeleteDirectoryError>>;
                 
 
                 #[doc="<p>Deletes a directory snapshot.</p>"]
-                fn delete_snapshot(&self, input: &DeleteSnapshotRequest)  -> Result<DeleteSnapshotResult, DeleteSnapshotError>;
+                fn delete_snapshot(&self, input: &DeleteSnapshotRequest)  -> Box<Future<Item = DeleteSnapshotResult, Error = DeleteSnapshotError>>;
                 
 
                 #[doc="<p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
-                fn delete_trust(&self, input: &DeleteTrustRequest)  -> Result<DeleteTrustResult, DeleteTrustError>;
+                fn delete_trust(&self, input: &DeleteTrustRequest)  -> Box<Future<Item = DeleteTrustResult, Error = DeleteTrustError>>;
                 
 
                 #[doc="<p>Removes the specified directory as a publisher to the specified SNS topic.</p>"]
-                fn deregister_event_topic(&self, input: &DeregisterEventTopicRequest)  -> Result<DeregisterEventTopicResult, DeregisterEventTopicError>;
+                fn deregister_event_topic(&self, input: &DeregisterEventTopicRequest)  -> Box<Future<Item = DeregisterEventTopicResult, Error = DeregisterEventTopicError>>;
                 
 
                 #[doc="<p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>"]
-                fn describe_conditional_forwarders(&self, input: &DescribeConditionalForwardersRequest)  -> Result<DescribeConditionalForwardersResult, DescribeConditionalForwardersError>;
+                fn describe_conditional_forwarders(&self, input: &DescribeConditionalForwardersRequest)  -> Box<Future<Item = DescribeConditionalForwardersResult, Error = DescribeConditionalForwardersError>>;
                 
 
                 #[doc="<p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
-                fn describe_directories(&self, input: &DescribeDirectoriesRequest)  -> Result<DescribeDirectoriesResult, DescribeDirectoriesError>;
+                fn describe_directories(&self, input: &DescribeDirectoriesRequest)  -> Box<Future<Item = DescribeDirectoriesResult, Error = DescribeDirectoriesError>>;
                 
 
                 #[doc="<p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>"]
-                fn describe_event_topics(&self, input: &DescribeEventTopicsRequest)  -> Result<DescribeEventTopicsResult, DescribeEventTopicsError>;
+                fn describe_event_topics(&self, input: &DescribeEventTopicsRequest)  -> Box<Future<Item = DescribeEventTopicsResult, Error = DescribeEventTopicsError>>;
                 
 
                 #[doc="<p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
-                fn describe_snapshots(&self, input: &DescribeSnapshotsRequest)  -> Result<DescribeSnapshotsResult, DescribeSnapshotsError>;
+                fn describe_snapshots(&self, input: &DescribeSnapshotsRequest)  -> Box<Future<Item = DescribeSnapshotsResult, Error = DescribeSnapshotsError>>;
                 
 
                 #[doc="<p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>"]
-                fn describe_trusts(&self, input: &DescribeTrustsRequest)  -> Result<DescribeTrustsResult, DescribeTrustsError>;
+                fn describe_trusts(&self, input: &DescribeTrustsRequest)  -> Box<Future<Item = DescribeTrustsResult, Error = DescribeTrustsError>>;
                 
 
                 #[doc="<p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
-                fn disable_radius(&self, input: &DisableRadiusRequest)  -> Result<DisableRadiusResult, DisableRadiusError>;
+                fn disable_radius(&self, input: &DisableRadiusRequest)  -> Box<Future<Item = DisableRadiusResult, Error = DisableRadiusError>>;
                 
 
                 #[doc="<p>Disables single-sign on for a directory.</p>"]
-                fn disable_sso(&self, input: &DisableSsoRequest)  -> Result<DisableSsoResult, DisableSsoError>;
+                fn disable_sso(&self, input: &DisableSsoRequest)  -> Box<Future<Item = DisableSsoResult, Error = DisableSsoError>>;
                 
 
                 #[doc="<p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
-                fn enable_radius(&self, input: &EnableRadiusRequest)  -> Result<EnableRadiusResult, EnableRadiusError>;
+                fn enable_radius(&self, input: &EnableRadiusRequest)  -> Box<Future<Item = EnableRadiusResult, Error = EnableRadiusError>>;
                 
 
                 #[doc="<p>Enables single sign-on for a directory.</p>"]
-                fn enable_sso(&self, input: &EnableSsoRequest)  -> Result<EnableSsoResult, EnableSsoError>;
+                fn enable_sso(&self, input: &EnableSsoRequest)  -> Box<Future<Item = EnableSsoResult, Error = EnableSsoError>>;
                 
 
                 #[doc="<p>Obtains directory limit information for the current region.</p>"]
-                fn get_directory_limits(&self, input: &GetDirectoryLimitsRequest)  -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError>;
+                fn get_directory_limits(&self, input: &GetDirectoryLimitsRequest)  -> Box<Future<Item = GetDirectoryLimitsResult, Error = GetDirectoryLimitsError>>;
                 
 
                 #[doc="<p>Obtains the manual snapshot limits for a directory.</p>"]
-                fn get_snapshot_limits(&self, input: &GetSnapshotLimitsRequest)  -> Result<GetSnapshotLimitsResult, GetSnapshotLimitsError>;
+                fn get_snapshot_limits(&self, input: &GetSnapshotLimitsRequest)  -> Box<Future<Item = GetSnapshotLimitsResult, Error = GetSnapshotLimitsError>>;
                 
 
                 #[doc="<p>Lists the address blocks that you have added to a directory.</p>"]
-                fn list_ip_routes(&self, input: &ListIpRoutesRequest)  -> Result<ListIpRoutesResult, ListIpRoutesError>;
+                fn list_ip_routes(&self, input: &ListIpRoutesRequest)  -> Box<Future<Item = ListIpRoutesResult, Error = ListIpRoutesError>>;
                 
 
                 #[doc="<p>Lists all schema extensions applied to a Microsoft AD Directory.</p>"]
-                fn list_schema_extensions(&self, input: &ListSchemaExtensionsRequest)  -> Result<ListSchemaExtensionsResult, ListSchemaExtensionsError>;
+                fn list_schema_extensions(&self, input: &ListSchemaExtensionsRequest)  -> Box<Future<Item = ListSchemaExtensionsResult, Error = ListSchemaExtensionsError>>;
                 
 
                 #[doc="<p>Lists all tags on a directory.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Box<Future<Item = ListTagsForResourceResult, Error = ListTagsForResourceError>>;
                 
 
                 #[doc="<p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>"]
-                fn register_event_topic(&self, input: &RegisterEventTopicRequest)  -> Result<RegisterEventTopicResult, RegisterEventTopicError>;
+                fn register_event_topic(&self, input: &RegisterEventTopicRequest)  -> Box<Future<Item = RegisterEventTopicResult, Error = RegisterEventTopicError>>;
                 
 
                 #[doc="<p>Removes IP address blocks from a directory.</p>"]
-                fn remove_ip_routes(&self, input: &RemoveIpRoutesRequest)  -> Result<RemoveIpRoutesResult, RemoveIpRoutesError>;
+                fn remove_ip_routes(&self, input: &RemoveIpRoutesRequest)  -> Box<Future<Item = RemoveIpRoutesResult, Error = RemoveIpRoutesError>>;
                 
 
                 #[doc="<p>Removes tags from a directory.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Box<Future<Item = RemoveTagsFromResourceResult, Error = RemoveTagsFromResourceError>>;
                 
 
                 #[doc="<p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>"]
-                fn restore_from_snapshot(&self, input: &RestoreFromSnapshotRequest)  -> Result<RestoreFromSnapshotResult, RestoreFromSnapshotError>;
+                fn restore_from_snapshot(&self, input: &RestoreFromSnapshotRequest)  -> Box<Future<Item = RestoreFromSnapshotResult, Error = RestoreFromSnapshotError>>;
                 
 
                 #[doc="<p>Applies a schema extension to a Microsoft AD directory.</p>"]
-                fn start_schema_extension(&self, input: &StartSchemaExtensionRequest)  -> Result<StartSchemaExtensionResult, StartSchemaExtensionError>;
+                fn start_schema_extension(&self, input: &StartSchemaExtensionRequest)  -> Box<Future<Item = StartSchemaExtensionResult, Error = StartSchemaExtensionError>>;
                 
 
                 #[doc="<p>Updates a conditional forwarder that has been set up for your AWS directory.</p>"]
-                fn update_conditional_forwarder(&self, input: &UpdateConditionalForwarderRequest)  -> Result<UpdateConditionalForwarderResult, UpdateConditionalForwarderError>;
+                fn update_conditional_forwarder(&self, input: &UpdateConditionalForwarderRequest)  -> Box<Future<Item = UpdateConditionalForwarderResult, Error = UpdateConditionalForwarderError>>;
                 
 
                 #[doc="<p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>"]
-                fn update_radius(&self, input: &UpdateRadiusRequest)  -> Result<UpdateRadiusResult, UpdateRadiusError>;
+                fn update_radius(&self, input: &UpdateRadiusRequest)  -> Box<Future<Item = UpdateRadiusResult, Error = UpdateRadiusError>>;
                 
 
                 #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
-                fn verify_trust(&self, input: &VerifyTrustRequest)  -> Result<VerifyTrustResult, VerifyTrustError>;
+                fn verify_trust(&self, input: &VerifyTrustRequest)  -> Box<Future<Item = VerifyTrustResult, Error = VerifyTrustError>>;
                 
 }
 /// A client for the Directory Service API.
@@ -4477,7 +4478,7 @@ VerifyTrustError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn add_ip_routes(&self, input: &AddIpRoutesRequest)  -> Result<AddIpRoutesResult, AddIpRoutesError> {
+                fn add_ip_routes(&self, input: &AddIpRoutesRequest)  -> Box<Future<Item = AddIpRoutesResult, Error = AddIpRoutesError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4485,21 +4486,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddIpRoutesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddIpRoutesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddIpRoutesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddIpRoutesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Result<AddTagsToResourceResult, AddTagsToResourceError> {
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Box<Future<Item = AddTagsToResourceResult, Error = AddTagsToResourceError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4507,21 +4518,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddTagsToResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddTagsToResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>"]
-                fn cancel_schema_extension(&self, input: &CancelSchemaExtensionRequest)  -> Result<CancelSchemaExtensionResult, CancelSchemaExtensionError> {
+                fn cancel_schema_extension(&self, input: &CancelSchemaExtensionRequest)  -> Box<Future<Item = CancelSchemaExtensionResult, Error = CancelSchemaExtensionError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4529,21 +4550,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelSchemaExtensionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelSchemaExtensionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CancelSchemaExtensionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelSchemaExtensionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CancelSchemaExtensionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CancelSchemaExtensionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn connect_directory(&self, input: &ConnectDirectoryRequest)  -> Result<ConnectDirectoryResult, ConnectDirectoryError> {
+                fn connect_directory(&self, input: &ConnectDirectoryRequest)  -> Box<Future<Item = ConnectDirectoryResult, Error = ConnectDirectoryError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4551,21 +4582,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ConnectDirectoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConnectDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ConnectDirectoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ConnectDirectoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ConnectDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ConnectDirectoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important>"]
-                fn create_alias(&self, input: &CreateAliasRequest)  -> Result<CreateAliasResult, CreateAliasError> {
+                fn create_alias(&self, input: &CreateAliasRequest)  -> Box<Future<Item = CreateAliasResult, Error = CreateAliasError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4573,21 +4614,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateAliasError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAliasResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateAliasError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateAliasResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>"]
-                fn create_computer(&self, input: &CreateComputerRequest)  -> Result<CreateComputerResult, CreateComputerError> {
+                fn create_computer(&self, input: &CreateComputerRequest)  -> Box<Future<Item = CreateComputerResult, Error = CreateComputerError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4595,21 +4646,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateComputerError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateComputerResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateComputerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateComputerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateComputerResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateComputerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>"]
-                fn create_conditional_forwarder(&self, input: &CreateConditionalForwarderRequest)  -> Result<CreateConditionalForwarderResult, CreateConditionalForwarderError> {
+                fn create_conditional_forwarder(&self, input: &CreateConditionalForwarderRequest)  -> Box<Future<Item = CreateConditionalForwarderResult, Error = CreateConditionalForwarderError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4617,21 +4678,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateConditionalForwarderError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateConditionalForwarderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn create_directory(&self, input: &CreateDirectoryRequest)  -> Result<CreateDirectoryResult, CreateDirectoryError> {
+                fn create_directory(&self, input: &CreateDirectoryRequest)  -> Box<Future<Item = CreateDirectoryResult, Error = CreateDirectoryError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4639,21 +4710,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDirectoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateDirectoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDirectoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateDirectoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn create_microsoft_ad(&self, input: &CreateMicrosoftADRequest)  -> Result<CreateMicrosoftADResult, CreateMicrosoftADError> {
+                fn create_microsoft_ad(&self, input: &CreateMicrosoftADRequest)  -> Box<Future<Item = CreateMicrosoftADResult, Error = CreateMicrosoftADError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4661,21 +4742,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateMicrosoftADError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateMicrosoftADResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateMicrosoftADError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateMicrosoftADError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateMicrosoftADResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateMicrosoftADError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note>"]
-                fn create_snapshot(&self, input: &CreateSnapshotRequest)  -> Result<CreateSnapshotResult, CreateSnapshotError> {
+                fn create_snapshot(&self, input: &CreateSnapshotRequest)  -> Box<Future<Item = CreateSnapshotResult, Error = CreateSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4683,21 +4774,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSnapshotError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>"]
-                fn create_trust(&self, input: &CreateTrustRequest)  -> Result<CreateTrustResult, CreateTrustError> {
+                fn create_trust(&self, input: &CreateTrustRequest)  -> Box<Future<Item = CreateTrustResult, Error = CreateTrustError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4705,21 +4806,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTrustError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTrustError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>"]
-                fn delete_conditional_forwarder(&self, input: &DeleteConditionalForwarderRequest)  -> Result<DeleteConditionalForwarderResult, DeleteConditionalForwarderError> {
+                fn delete_conditional_forwarder(&self, input: &DeleteConditionalForwarderRequest)  -> Box<Future<Item = DeleteConditionalForwarderResult, Error = DeleteConditionalForwarderError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4727,21 +4838,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteConditionalForwarderError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteConditionalForwarderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
-                fn delete_directory(&self, input: &DeleteDirectoryRequest)  -> Result<DeleteDirectoryResult, DeleteDirectoryError> {
+                fn delete_directory(&self, input: &DeleteDirectoryRequest)  -> Box<Future<Item = DeleteDirectoryResult, Error = DeleteDirectoryError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4749,21 +4870,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDirectoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteDirectoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDirectoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteDirectoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a directory snapshot.</p>"]
-                fn delete_snapshot(&self, input: &DeleteSnapshotRequest)  -> Result<DeleteSnapshotResult, DeleteSnapshotError> {
+                fn delete_snapshot(&self, input: &DeleteSnapshotRequest)  -> Box<Future<Item = DeleteSnapshotResult, Error = DeleteSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4771,21 +4902,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSnapshotError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
-                fn delete_trust(&self, input: &DeleteTrustRequest)  -> Result<DeleteTrustResult, DeleteTrustError> {
+                fn delete_trust(&self, input: &DeleteTrustRequest)  -> Box<Future<Item = DeleteTrustResult, Error = DeleteTrustError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4793,21 +4934,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTrustError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTrustError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified directory as a publisher to the specified SNS topic.</p>"]
-                fn deregister_event_topic(&self, input: &DeregisterEventTopicRequest)  -> Result<DeregisterEventTopicResult, DeregisterEventTopicError> {
+                fn deregister_event_topic(&self, input: &DeregisterEventTopicRequest)  -> Box<Future<Item = DeregisterEventTopicResult, Error = DeregisterEventTopicError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4815,21 +4966,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeregisterEventTopicError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterEventTopicResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeregisterEventTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeregisterEventTopicError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeregisterEventTopicResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeregisterEventTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>"]
-                fn describe_conditional_forwarders(&self, input: &DescribeConditionalForwardersRequest)  -> Result<DescribeConditionalForwardersResult, DescribeConditionalForwardersError> {
+                fn describe_conditional_forwarders(&self, input: &DescribeConditionalForwardersRequest)  -> Box<Future<Item = DescribeConditionalForwardersResult, Error = DescribeConditionalForwardersError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4837,21 +4998,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConditionalForwardersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConditionalForwardersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeConditionalForwardersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConditionalForwardersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeConditionalForwardersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeConditionalForwardersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
-                fn describe_directories(&self, input: &DescribeDirectoriesRequest)  -> Result<DescribeDirectoriesResult, DescribeDirectoriesError> {
+                fn describe_directories(&self, input: &DescribeDirectoriesRequest)  -> Box<Future<Item = DescribeDirectoriesResult, Error = DescribeDirectoriesError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4859,21 +5030,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDirectoriesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDirectoriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeDirectoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDirectoriesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeDirectoriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeDirectoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>"]
-                fn describe_event_topics(&self, input: &DescribeEventTopicsRequest)  -> Result<DescribeEventTopicsResult, DescribeEventTopicsError> {
+                fn describe_event_topics(&self, input: &DescribeEventTopicsRequest)  -> Box<Future<Item = DescribeEventTopicsResult, Error = DescribeEventTopicsError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4881,21 +5062,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEventTopicsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventTopicsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeEventTopicsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEventTopicsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeEventTopicsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeEventTopicsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
-                fn describe_snapshots(&self, input: &DescribeSnapshotsRequest)  -> Result<DescribeSnapshotsResult, DescribeSnapshotsError> {
+                fn describe_snapshots(&self, input: &DescribeSnapshotsRequest)  -> Box<Future<Item = DescribeSnapshotsResult, Error = DescribeSnapshotsError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4903,21 +5094,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSnapshotsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSnapshotsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSnapshotsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeSnapshotsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>"]
-                fn describe_trusts(&self, input: &DescribeTrustsRequest)  -> Result<DescribeTrustsResult, DescribeTrustsError> {
+                fn describe_trusts(&self, input: &DescribeTrustsRequest)  -> Box<Future<Item = DescribeTrustsResult, Error = DescribeTrustsError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4925,21 +5126,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTrustsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTrustsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeTrustsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTrustsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeTrustsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeTrustsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
-                fn disable_radius(&self, input: &DisableRadiusRequest)  -> Result<DisableRadiusResult, DisableRadiusError> {
+                fn disable_radius(&self, input: &DisableRadiusRequest)  -> Box<Future<Item = DisableRadiusResult, Error = DisableRadiusError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4947,21 +5158,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableRadiusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DisableRadiusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableRadiusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DisableRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DisableRadiusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables single-sign on for a directory.</p>"]
-                fn disable_sso(&self, input: &DisableSsoRequest)  -> Result<DisableSsoResult, DisableSsoError> {
+                fn disable_sso(&self, input: &DisableSsoRequest)  -> Box<Future<Item = DisableSsoResult, Error = DisableSsoError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4969,21 +5190,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableSsoError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableSsoResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DisableSsoError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableSsoError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DisableSsoResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DisableSsoError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
-                fn enable_radius(&self, input: &EnableRadiusRequest)  -> Result<EnableRadiusResult, EnableRadiusError> {
+                fn enable_radius(&self, input: &EnableRadiusRequest)  -> Box<Future<Item = EnableRadiusResult, Error = EnableRadiusError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4991,21 +5222,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableRadiusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(EnableRadiusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableRadiusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<EnableRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(EnableRadiusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables single sign-on for a directory.</p>"]
-                fn enable_sso(&self, input: &EnableSsoRequest)  -> Result<EnableSsoResult, EnableSsoError> {
+                fn enable_sso(&self, input: &EnableSsoRequest)  -> Box<Future<Item = EnableSsoResult, Error = EnableSsoError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5013,21 +5254,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableSsoError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableSsoResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(EnableSsoError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableSsoError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<EnableSsoResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(EnableSsoError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Obtains directory limit information for the current region.</p>"]
-                fn get_directory_limits(&self, input: &GetDirectoryLimitsRequest)  -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError> {
+                fn get_directory_limits(&self, input: &GetDirectoryLimitsRequest)  -> Box<Future<Item = GetDirectoryLimitsResult, Error = GetDirectoryLimitsError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5035,21 +5286,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDirectoryLimitsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDirectoryLimitsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDirectoryLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDirectoryLimitsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDirectoryLimitsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDirectoryLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Obtains the manual snapshot limits for a directory.</p>"]
-                fn get_snapshot_limits(&self, input: &GetSnapshotLimitsRequest)  -> Result<GetSnapshotLimitsResult, GetSnapshotLimitsError> {
+                fn get_snapshot_limits(&self, input: &GetSnapshotLimitsRequest)  -> Box<Future<Item = GetSnapshotLimitsResult, Error = GetSnapshotLimitsError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5057,21 +5318,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetSnapshotLimitsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSnapshotLimitsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetSnapshotLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetSnapshotLimitsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetSnapshotLimitsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetSnapshotLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the address blocks that you have added to a directory.</p>"]
-                fn list_ip_routes(&self, input: &ListIpRoutesRequest)  -> Result<ListIpRoutesResult, ListIpRoutesError> {
+                fn list_ip_routes(&self, input: &ListIpRoutesRequest)  -> Box<Future<Item = ListIpRoutesResult, Error = ListIpRoutesError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5079,21 +5350,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListIpRoutesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListIpRoutesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListIpRoutesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListIpRoutesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all schema extensions applied to a Microsoft AD Directory.</p>"]
-                fn list_schema_extensions(&self, input: &ListSchemaExtensionsRequest)  -> Result<ListSchemaExtensionsResult, ListSchemaExtensionsError> {
+                fn list_schema_extensions(&self, input: &ListSchemaExtensionsRequest)  -> Box<Future<Item = ListSchemaExtensionsResult, Error = ListSchemaExtensionsError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5101,21 +5382,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListSchemaExtensionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSchemaExtensionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListSchemaExtensionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListSchemaExtensionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListSchemaExtensionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListSchemaExtensionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all tags on a directory.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Box<Future<Item = ListTagsForResourceResult, Error = ListTagsForResourceError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5123,21 +5414,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>"]
-                fn register_event_topic(&self, input: &RegisterEventTopicRequest)  -> Result<RegisterEventTopicResult, RegisterEventTopicError> {
+                fn register_event_topic(&self, input: &RegisterEventTopicRequest)  -> Box<Future<Item = RegisterEventTopicResult, Error = RegisterEventTopicError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5145,21 +5446,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterEventTopicError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterEventTopicResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RegisterEventTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterEventTopicError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RegisterEventTopicResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RegisterEventTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes IP address blocks from a directory.</p>"]
-                fn remove_ip_routes(&self, input: &RemoveIpRoutesRequest)  -> Result<RemoveIpRoutesResult, RemoveIpRoutesError> {
+                fn remove_ip_routes(&self, input: &RemoveIpRoutesRequest)  -> Box<Future<Item = RemoveIpRoutesResult, Error = RemoveIpRoutesError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5167,21 +5478,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveIpRoutesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RemoveIpRoutesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveIpRoutesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RemoveIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RemoveIpRoutesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes tags from a directory.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Box<Future<Item = RemoveTagsFromResourceResult, Error = RemoveTagsFromResourceError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5189,21 +5510,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveTagsFromResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveTagsFromResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>"]
-                fn restore_from_snapshot(&self, input: &RestoreFromSnapshotRequest)  -> Result<RestoreFromSnapshotResult, RestoreFromSnapshotError> {
+                fn restore_from_snapshot(&self, input: &RestoreFromSnapshotRequest)  -> Box<Future<Item = RestoreFromSnapshotResult, Error = RestoreFromSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5211,21 +5542,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreFromSnapshotError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RestoreFromSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RestoreFromSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreFromSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RestoreFromSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RestoreFromSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Applies a schema extension to a Microsoft AD directory.</p>"]
-                fn start_schema_extension(&self, input: &StartSchemaExtensionRequest)  -> Result<StartSchemaExtensionResult, StartSchemaExtensionError> {
+                fn start_schema_extension(&self, input: &StartSchemaExtensionRequest)  -> Box<Future<Item = StartSchemaExtensionResult, Error = StartSchemaExtensionError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5233,21 +5574,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StartSchemaExtensionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartSchemaExtensionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StartSchemaExtensionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StartSchemaExtensionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StartSchemaExtensionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StartSchemaExtensionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a conditional forwarder that has been set up for your AWS directory.</p>"]
-                fn update_conditional_forwarder(&self, input: &UpdateConditionalForwarderRequest)  -> Result<UpdateConditionalForwarderResult, UpdateConditionalForwarderError> {
+                fn update_conditional_forwarder(&self, input: &UpdateConditionalForwarderRequest)  -> Box<Future<Item = UpdateConditionalForwarderResult, Error = UpdateConditionalForwarderError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5255,21 +5606,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateConditionalForwarderError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateConditionalForwarderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>"]
-                fn update_radius(&self, input: &UpdateRadiusRequest)  -> Result<UpdateRadiusResult, UpdateRadiusError> {
+                fn update_radius(&self, input: &UpdateRadiusRequest)  -> Box<Future<Item = UpdateRadiusResult, Error = UpdateRadiusError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5277,21 +5638,31 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateRadiusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateRadiusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateRadiusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateRadiusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
-                fn verify_trust(&self, input: &VerifyTrustRequest)  -> Result<VerifyTrustResult, VerifyTrustError> {
+                fn verify_trust(&self, input: &VerifyTrustRequest)  -> Box<Future<Item = VerifyTrustResult, Error = VerifyTrustError>> {
                     let mut request = SignedRequest::new("POST", "ds", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5299,16 +5670,26 @@ VerifyTrustError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(VerifyTrustError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VerifyTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(VerifyTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| VerifyTrustError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<VerifyTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(VerifyTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

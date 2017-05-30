@@ -13,7 +13,7 @@ impl GenerateProtocol for JsonGenerator {
 
             writeln!(writer,"
                 {documentation}
-                {method_signature} -> Result<{output_type}, {error_type}>;
+                {method_signature} -> Box<Future<Item = {output_type}, Error = {error_type}>>;
                 ",
                 documentation = generate_documentation(operation).unwrap_or("".to_owned()),
                 method_signature = generate_method_signature(operation),

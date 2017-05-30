@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type ARN = String;
 pub type Alias = String;
 pub type BooleanObject = bool;
@@ -1551,59 +1552,59 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Creates tags for a WorkSpace.</p>"]
-                fn create_tags(&self, input: &CreateTagsRequest)  -> Result<CreateTagsResult, CreateTagsError>;
+                fn create_tags(&self, input: &CreateTagsRequest)  -> Box<Future<Item = CreateTagsResult, Error = CreateTagsError>>;
                 
 
                 #[doc="<p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note>"]
-                fn create_workspaces(&self, input: &CreateWorkspacesRequest)  -> Result<CreateWorkspacesResult, CreateWorkspacesError>;
+                fn create_workspaces(&self, input: &CreateWorkspacesRequest)  -> Box<Future<Item = CreateWorkspacesResult, Error = CreateWorkspacesError>>;
                 
 
                 #[doc="<p>Deletes tags from a WorkSpace.</p>"]
-                fn delete_tags(&self, input: &DeleteTagsRequest)  -> Result<DeleteTagsResult, DeleteTagsError>;
+                fn delete_tags(&self, input: &DeleteTagsRequest)  -> Box<Future<Item = DeleteTagsResult, Error = DeleteTagsError>>;
                 
 
                 #[doc="<p>Describes tags for a WorkSpace.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsRequest)  -> Result<DescribeTagsResult, DescribeTagsError>;
+                fn describe_tags(&self, input: &DescribeTagsRequest)  -> Box<Future<Item = DescribeTagsResult, Error = DescribeTagsError>>;
                 
 
                 #[doc="<p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-                fn describe_workspace_bundles(&self, input: &DescribeWorkspaceBundlesRequest)  -> Result<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError>;
+                fn describe_workspace_bundles(&self, input: &DescribeWorkspaceBundlesRequest)  -> Box<Future<Item = DescribeWorkspaceBundlesResult, Error = DescribeWorkspaceBundlesError>>;
                 
 
                 #[doc="<p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-                fn describe_workspace_directories(&self, input: &DescribeWorkspaceDirectoriesRequest)  -> Result<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError>;
+                fn describe_workspace_directories(&self, input: &DescribeWorkspaceDirectoriesRequest)  -> Box<Future<Item = DescribeWorkspaceDirectoriesResult, Error = DescribeWorkspaceDirectoriesError>>;
                 
 
                 #[doc="<p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-                fn describe_workspaces(&self, input: &DescribeWorkspacesRequest)  -> Result<DescribeWorkspacesResult, DescribeWorkspacesError>;
+                fn describe_workspaces(&self, input: &DescribeWorkspacesRequest)  -> Box<Future<Item = DescribeWorkspacesResult, Error = DescribeWorkspacesError>>;
                 
 
                 #[doc="<p>Describes the connection status of a specified WorkSpace.</p>"]
-                fn describe_workspaces_connection_status(&self, input: &DescribeWorkspacesConnectionStatusRequest)  -> Result<DescribeWorkspacesConnectionStatusResult, DescribeWorkspacesConnectionStatusError>;
+                fn describe_workspaces_connection_status(&self, input: &DescribeWorkspacesConnectionStatusRequest)  -> Box<Future<Item = DescribeWorkspacesConnectionStatusResult, Error = DescribeWorkspacesConnectionStatusError>>;
                 
 
                 #[doc="<p>Modifies the WorkSpace properties, including the RunningMode and AutoStop time.</p>"]
-                fn modify_workspace_properties(&self, input: &ModifyWorkspacePropertiesRequest)  -> Result<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
+                fn modify_workspace_properties(&self, input: &ModifyWorkspacePropertiesRequest)  -> Box<Future<Item = ModifyWorkspacePropertiesResult, Error = ModifyWorkspacePropertiesError>>;
                 
 
                 #[doc="<p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note>"]
-                fn reboot_workspaces(&self, input: &RebootWorkspacesRequest)  -> Result<RebootWorkspacesResult, RebootWorkspacesError>;
+                fn reboot_workspaces(&self, input: &RebootWorkspacesRequest)  -> Box<Future<Item = RebootWorkspacesResult, Error = RebootWorkspacesError>>;
                 
 
                 #[doc="<p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note>"]
-                fn rebuild_workspaces(&self, input: &RebuildWorkspacesRequest)  -> Result<RebuildWorkspacesResult, RebuildWorkspacesError>;
+                fn rebuild_workspaces(&self, input: &RebuildWorkspacesRequest)  -> Box<Future<Item = RebuildWorkspacesResult, Error = RebuildWorkspacesError>>;
                 
 
                 #[doc="<p>Starts the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to “STOPPED.”</p>"]
-                fn start_workspaces(&self, input: &StartWorkspacesRequest)  -> Result<StartWorkspacesResult, StartWorkspacesError>;
+                fn start_workspaces(&self, input: &StartWorkspacesRequest)  -> Box<Future<Item = StartWorkspacesResult, Error = StartWorkspacesError>>;
                 
 
                 #[doc="<p> Stops the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
-                fn stop_workspaces(&self, input: &StopWorkspacesRequest)  -> Result<StopWorkspacesResult, StopWorkspacesError>;
+                fn stop_workspaces(&self, input: &StopWorkspacesRequest)  -> Box<Future<Item = StopWorkspacesResult, Error = StopWorkspacesError>>;
                 
 
                 #[doc="<p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note>"]
-                fn terminate_workspaces(&self, input: &TerminateWorkspacesRequest)  -> Result<TerminateWorkspacesResult, TerminateWorkspacesError>;
+                fn terminate_workspaces(&self, input: &TerminateWorkspacesRequest)  -> Box<Future<Item = TerminateWorkspacesResult, Error = TerminateWorkspacesError>>;
                 
 }
 /// A client for the Amazon WorkSpaces API.
@@ -1627,7 +1628,7 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Creates tags for a WorkSpace.</p>"]
-                fn create_tags(&self, input: &CreateTagsRequest)  -> Result<CreateTagsResult, CreateTagsError> {
+                fn create_tags(&self, input: &CreateTagsRequest)  -> Box<Future<Item = CreateTagsResult, Error = CreateTagsError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1635,21 +1636,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTagsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note>"]
-                fn create_workspaces(&self, input: &CreateWorkspacesRequest)  -> Result<CreateWorkspacesResult, CreateWorkspacesError> {
+                fn create_workspaces(&self, input: &CreateWorkspacesRequest)  -> Box<Future<Item = CreateWorkspacesResult, Error = CreateWorkspacesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1657,21 +1668,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateWorkspacesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateWorkspacesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes tags from a WorkSpace.</p>"]
-                fn delete_tags(&self, input: &DeleteTagsRequest)  -> Result<DeleteTagsResult, DeleteTagsError> {
+                fn delete_tags(&self, input: &DeleteTagsRequest)  -> Box<Future<Item = DeleteTagsResult, Error = DeleteTagsError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1679,21 +1700,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTagsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes tags for a WorkSpace.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsRequest)  -> Result<DescribeTagsResult, DescribeTagsError> {
+                fn describe_tags(&self, input: &DescribeTagsRequest)  -> Box<Future<Item = DescribeTagsResult, Error = DescribeTagsError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1701,21 +1732,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTagsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-                fn describe_workspace_bundles(&self, input: &DescribeWorkspaceBundlesRequest)  -> Result<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError> {
+                fn describe_workspace_bundles(&self, input: &DescribeWorkspaceBundlesRequest)  -> Box<Future<Item = DescribeWorkspaceBundlesResult, Error = DescribeWorkspaceBundlesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1723,21 +1764,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeWorkspaceBundlesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspaceBundlesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeWorkspaceBundlesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeWorkspaceBundlesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeWorkspaceBundlesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeWorkspaceBundlesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-                fn describe_workspace_directories(&self, input: &DescribeWorkspaceDirectoriesRequest)  -> Result<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError> {
+                fn describe_workspace_directories(&self, input: &DescribeWorkspaceDirectoriesRequest)  -> Box<Future<Item = DescribeWorkspaceDirectoriesResult, Error = DescribeWorkspaceDirectoriesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1745,21 +1796,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeWorkspaceDirectoriesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeWorkspaceDirectoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeWorkspaceDirectoriesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeWorkspaceDirectoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-                fn describe_workspaces(&self, input: &DescribeWorkspacesRequest)  -> Result<DescribeWorkspacesResult, DescribeWorkspacesError> {
+                fn describe_workspaces(&self, input: &DescribeWorkspacesRequest)  -> Box<Future<Item = DescribeWorkspacesResult, Error = DescribeWorkspacesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1767,21 +1828,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeWorkspacesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeWorkspacesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the connection status of a specified WorkSpace.</p>"]
-                fn describe_workspaces_connection_status(&self, input: &DescribeWorkspacesConnectionStatusRequest)  -> Result<DescribeWorkspacesConnectionStatusResult, DescribeWorkspacesConnectionStatusError> {
+                fn describe_workspaces_connection_status(&self, input: &DescribeWorkspacesConnectionStatusRequest)  -> Box<Future<Item = DescribeWorkspacesConnectionStatusResult, Error = DescribeWorkspacesConnectionStatusError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1789,21 +1860,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeWorkspacesConnectionStatusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeWorkspacesConnectionStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeWorkspacesConnectionStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeWorkspacesConnectionStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the WorkSpace properties, including the RunningMode and AutoStop time.</p>"]
-                fn modify_workspace_properties(&self, input: &ModifyWorkspacePropertiesRequest)  -> Result<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError> {
+                fn modify_workspace_properties(&self, input: &ModifyWorkspacePropertiesRequest)  -> Box<Future<Item = ModifyWorkspacePropertiesResult, Error = ModifyWorkspacePropertiesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1811,21 +1892,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyWorkspacePropertiesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyWorkspacePropertiesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ModifyWorkspacePropertiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyWorkspacePropertiesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ModifyWorkspacePropertiesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ModifyWorkspacePropertiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note>"]
-                fn reboot_workspaces(&self, input: &RebootWorkspacesRequest)  -> Result<RebootWorkspacesResult, RebootWorkspacesError> {
+                fn reboot_workspaces(&self, input: &RebootWorkspacesRequest)  -> Box<Future<Item = RebootWorkspacesResult, Error = RebootWorkspacesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1833,21 +1924,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RebootWorkspacesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RebootWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RebootWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RebootWorkspacesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RebootWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RebootWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note>"]
-                fn rebuild_workspaces(&self, input: &RebuildWorkspacesRequest)  -> Result<RebuildWorkspacesResult, RebuildWorkspacesError> {
+                fn rebuild_workspaces(&self, input: &RebuildWorkspacesRequest)  -> Box<Future<Item = RebuildWorkspacesResult, Error = RebuildWorkspacesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1855,21 +1956,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RebuildWorkspacesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RebuildWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RebuildWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RebuildWorkspacesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RebuildWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RebuildWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Starts the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to “STOPPED.”</p>"]
-                fn start_workspaces(&self, input: &StartWorkspacesRequest)  -> Result<StartWorkspacesResult, StartWorkspacesError> {
+                fn start_workspaces(&self, input: &StartWorkspacesRequest)  -> Box<Future<Item = StartWorkspacesResult, Error = StartWorkspacesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1877,21 +1988,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StartWorkspacesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StartWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StartWorkspacesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StartWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StartWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Stops the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
-                fn stop_workspaces(&self, input: &StopWorkspacesRequest)  -> Result<StopWorkspacesResult, StopWorkspacesError> {
+                fn stop_workspaces(&self, input: &StopWorkspacesRequest)  -> Box<Future<Item = StopWorkspacesResult, Error = StopWorkspacesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1899,21 +2020,31 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StopWorkspacesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StopWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StopWorkspacesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StopWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StopWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note>"]
-                fn terminate_workspaces(&self, input: &TerminateWorkspacesRequest)  -> Result<TerminateWorkspacesResult, TerminateWorkspacesError> {
+                fn terminate_workspaces(&self, input: &TerminateWorkspacesRequest)  -> Box<Future<Item = TerminateWorkspacesResult, Error = TerminateWorkspacesError>> {
                     let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1921,16 +2052,26 @@ TerminateWorkspacesError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TerminateWorkspacesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TerminateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(TerminateWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TerminateWorkspacesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<TerminateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(TerminateWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

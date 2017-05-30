@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 #[doc="<p>Represents the input of, and adds tags to, an on-premises instance operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
             pub struct AddTagsToOnPremisesInstancesInput {
@@ -4222,143 +4223,143 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds tags to on-premises instances.</p>"]
-                fn add_tags_to_on_premises_instances(&self, input: &AddTagsToOnPremisesInstancesInput)  -> Result<(), AddTagsToOnPremisesInstancesError>;
+                fn add_tags_to_on_premises_instances(&self, input: &AddTagsToOnPremisesInstancesInput)  -> Box<Future<Item = (), Error = AddTagsToOnPremisesInstancesError>>;
                 
 
                 #[doc="<p>Gets information about one or more application revisions.</p>"]
-                fn batch_get_application_revisions(&self, input: &BatchGetApplicationRevisionsInput)  -> Result<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError>;
+                fn batch_get_application_revisions(&self, input: &BatchGetApplicationRevisionsInput)  -> Box<Future<Item = BatchGetApplicationRevisionsOutput, Error = BatchGetApplicationRevisionsError>>;
                 
 
                 #[doc="<p>Gets information about one or more applications.</p>"]
-                fn batch_get_applications(&self, input: &BatchGetApplicationsInput)  -> Result<BatchGetApplicationsOutput, BatchGetApplicationsError>;
+                fn batch_get_applications(&self, input: &BatchGetApplicationsInput)  -> Box<Future<Item = BatchGetApplicationsOutput, Error = BatchGetApplicationsError>>;
                 
 
                 #[doc="<p>Gets information about one or more deployment groups.</p>"]
-                fn batch_get_deployment_groups(&self, input: &BatchGetDeploymentGroupsInput)  -> Result<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError>;
+                fn batch_get_deployment_groups(&self, input: &BatchGetDeploymentGroupsInput)  -> Box<Future<Item = BatchGetDeploymentGroupsOutput, Error = BatchGetDeploymentGroupsError>>;
                 
 
                 #[doc="<p>Gets information about one or more instance that are part of a deployment group.</p>"]
-                fn batch_get_deployment_instances(&self, input: &BatchGetDeploymentInstancesInput)  -> Result<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError>;
+                fn batch_get_deployment_instances(&self, input: &BatchGetDeploymentInstancesInput)  -> Box<Future<Item = BatchGetDeploymentInstancesOutput, Error = BatchGetDeploymentInstancesError>>;
                 
 
                 #[doc="<p>Gets information about one or more deployments.</p>"]
-                fn batch_get_deployments(&self, input: &BatchGetDeploymentsInput)  -> Result<BatchGetDeploymentsOutput, BatchGetDeploymentsError>;
+                fn batch_get_deployments(&self, input: &BatchGetDeploymentsInput)  -> Box<Future<Item = BatchGetDeploymentsOutput, Error = BatchGetDeploymentsError>>;
                 
 
                 #[doc="<p>Gets information about one or more on-premises instances.</p>"]
-                fn batch_get_on_premises_instances(&self, input: &BatchGetOnPremisesInstancesInput)  -> Result<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError>;
+                fn batch_get_on_premises_instances(&self, input: &BatchGetOnPremisesInstancesInput)  -> Box<Future<Item = BatchGetOnPremisesInstancesOutput, Error = BatchGetOnPremisesInstancesError>>;
                 
 
                 #[doc="<p>Creates an application.</p>"]
-                fn create_application(&self, input: &CreateApplicationInput)  -> Result<CreateApplicationOutput, CreateApplicationError>;
+                fn create_application(&self, input: &CreateApplicationInput)  -> Box<Future<Item = CreateApplicationOutput, Error = CreateApplicationError>>;
                 
 
                 #[doc="<p>Deploys an application revision through the specified deployment group.</p>"]
-                fn create_deployment(&self, input: &CreateDeploymentInput)  -> Result<CreateDeploymentOutput, CreateDeploymentError>;
+                fn create_deployment(&self, input: &CreateDeploymentInput)  -> Box<Future<Item = CreateDeploymentOutput, Error = CreateDeploymentError>>;
                 
 
                 #[doc="<p>Creates a deployment configuration.</p>"]
-                fn create_deployment_config(&self, input: &CreateDeploymentConfigInput)  -> Result<CreateDeploymentConfigOutput, CreateDeploymentConfigError>;
+                fn create_deployment_config(&self, input: &CreateDeploymentConfigInput)  -> Box<Future<Item = CreateDeploymentConfigOutput, Error = CreateDeploymentConfigError>>;
                 
 
                 #[doc="<p>Creates a deployment group to which application revisions will be deployed.</p>"]
-                fn create_deployment_group(&self, input: &CreateDeploymentGroupInput)  -> Result<CreateDeploymentGroupOutput, CreateDeploymentGroupError>;
+                fn create_deployment_group(&self, input: &CreateDeploymentGroupInput)  -> Box<Future<Item = CreateDeploymentGroupOutput, Error = CreateDeploymentGroupError>>;
                 
 
                 #[doc="<p>Deletes an application.</p>"]
-                fn delete_application(&self, input: &DeleteApplicationInput)  -> Result<(), DeleteApplicationError>;
+                fn delete_application(&self, input: &DeleteApplicationInput)  -> Box<Future<Item = (), Error = DeleteApplicationError>>;
                 
 
                 #[doc="<p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note>"]
-                fn delete_deployment_config(&self, input: &DeleteDeploymentConfigInput)  -> Result<(), DeleteDeploymentConfigError>;
+                fn delete_deployment_config(&self, input: &DeleteDeploymentConfigInput)  -> Box<Future<Item = (), Error = DeleteDeploymentConfigError>>;
                 
 
                 #[doc="<p>Deletes a deployment group.</p>"]
-                fn delete_deployment_group(&self, input: &DeleteDeploymentGroupInput)  -> Result<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError>;
+                fn delete_deployment_group(&self, input: &DeleteDeploymentGroupInput)  -> Box<Future<Item = DeleteDeploymentGroupOutput, Error = DeleteDeploymentGroupError>>;
                 
 
                 #[doc="<p>Deregisters an on-premises instance.</p>"]
-                fn deregister_on_premises_instance(&self, input: &DeregisterOnPremisesInstanceInput)  -> Result<(), DeregisterOnPremisesInstanceError>;
+                fn deregister_on_premises_instance(&self, input: &DeregisterOnPremisesInstanceInput)  -> Box<Future<Item = (), Error = DeregisterOnPremisesInstanceError>>;
                 
 
                 #[doc="<p>Gets information about an application.</p>"]
-                fn get_application(&self, input: &GetApplicationInput)  -> Result<GetApplicationOutput, GetApplicationError>;
+                fn get_application(&self, input: &GetApplicationInput)  -> Box<Future<Item = GetApplicationOutput, Error = GetApplicationError>>;
                 
 
                 #[doc="<p>Gets information about an application revision.</p>"]
-                fn get_application_revision(&self, input: &GetApplicationRevisionInput)  -> Result<GetApplicationRevisionOutput, GetApplicationRevisionError>;
+                fn get_application_revision(&self, input: &GetApplicationRevisionInput)  -> Box<Future<Item = GetApplicationRevisionOutput, Error = GetApplicationRevisionError>>;
                 
 
                 #[doc="<p>Gets information about a deployment.</p>"]
-                fn get_deployment(&self, input: &GetDeploymentInput)  -> Result<GetDeploymentOutput, GetDeploymentError>;
+                fn get_deployment(&self, input: &GetDeploymentInput)  -> Box<Future<Item = GetDeploymentOutput, Error = GetDeploymentError>>;
                 
 
                 #[doc="<p>Gets information about a deployment configuration.</p>"]
-                fn get_deployment_config(&self, input: &GetDeploymentConfigInput)  -> Result<GetDeploymentConfigOutput, GetDeploymentConfigError>;
+                fn get_deployment_config(&self, input: &GetDeploymentConfigInput)  -> Box<Future<Item = GetDeploymentConfigOutput, Error = GetDeploymentConfigError>>;
                 
 
                 #[doc="<p>Gets information about a deployment group.</p>"]
-                fn get_deployment_group(&self, input: &GetDeploymentGroupInput)  -> Result<GetDeploymentGroupOutput, GetDeploymentGroupError>;
+                fn get_deployment_group(&self, input: &GetDeploymentGroupInput)  -> Box<Future<Item = GetDeploymentGroupOutput, Error = GetDeploymentGroupError>>;
                 
 
                 #[doc="<p>Gets information about an instance as part of a deployment.</p>"]
-                fn get_deployment_instance(&self, input: &GetDeploymentInstanceInput)  -> Result<GetDeploymentInstanceOutput, GetDeploymentInstanceError>;
+                fn get_deployment_instance(&self, input: &GetDeploymentInstanceInput)  -> Box<Future<Item = GetDeploymentInstanceOutput, Error = GetDeploymentInstanceError>>;
                 
 
                 #[doc="<p>Gets information about an on-premises instance.</p>"]
-                fn get_on_premises_instance(&self, input: &GetOnPremisesInstanceInput)  -> Result<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError>;
+                fn get_on_premises_instance(&self, input: &GetOnPremisesInstanceInput)  -> Box<Future<Item = GetOnPremisesInstanceOutput, Error = GetOnPremisesInstanceError>>;
                 
 
                 #[doc="<p>Lists information about revisions for an application.</p>"]
-                fn list_application_revisions(&self, input: &ListApplicationRevisionsInput)  -> Result<ListApplicationRevisionsOutput, ListApplicationRevisionsError>;
+                fn list_application_revisions(&self, input: &ListApplicationRevisionsInput)  -> Box<Future<Item = ListApplicationRevisionsOutput, Error = ListApplicationRevisionsError>>;
                 
 
                 #[doc="<p>Lists the applications registered with the applicable IAM user or AWS account.</p>"]
-                fn list_applications(&self, input: &ListApplicationsInput)  -> Result<ListApplicationsOutput, ListApplicationsError>;
+                fn list_applications(&self, input: &ListApplicationsInput)  -> Box<Future<Item = ListApplicationsOutput, Error = ListApplicationsError>>;
                 
 
                 #[doc="<p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>"]
-                fn list_deployment_configs(&self, input: &ListDeploymentConfigsInput)  -> Result<ListDeploymentConfigsOutput, ListDeploymentConfigsError>;
+                fn list_deployment_configs(&self, input: &ListDeploymentConfigsInput)  -> Box<Future<Item = ListDeploymentConfigsOutput, Error = ListDeploymentConfigsError>>;
                 
 
                 #[doc="<p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>"]
-                fn list_deployment_groups(&self, input: &ListDeploymentGroupsInput)  -> Result<ListDeploymentGroupsOutput, ListDeploymentGroupsError>;
+                fn list_deployment_groups(&self, input: &ListDeploymentGroupsInput)  -> Box<Future<Item = ListDeploymentGroupsOutput, Error = ListDeploymentGroupsError>>;
                 
 
                 #[doc="<p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>"]
-                fn list_deployment_instances(&self, input: &ListDeploymentInstancesInput)  -> Result<ListDeploymentInstancesOutput, ListDeploymentInstancesError>;
+                fn list_deployment_instances(&self, input: &ListDeploymentInstancesInput)  -> Box<Future<Item = ListDeploymentInstancesOutput, Error = ListDeploymentInstancesError>>;
                 
 
                 #[doc="<p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>"]
-                fn list_deployments(&self, input: &ListDeploymentsInput)  -> Result<ListDeploymentsOutput, ListDeploymentsError>;
+                fn list_deployments(&self, input: &ListDeploymentsInput)  -> Box<Future<Item = ListDeploymentsOutput, Error = ListDeploymentsError>>;
                 
 
                 #[doc="<p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>"]
-                fn list_on_premises_instances(&self, input: &ListOnPremisesInstancesInput)  -> Result<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
+                fn list_on_premises_instances(&self, input: &ListOnPremisesInstancesInput)  -> Box<Future<Item = ListOnPremisesInstancesOutput, Error = ListOnPremisesInstancesError>>;
                 
 
                 #[doc="<p>Registers with AWS CodeDeploy a revision for the specified application.</p>"]
-                fn register_application_revision(&self, input: &RegisterApplicationRevisionInput)  -> Result<(), RegisterApplicationRevisionError>;
+                fn register_application_revision(&self, input: &RegisterApplicationRevisionInput)  -> Box<Future<Item = (), Error = RegisterApplicationRevisionError>>;
                 
 
                 #[doc="<p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note>"]
-                fn register_on_premises_instance(&self, input: &RegisterOnPremisesInstanceInput)  -> Result<(), RegisterOnPremisesInstanceError>;
+                fn register_on_premises_instance(&self, input: &RegisterOnPremisesInstanceInput)  -> Box<Future<Item = (), Error = RegisterOnPremisesInstanceError>>;
                 
 
                 #[doc="<p>Removes one or more tags from one or more on-premises instances.</p>"]
-                fn remove_tags_from_on_premises_instances(&self, input: &RemoveTagsFromOnPremisesInstancesInput)  -> Result<(), RemoveTagsFromOnPremisesInstancesError>;
+                fn remove_tags_from_on_premises_instances(&self, input: &RemoveTagsFromOnPremisesInstancesInput)  -> Box<Future<Item = (), Error = RemoveTagsFromOnPremisesInstancesError>>;
                 
 
                 #[doc="<p>Attempts to stop an ongoing deployment.</p>"]
-                fn stop_deployment(&self, input: &StopDeploymentInput)  -> Result<StopDeploymentOutput, StopDeploymentError>;
+                fn stop_deployment(&self, input: &StopDeploymentInput)  -> Box<Future<Item = StopDeploymentOutput, Error = StopDeploymentError>>;
                 
 
                 #[doc="<p>Changes the name of an application.</p>"]
-                fn update_application(&self, input: &UpdateApplicationInput)  -> Result<(), UpdateApplicationError>;
+                fn update_application(&self, input: &UpdateApplicationInput)  -> Box<Future<Item = (), Error = UpdateApplicationError>>;
                 
 
                 #[doc="<p>Changes information about a deployment group.</p>"]
-                fn update_deployment_group(&self, input: &UpdateDeploymentGroupInput)  -> Result<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError>;
+                fn update_deployment_group(&self, input: &UpdateDeploymentGroupInput)  -> Box<Future<Item = UpdateDeploymentGroupOutput, Error = UpdateDeploymentGroupError>>;
                 
 }
 /// A client for the CodeDeploy API.
@@ -4382,7 +4383,7 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds tags to on-premises instances.</p>"]
-                fn add_tags_to_on_premises_instances(&self, input: &AddTagsToOnPremisesInstancesInput)  -> Result<(), AddTagsToOnPremisesInstancesError> {
+                fn add_tags_to_on_premises_instances(&self, input: &AddTagsToOnPremisesInstancesInput)  -> Box<Future<Item = (), Error = AddTagsToOnPremisesInstancesError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4390,21 +4391,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddTagsToOnPremisesInstancesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(AddTagsToOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddTagsToOnPremisesInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(AddTagsToOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about one or more application revisions.</p>"]
-                fn batch_get_application_revisions(&self, input: &BatchGetApplicationRevisionsInput)  -> Result<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError> {
+                fn batch_get_application_revisions(&self, input: &BatchGetApplicationRevisionsInput)  -> Box<Future<Item = BatchGetApplicationRevisionsOutput, Error = BatchGetApplicationRevisionsError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4412,21 +4423,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchGetApplicationRevisionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchGetApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchGetApplicationRevisionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchGetApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchGetApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about one or more applications.</p>"]
-                fn batch_get_applications(&self, input: &BatchGetApplicationsInput)  -> Result<BatchGetApplicationsOutput, BatchGetApplicationsError> {
+                fn batch_get_applications(&self, input: &BatchGetApplicationsInput)  -> Box<Future<Item = BatchGetApplicationsOutput, Error = BatchGetApplicationsError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4434,21 +4455,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchGetApplicationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchGetApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchGetApplicationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchGetApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchGetApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about one or more deployment groups.</p>"]
-                fn batch_get_deployment_groups(&self, input: &BatchGetDeploymentGroupsInput)  -> Result<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError> {
+                fn batch_get_deployment_groups(&self, input: &BatchGetDeploymentGroupsInput)  -> Box<Future<Item = BatchGetDeploymentGroupsOutput, Error = BatchGetDeploymentGroupsError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4456,21 +4487,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchGetDeploymentGroupsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchGetDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchGetDeploymentGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchGetDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchGetDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about one or more instance that are part of a deployment group.</p>"]
-                fn batch_get_deployment_instances(&self, input: &BatchGetDeploymentInstancesInput)  -> Result<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError> {
+                fn batch_get_deployment_instances(&self, input: &BatchGetDeploymentInstancesInput)  -> Box<Future<Item = BatchGetDeploymentInstancesOutput, Error = BatchGetDeploymentInstancesError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4478,21 +4519,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchGetDeploymentInstancesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchGetDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchGetDeploymentInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchGetDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchGetDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about one or more deployments.</p>"]
-                fn batch_get_deployments(&self, input: &BatchGetDeploymentsInput)  -> Result<BatchGetDeploymentsOutput, BatchGetDeploymentsError> {
+                fn batch_get_deployments(&self, input: &BatchGetDeploymentsInput)  -> Box<Future<Item = BatchGetDeploymentsOutput, Error = BatchGetDeploymentsError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4500,21 +4551,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchGetDeploymentsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchGetDeploymentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchGetDeploymentsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchGetDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchGetDeploymentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about one or more on-premises instances.</p>"]
-                fn batch_get_on_premises_instances(&self, input: &BatchGetOnPremisesInstancesInput)  -> Result<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError> {
+                fn batch_get_on_premises_instances(&self, input: &BatchGetOnPremisesInstancesInput)  -> Box<Future<Item = BatchGetOnPremisesInstancesOutput, Error = BatchGetOnPremisesInstancesError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4522,21 +4583,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchGetOnPremisesInstancesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchGetOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchGetOnPremisesInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchGetOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an application.</p>"]
-                fn create_application(&self, input: &CreateApplicationInput)  -> Result<CreateApplicationOutput, CreateApplicationError> {
+                fn create_application(&self, input: &CreateApplicationInput)  -> Box<Future<Item = CreateApplicationOutput, Error = CreateApplicationError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4544,21 +4615,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateApplicationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deploys an application revision through the specified deployment group.</p>"]
-                fn create_deployment(&self, input: &CreateDeploymentInput)  -> Result<CreateDeploymentOutput, CreateDeploymentError> {
+                fn create_deployment(&self, input: &CreateDeploymentInput)  -> Box<Future<Item = CreateDeploymentOutput, Error = CreateDeploymentError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4566,21 +4647,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDeploymentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDeploymentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a deployment configuration.</p>"]
-                fn create_deployment_config(&self, input: &CreateDeploymentConfigInput)  -> Result<CreateDeploymentConfigOutput, CreateDeploymentConfigError> {
+                fn create_deployment_config(&self, input: &CreateDeploymentConfigInput)  -> Box<Future<Item = CreateDeploymentConfigOutput, Error = CreateDeploymentConfigError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4588,21 +4679,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDeploymentConfigError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDeploymentConfigError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a deployment group to which application revisions will be deployed.</p>"]
-                fn create_deployment_group(&self, input: &CreateDeploymentGroupInput)  -> Result<CreateDeploymentGroupOutput, CreateDeploymentGroupError> {
+                fn create_deployment_group(&self, input: &CreateDeploymentGroupInput)  -> Box<Future<Item = CreateDeploymentGroupOutput, Error = CreateDeploymentGroupError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4610,21 +4711,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDeploymentGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDeploymentGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an application.</p>"]
-                fn delete_application(&self, input: &DeleteApplicationInput)  -> Result<(), DeleteApplicationError> {
+                fn delete_application(&self, input: &DeleteApplicationInput)  -> Box<Future<Item = (), Error = DeleteApplicationError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4632,21 +4743,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteApplicationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note>"]
-                fn delete_deployment_config(&self, input: &DeleteDeploymentConfigInput)  -> Result<(), DeleteDeploymentConfigError> {
+                fn delete_deployment_config(&self, input: &DeleteDeploymentConfigInput)  -> Box<Future<Item = (), Error = DeleteDeploymentConfigError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4654,21 +4775,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDeploymentConfigError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDeploymentConfigError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a deployment group.</p>"]
-                fn delete_deployment_group(&self, input: &DeleteDeploymentGroupInput)  -> Result<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError> {
+                fn delete_deployment_group(&self, input: &DeleteDeploymentGroupInput)  -> Box<Future<Item = DeleteDeploymentGroupOutput, Error = DeleteDeploymentGroupError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4676,21 +4807,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDeploymentGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDeploymentGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deregisters an on-premises instance.</p>"]
-                fn deregister_on_premises_instance(&self, input: &DeregisterOnPremisesInstanceInput)  -> Result<(), DeregisterOnPremisesInstanceError> {
+                fn deregister_on_premises_instance(&self, input: &DeregisterOnPremisesInstanceInput)  -> Box<Future<Item = (), Error = DeregisterOnPremisesInstanceError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4698,21 +4839,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeregisterOnPremisesInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeregisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeregisterOnPremisesInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeregisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about an application.</p>"]
-                fn get_application(&self, input: &GetApplicationInput)  -> Result<GetApplicationOutput, GetApplicationError> {
+                fn get_application(&self, input: &GetApplicationInput)  -> Box<Future<Item = GetApplicationOutput, Error = GetApplicationError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4720,21 +4871,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetApplicationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about an application revision.</p>"]
-                fn get_application_revision(&self, input: &GetApplicationRevisionInput)  -> Result<GetApplicationRevisionOutput, GetApplicationRevisionError> {
+                fn get_application_revision(&self, input: &GetApplicationRevisionInput)  -> Box<Future<Item = GetApplicationRevisionOutput, Error = GetApplicationRevisionError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4742,21 +4903,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetApplicationRevisionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetApplicationRevisionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetApplicationRevisionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetApplicationRevisionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a deployment.</p>"]
-                fn get_deployment(&self, input: &GetDeploymentInput)  -> Result<GetDeploymentOutput, GetDeploymentError> {
+                fn get_deployment(&self, input: &GetDeploymentInput)  -> Box<Future<Item = GetDeploymentOutput, Error = GetDeploymentError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4764,21 +4935,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDeploymentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDeploymentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a deployment configuration.</p>"]
-                fn get_deployment_config(&self, input: &GetDeploymentConfigInput)  -> Result<GetDeploymentConfigOutput, GetDeploymentConfigError> {
+                fn get_deployment_config(&self, input: &GetDeploymentConfigInput)  -> Box<Future<Item = GetDeploymentConfigOutput, Error = GetDeploymentConfigError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4786,21 +4967,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDeploymentConfigError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDeploymentConfigError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a deployment group.</p>"]
-                fn get_deployment_group(&self, input: &GetDeploymentGroupInput)  -> Result<GetDeploymentGroupOutput, GetDeploymentGroupError> {
+                fn get_deployment_group(&self, input: &GetDeploymentGroupInput)  -> Box<Future<Item = GetDeploymentGroupOutput, Error = GetDeploymentGroupError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4808,21 +4999,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDeploymentGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDeploymentGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about an instance as part of a deployment.</p>"]
-                fn get_deployment_instance(&self, input: &GetDeploymentInstanceInput)  -> Result<GetDeploymentInstanceOutput, GetDeploymentInstanceError> {
+                fn get_deployment_instance(&self, input: &GetDeploymentInstanceInput)  -> Box<Future<Item = GetDeploymentInstanceOutput, Error = GetDeploymentInstanceError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4830,21 +5031,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDeploymentInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDeploymentInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDeploymentInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDeploymentInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDeploymentInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about an on-premises instance.</p>"]
-                fn get_on_premises_instance(&self, input: &GetOnPremisesInstanceInput)  -> Result<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError> {
+                fn get_on_premises_instance(&self, input: &GetOnPremisesInstanceInput)  -> Box<Future<Item = GetOnPremisesInstanceOutput, Error = GetOnPremisesInstanceError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4852,21 +5063,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetOnPremisesInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOnPremisesInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetOnPremisesInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetOnPremisesInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists information about revisions for an application.</p>"]
-                fn list_application_revisions(&self, input: &ListApplicationRevisionsInput)  -> Result<ListApplicationRevisionsOutput, ListApplicationRevisionsError> {
+                fn list_application_revisions(&self, input: &ListApplicationRevisionsInput)  -> Box<Future<Item = ListApplicationRevisionsOutput, Error = ListApplicationRevisionsError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4874,21 +5095,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListApplicationRevisionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListApplicationRevisionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the applications registered with the applicable IAM user or AWS account.</p>"]
-                fn list_applications(&self, input: &ListApplicationsInput)  -> Result<ListApplicationsOutput, ListApplicationsError> {
+                fn list_applications(&self, input: &ListApplicationsInput)  -> Box<Future<Item = ListApplicationsOutput, Error = ListApplicationsError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4896,21 +5127,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListApplicationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListApplicationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>"]
-                fn list_deployment_configs(&self, input: &ListDeploymentConfigsInput)  -> Result<ListDeploymentConfigsOutput, ListDeploymentConfigsError> {
+                fn list_deployment_configs(&self, input: &ListDeploymentConfigsInput)  -> Box<Future<Item = ListDeploymentConfigsOutput, Error = ListDeploymentConfigsError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4918,21 +5159,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDeploymentConfigsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentConfigsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDeploymentConfigsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDeploymentConfigsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDeploymentConfigsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDeploymentConfigsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>"]
-                fn list_deployment_groups(&self, input: &ListDeploymentGroupsInput)  -> Result<ListDeploymentGroupsOutput, ListDeploymentGroupsError> {
+                fn list_deployment_groups(&self, input: &ListDeploymentGroupsInput)  -> Box<Future<Item = ListDeploymentGroupsOutput, Error = ListDeploymentGroupsError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4940,21 +5191,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDeploymentGroupsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDeploymentGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>"]
-                fn list_deployment_instances(&self, input: &ListDeploymentInstancesInput)  -> Result<ListDeploymentInstancesOutput, ListDeploymentInstancesError> {
+                fn list_deployment_instances(&self, input: &ListDeploymentInstancesInput)  -> Box<Future<Item = ListDeploymentInstancesOutput, Error = ListDeploymentInstancesError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4962,21 +5223,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDeploymentInstancesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDeploymentInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>"]
-                fn list_deployments(&self, input: &ListDeploymentsInput)  -> Result<ListDeploymentsOutput, ListDeploymentsError> {
+                fn list_deployments(&self, input: &ListDeploymentsInput)  -> Box<Future<Item = ListDeploymentsOutput, Error = ListDeploymentsError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4984,21 +5255,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDeploymentsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDeploymentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDeploymentsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDeploymentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>"]
-                fn list_on_premises_instances(&self, input: &ListOnPremisesInstancesInput)  -> Result<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError> {
+                fn list_on_premises_instances(&self, input: &ListOnPremisesInstancesInput)  -> Box<Future<Item = ListOnPremisesInstancesOutput, Error = ListOnPremisesInstancesError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5006,21 +5287,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListOnPremisesInstancesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListOnPremisesInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Registers with AWS CodeDeploy a revision for the specified application.</p>"]
-                fn register_application_revision(&self, input: &RegisterApplicationRevisionInput)  -> Result<(), RegisterApplicationRevisionError> {
+                fn register_application_revision(&self, input: &RegisterApplicationRevisionInput)  -> Box<Future<Item = (), Error = RegisterApplicationRevisionError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5028,21 +5319,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterApplicationRevisionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(RegisterApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterApplicationRevisionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(RegisterApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note>"]
-                fn register_on_premises_instance(&self, input: &RegisterOnPremisesInstanceInput)  -> Result<(), RegisterOnPremisesInstanceError> {
+                fn register_on_premises_instance(&self, input: &RegisterOnPremisesInstanceInput)  -> Box<Future<Item = (), Error = RegisterOnPremisesInstanceError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5050,21 +5351,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterOnPremisesInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(RegisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterOnPremisesInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(RegisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes one or more tags from one or more on-premises instances.</p>"]
-                fn remove_tags_from_on_premises_instances(&self, input: &RemoveTagsFromOnPremisesInstancesInput)  -> Result<(), RemoveTagsFromOnPremisesInstancesError> {
+                fn remove_tags_from_on_premises_instances(&self, input: &RemoveTagsFromOnPremisesInstancesInput)  -> Box<Future<Item = (), Error = RemoveTagsFromOnPremisesInstancesError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5072,21 +5383,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveTagsFromOnPremisesInstancesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(RemoveTagsFromOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveTagsFromOnPremisesInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(RemoveTagsFromOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attempts to stop an ongoing deployment.</p>"]
-                fn stop_deployment(&self, input: &StopDeploymentInput)  -> Result<StopDeploymentOutput, StopDeploymentError> {
+                fn stop_deployment(&self, input: &StopDeploymentInput)  -> Box<Future<Item = StopDeploymentOutput, Error = StopDeploymentError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5094,21 +5415,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StopDeploymentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StopDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StopDeploymentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StopDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StopDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Changes the name of an application.</p>"]
-                fn update_application(&self, input: &UpdateApplicationInput)  -> Result<(), UpdateApplicationError> {
+                fn update_application(&self, input: &UpdateApplicationInput)  -> Box<Future<Item = (), Error = UpdateApplicationError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5116,21 +5447,31 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateApplicationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(UpdateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Changes information about a deployment group.</p>"]
-                fn update_deployment_group(&self, input: &UpdateDeploymentGroupInput)  -> Result<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError> {
+                fn update_deployment_group(&self, input: &UpdateDeploymentGroupInput)  -> Box<Future<Item = UpdateDeploymentGroupOutput, Error = UpdateDeploymentGroupError>> {
                     let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5138,16 +5479,26 @@ UpdateDeploymentGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateDeploymentGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateDeploymentGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -18786,475 +18796,475 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This action is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>"]
-                fn add_client_id_to_open_id_connect_provider(&self, input: &AddClientIDToOpenIDConnectProviderRequest) -> Result<(), AddClientIDToOpenIDConnectProviderError>;
+                fn add_client_id_to_open_id_connect_provider(&self, input: &AddClientIDToOpenIDConnectProviderRequest) -> Box<Future<Item = (), Error = AddClientIDToOpenIDConnectProviderError>>;
                 
 
                 #[doc="<p>Adds the specified IAM role to the specified instance profile.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permission policy.</p> </note> <p>For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
-                fn add_role_to_instance_profile(&self, input: &AddRoleToInstanceProfileRequest) -> Result<(), AddRoleToInstanceProfileError>;
+                fn add_role_to_instance_profile(&self, input: &AddRoleToInstanceProfileRequest) -> Box<Future<Item = (), Error = AddRoleToInstanceProfileError>>;
                 
 
                 #[doc="<p>Adds the specified user to the specified group.</p>"]
-                fn add_user_to_group(&self, input: &AddUserToGroupRequest) -> Result<(), AddUserToGroupError>;
+                fn add_user_to_group(&self, input: &AddUserToGroupRequest) -> Box<Future<Item = (), Error = AddUserToGroupError>>;
                 
 
                 #[doc="<p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn attach_group_policy(&self, input: &AttachGroupPolicyRequest) -> Result<(), AttachGroupPolicyError>;
+                fn attach_group_policy(&self, input: &AttachGroupPolicyRequest) -> Box<Future<Item = (), Error = AttachGroupPolicyError>>;
                 
 
                 #[doc="<p>Attaches the specified managed policy to the specified IAM role.</p> <p>When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy. You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn attach_role_policy(&self, input: &AttachRolePolicyRequest) -> Result<(), AttachRolePolicyError>;
+                fn attach_role_policy(&self, input: &AttachRolePolicyRequest) -> Box<Future<Item = (), Error = AttachRolePolicyError>>;
                 
 
                 #[doc="<p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn attach_user_policy(&self, input: &AttachUserPolicyRequest) -> Result<(), AttachUserPolicyError>;
+                fn attach_user_policy(&self, input: &AttachUserPolicyRequest) -> Box<Future<Item = (), Error = AttachUserPolicyError>>;
                 
 
                 #[doc="<p>Changes the password of the IAM user who is calling this action. The root account password is not affected by this action.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
-                fn change_password(&self, input: &ChangePasswordRequest) -> Result<(), ChangePasswordError>;
+                fn change_password(&self, input: &ChangePasswordRequest) -> Box<Future<Item = (), Error = ChangePasswordError>>;
                 
 
                 #[doc="<p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important>"]
-                fn create_access_key(&self, input: &CreateAccessKeyRequest) -> Result<CreateAccessKeyResponse, CreateAccessKeyError>;
+                fn create_access_key(&self, input: &CreateAccessKeyRequest) -> Box<Future<Item = CreateAccessKeyResponse, Error = CreateAccessKeyError>>;
                 
 
                 #[doc="<p>Creates an alias for your AWS account. For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_account_alias(&self, input: &CreateAccountAliasRequest) -> Result<(), CreateAccountAliasError>;
+                fn create_account_alias(&self, input: &CreateAccountAliasRequest) -> Box<Future<Item = (), Error = CreateAccountAliasError>>;
                 
 
                 #[doc="<p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_group(&self, input: &CreateGroupRequest) -> Result<CreateGroupResponse, CreateGroupError>;
+                fn create_group(&self, input: &CreateGroupRequest) -> Box<Future<Item = CreateGroupResponse, Error = CreateGroupError>>;
                 
 
                 #[doc="<p> Creates a new instance profile. For information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_instance_profile(&self, input: &CreateInstanceProfileRequest) -> Result<CreateInstanceProfileResponse, CreateInstanceProfileError>;
+                fn create_instance_profile(&self, input: &CreateInstanceProfileRequest) -> Box<Future<Item = CreateInstanceProfileResponse, Error = CreateInstanceProfileError>>;
                 
 
                 #[doc="<p> Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console. For more information about managing passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_login_profile(&self, input: &CreateLoginProfileRequest) -> Result<CreateLoginProfileResponse, CreateLoginProfileError>;
+                fn create_login_profile(&self, input: &CreateLoginProfileRequest) -> Box<Future<Item = CreateLoginProfileResponse, Error = CreateLoginProfileError>>;
                 
 
                 #[doc="<p>Creates an IAM entity to describe an identity provider (IdP) that supports <a href=\"http://openid.net/connect/\">OpenID Connect (OIDC)</a>.</p> <p>The OIDC provider that you create with this operation can be used as a principal in a role's trust policy to establish a trust relationship between AWS and the OIDC provider.</p> <p>When you create the IAM OIDC provider, you specify the URL of the OIDC identity provider (IdP) to trust, a list of client IDs (also known as audiences) that identify the application or applications that are allowed to authenticate using the OIDC provider, and a list of thumbprints of the server certificate(s) that the IdP uses. You get all of this information from the OIDC IdP that you want to use for access to AWS.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the IAM provider that this action creates, it is a best practice to limit access to the <a>CreateOpenIDConnectProvider</a> action to highly-privileged users.</p> </note>"]
-                fn create_open_id_connect_provider(&self, input: &CreateOpenIDConnectProviderRequest) -> Result<CreateOpenIDConnectProviderResponse, CreateOpenIDConnectProviderError>;
+                fn create_open_id_connect_provider(&self, input: &CreateOpenIDConnectProviderRequest) -> Box<Future<Item = CreateOpenIDConnectProviderResponse, Error = CreateOpenIDConnectProviderError>>;
                 
 
                 #[doc="<p>Creates a new managed policy for your AWS account.</p> <p>This operation creates a policy version with a version identifier of <code>v1</code> and sets v1 as the policy's default version. For more information about policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policies in general, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_policy(&self, input: &CreatePolicyRequest) -> Result<CreatePolicyResponse, CreatePolicyError>;
+                fn create_policy(&self, input: &CreatePolicyRequest) -> Box<Future<Item = CreatePolicyResponse, Error = CreatePolicyError>>;
                 
 
                 #[doc="<p>Creates a new version of the specified managed policy. To update a managed policy, you create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must delete an existing version using <a>DeletePolicyVersion</a> before you create a new version.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the version that is in effect for the IAM users, groups, and roles to which the policy is attached.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_policy_version(&self, input: &CreatePolicyVersionRequest) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError>;
+                fn create_policy_version(&self, input: &CreatePolicyVersionRequest) -> Box<Future<Item = CreatePolicyVersionResponse, Error = CreatePolicyVersionError>>;
                 
 
                 #[doc="<p>Creates a new role for your AWS account. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_role(&self, input: &CreateRoleRequest) -> Result<CreateRoleResponse, CreateRoleError>;
+                fn create_role(&self, input: &CreateRoleRequest) -> Box<Future<Item = CreateRoleResponse, Error = CreateRoleError>>;
                 
 
                 #[doc="<p>Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.</p> <p>The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy to enable federated users who sign-in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS.</p> <p>When you create the SAML provider resource, you upload an a SAML metadata document that you get from your IdP and that includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note> <p> For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html\">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html\">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_saml_provider(&self, input: &CreateSAMLProviderRequest) -> Result<CreateSAMLProviderResponse, CreateSAMLProviderError>;
+                fn create_saml_provider(&self, input: &CreateSAMLProviderRequest) -> Box<Future<Item = CreateSAMLProviderResponse, Error = CreateSAMLProviderError>>;
                 
 
                 #[doc="<p>Generates a set of credentials consisting of a user name and password that can be used to access the service specified in the request. These credentials are generated by IAM, and can be used only for the specified service. </p> <p>You can have a maximum of two sets of service-specific credentials for each supported service per user.</p> <p>The only supported service at this time is AWS CodeCommit.</p> <p>You can reset the password to a new service-generated value by calling <a>ResetServiceSpecificCredential</a>.</p> <p>For more information about service-specific credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_ssh-keys.html\">Using IAM with AWS CodeCommit: Git Credentials, SSH Keys, and AWS Access Keys</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_service_specific_credential(&self, input: &CreateServiceSpecificCredentialRequest) -> Result<CreateServiceSpecificCredentialResponse, CreateServiceSpecificCredentialError>;
+                fn create_service_specific_credential(&self, input: &CreateServiceSpecificCredentialRequest) -> Box<Future<Item = CreateServiceSpecificCredentialResponse, Error = CreateServiceSpecificCredentialError>>;
                 
 
                 #[doc="<p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_user(&self, input: &CreateUserRequest) -> Result<CreateUserResponse, CreateUserError>;
+                fn create_user(&self, input: &CreateUserRequest) -> Box<Future<Item = CreateUserResponse, Error = CreateUserError>>;
                 
 
                 #[doc="<p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information, such as your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important>"]
-                fn create_virtual_mfa_device(&self, input: &CreateVirtualMFADeviceRequest) -> Result<CreateVirtualMFADeviceResponse, CreateVirtualMFADeviceError>;
+                fn create_virtual_mfa_device(&self, input: &CreateVirtualMFADeviceRequest) -> Box<Future<Item = CreateVirtualMFADeviceResponse, Error = CreateVirtualMFADeviceError>>;
                 
 
                 #[doc="<p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>"]
-                fn deactivate_mfa_device(&self, input: &DeactivateMFADeviceRequest) -> Result<(), DeactivateMFADeviceError>;
+                fn deactivate_mfa_device(&self, input: &DeactivateMFADeviceRequest) -> Box<Future<Item = (), Error = DeactivateMFADeviceError>>;
                 
 
                 #[doc="<p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
-                fn delete_access_key(&self, input: &DeleteAccessKeyRequest) -> Result<(), DeleteAccessKeyError>;
+                fn delete_access_key(&self, input: &DeleteAccessKeyRequest) -> Box<Future<Item = (), Error = DeleteAccessKeyError>>;
                 
 
                 #[doc="<p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_account_alias(&self, input: &DeleteAccountAliasRequest) -> Result<(), DeleteAccountAliasError>;
+                fn delete_account_alias(&self, input: &DeleteAccountAliasRequest) -> Box<Future<Item = (), Error = DeleteAccountAliasError>>;
                 
 
                 #[doc="<p>Deletes the password policy for the AWS account. There are no parameters.</p>"]
-                fn delete_account_password_policy(&self) -> Result<(), DeleteAccountPasswordPolicyError>;
+                fn delete_account_password_policy(&self) -> Box<Future<Item = (), Error = DeleteAccountPasswordPolicyError>>;
                 
 
                 #[doc="<p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>"]
-                fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError>;
+                fn delete_group(&self, input: &DeleteGroupRequest) -> Box<Future<Item = (), Error = DeleteGroupError>>;
                 
 
                 #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_group_policy(&self, input: &DeleteGroupPolicyRequest) -> Result<(), DeleteGroupPolicyError>;
+                fn delete_group_policy(&self, input: &DeleteGroupPolicyRequest) -> Box<Future<Item = (), Error = DeleteGroupPolicyError>>;
                 
 
                 #[doc="<p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
-                fn delete_instance_profile(&self, input: &DeleteInstanceProfileRequest) -> Result<(), DeleteInstanceProfileError>;
+                fn delete_instance_profile(&self, input: &DeleteInstanceProfileRequest) -> Box<Future<Item = (), Error = DeleteInstanceProfileError>>;
                 
 
                 #[doc="<p>Deletes the password for the specified IAM user, which terminates the user's ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user's password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important>"]
-                fn delete_login_profile(&self, input: &DeleteLoginProfileRequest) -> Result<(), DeleteLoginProfileError>;
+                fn delete_login_profile(&self, input: &DeleteLoginProfileRequest) -> Box<Future<Item = (), Error = DeleteLoginProfileError>>;
                 
 
                 #[doc="<p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This action is idempotent; it does not fail or return an error if you call the action for a provider that does not exist.</p>"]
-                fn delete_open_id_connect_provider(&self, input: &DeleteOpenIDConnectProviderRequest) -> Result<(), DeleteOpenIDConnectProviderError>;
+                fn delete_open_id_connect_provider(&self, input: &DeleteOpenIDConnectProviderRequest) -> Box<Future<Item = (), Error = DeleteOpenIDConnectProviderError>>;
                 
 
                 #[doc="<p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to, and you must delete all of the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> APIs. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError>;
+                fn delete_policy(&self, input: &DeletePolicyRequest) -> Box<Future<Item = (), Error = DeletePolicyError>>;
                 
 
                 #[doc="<p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_policy_version(&self, input: &DeletePolicyVersionRequest) -> Result<(), DeletePolicyVersionError>;
+                fn delete_policy_version(&self, input: &DeletePolicyVersionRequest) -> Box<Future<Item = (), Error = DeletePolicyVersionError>>;
                 
 
                 #[doc="<p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important>"]
-                fn delete_role(&self, input: &DeleteRoleRequest) -> Result<(), DeleteRoleError>;
+                fn delete_role(&self, input: &DeleteRoleRequest) -> Box<Future<Item = (), Error = DeleteRoleError>>;
                 
 
                 #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_role_policy(&self, input: &DeleteRolePolicyRequest) -> Result<(), DeleteRolePolicyError>;
+                fn delete_role_policy(&self, input: &DeleteRolePolicyRequest) -> Box<Future<Item = (), Error = DeleteRolePolicyError>>;
                 
 
                 #[doc="<p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource's ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
-                fn delete_saml_provider(&self, input: &DeleteSAMLProviderRequest) -> Result<(), DeleteSAMLProviderError>;
+                fn delete_saml_provider(&self, input: &DeleteSAMLProviderRequest) -> Box<Future<Item = (), Error = DeleteSAMLProviderError>>;
                 
 
                 #[doc="<p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
-                fn delete_ssh_public_key(&self, input: &DeleteSSHPublicKeyRequest) -> Result<(), DeleteSSHPublicKeyError>;
+                fn delete_ssh_public_key(&self, input: &DeleteSSHPublicKeyRequest) -> Box<Future<Item = (), Error = DeleteSSHPublicKeyError>>;
                 
 
                 #[doc="<p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn't detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href=\"http://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html\">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important>"]
-                fn delete_server_certificate(&self, input: &DeleteServerCertificateRequest) -> Result<(), DeleteServerCertificateError>;
+                fn delete_server_certificate(&self, input: &DeleteServerCertificateRequest) -> Box<Future<Item = (), Error = DeleteServerCertificateError>>;
                 
 
                 #[doc="<p>Deletes the specified service-specific credential.</p>"]
-                fn delete_service_specific_credential(&self, input: &DeleteServiceSpecificCredentialRequest) -> Result<(), DeleteServiceSpecificCredentialError>;
+                fn delete_service_specific_credential(&self, input: &DeleteServiceSpecificCredentialRequest) -> Box<Future<Item = (), Error = DeleteServiceSpecificCredentialError>>;
                 
 
                 #[doc="<p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated IAM users.</p>"]
-                fn delete_signing_certificate(&self, input: &DeleteSigningCertificateRequest) -> Result<(), DeleteSigningCertificateError>;
+                fn delete_signing_certificate(&self, input: &DeleteSigningCertificateRequest) -> Box<Future<Item = (), Error = DeleteSigningCertificateError>>;
                 
 
                 #[doc="<p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, or attached policies.</p>"]
-                fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError>;
+                fn delete_user(&self, input: &DeleteUserRequest) -> Box<Future<Item = (), Error = DeleteUserError>>;
                 
 
                 #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_user_policy(&self, input: &DeleteUserPolicyRequest) -> Result<(), DeleteUserPolicyError>;
+                fn delete_user_policy(&self, input: &DeleteUserPolicyRequest) -> Box<Future<Item = (), Error = DeleteUserPolicyError>>;
                 
 
                 #[doc="<p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user's virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note>"]
-                fn delete_virtual_mfa_device(&self, input: &DeleteVirtualMFADeviceRequest) -> Result<(), DeleteVirtualMFADeviceError>;
+                fn delete_virtual_mfa_device(&self, input: &DeleteVirtualMFADeviceRequest) -> Box<Future<Item = (), Error = DeleteVirtualMFADeviceError>>;
                 
 
                 #[doc="<p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn detach_group_policy(&self, input: &DetachGroupPolicyRequest) -> Result<(), DetachGroupPolicyError>;
+                fn detach_group_policy(&self, input: &DetachGroupPolicyRequest) -> Box<Future<Item = (), Error = DetachGroupPolicyError>>;
                 
 
                 #[doc="<p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn detach_role_policy(&self, input: &DetachRolePolicyRequest) -> Result<(), DetachRolePolicyError>;
+                fn detach_role_policy(&self, input: &DetachRolePolicyRequest) -> Box<Future<Item = (), Error = DetachRolePolicyError>>;
                 
 
                 #[doc="<p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn detach_user_policy(&self, input: &DetachUserPolicyRequest) -> Result<(), DetachUserPolicyError>;
+                fn detach_user_policy(&self, input: &DetachUserPolicyRequest) -> Box<Future<Item = (), Error = DetachUserPolicyError>>;
                 
 
                 #[doc="<p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>"]
-                fn enable_mfa_device(&self, input: &EnableMFADeviceRequest) -> Result<(), EnableMFADeviceError>;
+                fn enable_mfa_device(&self, input: &EnableMFADeviceRequest) -> Box<Future<Item = (), Error = EnableMFADeviceError>>;
                 
 
                 #[doc="<p> Generates a credential report for the AWS account. For more information about the credential report, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>"]
-                fn generate_credential_report(&self) -> Result<GenerateCredentialReportResponse, GenerateCredentialReportError>;
+                fn generate_credential_report(&self) -> Box<Future<Item = GenerateCredentialReportResponse, Error = GenerateCredentialReportError>>;
                 
 
                 #[doc="<p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and region that were specified in the last request made with that key.</p>"]
-                fn get_access_key_last_used(&self, input: &GetAccessKeyLastUsedRequest) -> Result<GetAccessKeyLastUsedResponse, GetAccessKeyLastUsedError>;
+                fn get_access_key_last_used(&self, input: &GetAccessKeyLastUsedRequest) -> Box<Future<Item = GetAccessKeyLastUsedResponse, Error = GetAccessKeyLastUsedError>>;
                 
 
                 #[doc="<p>Retrieves information about all IAM users, groups, roles, and policies in your AWS account, including their relationships to one another. Use this API to obtain a snapshot of the configuration of IAM permissions (users, groups, roles, and policies) in your account.</p> <p>You can optionally filter the results using the <code>Filter</code> parameter. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn get_account_authorization_details(&self, input: &GetAccountAuthorizationDetailsRequest) -> Result<GetAccountAuthorizationDetailsResponse, GetAccountAuthorizationDetailsError>;
+                fn get_account_authorization_details(&self, input: &GetAccountAuthorizationDetailsRequest) -> Box<Future<Item = GetAccountAuthorizationDetailsResponse, Error = GetAccountAuthorizationDetailsError>>;
                 
 
                 #[doc="<p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html\">Managing an IAM Password Policy</a>.</p>"]
-                fn get_account_password_policy(&self) -> Result<GetAccountPasswordPolicyResponse, GetAccountPasswordPolicyError>;
+                fn get_account_password_policy(&self) -> Box<Future<Item = GetAccountPasswordPolicyResponse, Error = GetAccountPasswordPolicyError>>;
                 
 
                 #[doc="<p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_account_summary(&self) -> Result<GetAccountSummaryResponse, GetAccountSummaryError>;
+                fn get_account_summary(&self) -> Box<Future<Item = GetAccountSummaryResponse, Error = GetAccountSummaryError>>;
                 
 
                 #[doc="<p>Gets a list of all of the context keys referenced in the input policies. The policies are supplied as a list of one or more strings. To get the context keys from policies associated with an IAM user, group, or role, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value specified in an IAM policy. Use GetContextKeysForCustomPolicy to understand what key names and values you must supply when you call <a>SimulateCustomPolicy</a>. Note that all parameters are shown in unencoded form here for clarity, but must be URL encoded to be included as a part of a real HTML request.</p>"]
-                fn get_context_keys_for_custom_policy(&self, input: &GetContextKeysForCustomPolicyRequest) -> Result<GetContextKeysForPolicyResponse, GetContextKeysForCustomPolicyError>;
+                fn get_context_keys_for_custom_policy(&self, input: &GetContextKeysForCustomPolicyRequest) -> Box<Future<Item = GetContextKeysForPolicyResponse, Error = GetContextKeysForCustomPolicyError>>;
                 
 
                 #[doc="<p>Gets a list of all of the context keys referenced in all of the IAM policies attached to the specified IAM entity. The entity can be an IAM user, group, or role. If you specify a user, then the request also includes all of the policies attached to groups that the user is a member of.</p> <p>You can optionally include a list of one or more additional policies, specified as strings. If you want to include <i>only</i> a list of policies by string, use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value in an IAM policy. Use <a>GetContextKeysForPrincipalPolicy</a> to understand what key names and values you must supply when you call <a>SimulatePrincipalPolicy</a>.</p>"]
-                fn get_context_keys_for_principal_policy(&self, input: &GetContextKeysForPrincipalPolicyRequest) -> Result<GetContextKeysForPolicyResponse, GetContextKeysForPrincipalPolicyError>;
+                fn get_context_keys_for_principal_policy(&self, input: &GetContextKeysForPrincipalPolicyRequest) -> Box<Future<Item = GetContextKeysForPolicyResponse, Error = GetContextKeysForPrincipalPolicyError>>;
                 
 
                 #[doc="<p> Retrieves a credential report for the AWS account. For more information about the credential report, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_credential_report(&self) -> Result<GetCredentialReportResponse, GetCredentialReportError>;
+                fn get_credential_report(&self) -> Box<Future<Item = GetCredentialReportResponse, Error = GetCredentialReportError>>;
                 
 
                 #[doc="<p> Returns a list of IAM users that are in the specified IAM group. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError>;
+                fn get_group(&self, input: &GetGroupRequest) -> Box<Future<Item = GetGroupResponse, Error = GetGroupError>>;
                 
 
                 #[doc="<p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_group_policy(&self, input: &GetGroupPolicyRequest) -> Result<GetGroupPolicyResponse, GetGroupPolicyError>;
+                fn get_group_policy(&self, input: &GetGroupPolicyRequest) -> Box<Future<Item = GetGroupPolicyResponse, Error = GetGroupPolicyError>>;
                 
 
                 #[doc="<p> Retrieves information about the specified instance profile, including the instance profile's path, GUID, ARN, and role. For more information about instance profiles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_instance_profile(&self, input: &GetInstanceProfileRequest) -> Result<GetInstanceProfileResponse, GetInstanceProfileError>;
+                fn get_instance_profile(&self, input: &GetInstanceProfileRequest) -> Box<Future<Item = GetInstanceProfileResponse, Error = GetInstanceProfileError>>;
                 
 
                 #[doc="<p>Retrieves the user name and password-creation date for the specified IAM user. If the user has not been assigned a password, the action returns a 404 (<code>NoSuchEntity</code>) error.</p>"]
-                fn get_login_profile(&self, input: &GetLoginProfileRequest) -> Result<GetLoginProfileResponse, GetLoginProfileError>;
+                fn get_login_profile(&self, input: &GetLoginProfileRequest) -> Box<Future<Item = GetLoginProfileResponse, Error = GetLoginProfileError>>;
                 
 
                 #[doc="<p>Returns information about the specified OpenID Connect (OIDC) provider resource object in IAM.</p>"]
-                fn get_open_id_connect_provider(&self, input: &GetOpenIDConnectProviderRequest) -> Result<GetOpenIDConnectProviderResponse, GetOpenIDConnectProviderError>;
+                fn get_open_id_connect_provider(&self, input: &GetOpenIDConnectProviderRequest) -> Box<Future<Item = GetOpenIDConnectProviderResponse, Error = GetOpenIDConnectProviderError>>;
                 
 
                 #[doc="<p>Retrieves information about the specified managed policy, including the policy's default version and the total number of IAM users, groups, and roles to which the policy is attached. To retrieve the list of the specific users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API. This API returns metadata about the policy. To retrieve the actual policy document for a specific version of the policy, use <a>GetPolicyVersion</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded with an IAM user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
+                fn get_policy(&self, input: &GetPolicyRequest) -> Box<Future<Item = GetPolicyResponse, Error = GetPolicyError>>;
                 
 
                 #[doc="<p>Retrieves information about the specified version of the specified managed policy, including the policy document.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>To list the available versions for a policy, use <a>ListPolicyVersions</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded in a user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about the types of policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_policy_version(&self, input: &GetPolicyVersionRequest) -> Result<GetPolicyVersionResponse, GetPolicyVersionError>;
+                fn get_policy_version(&self, input: &GetPolicyVersionRequest) -> Box<Future<Item = GetPolicyVersionResponse, Error = GetPolicyVersionError>>;
                 
 
                 #[doc="<p>Retrieves information about the specified role, including the role's path, GUID, ARN, and the role's trust policy that grants permission to assume the role. For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note>"]
-                fn get_role(&self, input: &GetRoleRequest) -> Result<GetRoleResponse, GetRoleError>;
+                fn get_role(&self, input: &GetRoleRequest) -> Box<Future<Item = GetRoleResponse, Error = GetRoleError>>;
                 
 
                 #[doc="<p>Retrieves the specified inline policy document that is embedded with the specified IAM role.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM role can also have managed policies attached to it. To retrieve a managed policy document that is attached to a role, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p>"]
-                fn get_role_policy(&self, input: &GetRolePolicyRequest) -> Result<GetRolePolicyResponse, GetRolePolicyError>;
+                fn get_role_policy(&self, input: &GetRolePolicyRequest) -> Box<Future<Item = GetRolePolicyResponse, Error = GetRolePolicyError>>;
                 
 
                 #[doc="<p>Returns the SAML provider metadocument that was uploaded when the IAM SAML provider resource object was created or updated.</p> <note> <p>This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
-                fn get_saml_provider(&self, input: &GetSAMLProviderRequest) -> Result<GetSAMLProviderResponse, GetSAMLProviderError>;
+                fn get_saml_provider(&self, input: &GetSAMLProviderRequest) -> Box<Future<Item = GetSAMLProviderResponse, Error = GetSAMLProviderError>>;
                 
 
                 #[doc="<p>Retrieves the specified SSH public key, including metadata about the key.</p> <p>The SSH public key retrieved by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
-                fn get_ssh_public_key(&self, input: &GetSSHPublicKeyRequest) -> Result<GetSSHPublicKeyResponse, GetSSHPublicKeyError>;
+                fn get_ssh_public_key(&self, input: &GetSSHPublicKeyRequest) -> Box<Future<Item = GetSSHPublicKeyResponse, Error = GetSSHPublicKeyError>>;
                 
 
                 #[doc="<p>Retrieves information about the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_server_certificate(&self, input: &GetServerCertificateRequest) -> Result<GetServerCertificateResponse, GetServerCertificateError>;
+                fn get_server_certificate(&self, input: &GetServerCertificateRequest) -> Box<Future<Item = GetServerCertificateResponse, Error = GetServerCertificateError>>;
                 
 
                 #[doc="<p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>"]
-                fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError>;
+                fn get_user(&self, input: &GetUserRequest) -> Box<Future<Item = GetUserResponse, Error = GetUserError>>;
                 
 
                 #[doc="<p>Retrieves the specified inline policy document that is embedded in the specified IAM user.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM user can also have managed policies attached to it. To retrieve a managed policy document that is attached to a user, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_user_policy(&self, input: &GetUserPolicyRequest) -> Result<GetUserPolicyResponse, GetUserPolicyError>;
+                fn get_user_policy(&self, input: &GetUserPolicyRequest) -> Box<Future<Item = GetUserPolicyResponse, Error = GetUserPolicyError>>;
                 
 
                 #[doc="<p>Returns information about the access key IDs associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note>"]
-                fn list_access_keys(&self, input: &ListAccessKeysRequest) -> Result<ListAccessKeysResponse, ListAccessKeysError>;
+                fn list_access_keys(&self, input: &ListAccessKeysRequest) -> Box<Future<Item = ListAccessKeysResponse, Error = ListAccessKeysError>>;
                 
 
                 #[doc="<p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
-                fn list_account_aliases(&self, input: &ListAccountAliasesRequest) -> Result<ListAccountAliasesResponse, ListAccountAliasesError>;
+                fn list_account_aliases(&self, input: &ListAccountAliasesRequest) -> Box<Future<Item = ListAccountAliasesResponse, Error = ListAccountAliasesError>>;
                 
 
                 #[doc="<p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>"]
-                fn list_attached_group_policies(&self, input: &ListAttachedGroupPoliciesRequest) -> Result<ListAttachedGroupPoliciesResponse, ListAttachedGroupPoliciesError>;
+                fn list_attached_group_policies(&self, input: &ListAttachedGroupPoliciesRequest) -> Box<Future<Item = ListAttachedGroupPoliciesResponse, Error = ListAttachedGroupPoliciesError>>;
                 
 
                 #[doc="<p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the action returns an empty list.</p>"]
-                fn list_attached_role_policies(&self, input: &ListAttachedRolePoliciesRequest) -> Result<ListAttachedRolePoliciesResponse, ListAttachedRolePoliciesError>;
+                fn list_attached_role_policies(&self, input: &ListAttachedRolePoliciesRequest) -> Box<Future<Item = ListAttachedRolePoliciesResponse, Error = ListAttachedRolePoliciesError>>;
                 
 
                 #[doc="<p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>"]
-                fn list_attached_user_policies(&self, input: &ListAttachedUserPoliciesRequest) -> Result<ListAttachedUserPoliciesResponse, ListAttachedUserPoliciesError>;
+                fn list_attached_user_policies(&self, input: &ListAttachedUserPoliciesRequest) -> Box<Future<Item = ListAttachedUserPoliciesResponse, Error = ListAttachedUserPoliciesError>>;
                 
 
                 #[doc="<p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_entities_for_policy(&self, input: &ListEntitiesForPolicyRequest) -> Result<ListEntitiesForPolicyResponse, ListEntitiesForPolicyError>;
+                fn list_entities_for_policy(&self, input: &ListEntitiesForPolicyRequest) -> Box<Future<Item = ListEntitiesForPolicyResponse, Error = ListEntitiesForPolicyError>>;
                 
 
                 #[doc="<p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the action returns an empty list.</p>"]
-                fn list_group_policies(&self, input: &ListGroupPoliciesRequest) -> Result<ListGroupPoliciesResponse, ListGroupPoliciesError>;
+                fn list_group_policies(&self, input: &ListGroupPoliciesRequest) -> Box<Future<Item = ListGroupPoliciesResponse, Error = ListGroupPoliciesError>>;
                 
 
                 #[doc="<p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_groups(&self, input: &ListGroupsRequest) -> Result<ListGroupsResponse, ListGroupsError>;
+                fn list_groups(&self, input: &ListGroupsRequest) -> Box<Future<Item = ListGroupsResponse, Error = ListGroupsError>>;
                 
 
                 #[doc="<p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_groups_for_user(&self, input: &ListGroupsForUserRequest) -> Result<ListGroupsForUserResponse, ListGroupsForUserError>;
+                fn list_groups_for_user(&self, input: &ListGroupsForUserRequest) -> Box<Future<Item = ListGroupsForUserResponse, Error = ListGroupsForUserError>>;
                 
 
                 #[doc="<p>Lists the instance profiles that have the specified path prefix. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_instance_profiles(&self, input: &ListInstanceProfilesRequest) -> Result<ListInstanceProfilesResponse, ListInstanceProfilesError>;
+                fn list_instance_profiles(&self, input: &ListInstanceProfilesRequest) -> Box<Future<Item = ListInstanceProfilesResponse, Error = ListInstanceProfilesError>>;
                 
 
                 #[doc="<p>Lists the instance profiles that have the specified associated IAM role. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_instance_profiles_for_role(&self, input: &ListInstanceProfilesForRoleRequest) -> Result<ListInstanceProfilesForRoleResponse, ListInstanceProfilesForRoleError>;
+                fn list_instance_profiles_for_role(&self, input: &ListInstanceProfilesForRoleRequest) -> Box<Future<Item = ListInstanceProfilesForRoleResponse, Error = ListInstanceProfilesForRoleError>>;
                 
 
                 #[doc="<p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this action lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_mfa_devices(&self, input: &ListMFADevicesRequest) -> Result<ListMFADevicesResponse, ListMFADevicesError>;
+                fn list_mfa_devices(&self, input: &ListMFADevicesRequest) -> Box<Future<Item = ListMFADevicesResponse, Error = ListMFADevicesError>>;
                 
 
                 #[doc="<p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>"]
-                fn list_open_id_connect_providers(&self, input: &ListOpenIDConnectProvidersRequest) -> Result<ListOpenIDConnectProvidersResponse, ListOpenIDConnectProvidersError>;
+                fn list_open_id_connect_providers(&self, input: &ListOpenIDConnectProvidersRequest) -> Box<Future<Item = ListOpenIDConnectProvidersResponse, Error = ListOpenIDConnectProvidersError>>;
                 
 
                 #[doc="<p>Lists all the managed policies that are available in your AWS account, including your own customer-defined managed policies and all AWS managed policies.</p> <p>You can filter the list of policies that is returned using the optional <code>OnlyAttached</code>, <code>Scope</code>, and <code>PathPrefix</code> parameters. For example, to list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>. To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn list_policies(&self, input: &ListPoliciesRequest) -> Result<ListPoliciesResponse, ListPoliciesError>;
+                fn list_policies(&self, input: &ListPoliciesRequest) -> Box<Future<Item = ListPoliciesResponse, Error = ListPoliciesError>>;
                 
 
                 #[doc="<p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn list_policy_versions(&self, input: &ListPolicyVersionsRequest) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError>;
+                fn list_policy_versions(&self, input: &ListPolicyVersionsRequest) -> Box<Future<Item = ListPolicyVersionsResponse, Error = ListPolicyVersionsError>>;
                 
 
                 #[doc="<p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the action returns an empty list.</p>"]
-                fn list_role_policies(&self, input: &ListRolePoliciesRequest) -> Result<ListRolePoliciesResponse, ListRolePoliciesError>;
+                fn list_role_policies(&self, input: &ListRolePoliciesRequest) -> Box<Future<Item = ListRolePoliciesResponse, Error = ListRolePoliciesError>>;
                 
 
                 #[doc="<p>Lists the IAM roles that have the specified path prefix. If there are none, the action returns an empty list. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_roles(&self, input: &ListRolesRequest) -> Result<ListRolesResponse, ListRolesError>;
+                fn list_roles(&self, input: &ListRolesRequest) -> Box<Future<Item = ListRolesResponse, Error = ListRolesError>>;
                 
 
                 #[doc="<p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
-                fn list_saml_providers(&self, input: &ListSAMLProvidersRequest) -> Result<ListSAMLProvidersResponse, ListSAMLProvidersError>;
+                fn list_saml_providers(&self, input: &ListSAMLProvidersRequest) -> Box<Future<Item = ListSAMLProvidersResponse, Error = ListSAMLProvidersError>>;
                 
 
                 #[doc="<p>Returns information about the SSH public keys associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>The SSH public keys returned by this action are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_ssh_public_keys(&self, input: &ListSSHPublicKeysRequest) -> Result<ListSSHPublicKeysResponse, ListSSHPublicKeysError>;
+                fn list_ssh_public_keys(&self, input: &ListSSHPublicKeysRequest) -> Box<Future<Item = ListSSHPublicKeysResponse, Error = ListSSHPublicKeysError>>;
                 
 
                 #[doc="<p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the action returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>"]
-                fn list_server_certificates(&self, input: &ListServerCertificatesRequest) -> Result<ListServerCertificatesResponse, ListServerCertificatesError>;
+                fn list_server_certificates(&self, input: &ListServerCertificatesRequest) -> Box<Future<Item = ListServerCertificatesResponse, Error = ListServerCertificatesError>>;
                 
 
                 #[doc="<p>Returns information about the service-specific credentials associated with the specified IAM user. If there are none, the action returns an empty list. The service-specific credentials returned by this action are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html\">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>"]
-                fn list_service_specific_credentials(&self, input: &ListServiceSpecificCredentialsRequest) -> Result<ListServiceSpecificCredentialsResponse, ListServiceSpecificCredentialsError>;
+                fn list_service_specific_credentials(&self, input: &ListServiceSpecificCredentialsRequest) -> Box<Future<Item = ListServiceSpecificCredentialsResponse, Error = ListServiceSpecificCredentialsError>>;
                 
 
                 #[doc="<p>Returns information about the signing certificates associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
-                fn list_signing_certificates(&self, input: &ListSigningCertificatesRequest) -> Result<ListSigningCertificatesResponse, ListSigningCertificatesError>;
+                fn list_signing_certificates(&self, input: &ListSigningCertificatesRequest) -> Box<Future<Item = ListSigningCertificatesResponse, Error = ListSigningCertificatesError>>;
                 
 
                 #[doc="<p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the action returns an empty list.</p>"]
-                fn list_user_policies(&self, input: &ListUserPoliciesRequest) -> Result<ListUserPoliciesResponse, ListUserPoliciesError>;
+                fn list_user_policies(&self, input: &ListUserPoliciesRequest) -> Box<Future<Item = ListUserPoliciesResponse, Error = ListUserPoliciesError>>;
                 
 
                 #[doc="<p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the action returns all users in the AWS account. If there are none, the action returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError>;
+                fn list_users(&self, input: &ListUsersRequest) -> Box<Future<Item = ListUsersResponse, Error = ListUsersError>>;
                 
 
                 #[doc="<p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the action returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_virtual_mfa_devices(&self, input: &ListVirtualMFADevicesRequest) -> Result<ListVirtualMFADevicesResponse, ListVirtualMFADevicesError>;
+                fn list_virtual_mfa_devices(&self, input: &ListVirtualMFADevicesRequest) -> Box<Future<Item = ListVirtualMFADevicesResponse, Error = ListVirtualMFADevicesError>>;
                 
 
                 #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn put_group_policy(&self, input: &PutGroupPolicyRequest) -> Result<(), PutGroupPolicyError>;
+                fn put_group_policy(&self, input: &PutGroupPolicyRequest) -> Box<Future<Item = (), Error = PutGroupPolicyError>>;
                 
 
                 #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role's access (permissions) policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn put_role_policy(&self, input: &PutRolePolicyRequest) -> Result<(), PutRolePolicyError>;
+                fn put_role_policy(&self, input: &PutRolePolicyRequest) -> Box<Future<Item = (), Error = PutRolePolicyError>>;
                 
 
                 #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn put_user_policy(&self, input: &PutUserPolicyRequest) -> Result<(), PutUserPolicyError>;
+                fn put_user_policy(&self, input: &PutUserPolicyRequest) -> Box<Future<Item = (), Error = PutUserPolicyError>>;
                 
 
                 #[doc="<p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This action is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>"]
-                fn remove_client_id_from_open_id_connect_provider(&self, input: &RemoveClientIDFromOpenIDConnectProviderRequest) -> Result<(), RemoveClientIDFromOpenIDConnectProviderError>;
+                fn remove_client_id_from_open_id_connect_provider(&self, input: &RemoveClientIDFromOpenIDConnectProviderRequest) -> Box<Future<Item = (), Error = RemoveClientIDFromOpenIDConnectProviderError>>;
                 
 
                 #[doc="<p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
-                fn remove_role_from_instance_profile(&self, input: &RemoveRoleFromInstanceProfileRequest) -> Result<(), RemoveRoleFromInstanceProfileError>;
+                fn remove_role_from_instance_profile(&self, input: &RemoveRoleFromInstanceProfileRequest) -> Box<Future<Item = (), Error = RemoveRoleFromInstanceProfileError>>;
                 
 
                 #[doc="<p>Removes the specified user from the specified group.</p>"]
-                fn remove_user_from_group(&self, input: &RemoveUserFromGroupRequest) -> Result<(), RemoveUserFromGroupError>;
+                fn remove_user_from_group(&self, input: &RemoveUserFromGroupRequest) -> Box<Future<Item = (), Error = RemoveUserFromGroupError>>;
                 
 
                 #[doc="<p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>"]
-                fn reset_service_specific_credential(&self, input: &ResetServiceSpecificCredentialRequest) -> Result<ResetServiceSpecificCredentialResponse, ResetServiceSpecificCredentialError>;
+                fn reset_service_specific_credential(&self, input: &ResetServiceSpecificCredentialRequest) -> Box<Future<Item = ResetServiceSpecificCredentialResponse, Error = ResetServiceSpecificCredentialError>>;
                 
 
                 #[doc="<p>Synchronizes the specified MFA device with its IAM resource object on the AWS servers.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>"]
-                fn resync_mfa_device(&self, input: &ResyncMFADeviceRequest) -> Result<(), ResyncMFADeviceError>;
+                fn resync_mfa_device(&self, input: &ResyncMFADeviceRequest) -> Box<Future<Item = (), Error = ResyncMFADeviceError>>;
                 
 
                 #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This action affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn set_default_policy_version(&self, input: &SetDefaultPolicyVersionRequest) -> Result<(), SetDefaultPolicyVersionError>;
+                fn set_default_policy_version(&self, input: &SetDefaultPolicyVersionRequest) -> Box<Future<Item = (), Error = SetDefaultPolicyVersionError>>;
                 
 
                 #[doc="<p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API actions and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API actions; it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p>If you want to simulate existing policies attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>"]
-                fn simulate_custom_policy(&self, input: &SimulateCustomPolicyRequest) -> Result<SimulatePolicyResponse, SimulateCustomPolicyError>;
+                fn simulate_custom_policy(&self, input: &SimulateCustomPolicyRequest) -> Box<Future<Item = SimulatePolicyResponse, Error = SimulateCustomPolicyError>>;
                 
 
                 #[doc="<p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API actions and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to .</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API actions, it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>"]
-                fn simulate_principal_policy(&self, input: &SimulatePrincipalPolicyRequest) -> Result<SimulatePolicyResponse, SimulatePrincipalPolicyError>;
+                fn simulate_principal_policy(&self, input: &SimulatePrincipalPolicyRequest) -> Box<Future<Item = SimulatePolicyResponse, Error = SimulatePrincipalPolicyError>>;
                 
 
                 #[doc="<p>Changes the status of the specified access key from Active to Inactive, or vice versa. This action can be used to disable a user's key as part of a key rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html\">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>"]
-                fn update_access_key(&self, input: &UpdateAccessKeyRequest) -> Result<(), UpdateAccessKeyError>;
+                fn update_access_key(&self, input: &UpdateAccessKeyRequest) -> Box<Future<Item = (), Error = UpdateAccessKeyError>>;
                 
 
                 #[doc="<p>Updates the password policy settings for the AWS account.</p> <note> <p>This action does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value.</p> </note> <p> For more information about using a password policy, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html\">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>"]
-                fn update_account_password_policy(&self, input: &UpdateAccountPasswordPolicyRequest) -> Result<(), UpdateAccountPasswordPolicyError>;
+                fn update_account_password_policy(&self, input: &UpdateAccountPasswordPolicyRequest) -> Box<Future<Item = (), Error = UpdateAccountPasswordPolicyError>>;
                 
 
                 #[doc="<p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the \"role trust policy\". For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p>"]
-                fn update_assume_role_policy(&self, input: &UpdateAssumeRolePolicyRequest) -> Result<(), UpdateAssumeRolePolicyError>;
+                fn update_assume_role_policy(&self, input: &UpdateAssumeRolePolicyRequest) -> Box<Future<Item = (), Error = UpdateAssumeRolePolicyError>>;
                 
 
                 #[doc="<p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html\">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change an IAM group name the requester must have appropriate permissions on both the source object and the target object. For example, to change \"Managers\" to \"MGRs\", the entity making the request must have permission on both \"Managers\" and \"MGRs\", or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html\">Permissions and Policies</a>. </p> </note>"]
-                fn update_group(&self, input: &UpdateGroupRequest) -> Result<(), UpdateGroupError>;
+                fn update_group(&self, input: &UpdateGroupRequest) -> Box<Future<Item = (), Error = UpdateGroupError>>;
                 
 
                 #[doc="<p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
-                fn update_login_profile(&self, input: &UpdateLoginProfileRequest) -> Result<(), UpdateLoginProfileError>;
+                fn update_login_profile(&self, input: &UpdateLoginProfileRequest) -> Box<Future<Item = (), Error = UpdateLoginProfileError>>;
                 
 
                 #[doc="<p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this action completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider's certificate changes, which occurs rarely. However, if the provider's certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the provider's certificate and is validated by the thumbprint, it is a best practice to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> action to highly-privileged users.</p> </note>"]
-                fn update_open_id_connect_provider_thumbprint(&self, input: &UpdateOpenIDConnectProviderThumbprintRequest) -> Result<(), UpdateOpenIDConnectProviderThumbprintError>;
+                fn update_open_id_connect_provider_thumbprint(&self, input: &UpdateOpenIDConnectProviderThumbprintRequest) -> Box<Future<Item = (), Error = UpdateOpenIDConnectProviderThumbprintError>>;
                 
 
                 #[doc="<p>Updates the metadata document for an existing SAML provider resource object.</p> <note> <p>This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
-                fn update_saml_provider(&self, input: &UpdateSAMLProviderRequest) -> Result<UpdateSAMLProviderResponse, UpdateSAMLProviderError>;
+                fn update_saml_provider(&self, input: &UpdateSAMLProviderRequest) -> Box<Future<Item = UpdateSAMLProviderResponse, Error = UpdateSAMLProviderError>>;
                 
 
                 #[doc="<p>Sets the status of an IAM user's SSH public key to active or inactive. SSH public keys that are inactive cannot be used for authentication. This action can be used to disable a user's SSH public key as part of a key rotation work flow.</p> <p>The SSH public key affected by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
-                fn update_ssh_public_key(&self, input: &UpdateSSHPublicKeyRequest) -> Result<(), UpdateSSHPublicKeyError>;
+                fn update_ssh_public_key(&self, input: &UpdateSSHPublicKeyRequest) -> Box<Future<Item = (), Error = UpdateSSHPublicKeyError>>;
                 
 
                 #[doc="<p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p>You should understand the implications of changing a server certificate's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts\">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change a server certificate name the requester must have appropriate permissions on both the source object and the target object. For example, to change the name from \"ProductionCert\" to \"ProdCert\", the entity making the request must have permission on \"ProductionCert\" and \"ProdCert\", or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html\">Access Management</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn update_server_certificate(&self, input: &UpdateServerCertificateRequest) -> Result<(), UpdateServerCertificateError>;
+                fn update_server_certificate(&self, input: &UpdateServerCertificateRequest) -> Box<Future<Item = (), Error = UpdateServerCertificateError>>;
                 
 
                 #[doc="<p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This action can be used to disable a user’s service-specific credential as part of a credential rotation work flow.</p>"]
-                fn update_service_specific_credential(&self, input: &UpdateServiceSpecificCredentialRequest) -> Result<(), UpdateServiceSpecificCredentialError>;
+                fn update_service_specific_credential(&self, input: &UpdateServiceSpecificCredentialRequest) -> Box<Future<Item = (), Error = UpdateServiceSpecificCredentialError>>;
                 
 
                 #[doc="<p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This action can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
-                fn update_signing_certificate(&self, input: &UpdateSigningCertificateRequest) -> Result<(), UpdateSigningCertificateError>;
+                fn update_signing_certificate(&self, input: &UpdateSigningCertificateRequest) -> Box<Future<Item = (), Error = UpdateSigningCertificateError>>;
                 
 
                 #[doc="<p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming\">Renaming an IAM User</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html\">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html\">Permissions and Policies</a>. </p> </note>"]
-                fn update_user(&self, input: &UpdateUserRequest) -> Result<(), UpdateUserError>;
+                fn update_user(&self, input: &UpdateUserRequest) -> Box<Future<Item = (), Error = UpdateUserError>>;
                 
 
                 #[doc="<p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this action can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
-                fn upload_ssh_public_key(&self, input: &UploadSSHPublicKeyRequest) -> Result<UploadSSHPublicKeyResponse, UploadSSHPublicKeyError>;
+                fn upload_ssh_public_key(&self, input: &UploadSSHPublicKeyRequest) -> Box<Future<Item = UploadSSHPublicKeyResponse, Error = UploadSSHPublicKeyError>>;
                 
 
                 #[doc="<p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <p>For information about the number of server certificates you can upload, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html\">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html\">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html\">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn upload_server_certificate(&self, input: &UploadServerCertificateRequest) -> Result<UploadServerCertificateResponse, UploadServerCertificateError>;
+                fn upload_server_certificate(&self, input: &UploadServerCertificateRequest) -> Box<Future<Item = UploadServerCertificateResponse, Error = UploadServerCertificateError>>;
                 
 
                 #[doc="<p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of a X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html\">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn upload_signing_certificate(&self, input: &UploadSigningCertificateRequest) -> Result<UploadSigningCertificateResponse, UploadSigningCertificateError>;
+                fn upload_signing_certificate(&self, input: &UploadSigningCertificateRequest) -> Box<Future<Item = UploadSigningCertificateResponse, Error = UploadSigningCertificateError>>;
                 
 }
 /// A client for the IAM API.
@@ -19278,7 +19288,7 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This action is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>"]
-                fn add_client_id_to_open_id_connect_provider(&self, input: &AddClientIDToOpenIDConnectProviderRequest) -> Result<(), AddClientIDToOpenIDConnectProviderError> {
+                fn add_client_id_to_open_id_connect_provider(&self, input: &AddClientIDToOpenIDConnectProviderRequest) -> Box<Future<Item = (), Error = AddClientIDToOpenIDConnectProviderError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19287,22 +19297,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     AddClientIDToOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddClientIDToOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddClientIDToOpenIDConnectProviderError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddClientIDToOpenIDConnectProviderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AddClientIDToOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds the specified IAM role to the specified instance profile.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permission policy.</p> </note> <p>For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
-                fn add_role_to_instance_profile(&self, input: &AddRoleToInstanceProfileRequest) -> Result<(), AddRoleToInstanceProfileError> {
+                fn add_role_to_instance_profile(&self, input: &AddRoleToInstanceProfileRequest) -> Box<Future<Item = (), Error = AddRoleToInstanceProfileError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19311,22 +19330,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     AddRoleToInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddRoleToInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddRoleToInstanceProfileError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddRoleToInstanceProfileError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AddRoleToInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds the specified user to the specified group.</p>"]
-                fn add_user_to_group(&self, input: &AddUserToGroupRequest) -> Result<(), AddUserToGroupError> {
+                fn add_user_to_group(&self, input: &AddUserToGroupRequest) -> Box<Future<Item = (), Error = AddUserToGroupError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19335,22 +19363,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     AddUserToGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddUserToGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddUserToGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddUserToGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AddUserToGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn attach_group_policy(&self, input: &AttachGroupPolicyRequest) -> Result<(), AttachGroupPolicyError> {
+                fn attach_group_policy(&self, input: &AttachGroupPolicyRequest) -> Box<Future<Item = (), Error = AttachGroupPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19359,22 +19396,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     AttachGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachGroupPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachGroupPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches the specified managed policy to the specified IAM role.</p> <p>When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy. You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn attach_role_policy(&self, input: &AttachRolePolicyRequest) -> Result<(), AttachRolePolicyError> {
+                fn attach_role_policy(&self, input: &AttachRolePolicyRequest) -> Box<Future<Item = (), Error = AttachRolePolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19383,22 +19429,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     AttachRolePolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachRolePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachRolePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn attach_user_policy(&self, input: &AttachUserPolicyRequest) -> Result<(), AttachUserPolicyError> {
+                fn attach_user_policy(&self, input: &AttachUserPolicyRequest) -> Box<Future<Item = (), Error = AttachUserPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19407,22 +19462,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     AttachUserPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachUserPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachUserPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Changes the password of the IAM user who is calling this action. The root account password is not affected by this action.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
-                fn change_password(&self, input: &ChangePasswordRequest) -> Result<(), ChangePasswordError> {
+                fn change_password(&self, input: &ChangePasswordRequest) -> Box<Future<Item = (), Error = ChangePasswordError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19431,22 +19495,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ChangePasswordRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ChangePasswordError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ChangePasswordError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ChangePasswordError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ChangePasswordError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important>"]
-                fn create_access_key(&self, input: &CreateAccessKeyRequest) -> Result<CreateAccessKeyResponse, CreateAccessKeyError> {
+                fn create_access_key(&self, input: &CreateAccessKeyRequest) -> Box<Future<Item = CreateAccessKeyResponse, Error = CreateAccessKeyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19455,11 +19528,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateAccessKeyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateAccessKeyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateAccessKeyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19471,23 +19552,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateAccessKeyResponseDeserializer::deserialize("CreateAccessKeyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateAccessKeyResponseDeserializer::deserialize("CreateAccessKeyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateAccessKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateAccessKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an alias for your AWS account. For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_account_alias(&self, input: &CreateAccountAliasRequest) -> Result<(), CreateAccountAliasError> {
+                fn create_account_alias(&self, input: &CreateAccountAliasRequest) -> Box<Future<Item = (), Error = CreateAccountAliasError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19496,22 +19578,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateAccountAliasRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateAccountAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateAccountAliasError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateAccountAliasError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateAccountAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_group(&self, input: &CreateGroupRequest) -> Result<CreateGroupResponse, CreateGroupError> {
+                fn create_group(&self, input: &CreateGroupRequest) -> Box<Future<Item = CreateGroupResponse, Error = CreateGroupError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19520,11 +19611,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19536,23 +19635,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateGroupResponseDeserializer::deserialize("CreateGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateGroupResponseDeserializer::deserialize("CreateGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Creates a new instance profile. For information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_instance_profile(&self, input: &CreateInstanceProfileRequest) -> Result<CreateInstanceProfileResponse, CreateInstanceProfileError> {
+                fn create_instance_profile(&self, input: &CreateInstanceProfileRequest) -> Box<Future<Item = CreateInstanceProfileResponse, Error = CreateInstanceProfileError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19561,11 +19661,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateInstanceProfileError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateInstanceProfileError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19577,23 +19685,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateInstanceProfileResponseDeserializer::deserialize("CreateInstanceProfileResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateInstanceProfileResponseDeserializer::deserialize("CreateInstanceProfileResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console. For more information about managing passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_login_profile(&self, input: &CreateLoginProfileRequest) -> Result<CreateLoginProfileResponse, CreateLoginProfileError> {
+                fn create_login_profile(&self, input: &CreateLoginProfileRequest) -> Box<Future<Item = CreateLoginProfileResponse, Error = CreateLoginProfileError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19602,11 +19711,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateLoginProfileRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateLoginProfileError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateLoginProfileError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19618,23 +19735,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateLoginProfileResponseDeserializer::deserialize("CreateLoginProfileResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateLoginProfileResponseDeserializer::deserialize("CreateLoginProfileResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateLoginProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateLoginProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an IAM entity to describe an identity provider (IdP) that supports <a href=\"http://openid.net/connect/\">OpenID Connect (OIDC)</a>.</p> <p>The OIDC provider that you create with this operation can be used as a principal in a role's trust policy to establish a trust relationship between AWS and the OIDC provider.</p> <p>When you create the IAM OIDC provider, you specify the URL of the OIDC identity provider (IdP) to trust, a list of client IDs (also known as audiences) that identify the application or applications that are allowed to authenticate using the OIDC provider, and a list of thumbprints of the server certificate(s) that the IdP uses. You get all of this information from the OIDC IdP that you want to use for access to AWS.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the IAM provider that this action creates, it is a best practice to limit access to the <a>CreateOpenIDConnectProvider</a> action to highly-privileged users.</p> </note>"]
-                fn create_open_id_connect_provider(&self, input: &CreateOpenIDConnectProviderRequest) -> Result<CreateOpenIDConnectProviderResponse, CreateOpenIDConnectProviderError> {
+                fn create_open_id_connect_provider(&self, input: &CreateOpenIDConnectProviderRequest) -> Box<Future<Item = CreateOpenIDConnectProviderResponse, Error = CreateOpenIDConnectProviderError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19643,11 +19761,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateOpenIDConnectProviderError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateOpenIDConnectProviderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19659,23 +19785,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateOpenIDConnectProviderResponseDeserializer::deserialize("CreateOpenIDConnectProviderResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateOpenIDConnectProviderResponseDeserializer::deserialize("CreateOpenIDConnectProviderResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new managed policy for your AWS account.</p> <p>This operation creates a policy version with a version identifier of <code>v1</code> and sets v1 as the policy's default version. For more information about policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policies in general, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_policy(&self, input: &CreatePolicyRequest) -> Result<CreatePolicyResponse, CreatePolicyError> {
+                fn create_policy(&self, input: &CreatePolicyRequest) -> Box<Future<Item = CreatePolicyResponse, Error = CreatePolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19684,11 +19811,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreatePolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19700,23 +19835,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreatePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreatePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new version of the specified managed policy. To update a managed policy, you create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must delete an existing version using <a>DeletePolicyVersion</a> before you create a new version.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the version that is in effect for the IAM users, groups, and roles to which the policy is attached.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_policy_version(&self, input: &CreatePolicyVersionRequest) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError> {
+                fn create_policy_version(&self, input: &CreatePolicyVersionRequest) -> Box<Future<Item = CreatePolicyVersionResponse, Error = CreatePolicyVersionError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19725,11 +19861,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreatePolicyVersionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePolicyVersionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePolicyVersionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19741,23 +19885,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreatePolicyVersionResponseDeserializer::deserialize("CreatePolicyVersionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreatePolicyVersionResponseDeserializer::deserialize("CreatePolicyVersionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new role for your AWS account. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_role(&self, input: &CreateRoleRequest) -> Result<CreateRoleResponse, CreateRoleError> {
+                fn create_role(&self, input: &CreateRoleRequest) -> Box<Future<Item = CreateRoleResponse, Error = CreateRoleError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19766,11 +19911,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateRoleRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateRoleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateRoleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19782,23 +19935,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateRoleResponseDeserializer::deserialize("CreateRoleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateRoleResponseDeserializer::deserialize("CreateRoleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.</p> <p>The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy to enable federated users who sign-in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS.</p> <p>When you create the SAML provider resource, you upload an a SAML metadata document that you get from your IdP and that includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note> <p> For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html\">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html\">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_saml_provider(&self, input: &CreateSAMLProviderRequest) -> Result<CreateSAMLProviderResponse, CreateSAMLProviderError> {
+                fn create_saml_provider(&self, input: &CreateSAMLProviderRequest) -> Box<Future<Item = CreateSAMLProviderResponse, Error = CreateSAMLProviderError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19807,11 +19961,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSAMLProviderError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSAMLProviderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19823,23 +19985,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateSAMLProviderResponseDeserializer::deserialize("CreateSAMLProviderResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateSAMLProviderResponseDeserializer::deserialize("CreateSAMLProviderResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Generates a set of credentials consisting of a user name and password that can be used to access the service specified in the request. These credentials are generated by IAM, and can be used only for the specified service. </p> <p>You can have a maximum of two sets of service-specific credentials for each supported service per user.</p> <p>The only supported service at this time is AWS CodeCommit.</p> <p>You can reset the password to a new service-generated value by calling <a>ResetServiceSpecificCredential</a>.</p> <p>For more information about service-specific credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_ssh-keys.html\">Using IAM with AWS CodeCommit: Git Credentials, SSH Keys, and AWS Access Keys</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_service_specific_credential(&self, input: &CreateServiceSpecificCredentialRequest) -> Result<CreateServiceSpecificCredentialResponse, CreateServiceSpecificCredentialError> {
+                fn create_service_specific_credential(&self, input: &CreateServiceSpecificCredentialRequest) -> Box<Future<Item = CreateServiceSpecificCredentialResponse, Error = CreateServiceSpecificCredentialError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19848,11 +20011,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateServiceSpecificCredentialError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateServiceSpecificCredentialError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19864,23 +20035,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateServiceSpecificCredentialResponseDeserializer::deserialize("CreateServiceSpecificCredentialResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateServiceSpecificCredentialResponseDeserializer::deserialize("CreateServiceSpecificCredentialResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn create_user(&self, input: &CreateUserRequest) -> Result<CreateUserResponse, CreateUserError> {
+                fn create_user(&self, input: &CreateUserRequest) -> Box<Future<Item = CreateUserResponse, Error = CreateUserError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19889,11 +20061,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateUserRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateUserError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateUserError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19905,23 +20085,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateUserResponseDeserializer::deserialize("CreateUserResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateUserResponseDeserializer::deserialize("CreateUserResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information, such as your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important>"]
-                fn create_virtual_mfa_device(&self, input: &CreateVirtualMFADeviceRequest) -> Result<CreateVirtualMFADeviceResponse, CreateVirtualMFADeviceError> {
+                fn create_virtual_mfa_device(&self, input: &CreateVirtualMFADeviceRequest) -> Box<Future<Item = CreateVirtualMFADeviceResponse, Error = CreateVirtualMFADeviceError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19930,11 +20111,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     CreateVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateVirtualMFADeviceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateVirtualMFADeviceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -19946,23 +20135,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateVirtualMFADeviceResponseDeserializer::deserialize("CreateVirtualMFADeviceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateVirtualMFADeviceResponseDeserializer::deserialize("CreateVirtualMFADeviceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>"]
-                fn deactivate_mfa_device(&self, input: &DeactivateMFADeviceRequest) -> Result<(), DeactivateMFADeviceError> {
+                fn deactivate_mfa_device(&self, input: &DeactivateMFADeviceRequest) -> Box<Future<Item = (), Error = DeactivateMFADeviceError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19971,22 +20161,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeactivateMFADeviceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeactivateMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeactivateMFADeviceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeactivateMFADeviceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeactivateMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
-                fn delete_access_key(&self, input: &DeleteAccessKeyRequest) -> Result<(), DeleteAccessKeyError> {
+                fn delete_access_key(&self, input: &DeleteAccessKeyRequest) -> Box<Future<Item = (), Error = DeleteAccessKeyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -19995,22 +20194,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteAccessKeyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteAccessKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteAccessKeyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteAccessKeyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteAccessKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_account_alias(&self, input: &DeleteAccountAliasRequest) -> Result<(), DeleteAccountAliasError> {
+                fn delete_account_alias(&self, input: &DeleteAccountAliasRequest) -> Box<Future<Item = (), Error = DeleteAccountAliasError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20019,22 +20227,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteAccountAliasRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteAccountAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteAccountAliasError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteAccountAliasError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteAccountAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the password policy for the AWS account. There are no parameters.</p>"]
-                fn delete_account_password_policy(&self) -> Result<(), DeleteAccountPasswordPolicyError> {
+                fn delete_account_password_policy(&self) -> Box<Future<Item = (), Error = DeleteAccountPasswordPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20043,22 +20260,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteAccountPasswordPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteAccountPasswordPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>"]
-                fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError> {
+                fn delete_group(&self, input: &DeleteGroupRequest) -> Box<Future<Item = (), Error = DeleteGroupError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20067,22 +20293,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_group_policy(&self, input: &DeleteGroupPolicyRequest) -> Result<(), DeleteGroupPolicyError> {
+                fn delete_group_policy(&self, input: &DeleteGroupPolicyRequest) -> Box<Future<Item = (), Error = DeleteGroupPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20091,22 +20326,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteGroupPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteGroupPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
-                fn delete_instance_profile(&self, input: &DeleteInstanceProfileRequest) -> Result<(), DeleteInstanceProfileError> {
+                fn delete_instance_profile(&self, input: &DeleteInstanceProfileRequest) -> Box<Future<Item = (), Error = DeleteInstanceProfileError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20115,22 +20359,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteInstanceProfileError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteInstanceProfileError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the password for the specified IAM user, which terminates the user's ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user's password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important>"]
-                fn delete_login_profile(&self, input: &DeleteLoginProfileRequest) -> Result<(), DeleteLoginProfileError> {
+                fn delete_login_profile(&self, input: &DeleteLoginProfileRequest) -> Box<Future<Item = (), Error = DeleteLoginProfileError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20139,22 +20392,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteLoginProfileRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteLoginProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteLoginProfileError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteLoginProfileError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteLoginProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This action is idempotent; it does not fail or return an error if you call the action for a provider that does not exist.</p>"]
-                fn delete_open_id_connect_provider(&self, input: &DeleteOpenIDConnectProviderRequest) -> Result<(), DeleteOpenIDConnectProviderError> {
+                fn delete_open_id_connect_provider(&self, input: &DeleteOpenIDConnectProviderRequest) -> Box<Future<Item = (), Error = DeleteOpenIDConnectProviderError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20163,22 +20425,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteOpenIDConnectProviderError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteOpenIDConnectProviderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to, and you must delete all of the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> APIs. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError> {
+                fn delete_policy(&self, input: &DeletePolicyRequest) -> Box<Future<Item = (), Error = DeletePolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20187,22 +20458,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeletePolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_policy_version(&self, input: &DeletePolicyVersionRequest) -> Result<(), DeletePolicyVersionError> {
+                fn delete_policy_version(&self, input: &DeletePolicyVersionRequest) -> Box<Future<Item = (), Error = DeletePolicyVersionError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20211,22 +20491,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeletePolicyVersionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePolicyVersionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePolicyVersionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important>"]
-                fn delete_role(&self, input: &DeleteRoleRequest) -> Result<(), DeleteRoleError> {
+                fn delete_role(&self, input: &DeleteRoleRequest) -> Box<Future<Item = (), Error = DeleteRoleError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20235,22 +20524,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteRoleRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRoleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRoleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_role_policy(&self, input: &DeleteRolePolicyRequest) -> Result<(), DeleteRolePolicyError> {
+                fn delete_role_policy(&self, input: &DeleteRolePolicyRequest) -> Box<Future<Item = (), Error = DeleteRolePolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20259,22 +20557,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteRolePolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRolePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRolePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource's ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
-                fn delete_saml_provider(&self, input: &DeleteSAMLProviderRequest) -> Result<(), DeleteSAMLProviderError> {
+                fn delete_saml_provider(&self, input: &DeleteSAMLProviderRequest) -> Box<Future<Item = (), Error = DeleteSAMLProviderError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20283,22 +20590,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSAMLProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSAMLProviderError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSAMLProviderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSAMLProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
-                fn delete_ssh_public_key(&self, input: &DeleteSSHPublicKeyRequest) -> Result<(), DeleteSSHPublicKeyError> {
+                fn delete_ssh_public_key(&self, input: &DeleteSSHPublicKeyRequest) -> Box<Future<Item = (), Error = DeleteSSHPublicKeyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20307,22 +20623,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSSHPublicKeyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSSHPublicKeyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn't detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href=\"http://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html\">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important>"]
-                fn delete_server_certificate(&self, input: &DeleteServerCertificateRequest) -> Result<(), DeleteServerCertificateError> {
+                fn delete_server_certificate(&self, input: &DeleteServerCertificateRequest) -> Box<Future<Item = (), Error = DeleteServerCertificateError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20331,22 +20656,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteServerCertificateRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteServerCertificateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteServerCertificateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified service-specific credential.</p>"]
-                fn delete_service_specific_credential(&self, input: &DeleteServiceSpecificCredentialRequest) -> Result<(), DeleteServiceSpecificCredentialError> {
+                fn delete_service_specific_credential(&self, input: &DeleteServiceSpecificCredentialRequest) -> Box<Future<Item = (), Error = DeleteServiceSpecificCredentialError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20355,22 +20689,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteServiceSpecificCredentialError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteServiceSpecificCredentialError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated IAM users.</p>"]
-                fn delete_signing_certificate(&self, input: &DeleteSigningCertificateRequest) -> Result<(), DeleteSigningCertificateError> {
+                fn delete_signing_certificate(&self, input: &DeleteSigningCertificateRequest) -> Box<Future<Item = (), Error = DeleteSigningCertificateError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20379,22 +20722,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSigningCertificateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSigningCertificateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, or attached policies.</p>"]
-                fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError> {
+                fn delete_user(&self, input: &DeleteUserRequest) -> Box<Future<Item = (), Error = DeleteUserError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20403,22 +20755,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteUserRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteUserError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteUserError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn delete_user_policy(&self, input: &DeleteUserPolicyRequest) -> Result<(), DeleteUserPolicyError> {
+                fn delete_user_policy(&self, input: &DeleteUserPolicyRequest) -> Box<Future<Item = (), Error = DeleteUserPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20427,22 +20788,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteUserPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteUserPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteUserPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user's virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note>"]
-                fn delete_virtual_mfa_device(&self, input: &DeleteVirtualMFADeviceRequest) -> Result<(), DeleteVirtualMFADeviceError> {
+                fn delete_virtual_mfa_device(&self, input: &DeleteVirtualMFADeviceRequest) -> Box<Future<Item = (), Error = DeleteVirtualMFADeviceError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20451,22 +20821,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DeleteVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVirtualMFADeviceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVirtualMFADeviceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn detach_group_policy(&self, input: &DetachGroupPolicyRequest) -> Result<(), DetachGroupPolicyError> {
+                fn detach_group_policy(&self, input: &DetachGroupPolicyRequest) -> Box<Future<Item = (), Error = DetachGroupPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20475,22 +20854,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DetachGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachGroupPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachGroupPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn detach_role_policy(&self, input: &DetachRolePolicyRequest) -> Result<(), DetachRolePolicyError> {
+                fn detach_role_policy(&self, input: &DetachRolePolicyRequest) -> Box<Future<Item = (), Error = DetachRolePolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20499,22 +20887,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DetachRolePolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachRolePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachRolePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn detach_user_policy(&self, input: &DetachUserPolicyRequest) -> Result<(), DetachUserPolicyError> {
+                fn detach_user_policy(&self, input: &DetachUserPolicyRequest) -> Box<Future<Item = (), Error = DetachUserPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20523,22 +20920,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     DetachUserPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachUserPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachUserPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>"]
-                fn enable_mfa_device(&self, input: &EnableMFADeviceRequest) -> Result<(), EnableMFADeviceError> {
+                fn enable_mfa_device(&self, input: &EnableMFADeviceRequest) -> Box<Future<Item = (), Error = EnableMFADeviceError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20547,22 +20953,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     EnableMFADeviceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnableMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableMFADeviceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableMFADeviceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnableMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Generates a credential report for the AWS account. For more information about the credential report, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>"]
-                fn generate_credential_report(&self) -> Result<GenerateCredentialReportResponse, GenerateCredentialReportError> {
+                fn generate_credential_report(&self) -> Box<Future<Item = GenerateCredentialReportResponse, Error = GenerateCredentialReportError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20571,11 +20986,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GenerateCredentialReportError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GenerateCredentialReportError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20587,23 +21010,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GenerateCredentialReportResponseDeserializer::deserialize("GenerateCredentialReportResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GenerateCredentialReportResponseDeserializer::deserialize("GenerateCredentialReportResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GenerateCredentialReportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GenerateCredentialReportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and region that were specified in the last request made with that key.</p>"]
-                fn get_access_key_last_used(&self, input: &GetAccessKeyLastUsedRequest) -> Result<GetAccessKeyLastUsedResponse, GetAccessKeyLastUsedError> {
+                fn get_access_key_last_used(&self, input: &GetAccessKeyLastUsedRequest) -> Box<Future<Item = GetAccessKeyLastUsedResponse, Error = GetAccessKeyLastUsedError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20612,11 +21036,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetAccessKeyLastUsedRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetAccessKeyLastUsedError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetAccessKeyLastUsedError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20628,23 +21060,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetAccessKeyLastUsedResponseDeserializer::deserialize("GetAccessKeyLastUsedResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetAccessKeyLastUsedResponseDeserializer::deserialize("GetAccessKeyLastUsedResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetAccessKeyLastUsedError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetAccessKeyLastUsedError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about all IAM users, groups, roles, and policies in your AWS account, including their relationships to one another. Use this API to obtain a snapshot of the configuration of IAM permissions (users, groups, roles, and policies) in your account.</p> <p>You can optionally filter the results using the <code>Filter</code> parameter. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn get_account_authorization_details(&self, input: &GetAccountAuthorizationDetailsRequest) -> Result<GetAccountAuthorizationDetailsResponse, GetAccountAuthorizationDetailsError> {
+                fn get_account_authorization_details(&self, input: &GetAccountAuthorizationDetailsRequest) -> Box<Future<Item = GetAccountAuthorizationDetailsResponse, Error = GetAccountAuthorizationDetailsError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20653,11 +21086,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetAccountAuthorizationDetailsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetAccountAuthorizationDetailsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetAccountAuthorizationDetailsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20669,23 +21110,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetAccountAuthorizationDetailsResponseDeserializer::deserialize("GetAccountAuthorizationDetailsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetAccountAuthorizationDetailsResponseDeserializer::deserialize("GetAccountAuthorizationDetailsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetAccountAuthorizationDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetAccountAuthorizationDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html\">Managing an IAM Password Policy</a>.</p>"]
-                fn get_account_password_policy(&self) -> Result<GetAccountPasswordPolicyResponse, GetAccountPasswordPolicyError> {
+                fn get_account_password_policy(&self) -> Box<Future<Item = GetAccountPasswordPolicyResponse, Error = GetAccountPasswordPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20694,11 +21136,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetAccountPasswordPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetAccountPasswordPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20710,23 +21160,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetAccountPasswordPolicyResponseDeserializer::deserialize("GetAccountPasswordPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetAccountPasswordPolicyResponseDeserializer::deserialize("GetAccountPasswordPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_account_summary(&self) -> Result<GetAccountSummaryResponse, GetAccountSummaryError> {
+                fn get_account_summary(&self) -> Box<Future<Item = GetAccountSummaryResponse, Error = GetAccountSummaryError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20735,11 +21186,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetAccountSummaryError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetAccountSummaryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20751,23 +21210,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetAccountSummaryResponseDeserializer::deserialize("GetAccountSummaryResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetAccountSummaryResponseDeserializer::deserialize("GetAccountSummaryResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetAccountSummaryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetAccountSummaryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets a list of all of the context keys referenced in the input policies. The policies are supplied as a list of one or more strings. To get the context keys from policies associated with an IAM user, group, or role, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value specified in an IAM policy. Use GetContextKeysForCustomPolicy to understand what key names and values you must supply when you call <a>SimulateCustomPolicy</a>. Note that all parameters are shown in unencoded form here for clarity, but must be URL encoded to be included as a part of a real HTML request.</p>"]
-                fn get_context_keys_for_custom_policy(&self, input: &GetContextKeysForCustomPolicyRequest) -> Result<GetContextKeysForPolicyResponse, GetContextKeysForCustomPolicyError> {
+                fn get_context_keys_for_custom_policy(&self, input: &GetContextKeysForCustomPolicyRequest) -> Box<Future<Item = GetContextKeysForPolicyResponse, Error = GetContextKeysForCustomPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20776,11 +21236,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetContextKeysForCustomPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetContextKeysForCustomPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetContextKeysForCustomPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20792,23 +21260,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetContextKeysForPolicyResponseDeserializer::deserialize("GetContextKeysForCustomPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetContextKeysForPolicyResponseDeserializer::deserialize("GetContextKeysForCustomPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetContextKeysForCustomPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetContextKeysForCustomPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets a list of all of the context keys referenced in all of the IAM policies attached to the specified IAM entity. The entity can be an IAM user, group, or role. If you specify a user, then the request also includes all of the policies attached to groups that the user is a member of.</p> <p>You can optionally include a list of one or more additional policies, specified as strings. If you want to include <i>only</i> a list of policies by string, use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value in an IAM policy. Use <a>GetContextKeysForPrincipalPolicy</a> to understand what key names and values you must supply when you call <a>SimulatePrincipalPolicy</a>.</p>"]
-                fn get_context_keys_for_principal_policy(&self, input: &GetContextKeysForPrincipalPolicyRequest) -> Result<GetContextKeysForPolicyResponse, GetContextKeysForPrincipalPolicyError> {
+                fn get_context_keys_for_principal_policy(&self, input: &GetContextKeysForPrincipalPolicyRequest) -> Box<Future<Item = GetContextKeysForPolicyResponse, Error = GetContextKeysForPrincipalPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20817,11 +21286,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetContextKeysForPrincipalPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetContextKeysForPrincipalPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetContextKeysForPrincipalPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20833,23 +21310,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetContextKeysForPolicyResponseDeserializer::deserialize("GetContextKeysForPrincipalPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetContextKeysForPolicyResponseDeserializer::deserialize("GetContextKeysForPrincipalPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetContextKeysForPrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetContextKeysForPrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Retrieves a credential report for the AWS account. For more information about the credential report, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_credential_report(&self) -> Result<GetCredentialReportResponse, GetCredentialReportError> {
+                fn get_credential_report(&self) -> Box<Future<Item = GetCredentialReportResponse, Error = GetCredentialReportError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20858,11 +21336,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetCredentialReportError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetCredentialReportError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20874,23 +21360,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetCredentialReportResponseDeserializer::deserialize("GetCredentialReportResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetCredentialReportResponseDeserializer::deserialize("GetCredentialReportResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetCredentialReportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetCredentialReportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Returns a list of IAM users that are in the specified IAM group. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError> {
+                fn get_group(&self, input: &GetGroupRequest) -> Box<Future<Item = GetGroupResponse, Error = GetGroupError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20899,11 +21386,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20915,23 +21410,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetGroupResponseDeserializer::deserialize("GetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetGroupResponseDeserializer::deserialize("GetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_group_policy(&self, input: &GetGroupPolicyRequest) -> Result<GetGroupPolicyResponse, GetGroupPolicyError> {
+                fn get_group_policy(&self, input: &GetGroupPolicyRequest) -> Box<Future<Item = GetGroupPolicyResponse, Error = GetGroupPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20940,11 +21436,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetGroupPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetGroupPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20956,23 +21460,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetGroupPolicyResponseDeserializer::deserialize("GetGroupPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetGroupPolicyResponseDeserializer::deserialize("GetGroupPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Retrieves information about the specified instance profile, including the instance profile's path, GUID, ARN, and role. For more information about instance profiles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_instance_profile(&self, input: &GetInstanceProfileRequest) -> Result<GetInstanceProfileResponse, GetInstanceProfileError> {
+                fn get_instance_profile(&self, input: &GetInstanceProfileRequest) -> Box<Future<Item = GetInstanceProfileResponse, Error = GetInstanceProfileError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -20981,11 +21486,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetInstanceProfileError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetInstanceProfileError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -20997,23 +21510,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetInstanceProfileResponseDeserializer::deserialize("GetInstanceProfileResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetInstanceProfileResponseDeserializer::deserialize("GetInstanceProfileResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the user name and password-creation date for the specified IAM user. If the user has not been assigned a password, the action returns a 404 (<code>NoSuchEntity</code>) error.</p>"]
-                fn get_login_profile(&self, input: &GetLoginProfileRequest) -> Result<GetLoginProfileResponse, GetLoginProfileError> {
+                fn get_login_profile(&self, input: &GetLoginProfileRequest) -> Box<Future<Item = GetLoginProfileResponse, Error = GetLoginProfileError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21022,11 +21536,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetLoginProfileRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetLoginProfileError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetLoginProfileError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21038,23 +21560,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetLoginProfileResponseDeserializer::deserialize("GetLoginProfileResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetLoginProfileResponseDeserializer::deserialize("GetLoginProfileResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetLoginProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetLoginProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the specified OpenID Connect (OIDC) provider resource object in IAM.</p>"]
-                fn get_open_id_connect_provider(&self, input: &GetOpenIDConnectProviderRequest) -> Result<GetOpenIDConnectProviderResponse, GetOpenIDConnectProviderError> {
+                fn get_open_id_connect_provider(&self, input: &GetOpenIDConnectProviderRequest) -> Box<Future<Item = GetOpenIDConnectProviderResponse, Error = GetOpenIDConnectProviderError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21063,11 +21586,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetOpenIDConnectProviderError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetOpenIDConnectProviderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21079,23 +21610,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetOpenIDConnectProviderResponseDeserializer::deserialize("GetOpenIDConnectProviderResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetOpenIDConnectProviderResponseDeserializer::deserialize("GetOpenIDConnectProviderResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about the specified managed policy, including the policy's default version and the total number of IAM users, groups, and roles to which the policy is attached. To retrieve the list of the specific users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API. This API returns metadata about the policy. To retrieve the actual policy document for a specific version of the policy, use <a>GetPolicyVersion</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded with an IAM user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
+                fn get_policy(&self, input: &GetPolicyRequest) -> Box<Future<Item = GetPolicyResponse, Error = GetPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21104,11 +21636,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21120,23 +21660,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetPolicyResponseDeserializer::deserialize("GetPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetPolicyResponseDeserializer::deserialize("GetPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about the specified version of the specified managed policy, including the policy document.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>To list the available versions for a policy, use <a>ListPolicyVersions</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded in a user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about the types of policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_policy_version(&self, input: &GetPolicyVersionRequest) -> Result<GetPolicyVersionResponse, GetPolicyVersionError> {
+                fn get_policy_version(&self, input: &GetPolicyVersionRequest) -> Box<Future<Item = GetPolicyVersionResponse, Error = GetPolicyVersionError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21145,11 +21686,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetPolicyVersionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPolicyVersionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPolicyVersionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21161,23 +21710,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetPolicyVersionResponseDeserializer::deserialize("GetPolicyVersionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetPolicyVersionResponseDeserializer::deserialize("GetPolicyVersionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about the specified role, including the role's path, GUID, ARN, and the role's trust policy that grants permission to assume the role. For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note>"]
-                fn get_role(&self, input: &GetRoleRequest) -> Result<GetRoleResponse, GetRoleError> {
+                fn get_role(&self, input: &GetRoleRequest) -> Box<Future<Item = GetRoleResponse, Error = GetRoleError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21186,11 +21736,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetRoleRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetRoleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetRoleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21202,23 +21760,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetRoleResponseDeserializer::deserialize("GetRoleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetRoleResponseDeserializer::deserialize("GetRoleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the specified inline policy document that is embedded with the specified IAM role.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM role can also have managed policies attached to it. To retrieve a managed policy document that is attached to a role, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p>"]
-                fn get_role_policy(&self, input: &GetRolePolicyRequest) -> Result<GetRolePolicyResponse, GetRolePolicyError> {
+                fn get_role_policy(&self, input: &GetRolePolicyRequest) -> Box<Future<Item = GetRolePolicyResponse, Error = GetRolePolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21227,11 +21786,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetRolePolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetRolePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetRolePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21243,23 +21810,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the SAML provider metadocument that was uploaded when the IAM SAML provider resource object was created or updated.</p> <note> <p>This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
-                fn get_saml_provider(&self, input: &GetSAMLProviderRequest) -> Result<GetSAMLProviderResponse, GetSAMLProviderError> {
+                fn get_saml_provider(&self, input: &GetSAMLProviderRequest) -> Box<Future<Item = GetSAMLProviderResponse, Error = GetSAMLProviderError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21268,11 +21836,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetSAMLProviderError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetSAMLProviderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21284,23 +21860,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetSAMLProviderResponseDeserializer::deserialize("GetSAMLProviderResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetSAMLProviderResponseDeserializer::deserialize("GetSAMLProviderResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetSAMLProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetSAMLProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the specified SSH public key, including metadata about the key.</p> <p>The SSH public key retrieved by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
-                fn get_ssh_public_key(&self, input: &GetSSHPublicKeyRequest) -> Result<GetSSHPublicKeyResponse, GetSSHPublicKeyError> {
+                fn get_ssh_public_key(&self, input: &GetSSHPublicKeyRequest) -> Box<Future<Item = GetSSHPublicKeyResponse, Error = GetSSHPublicKeyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21309,11 +21886,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetSSHPublicKeyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetSSHPublicKeyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21325,23 +21910,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetSSHPublicKeyResponseDeserializer::deserialize("GetSSHPublicKeyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetSSHPublicKeyResponseDeserializer::deserialize("GetSSHPublicKeyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_server_certificate(&self, input: &GetServerCertificateRequest) -> Result<GetServerCertificateResponse, GetServerCertificateError> {
+                fn get_server_certificate(&self, input: &GetServerCertificateRequest) -> Box<Future<Item = GetServerCertificateResponse, Error = GetServerCertificateError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21350,11 +21936,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetServerCertificateRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetServerCertificateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetServerCertificateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21366,23 +21960,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetServerCertificateResponseDeserializer::deserialize("GetServerCertificateResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetServerCertificateResponseDeserializer::deserialize("GetServerCertificateResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>"]
-                fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError> {
+                fn get_user(&self, input: &GetUserRequest) -> Box<Future<Item = GetUserResponse, Error = GetUserError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21391,11 +21986,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetUserRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetUserError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetUserError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21407,23 +22010,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetUserResponseDeserializer::deserialize("GetUserResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetUserResponseDeserializer::deserialize("GetUserResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the specified inline policy document that is embedded in the specified IAM user.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM user can also have managed policies attached to it. To retrieve a managed policy document that is attached to a user, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn get_user_policy(&self, input: &GetUserPolicyRequest) -> Result<GetUserPolicyResponse, GetUserPolicyError> {
+                fn get_user_policy(&self, input: &GetUserPolicyRequest) -> Box<Future<Item = GetUserPolicyResponse, Error = GetUserPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21432,11 +22036,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     GetUserPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetUserPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetUserPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21448,23 +22060,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the access key IDs associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note>"]
-                fn list_access_keys(&self, input: &ListAccessKeysRequest) -> Result<ListAccessKeysResponse, ListAccessKeysError> {
+                fn list_access_keys(&self, input: &ListAccessKeysRequest) -> Box<Future<Item = ListAccessKeysResponse, Error = ListAccessKeysError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21473,11 +22086,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListAccessKeysRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAccessKeysError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAccessKeysError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21489,23 +22110,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListAccessKeysResponseDeserializer::deserialize("ListAccessKeysResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListAccessKeysResponseDeserializer::deserialize("ListAccessKeysResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListAccessKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListAccessKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
-                fn list_account_aliases(&self, input: &ListAccountAliasesRequest) -> Result<ListAccountAliasesResponse, ListAccountAliasesError> {
+                fn list_account_aliases(&self, input: &ListAccountAliasesRequest) -> Box<Future<Item = ListAccountAliasesResponse, Error = ListAccountAliasesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21514,11 +22136,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListAccountAliasesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAccountAliasesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAccountAliasesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21530,23 +22160,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListAccountAliasesResponseDeserializer::deserialize("ListAccountAliasesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListAccountAliasesResponseDeserializer::deserialize("ListAccountAliasesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListAccountAliasesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListAccountAliasesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>"]
-                fn list_attached_group_policies(&self, input: &ListAttachedGroupPoliciesRequest) -> Result<ListAttachedGroupPoliciesResponse, ListAttachedGroupPoliciesError> {
+                fn list_attached_group_policies(&self, input: &ListAttachedGroupPoliciesRequest) -> Box<Future<Item = ListAttachedGroupPoliciesResponse, Error = ListAttachedGroupPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21555,11 +22186,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListAttachedGroupPoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAttachedGroupPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAttachedGroupPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21571,23 +22210,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListAttachedGroupPoliciesResponseDeserializer::deserialize("ListAttachedGroupPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListAttachedGroupPoliciesResponseDeserializer::deserialize("ListAttachedGroupPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListAttachedGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListAttachedGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the action returns an empty list.</p>"]
-                fn list_attached_role_policies(&self, input: &ListAttachedRolePoliciesRequest) -> Result<ListAttachedRolePoliciesResponse, ListAttachedRolePoliciesError> {
+                fn list_attached_role_policies(&self, input: &ListAttachedRolePoliciesRequest) -> Box<Future<Item = ListAttachedRolePoliciesResponse, Error = ListAttachedRolePoliciesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21596,11 +22236,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListAttachedRolePoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAttachedRolePoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAttachedRolePoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21612,23 +22260,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListAttachedRolePoliciesResponseDeserializer::deserialize("ListAttachedRolePoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListAttachedRolePoliciesResponseDeserializer::deserialize("ListAttachedRolePoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListAttachedRolePoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListAttachedRolePoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>"]
-                fn list_attached_user_policies(&self, input: &ListAttachedUserPoliciesRequest) -> Result<ListAttachedUserPoliciesResponse, ListAttachedUserPoliciesError> {
+                fn list_attached_user_policies(&self, input: &ListAttachedUserPoliciesRequest) -> Box<Future<Item = ListAttachedUserPoliciesResponse, Error = ListAttachedUserPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21637,11 +22286,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListAttachedUserPoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAttachedUserPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAttachedUserPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21653,23 +22310,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListAttachedUserPoliciesResponseDeserializer::deserialize("ListAttachedUserPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListAttachedUserPoliciesResponseDeserializer::deserialize("ListAttachedUserPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListAttachedUserPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListAttachedUserPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_entities_for_policy(&self, input: &ListEntitiesForPolicyRequest) -> Result<ListEntitiesForPolicyResponse, ListEntitiesForPolicyError> {
+                fn list_entities_for_policy(&self, input: &ListEntitiesForPolicyRequest) -> Box<Future<Item = ListEntitiesForPolicyResponse, Error = ListEntitiesForPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21678,11 +22336,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListEntitiesForPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListEntitiesForPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListEntitiesForPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21694,23 +22360,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListEntitiesForPolicyResponseDeserializer::deserialize("ListEntitiesForPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListEntitiesForPolicyResponseDeserializer::deserialize("ListEntitiesForPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListEntitiesForPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListEntitiesForPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the action returns an empty list.</p>"]
-                fn list_group_policies(&self, input: &ListGroupPoliciesRequest) -> Result<ListGroupPoliciesResponse, ListGroupPoliciesError> {
+                fn list_group_policies(&self, input: &ListGroupPoliciesRequest) -> Box<Future<Item = ListGroupPoliciesResponse, Error = ListGroupPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21719,11 +22386,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListGroupPoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListGroupPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListGroupPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21735,23 +22410,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListGroupPoliciesResponseDeserializer::deserialize("ListGroupPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListGroupPoliciesResponseDeserializer::deserialize("ListGroupPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_groups(&self, input: &ListGroupsRequest) -> Result<ListGroupsResponse, ListGroupsError> {
+                fn list_groups(&self, input: &ListGroupsRequest) -> Box<Future<Item = ListGroupsResponse, Error = ListGroupsError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21760,11 +22436,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListGroupsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21776,23 +22460,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListGroupsResponseDeserializer::deserialize("ListGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListGroupsResponseDeserializer::deserialize("ListGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_groups_for_user(&self, input: &ListGroupsForUserRequest) -> Result<ListGroupsForUserResponse, ListGroupsForUserError> {
+                fn list_groups_for_user(&self, input: &ListGroupsForUserRequest) -> Box<Future<Item = ListGroupsForUserResponse, Error = ListGroupsForUserError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21801,11 +22486,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListGroupsForUserRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListGroupsForUserError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListGroupsForUserError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21817,23 +22510,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListGroupsForUserResponseDeserializer::deserialize("ListGroupsForUserResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListGroupsForUserResponseDeserializer::deserialize("ListGroupsForUserResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListGroupsForUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListGroupsForUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the instance profiles that have the specified path prefix. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_instance_profiles(&self, input: &ListInstanceProfilesRequest) -> Result<ListInstanceProfilesResponse, ListInstanceProfilesError> {
+                fn list_instance_profiles(&self, input: &ListInstanceProfilesRequest) -> Box<Future<Item = ListInstanceProfilesResponse, Error = ListInstanceProfilesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21842,11 +22536,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListInstanceProfilesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListInstanceProfilesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListInstanceProfilesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21858,23 +22560,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListInstanceProfilesResponseDeserializer::deserialize("ListInstanceProfilesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListInstanceProfilesResponseDeserializer::deserialize("ListInstanceProfilesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListInstanceProfilesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListInstanceProfilesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the instance profiles that have the specified associated IAM role. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_instance_profiles_for_role(&self, input: &ListInstanceProfilesForRoleRequest) -> Result<ListInstanceProfilesForRoleResponse, ListInstanceProfilesForRoleError> {
+                fn list_instance_profiles_for_role(&self, input: &ListInstanceProfilesForRoleRequest) -> Box<Future<Item = ListInstanceProfilesForRoleResponse, Error = ListInstanceProfilesForRoleError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21883,11 +22586,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListInstanceProfilesForRoleRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListInstanceProfilesForRoleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListInstanceProfilesForRoleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21899,23 +22610,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListInstanceProfilesForRoleResponseDeserializer::deserialize("ListInstanceProfilesForRoleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListInstanceProfilesForRoleResponseDeserializer::deserialize("ListInstanceProfilesForRoleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListInstanceProfilesForRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListInstanceProfilesForRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this action lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_mfa_devices(&self, input: &ListMFADevicesRequest) -> Result<ListMFADevicesResponse, ListMFADevicesError> {
+                fn list_mfa_devices(&self, input: &ListMFADevicesRequest) -> Box<Future<Item = ListMFADevicesResponse, Error = ListMFADevicesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21924,11 +22636,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListMFADevicesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListMFADevicesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListMFADevicesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21940,23 +22660,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListMFADevicesResponseDeserializer::deserialize("ListMFADevicesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListMFADevicesResponseDeserializer::deserialize("ListMFADevicesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListMFADevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListMFADevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>"]
-                fn list_open_id_connect_providers(&self, input: &ListOpenIDConnectProvidersRequest) -> Result<ListOpenIDConnectProvidersResponse, ListOpenIDConnectProvidersError> {
+                fn list_open_id_connect_providers(&self, input: &ListOpenIDConnectProvidersRequest) -> Box<Future<Item = ListOpenIDConnectProvidersResponse, Error = ListOpenIDConnectProvidersError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -21965,11 +22686,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListOpenIDConnectProvidersRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListOpenIDConnectProvidersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListOpenIDConnectProvidersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -21981,23 +22710,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListOpenIDConnectProvidersResponseDeserializer::deserialize("ListOpenIDConnectProvidersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListOpenIDConnectProvidersResponseDeserializer::deserialize("ListOpenIDConnectProvidersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListOpenIDConnectProvidersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListOpenIDConnectProvidersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all the managed policies that are available in your AWS account, including your own customer-defined managed policies and all AWS managed policies.</p> <p>You can filter the list of policies that is returned using the optional <code>OnlyAttached</code>, <code>Scope</code>, and <code>PathPrefix</code> parameters. For example, to list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>. To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn list_policies(&self, input: &ListPoliciesRequest) -> Result<ListPoliciesResponse, ListPoliciesError> {
+                fn list_policies(&self, input: &ListPoliciesRequest) -> Box<Future<Item = ListPoliciesResponse, Error = ListPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22006,11 +22736,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListPoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22022,23 +22760,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn list_policy_versions(&self, input: &ListPolicyVersionsRequest) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError> {
+                fn list_policy_versions(&self, input: &ListPolicyVersionsRequest) -> Box<Future<Item = ListPolicyVersionsResponse, Error = ListPolicyVersionsError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22047,11 +22786,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListPolicyVersionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPolicyVersionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPolicyVersionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22063,23 +22810,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListPolicyVersionsResponseDeserializer::deserialize("ListPolicyVersionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListPolicyVersionsResponseDeserializer::deserialize("ListPolicyVersionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the action returns an empty list.</p>"]
-                fn list_role_policies(&self, input: &ListRolePoliciesRequest) -> Result<ListRolePoliciesResponse, ListRolePoliciesError> {
+                fn list_role_policies(&self, input: &ListRolePoliciesRequest) -> Box<Future<Item = ListRolePoliciesResponse, Error = ListRolePoliciesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22088,11 +22836,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListRolePoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListRolePoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListRolePoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22104,23 +22860,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListRolePoliciesResponseDeserializer::deserialize("ListRolePoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListRolePoliciesResponseDeserializer::deserialize("ListRolePoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListRolePoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListRolePoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the IAM roles that have the specified path prefix. If there are none, the action returns an empty list. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_roles(&self, input: &ListRolesRequest) -> Result<ListRolesResponse, ListRolesError> {
+                fn list_roles(&self, input: &ListRolesRequest) -> Box<Future<Item = ListRolesResponse, Error = ListRolesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22129,11 +22886,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListRolesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListRolesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListRolesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22145,23 +22910,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListRolesResponseDeserializer::deserialize("ListRolesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListRolesResponseDeserializer::deserialize("ListRolesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListRolesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListRolesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
-                fn list_saml_providers(&self, input: &ListSAMLProvidersRequest) -> Result<ListSAMLProvidersResponse, ListSAMLProvidersError> {
+                fn list_saml_providers(&self, input: &ListSAMLProvidersRequest) -> Box<Future<Item = ListSAMLProvidersResponse, Error = ListSAMLProvidersError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22170,11 +22936,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListSAMLProvidersRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListSAMLProvidersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListSAMLProvidersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22186,23 +22960,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListSAMLProvidersResponseDeserializer::deserialize("ListSAMLProvidersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListSAMLProvidersResponseDeserializer::deserialize("ListSAMLProvidersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListSAMLProvidersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListSAMLProvidersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the SSH public keys associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>The SSH public keys returned by this action are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_ssh_public_keys(&self, input: &ListSSHPublicKeysRequest) -> Result<ListSSHPublicKeysResponse, ListSSHPublicKeysError> {
+                fn list_ssh_public_keys(&self, input: &ListSSHPublicKeysRequest) -> Box<Future<Item = ListSSHPublicKeysResponse, Error = ListSSHPublicKeysError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22211,11 +22986,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListSSHPublicKeysRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListSSHPublicKeysError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListSSHPublicKeysError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22227,23 +23010,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListSSHPublicKeysResponseDeserializer::deserialize("ListSSHPublicKeysResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListSSHPublicKeysResponseDeserializer::deserialize("ListSSHPublicKeysResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListSSHPublicKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListSSHPublicKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the action returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>"]
-                fn list_server_certificates(&self, input: &ListServerCertificatesRequest) -> Result<ListServerCertificatesResponse, ListServerCertificatesError> {
+                fn list_server_certificates(&self, input: &ListServerCertificatesRequest) -> Box<Future<Item = ListServerCertificatesResponse, Error = ListServerCertificatesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22252,11 +23036,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListServerCertificatesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListServerCertificatesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListServerCertificatesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22268,23 +23060,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListServerCertificatesResponseDeserializer::deserialize("ListServerCertificatesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListServerCertificatesResponseDeserializer::deserialize("ListServerCertificatesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListServerCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListServerCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the service-specific credentials associated with the specified IAM user. If there are none, the action returns an empty list. The service-specific credentials returned by this action are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html\">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>"]
-                fn list_service_specific_credentials(&self, input: &ListServiceSpecificCredentialsRequest) -> Result<ListServiceSpecificCredentialsResponse, ListServiceSpecificCredentialsError> {
+                fn list_service_specific_credentials(&self, input: &ListServiceSpecificCredentialsRequest) -> Box<Future<Item = ListServiceSpecificCredentialsResponse, Error = ListServiceSpecificCredentialsError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22293,11 +23086,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListServiceSpecificCredentialsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListServiceSpecificCredentialsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListServiceSpecificCredentialsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22309,23 +23110,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListServiceSpecificCredentialsResponseDeserializer::deserialize("ListServiceSpecificCredentialsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListServiceSpecificCredentialsResponseDeserializer::deserialize("ListServiceSpecificCredentialsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListServiceSpecificCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListServiceSpecificCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the signing certificates associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
-                fn list_signing_certificates(&self, input: &ListSigningCertificatesRequest) -> Result<ListSigningCertificatesResponse, ListSigningCertificatesError> {
+                fn list_signing_certificates(&self, input: &ListSigningCertificatesRequest) -> Box<Future<Item = ListSigningCertificatesResponse, Error = ListSigningCertificatesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22334,11 +23136,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListSigningCertificatesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListSigningCertificatesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListSigningCertificatesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22350,23 +23160,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListSigningCertificatesResponseDeserializer::deserialize("ListSigningCertificatesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListSigningCertificatesResponseDeserializer::deserialize("ListSigningCertificatesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListSigningCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListSigningCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the action returns an empty list.</p>"]
-                fn list_user_policies(&self, input: &ListUserPoliciesRequest) -> Result<ListUserPoliciesResponse, ListUserPoliciesError> {
+                fn list_user_policies(&self, input: &ListUserPoliciesRequest) -> Box<Future<Item = ListUserPoliciesResponse, Error = ListUserPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22375,11 +23186,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListUserPoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListUserPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListUserPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22391,23 +23210,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListUserPoliciesResponseDeserializer::deserialize("ListUserPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListUserPoliciesResponseDeserializer::deserialize("ListUserPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListUserPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListUserPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the action returns all users in the AWS account. If there are none, the action returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError> {
+                fn list_users(&self, input: &ListUsersRequest) -> Box<Future<Item = ListUsersResponse, Error = ListUsersError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22416,11 +23236,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListUsersRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListUsersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListUsersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22432,23 +23260,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListUsersResponseDeserializer::deserialize("ListUsersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListUsersResponseDeserializer::deserialize("ListUsersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListUsersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListUsersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the action returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-                fn list_virtual_mfa_devices(&self, input: &ListVirtualMFADevicesRequest) -> Result<ListVirtualMFADevicesResponse, ListVirtualMFADevicesError> {
+                fn list_virtual_mfa_devices(&self, input: &ListVirtualMFADevicesRequest) -> Box<Future<Item = ListVirtualMFADevicesResponse, Error = ListVirtualMFADevicesError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22457,11 +23286,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ListVirtualMFADevicesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListVirtualMFADevicesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListVirtualMFADevicesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22473,23 +23310,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListVirtualMFADevicesResponseDeserializer::deserialize("ListVirtualMFADevicesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListVirtualMFADevicesResponseDeserializer::deserialize("ListVirtualMFADevicesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListVirtualMFADevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListVirtualMFADevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn put_group_policy(&self, input: &PutGroupPolicyRequest) -> Result<(), PutGroupPolicyError> {
+                fn put_group_policy(&self, input: &PutGroupPolicyRequest) -> Box<Future<Item = (), Error = PutGroupPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22498,22 +23336,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     PutGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutGroupPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutGroupPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role's access (permissions) policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn put_role_policy(&self, input: &PutRolePolicyRequest) -> Result<(), PutRolePolicyError> {
+                fn put_role_policy(&self, input: &PutRolePolicyRequest) -> Box<Future<Item = (), Error = PutRolePolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22522,22 +23369,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     PutRolePolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutRolePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutRolePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn put_user_policy(&self, input: &PutUserPolicyRequest) -> Result<(), PutUserPolicyError> {
+                fn put_user_policy(&self, input: &PutUserPolicyRequest) -> Box<Future<Item = (), Error = PutUserPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22546,22 +23402,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     PutUserPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutUserPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutUserPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This action is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>"]
-                fn remove_client_id_from_open_id_connect_provider(&self, input: &RemoveClientIDFromOpenIDConnectProviderRequest) -> Result<(), RemoveClientIDFromOpenIDConnectProviderError> {
+                fn remove_client_id_from_open_id_connect_provider(&self, input: &RemoveClientIDFromOpenIDConnectProviderRequest) -> Box<Future<Item = (), Error = RemoveClientIDFromOpenIDConnectProviderError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22570,22 +23435,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     RemoveClientIDFromOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemoveClientIDFromOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveClientIDFromOpenIDConnectProviderError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveClientIDFromOpenIDConnectProviderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RemoveClientIDFromOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
-                fn remove_role_from_instance_profile(&self, input: &RemoveRoleFromInstanceProfileRequest) -> Result<(), RemoveRoleFromInstanceProfileError> {
+                fn remove_role_from_instance_profile(&self, input: &RemoveRoleFromInstanceProfileRequest) -> Box<Future<Item = (), Error = RemoveRoleFromInstanceProfileError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22594,22 +23468,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     RemoveRoleFromInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemoveRoleFromInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveRoleFromInstanceProfileError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveRoleFromInstanceProfileError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RemoveRoleFromInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified user from the specified group.</p>"]
-                fn remove_user_from_group(&self, input: &RemoveUserFromGroupRequest) -> Result<(), RemoveUserFromGroupError> {
+                fn remove_user_from_group(&self, input: &RemoveUserFromGroupRequest) -> Box<Future<Item = (), Error = RemoveUserFromGroupError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22618,22 +23501,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     RemoveUserFromGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemoveUserFromGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveUserFromGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveUserFromGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RemoveUserFromGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>"]
-                fn reset_service_specific_credential(&self, input: &ResetServiceSpecificCredentialRequest) -> Result<ResetServiceSpecificCredentialResponse, ResetServiceSpecificCredentialError> {
+                fn reset_service_specific_credential(&self, input: &ResetServiceSpecificCredentialRequest) -> Box<Future<Item = ResetServiceSpecificCredentialResponse, Error = ResetServiceSpecificCredentialError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22642,11 +23534,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ResetServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetServiceSpecificCredentialError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetServiceSpecificCredentialError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22658,23 +23558,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ResetServiceSpecificCredentialResponseDeserializer::deserialize("ResetServiceSpecificCredentialResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ResetServiceSpecificCredentialResponseDeserializer::deserialize("ResetServiceSpecificCredentialResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResetServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResetServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Synchronizes the specified MFA device with its IAM resource object on the AWS servers.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>"]
-                fn resync_mfa_device(&self, input: &ResyncMFADeviceRequest) -> Result<(), ResyncMFADeviceError> {
+                fn resync_mfa_device(&self, input: &ResyncMFADeviceRequest) -> Box<Future<Item = (), Error = ResyncMFADeviceError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22683,22 +23584,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     ResyncMFADeviceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResyncMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResyncMFADeviceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResyncMFADeviceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResyncMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This action affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
-                fn set_default_policy_version(&self, input: &SetDefaultPolicyVersionRequest) -> Result<(), SetDefaultPolicyVersionError> {
+                fn set_default_policy_version(&self, input: &SetDefaultPolicyVersionRequest) -> Box<Future<Item = (), Error = SetDefaultPolicyVersionError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22707,22 +23617,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     SetDefaultPolicyVersionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetDefaultPolicyVersionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetDefaultPolicyVersionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API actions and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API actions; it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p>If you want to simulate existing policies attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>"]
-                fn simulate_custom_policy(&self, input: &SimulateCustomPolicyRequest) -> Result<SimulatePolicyResponse, SimulateCustomPolicyError> {
+                fn simulate_custom_policy(&self, input: &SimulateCustomPolicyRequest) -> Box<Future<Item = SimulatePolicyResponse, Error = SimulateCustomPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22731,11 +23650,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     SimulateCustomPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SimulateCustomPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SimulateCustomPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22747,23 +23674,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SimulatePolicyResponseDeserializer::deserialize("SimulateCustomPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SimulatePolicyResponseDeserializer::deserialize("SimulateCustomPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SimulateCustomPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SimulateCustomPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API actions and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to .</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API actions, it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>"]
-                fn simulate_principal_policy(&self, input: &SimulatePrincipalPolicyRequest) -> Result<SimulatePolicyResponse, SimulatePrincipalPolicyError> {
+                fn simulate_principal_policy(&self, input: &SimulatePrincipalPolicyRequest) -> Box<Future<Item = SimulatePolicyResponse, Error = SimulatePrincipalPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22772,11 +23700,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     SimulatePrincipalPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SimulatePrincipalPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SimulatePrincipalPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22788,23 +23724,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SimulatePolicyResponseDeserializer::deserialize("SimulatePrincipalPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SimulatePolicyResponseDeserializer::deserialize("SimulatePrincipalPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SimulatePrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SimulatePrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Changes the status of the specified access key from Active to Inactive, or vice versa. This action can be used to disable a user's key as part of a key rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html\">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>"]
-                fn update_access_key(&self, input: &UpdateAccessKeyRequest) -> Result<(), UpdateAccessKeyError> {
+                fn update_access_key(&self, input: &UpdateAccessKeyRequest) -> Box<Future<Item = (), Error = UpdateAccessKeyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22813,22 +23750,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateAccessKeyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateAccessKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateAccessKeyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateAccessKeyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateAccessKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the password policy settings for the AWS account.</p> <note> <p>This action does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value.</p> </note> <p> For more information about using a password policy, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html\">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>"]
-                fn update_account_password_policy(&self, input: &UpdateAccountPasswordPolicyRequest) -> Result<(), UpdateAccountPasswordPolicyError> {
+                fn update_account_password_policy(&self, input: &UpdateAccountPasswordPolicyRequest) -> Box<Future<Item = (), Error = UpdateAccountPasswordPolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22837,22 +23783,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateAccountPasswordPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateAccountPasswordPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateAccountPasswordPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the \"role trust policy\". For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p>"]
-                fn update_assume_role_policy(&self, input: &UpdateAssumeRolePolicyRequest) -> Result<(), UpdateAssumeRolePolicyError> {
+                fn update_assume_role_policy(&self, input: &UpdateAssumeRolePolicyRequest) -> Box<Future<Item = (), Error = UpdateAssumeRolePolicyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22861,22 +23816,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateAssumeRolePolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateAssumeRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateAssumeRolePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateAssumeRolePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateAssumeRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html\">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change an IAM group name the requester must have appropriate permissions on both the source object and the target object. For example, to change \"Managers\" to \"MGRs\", the entity making the request must have permission on both \"Managers\" and \"MGRs\", or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html\">Permissions and Policies</a>. </p> </note>"]
-                fn update_group(&self, input: &UpdateGroupRequest) -> Result<(), UpdateGroupError> {
+                fn update_group(&self, input: &UpdateGroupRequest) -> Box<Future<Item = (), Error = UpdateGroupError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22885,22 +23849,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
-                fn update_login_profile(&self, input: &UpdateLoginProfileRequest) -> Result<(), UpdateLoginProfileError> {
+                fn update_login_profile(&self, input: &UpdateLoginProfileRequest) -> Box<Future<Item = (), Error = UpdateLoginProfileError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22909,22 +23882,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateLoginProfileRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateLoginProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateLoginProfileError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateLoginProfileError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateLoginProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this action completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider's certificate changes, which occurs rarely. However, if the provider's certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the provider's certificate and is validated by the thumbprint, it is a best practice to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> action to highly-privileged users.</p> </note>"]
-                fn update_open_id_connect_provider_thumbprint(&self, input: &UpdateOpenIDConnectProviderThumbprintRequest) -> Result<(), UpdateOpenIDConnectProviderThumbprintError> {
+                fn update_open_id_connect_provider_thumbprint(&self, input: &UpdateOpenIDConnectProviderThumbprintRequest) -> Box<Future<Item = (), Error = UpdateOpenIDConnectProviderThumbprintError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22933,22 +23915,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateOpenIDConnectProviderThumbprintRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateOpenIDConnectProviderThumbprintError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateOpenIDConnectProviderThumbprintError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateOpenIDConnectProviderThumbprintError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateOpenIDConnectProviderThumbprintError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the metadata document for an existing SAML provider resource object.</p> <note> <p>This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
-                fn update_saml_provider(&self, input: &UpdateSAMLProviderRequest) -> Result<UpdateSAMLProviderResponse, UpdateSAMLProviderError> {
+                fn update_saml_provider(&self, input: &UpdateSAMLProviderRequest) -> Box<Future<Item = UpdateSAMLProviderResponse, Error = UpdateSAMLProviderError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22957,11 +23948,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateSAMLProviderError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateSAMLProviderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -22973,23 +23972,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UpdateSAMLProviderResponseDeserializer::deserialize("UpdateSAMLProviderResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UpdateSAMLProviderResponseDeserializer::deserialize("UpdateSAMLProviderResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the status of an IAM user's SSH public key to active or inactive. SSH public keys that are inactive cannot be used for authentication. This action can be used to disable a user's SSH public key as part of a key rotation work flow.</p> <p>The SSH public key affected by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
-                fn update_ssh_public_key(&self, input: &UpdateSSHPublicKeyRequest) -> Result<(), UpdateSSHPublicKeyError> {
+                fn update_ssh_public_key(&self, input: &UpdateSSHPublicKeyRequest) -> Box<Future<Item = (), Error = UpdateSSHPublicKeyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -22998,22 +23998,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateSSHPublicKeyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateSSHPublicKeyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p>You should understand the implications of changing a server certificate's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts\">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change a server certificate name the requester must have appropriate permissions on both the source object and the target object. For example, to change the name from \"ProductionCert\" to \"ProdCert\", the entity making the request must have permission on \"ProductionCert\" and \"ProdCert\", or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html\">Access Management</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn update_server_certificate(&self, input: &UpdateServerCertificateRequest) -> Result<(), UpdateServerCertificateError> {
+                fn update_server_certificate(&self, input: &UpdateServerCertificateRequest) -> Box<Future<Item = (), Error = UpdateServerCertificateError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -23022,22 +24031,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateServerCertificateRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateServerCertificateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateServerCertificateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This action can be used to disable a user’s service-specific credential as part of a credential rotation work flow.</p>"]
-                fn update_service_specific_credential(&self, input: &UpdateServiceSpecificCredentialRequest) -> Result<(), UpdateServiceSpecificCredentialError> {
+                fn update_service_specific_credential(&self, input: &UpdateServiceSpecificCredentialRequest) -> Box<Future<Item = (), Error = UpdateServiceSpecificCredentialError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -23046,22 +24064,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateServiceSpecificCredentialError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateServiceSpecificCredentialError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This action can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
-                fn update_signing_certificate(&self, input: &UpdateSigningCertificateRequest) -> Result<(), UpdateSigningCertificateError> {
+                fn update_signing_certificate(&self, input: &UpdateSigningCertificateRequest) -> Box<Future<Item = (), Error = UpdateSigningCertificateError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -23070,22 +24097,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateSigningCertificateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateSigningCertificateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming\">Renaming an IAM User</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html\">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html\">Permissions and Policies</a>. </p> </note>"]
-                fn update_user(&self, input: &UpdateUserRequest) -> Result<(), UpdateUserError> {
+                fn update_user(&self, input: &UpdateUserRequest) -> Box<Future<Item = (), Error = UpdateUserError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -23094,22 +24130,31 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UpdateUserRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateUserError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateUserError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this action can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
-                fn upload_ssh_public_key(&self, input: &UploadSSHPublicKeyRequest) -> Result<UploadSSHPublicKeyResponse, UploadSSHPublicKeyError> {
+                fn upload_ssh_public_key(&self, input: &UploadSSHPublicKeyRequest) -> Box<Future<Item = UploadSSHPublicKeyResponse, Error = UploadSSHPublicKeyError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -23118,11 +24163,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UploadSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UploadSSHPublicKeyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UploadSSHPublicKeyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23134,23 +24187,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UploadSSHPublicKeyResponseDeserializer::deserialize("UploadSSHPublicKeyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UploadSSHPublicKeyResponseDeserializer::deserialize("UploadSSHPublicKeyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UploadSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UploadSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <p>For information about the number of server certificates you can upload, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html\">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html\">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html\">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn upload_server_certificate(&self, input: &UploadServerCertificateRequest) -> Result<UploadServerCertificateResponse, UploadServerCertificateError> {
+                fn upload_server_certificate(&self, input: &UploadServerCertificateRequest) -> Box<Future<Item = UploadServerCertificateResponse, Error = UploadServerCertificateError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -23159,11 +24213,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UploadServerCertificateRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UploadServerCertificateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UploadServerCertificateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23175,23 +24237,24 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UploadServerCertificateResponseDeserializer::deserialize("UploadServerCertificateResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UploadServerCertificateResponseDeserializer::deserialize("UploadServerCertificateResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UploadServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UploadServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of a X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html\">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
-                fn upload_signing_certificate(&self, input: &UploadSigningCertificateRequest) -> Result<UploadSigningCertificateResponse, UploadSigningCertificateError> {
+                fn upload_signing_certificate(&self, input: &UploadSigningCertificateRequest) -> Box<Future<Item = UploadSigningCertificateResponse, Error = UploadSigningCertificateError>> {
                     let mut request = SignedRequest::new("POST", "iam", self.region, "/");
                     let mut params = Params::new();
 
@@ -23200,11 +24263,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
                     UploadSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UploadSigningCertificateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UploadSigningCertificateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -23216,18 +24287,19 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UploadSigningCertificateResponseDeserializer::deserialize("UploadSigningCertificateResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UploadSigningCertificateResponseDeserializer::deserialize("UploadSigningCertificateResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UploadSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UploadSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -23253,6 +24325,28 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
         }
             
         #[test]
+        fn test_parse_valid_iam_list_account_aliases() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-account-aliases.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ListAccountAliasesRequest::default();
+            let result = client.list_account_aliases(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_iam_list_groups() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-groups.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ListGroupsRequest::default();
+            let result = client.list_groups(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
         fn test_parse_valid_iam_create_virtual_mfa_device() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-create-virtual-mfa-device.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
@@ -23264,34 +24358,23 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
 
 
         #[test]
+        fn test_parse_valid_iam_list_server_certificates() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-server-certificates.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ListServerCertificatesRequest::default();
+            let result = client.list_server_certificates(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
         fn test_parse_valid_iam_get_account_summary() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-get-account-summary.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             
             let result = client.get_account_summary();
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_iam_get_group() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-get-group.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetGroupRequest::default();
-            let result = client.get_group(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_iam_get_user_policy() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-get-user-policy.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetUserPolicyRequest::default();
-            let result = client.get_user_policy(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -23319,45 +24402,12 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_iam_list_account_aliases() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-account-aliases.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListAccountAliasesRequest::default();
-            let result = client.list_account_aliases(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_iam_list_groups() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-groups.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListGroupsRequest::default();
-            let result = client.list_groups(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
         fn test_parse_valid_iam_list_instance_profiles() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-instance-profiles.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = ListInstanceProfilesRequest::default();
             let result = client.list_instance_profiles(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_iam_list_mfa_devices() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-mfa-devices.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListMFADevicesRequest::default();
-            let result = client.list_mfa_devices(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -23374,12 +24424,12 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_iam_list_server_certificates() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-server-certificates.xml");
+        fn test_parse_valid_iam_get_group() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-get-group.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListServerCertificatesRequest::default();
-            let result = client.list_server_certificates(&request);
+            let request = GetGroupRequest::default();
+            let result = client.get_group(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -23396,6 +24446,28 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
 
 
         #[test]
+        fn test_parse_valid_iam_list_virtual_mfa_devices() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-virtual-mfa-devices.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ListVirtualMFADevicesRequest::default();
+            let result = client.list_virtual_mfa_devices(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_iam_get_user_policy() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-get-user-policy.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = GetUserPolicyRequest::default();
+            let result = client.get_user_policy(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
         fn test_parse_valid_iam_list_users() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-users.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
@@ -23407,12 +24479,12 @@ UploadSigningCertificateError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_iam_list_virtual_mfa_devices() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-virtual-mfa-devices.xml");
+        fn test_parse_valid_iam_list_mfa_devices() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "iam-list-mfa-devices.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListVirtualMFADevicesRequest::default();
-            let result = client.list_virtual_mfa_devices(&request);
+            let request = ListMFADevicesRequest::default();
+            let result = client.list_mfa_devices(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

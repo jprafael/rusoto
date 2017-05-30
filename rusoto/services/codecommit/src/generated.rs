@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type AccountId = String;
 pub type AdditionalData = String;
 pub type Arn = String;
@@ -1975,63 +1976,63 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Returns information about one or more repositories.</p> <note><p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p></note>"]
-                fn batch_get_repositories(&self, input: &BatchGetRepositoriesInput)  -> Result<BatchGetRepositoriesOutput, BatchGetRepositoriesError>;
+                fn batch_get_repositories(&self, input: &BatchGetRepositoriesInput)  -> Box<Future<Item = BatchGetRepositoriesOutput, Error = BatchGetRepositoriesError>>;
                 
 
                 #[doc="<p>Creates a new branch in a repository and points the branch to a commit.</p> <note><p>Calling the create branch operation does not set a repository's default branch. To do this, call the update default branch operation.</p></note>"]
-                fn create_branch(&self, input: &CreateBranchInput)  -> Result<(), CreateBranchError>;
+                fn create_branch(&self, input: &CreateBranchInput)  -> Box<Future<Item = (), Error = CreateBranchError>>;
                 
 
                 #[doc="<p>Creates a new, empty repository.</p>"]
-                fn create_repository(&self, input: &CreateRepositoryInput)  -> Result<CreateRepositoryOutput, CreateRepositoryError>;
+                fn create_repository(&self, input: &CreateRepositoryInput)  -> Box<Future<Item = CreateRepositoryOutput, Error = CreateRepositoryError>>;
                 
 
                 #[doc="<p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</important>"]
-                fn delete_repository(&self, input: &DeleteRepositoryInput)  -> Result<DeleteRepositoryOutput, DeleteRepositoryError>;
+                fn delete_repository(&self, input: &DeleteRepositoryInput)  -> Box<Future<Item = DeleteRepositoryOutput, Error = DeleteRepositoryError>>;
                 
 
                 #[doc="<p>Returns information about a repository branch, including its name and the last commit ID.</p>"]
-                fn get_branch(&self, input: &GetBranchInput)  -> Result<GetBranchOutput, GetBranchError>;
+                fn get_branch(&self, input: &GetBranchInput)  -> Box<Future<Item = GetBranchOutput, Error = GetBranchError>>;
                 
 
                 #[doc="<p>Returns information about a commit, including commit message and committer information.</p>"]
-                fn get_commit(&self, input: &GetCommitInput)  -> Result<GetCommitOutput, GetCommitError>;
+                fn get_commit(&self, input: &GetCommitInput)  -> Box<Future<Item = GetCommitOutput, Error = GetCommitError>>;
                 
 
                 #[doc="<p>Returns information about a repository.</p> <note><p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p></note>"]
-                fn get_repository(&self, input: &GetRepositoryInput)  -> Result<GetRepositoryOutput, GetRepositoryError>;
+                fn get_repository(&self, input: &GetRepositoryInput)  -> Box<Future<Item = GetRepositoryOutput, Error = GetRepositoryError>>;
                 
 
                 #[doc="<p>Gets information about triggers configured for a repository.</p>"]
-                fn get_repository_triggers(&self, input: &GetRepositoryTriggersInput)  -> Result<GetRepositoryTriggersOutput, GetRepositoryTriggersError>;
+                fn get_repository_triggers(&self, input: &GetRepositoryTriggersInput)  -> Box<Future<Item = GetRepositoryTriggersOutput, Error = GetRepositoryTriggersError>>;
                 
 
                 #[doc="<p>Gets information about one or more branches in a repository.</p>"]
-                fn list_branches(&self, input: &ListBranchesInput)  -> Result<ListBranchesOutput, ListBranchesError>;
+                fn list_branches(&self, input: &ListBranchesInput)  -> Box<Future<Item = ListBranchesOutput, Error = ListBranchesError>>;
                 
 
                 #[doc="<p>Gets information about one or more repositories.</p>"]
-                fn list_repositories(&self, input: &ListRepositoriesInput)  -> Result<ListRepositoriesOutput, ListRepositoriesError>;
+                fn list_repositories(&self, input: &ListRepositoriesInput)  -> Box<Future<Item = ListRepositoriesOutput, Error = ListRepositoriesError>>;
                 
 
                 #[doc="<p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>"]
-                fn put_repository_triggers(&self, input: &PutRepositoryTriggersInput)  -> Result<PutRepositoryTriggersOutput, PutRepositoryTriggersError>;
+                fn put_repository_triggers(&self, input: &PutRepositoryTriggersInput)  -> Box<Future<Item = PutRepositoryTriggersOutput, Error = PutRepositoryTriggersError>>;
                 
 
                 #[doc="<p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>"]
-                fn test_repository_triggers(&self, input: &TestRepositoryTriggersInput)  -> Result<TestRepositoryTriggersOutput, TestRepositoryTriggersError>;
+                fn test_repository_triggers(&self, input: &TestRepositoryTriggersInput)  -> Box<Future<Item = TestRepositoryTriggersOutput, Error = TestRepositoryTriggersError>>;
                 
 
                 #[doc="<p>Sets or changes the default branch name for the specified repository.</p> <note><p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p></note>"]
-                fn update_default_branch(&self, input: &UpdateDefaultBranchInput)  -> Result<(), UpdateDefaultBranchError>;
+                fn update_default_branch(&self, input: &UpdateDefaultBranchInput)  -> Box<Future<Item = (), Error = UpdateDefaultBranchError>>;
                 
 
                 #[doc="<p>Sets or changes the comment or description for a repository.</p> <note><p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p></note>"]
-                fn update_repository_description(&self, input: &UpdateRepositoryDescriptionInput)  -> Result<(), UpdateRepositoryDescriptionError>;
+                fn update_repository_description(&self, input: &UpdateRepositoryDescriptionInput)  -> Box<Future<Item = (), Error = UpdateRepositoryDescriptionError>>;
                 
 
                 #[doc="<p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix \".git\" is prohibited. For a full description of the limits on repository names, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html\">Limits</a> in the AWS CodeCommit User Guide.</p>"]
-                fn update_repository_name(&self, input: &UpdateRepositoryNameInput)  -> Result<(), UpdateRepositoryNameError>;
+                fn update_repository_name(&self, input: &UpdateRepositoryNameInput)  -> Box<Future<Item = (), Error = UpdateRepositoryNameError>>;
                 
 }
 /// A client for the CodeCommit API.
@@ -2055,7 +2056,7 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Returns information about one or more repositories.</p> <note><p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p></note>"]
-                fn batch_get_repositories(&self, input: &BatchGetRepositoriesInput)  -> Result<BatchGetRepositoriesOutput, BatchGetRepositoriesError> {
+                fn batch_get_repositories(&self, input: &BatchGetRepositoriesInput)  -> Box<Future<Item = BatchGetRepositoriesOutput, Error = BatchGetRepositoriesError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2063,21 +2064,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchGetRepositoriesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchGetRepositoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchGetRepositoriesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchGetRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchGetRepositoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new branch in a repository and points the branch to a commit.</p> <note><p>Calling the create branch operation does not set a repository's default branch. To do this, call the update default branch operation.</p></note>"]
-                fn create_branch(&self, input: &CreateBranchInput)  -> Result<(), CreateBranchError> {
+                fn create_branch(&self, input: &CreateBranchInput)  -> Box<Future<Item = (), Error = CreateBranchError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2085,21 +2096,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateBranchError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(CreateBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateBranchError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(CreateBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new, empty repository.</p>"]
-                fn create_repository(&self, input: &CreateRepositoryInput)  -> Result<CreateRepositoryOutput, CreateRepositoryError> {
+                fn create_repository(&self, input: &CreateRepositoryInput)  -> Box<Future<Item = CreateRepositoryOutput, Error = CreateRepositoryError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2107,21 +2128,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateRepositoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateRepositoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</important>"]
-                fn delete_repository(&self, input: &DeleteRepositoryInput)  -> Result<DeleteRepositoryOutput, DeleteRepositoryError> {
+                fn delete_repository(&self, input: &DeleteRepositoryInput)  -> Box<Future<Item = DeleteRepositoryOutput, Error = DeleteRepositoryError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2129,21 +2160,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRepositoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRepositoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about a repository branch, including its name and the last commit ID.</p>"]
-                fn get_branch(&self, input: &GetBranchInput)  -> Result<GetBranchOutput, GetBranchError> {
+                fn get_branch(&self, input: &GetBranchInput)  -> Box<Future<Item = GetBranchOutput, Error = GetBranchError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2151,21 +2192,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBranchError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetBranchOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBranchError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetBranchOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about a commit, including commit message and committer information.</p>"]
-                fn get_commit(&self, input: &GetCommitInput)  -> Result<GetCommitOutput, GetCommitError> {
+                fn get_commit(&self, input: &GetCommitInput)  -> Box<Future<Item = GetCommitOutput, Error = GetCommitError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2173,21 +2224,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetCommitError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetCommitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetCommitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetCommitError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetCommitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetCommitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about a repository.</p> <note><p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p></note>"]
-                fn get_repository(&self, input: &GetRepositoryInput)  -> Result<GetRepositoryOutput, GetRepositoryError> {
+                fn get_repository(&self, input: &GetRepositoryInput)  -> Box<Future<Item = GetRepositoryOutput, Error = GetRepositoryError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2195,21 +2256,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetRepositoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetRepositoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about triggers configured for a repository.</p>"]
-                fn get_repository_triggers(&self, input: &GetRepositoryTriggersInput)  -> Result<GetRepositoryTriggersOutput, GetRepositoryTriggersError> {
+                fn get_repository_triggers(&self, input: &GetRepositoryTriggersInput)  -> Box<Future<Item = GetRepositoryTriggersOutput, Error = GetRepositoryTriggersError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2217,21 +2288,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetRepositoryTriggersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetRepositoryTriggersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about one or more branches in a repository.</p>"]
-                fn list_branches(&self, input: &ListBranchesInput)  -> Result<ListBranchesOutput, ListBranchesError> {
+                fn list_branches(&self, input: &ListBranchesInput)  -> Box<Future<Item = ListBranchesOutput, Error = ListBranchesError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2239,21 +2320,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListBranchesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBranchesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListBranchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListBranchesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListBranchesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListBranchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about one or more repositories.</p>"]
-                fn list_repositories(&self, input: &ListRepositoriesInput)  -> Result<ListRepositoriesOutput, ListRepositoriesError> {
+                fn list_repositories(&self, input: &ListRepositoriesInput)  -> Box<Future<Item = ListRepositoriesOutput, Error = ListRepositoriesError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2261,21 +2352,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListRepositoriesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListRepositoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListRepositoriesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListRepositoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>"]
-                fn put_repository_triggers(&self, input: &PutRepositoryTriggersInput)  -> Result<PutRepositoryTriggersOutput, PutRepositoryTriggersError> {
+                fn put_repository_triggers(&self, input: &PutRepositoryTriggersInput)  -> Box<Future<Item = PutRepositoryTriggersOutput, Error = PutRepositoryTriggersError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2283,21 +2384,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutRepositoryTriggersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutRepositoryTriggersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>"]
-                fn test_repository_triggers(&self, input: &TestRepositoryTriggersInput)  -> Result<TestRepositoryTriggersOutput, TestRepositoryTriggersError> {
+                fn test_repository_triggers(&self, input: &TestRepositoryTriggersInput)  -> Box<Future<Item = TestRepositoryTriggersOutput, Error = TestRepositoryTriggersError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2305,21 +2416,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TestRepositoryTriggersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TestRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(TestRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TestRepositoryTriggersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<TestRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(TestRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets or changes the default branch name for the specified repository.</p> <note><p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p></note>"]
-                fn update_default_branch(&self, input: &UpdateDefaultBranchInput)  -> Result<(), UpdateDefaultBranchError> {
+                fn update_default_branch(&self, input: &UpdateDefaultBranchInput)  -> Box<Future<Item = (), Error = UpdateDefaultBranchError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2327,21 +2448,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateDefaultBranchError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(UpdateDefaultBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateDefaultBranchError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(UpdateDefaultBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets or changes the comment or description for a repository.</p> <note><p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p></note>"]
-                fn update_repository_description(&self, input: &UpdateRepositoryDescriptionInput)  -> Result<(), UpdateRepositoryDescriptionError> {
+                fn update_repository_description(&self, input: &UpdateRepositoryDescriptionInput)  -> Box<Future<Item = (), Error = UpdateRepositoryDescriptionError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2349,21 +2480,31 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateRepositoryDescriptionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(UpdateRepositoryDescriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateRepositoryDescriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(UpdateRepositoryDescriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix \".git\" is prohibited. For a full description of the limits on repository names, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html\">Limits</a> in the AWS CodeCommit User Guide.</p>"]
-                fn update_repository_name(&self, input: &UpdateRepositoryNameInput)  -> Result<(), UpdateRepositoryNameError> {
+                fn update_repository_name(&self, input: &UpdateRepositoryNameInput)  -> Box<Future<Item = (), Error = UpdateRepositoryNameError>> {
                     let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2371,16 +2512,26 @@ UpdateRepositoryNameError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateRepositoryNameError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(UpdateRepositoryNameError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateRepositoryNameError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(UpdateRepositoryNameError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

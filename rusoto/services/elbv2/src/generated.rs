@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -7008,119 +7018,119 @@ SetSubnetsError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds the specified tags to the specified resource. You can tag your Application Load Balancers and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>"]
-                fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError>;
+                fn add_tags(&self, input: &AddTagsInput) -> Box<Future<Item = AddTagsOutput, Error = AddTagsError>>;
                 
 
                 #[doc="<p>Creates a listener for the specified Application Load Balancer.</p> <p>You can create up to 10 listeners per load balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html\">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
-                fn create_listener(&self, input: &CreateListenerInput) -> Result<CreateListenerOutput, CreateListenerError>;
+                fn create_listener(&self, input: &CreateListenerInput) -> Box<Future<Item = CreateListenerOutput, Error = CreateListenerError>>;
                 
 
                 #[doc="<p>Creates an Application Load Balancer.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. You can add security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html\">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html\">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
-                fn create_load_balancer(&self, input: &CreateLoadBalancerInput) -> Result<CreateLoadBalancerOutput, CreateLoadBalancerError>;
+                fn create_load_balancer(&self, input: &CreateLoadBalancerInput) -> Box<Future<Item = CreateLoadBalancerOutput, Error = CreateLoadBalancerError>>;
                 
 
                 #[doc="<p>Creates a rule for the specified listener.</p> <p>Each rule can have one action and one condition. Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the default action for the default rule is taken. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules\">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>"]
-                fn create_rule(&self, input: &CreateRuleInput) -> Result<CreateRuleOutput, CreateRuleError>;
+                fn create_rule(&self, input: &CreateRuleInput) -> Box<Future<Item = CreateRuleOutput, Error = CreateRuleError>>;
                 
 
                 #[doc="<p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html\">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
-                fn create_target_group(&self, input: &CreateTargetGroupInput) -> Result<CreateTargetGroupOutput, CreateTargetGroupError>;
+                fn create_target_group(&self, input: &CreateTargetGroupInput) -> Box<Future<Item = CreateTargetGroupOutput, Error = CreateTargetGroupError>>;
                 
 
                 #[doc="<p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>"]
-                fn delete_listener(&self, input: &DeleteListenerInput) -> Result<DeleteListenerOutput, DeleteListenerError>;
+                fn delete_listener(&self, input: &DeleteListenerInput) -> Box<Future<Item = DeleteListenerOutput, Error = DeleteListenerError>>;
                 
 
                 #[doc="<p>Deletes the specified Application Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>"]
-                fn delete_load_balancer(&self, input: &DeleteLoadBalancerInput) -> Result<DeleteLoadBalancerOutput, DeleteLoadBalancerError>;
+                fn delete_load_balancer(&self, input: &DeleteLoadBalancerInput) -> Box<Future<Item = DeleteLoadBalancerOutput, Error = DeleteLoadBalancerError>>;
                 
 
                 #[doc="<p>Deletes the specified rule.</p>"]
-                fn delete_rule(&self, input: &DeleteRuleInput) -> Result<DeleteRuleOutput, DeleteRuleError>;
+                fn delete_rule(&self, input: &DeleteRuleInput) -> Box<Future<Item = DeleteRuleOutput, Error = DeleteRuleError>>;
                 
 
                 #[doc="<p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>"]
-                fn delete_target_group(&self, input: &DeleteTargetGroupInput) -> Result<DeleteTargetGroupOutput, DeleteTargetGroupError>;
+                fn delete_target_group(&self, input: &DeleteTargetGroupInput) -> Box<Future<Item = DeleteTargetGroupOutput, Error = DeleteTargetGroupError>>;
                 
 
                 #[doc="<p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>"]
-                fn deregister_targets(&self, input: &DeregisterTargetsInput) -> Result<DeregisterTargetsOutput, DeregisterTargetsError>;
+                fn deregister_targets(&self, input: &DeregisterTargetsInput) -> Box<Future<Item = DeregisterTargetsOutput, Error = DeregisterTargetsError>>;
                 
 
                 #[doc="<p>Describes the specified listeners or the listeners for the specified Application Load Balancer. You must specify either a load balancer or one or more listeners.</p>"]
-                fn describe_listeners(&self, input: &DescribeListenersInput) -> Result<DescribeListenersOutput, DescribeListenersError>;
+                fn describe_listeners(&self, input: &DescribeListenersInput) -> Box<Future<Item = DescribeListenersOutput, Error = DescribeListenersError>>;
                 
 
                 #[doc="<p>Describes the attributes for the specified Application Load Balancer.</p>"]
-                fn describe_load_balancer_attributes(&self, input: &DescribeLoadBalancerAttributesInput) -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
+                fn describe_load_balancer_attributes(&self, input: &DescribeLoadBalancerAttributesInput) -> Box<Future<Item = DescribeLoadBalancerAttributesOutput, Error = DescribeLoadBalancerAttributesError>>;
                 
 
                 #[doc="<p>Describes the specified Application Load Balancers or all of your Application Load Balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>"]
-                fn describe_load_balancers(&self, input: &DescribeLoadBalancersInput) -> Result<DescribeLoadBalancersOutput, DescribeLoadBalancersError>;
+                fn describe_load_balancers(&self, input: &DescribeLoadBalancersInput) -> Box<Future<Item = DescribeLoadBalancersOutput, Error = DescribeLoadBalancersError>>;
                 
 
                 #[doc="<p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>"]
-                fn describe_rules(&self, input: &DescribeRulesInput) -> Result<DescribeRulesOutput, DescribeRulesError>;
+                fn describe_rules(&self, input: &DescribeRulesInput) -> Box<Future<Item = DescribeRulesOutput, Error = DescribeRulesError>>;
                 
 
                 #[doc="<p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>Note that the only supported policy at this time is ELBSecurityPolicy-2015-05.</p>"]
-                fn describe_ssl_policies(&self, input: &DescribeSSLPoliciesInput) -> Result<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError>;
+                fn describe_ssl_policies(&self, input: &DescribeSSLPoliciesInput) -> Box<Future<Item = DescribeSSLPoliciesOutput, Error = DescribeSSLPoliciesError>>;
                 
 
                 #[doc="<p>Describes the tags for the specified resources.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsInput) -> Result<DescribeTagsOutput, DescribeTagsError>;
+                fn describe_tags(&self, input: &DescribeTagsInput) -> Box<Future<Item = DescribeTagsOutput, Error = DescribeTagsError>>;
                 
 
                 #[doc="<p>Describes the attributes for the specified target group.</p>"]
-                fn describe_target_group_attributes(&self, input: &DescribeTargetGroupAttributesInput) -> Result<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError>;
+                fn describe_target_group_attributes(&self, input: &DescribeTargetGroupAttributesInput) -> Box<Future<Item = DescribeTargetGroupAttributesOutput, Error = DescribeTargetGroupAttributesError>>;
                 
 
                 #[doc="<p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>"]
-                fn describe_target_groups(&self, input: &DescribeTargetGroupsInput) -> Result<DescribeTargetGroupsOutput, DescribeTargetGroupsError>;
+                fn describe_target_groups(&self, input: &DescribeTargetGroupsInput) -> Box<Future<Item = DescribeTargetGroupsOutput, Error = DescribeTargetGroupsError>>;
                 
 
                 #[doc="<p>Describes the health of the specified targets or all of your targets.</p>"]
-                fn describe_target_health(&self, input: &DescribeTargetHealthInput) -> Result<DescribeTargetHealthOutput, DescribeTargetHealthError>;
+                fn describe_target_health(&self, input: &DescribeTargetHealthInput) -> Box<Future<Item = DescribeTargetHealthOutput, Error = DescribeTargetHealthError>>;
                 
 
                 #[doc="<p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy.</p>"]
-                fn modify_listener(&self, input: &ModifyListenerInput) -> Result<ModifyListenerOutput, ModifyListenerError>;
+                fn modify_listener(&self, input: &ModifyListenerInput) -> Box<Future<Item = ModifyListenerOutput, Error = ModifyListenerError>>;
                 
 
                 #[doc="<p>Modifies the specified attributes of the specified Application Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>"]
-                fn modify_load_balancer_attributes(&self, input: &ModifyLoadBalancerAttributesInput) -> Result<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
+                fn modify_load_balancer_attributes(&self, input: &ModifyLoadBalancerAttributesInput) -> Box<Future<Item = ModifyLoadBalancerAttributesOutput, Error = ModifyLoadBalancerAttributesError>>;
                 
 
                 #[doc="<p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>"]
-                fn modify_rule(&self, input: &ModifyRuleInput) -> Result<ModifyRuleOutput, ModifyRuleError>;
+                fn modify_rule(&self, input: &ModifyRuleInput) -> Box<Future<Item = ModifyRuleOutput, Error = ModifyRuleError>>;
                 
 
                 #[doc="<p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>"]
-                fn modify_target_group(&self, input: &ModifyTargetGroupInput) -> Result<ModifyTargetGroupOutput, ModifyTargetGroupError>;
+                fn modify_target_group(&self, input: &ModifyTargetGroupInput) -> Box<Future<Item = ModifyTargetGroupOutput, Error = ModifyTargetGroupError>>;
                 
 
                 #[doc="<p>Modifies the specified attributes of the specified target group.</p>"]
-                fn modify_target_group_attributes(&self, input: &ModifyTargetGroupAttributesInput) -> Result<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError>;
+                fn modify_target_group_attributes(&self, input: &ModifyTargetGroupAttributesInput) -> Box<Future<Item = ModifyTargetGroupAttributesOutput, Error = ModifyTargetGroupAttributesError>>;
                 
 
                 #[doc="<p>Registers the specified targets with the specified target group.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port number for the target group. Alternatively, you can override the port for a target when you register it.</p> <p>The target must be in the virtual private cloud (VPC) that you specified for the target group. If the target is an EC2 instance, it can't be in the <code>stopped</code> or <code>running</code> state when you register it.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>"]
-                fn register_targets(&self, input: &RegisterTargetsInput) -> Result<RegisterTargetsOutput, RegisterTargetsError>;
+                fn register_targets(&self, input: &RegisterTargetsInput) -> Box<Future<Item = RegisterTargetsOutput, Error = RegisterTargetsError>>;
                 
 
                 #[doc="<p>Removes the specified tags from the specified resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>"]
-                fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError>;
+                fn remove_tags(&self, input: &RemoveTagsInput) -> Box<Future<Item = RemoveTagsOutput, Error = RemoveTagsError>>;
                 
 
                 #[doc="<p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>"]
-                fn set_rule_priorities(&self, input: &SetRulePrioritiesInput) -> Result<SetRulePrioritiesOutput, SetRulePrioritiesError>;
+                fn set_rule_priorities(&self, input: &SetRulePrioritiesInput) -> Box<Future<Item = SetRulePrioritiesOutput, Error = SetRulePrioritiesError>>;
                 
 
                 #[doc="<p>Associates the specified security groups with the specified load balancer. The specified security groups override the previously associated security groups.</p>"]
-                fn set_security_groups(&self, input: &SetSecurityGroupsInput) -> Result<SetSecurityGroupsOutput, SetSecurityGroupsError>;
+                fn set_security_groups(&self, input: &SetSecurityGroupsInput) -> Box<Future<Item = SetSecurityGroupsOutput, Error = SetSecurityGroupsError>>;
                 
 
                 #[doc="<p>Enables the Availability Zone for the specified subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p>"]
-                fn set_subnets(&self, input: &SetSubnetsInput) -> Result<SetSubnetsOutput, SetSubnetsError>;
+                fn set_subnets(&self, input: &SetSubnetsInput) -> Box<Future<Item = SetSubnetsOutput, Error = SetSubnetsError>>;
                 
 }
 /// A client for the Elastic Load Balancing v2 API.
@@ -7144,7 +7154,7 @@ SetSubnetsError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds the specified tags to the specified resource. You can tag your Application Load Balancers and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>"]
-                fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
+                fn add_tags(&self, input: &AddTagsInput) -> Box<Future<Item = AddTagsOutput, Error = AddTagsError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7153,11 +7163,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     AddTagsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7169,23 +7187,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a listener for the specified Application Load Balancer.</p> <p>You can create up to 10 listeners per load balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html\">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
-                fn create_listener(&self, input: &CreateListenerInput) -> Result<CreateListenerOutput, CreateListenerError> {
+                fn create_listener(&self, input: &CreateListenerInput) -> Box<Future<Item = CreateListenerOutput, Error = CreateListenerError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7194,11 +7213,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     CreateListenerInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateListenerError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateListenerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7210,23 +7237,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateListenerOutputDeserializer::deserialize("CreateListenerResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateListenerOutputDeserializer::deserialize("CreateListenerResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateListenerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateListenerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an Application Load Balancer.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. You can add security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html\">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html\">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
-                fn create_load_balancer(&self, input: &CreateLoadBalancerInput) -> Result<CreateLoadBalancerOutput, CreateLoadBalancerError> {
+                fn create_load_balancer(&self, input: &CreateLoadBalancerInput) -> Box<Future<Item = CreateLoadBalancerOutput, Error = CreateLoadBalancerError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7235,11 +7263,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     CreateLoadBalancerInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateLoadBalancerError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateLoadBalancerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7251,23 +7287,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateLoadBalancerOutputDeserializer::deserialize("CreateLoadBalancerResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateLoadBalancerOutputDeserializer::deserialize("CreateLoadBalancerResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a rule for the specified listener.</p> <p>Each rule can have one action and one condition. Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the default action for the default rule is taken. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules\">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>"]
-                fn create_rule(&self, input: &CreateRuleInput) -> Result<CreateRuleOutput, CreateRuleError> {
+                fn create_rule(&self, input: &CreateRuleInput) -> Box<Future<Item = CreateRuleOutput, Error = CreateRuleError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7276,11 +7313,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     CreateRuleInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateRuleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7292,23 +7337,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateRuleOutputDeserializer::deserialize("CreateRuleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateRuleOutputDeserializer::deserialize("CreateRuleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html\">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
-                fn create_target_group(&self, input: &CreateTargetGroupInput) -> Result<CreateTargetGroupOutput, CreateTargetGroupError> {
+                fn create_target_group(&self, input: &CreateTargetGroupInput) -> Box<Future<Item = CreateTargetGroupOutput, Error = CreateTargetGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7317,11 +7363,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     CreateTargetGroupInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTargetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTargetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7333,23 +7387,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateTargetGroupOutputDeserializer::deserialize("CreateTargetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateTargetGroupOutputDeserializer::deserialize("CreateTargetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateTargetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateTargetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>"]
-                fn delete_listener(&self, input: &DeleteListenerInput) -> Result<DeleteListenerOutput, DeleteListenerError> {
+                fn delete_listener(&self, input: &DeleteListenerInput) -> Box<Future<Item = DeleteListenerOutput, Error = DeleteListenerError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7358,11 +7413,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DeleteListenerInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteListenerError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteListenerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7374,23 +7437,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteListenerOutputDeserializer::deserialize("DeleteListenerResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteListenerOutputDeserializer::deserialize("DeleteListenerResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteListenerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteListenerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified Application Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>"]
-                fn delete_load_balancer(&self, input: &DeleteLoadBalancerInput) -> Result<DeleteLoadBalancerOutput, DeleteLoadBalancerError> {
+                fn delete_load_balancer(&self, input: &DeleteLoadBalancerInput) -> Box<Future<Item = DeleteLoadBalancerOutput, Error = DeleteLoadBalancerError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7399,11 +7463,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DeleteLoadBalancerInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteLoadBalancerError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteLoadBalancerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7415,23 +7487,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteLoadBalancerOutputDeserializer::deserialize("DeleteLoadBalancerResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteLoadBalancerOutputDeserializer::deserialize("DeleteLoadBalancerResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified rule.</p>"]
-                fn delete_rule(&self, input: &DeleteRuleInput) -> Result<DeleteRuleOutput, DeleteRuleError> {
+                fn delete_rule(&self, input: &DeleteRuleInput) -> Box<Future<Item = DeleteRuleOutput, Error = DeleteRuleError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7440,11 +7513,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DeleteRuleInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRuleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7456,23 +7537,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteRuleOutputDeserializer::deserialize("DeleteRuleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteRuleOutputDeserializer::deserialize("DeleteRuleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>"]
-                fn delete_target_group(&self, input: &DeleteTargetGroupInput) -> Result<DeleteTargetGroupOutput, DeleteTargetGroupError> {
+                fn delete_target_group(&self, input: &DeleteTargetGroupInput) -> Box<Future<Item = DeleteTargetGroupOutput, Error = DeleteTargetGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7481,11 +7563,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DeleteTargetGroupInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTargetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTargetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7497,23 +7587,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteTargetGroupOutputDeserializer::deserialize("DeleteTargetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteTargetGroupOutputDeserializer::deserialize("DeleteTargetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteTargetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteTargetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>"]
-                fn deregister_targets(&self, input: &DeregisterTargetsInput) -> Result<DeregisterTargetsOutput, DeregisterTargetsError> {
+                fn deregister_targets(&self, input: &DeregisterTargetsInput) -> Box<Future<Item = DeregisterTargetsOutput, Error = DeregisterTargetsError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7522,11 +7613,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DeregisterTargetsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeregisterTargetsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeregisterTargetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7538,23 +7637,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeregisterTargetsOutputDeserializer::deserialize("DeregisterTargetsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeregisterTargetsOutputDeserializer::deserialize("DeregisterTargetsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeregisterTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeregisterTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified listeners or the listeners for the specified Application Load Balancer. You must specify either a load balancer or one or more listeners.</p>"]
-                fn describe_listeners(&self, input: &DescribeListenersInput) -> Result<DescribeListenersOutput, DescribeListenersError> {
+                fn describe_listeners(&self, input: &DescribeListenersInput) -> Box<Future<Item = DescribeListenersOutput, Error = DescribeListenersError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7563,11 +7663,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DescribeListenersInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeListenersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeListenersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7579,23 +7687,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeListenersOutputDeserializer::deserialize("DescribeListenersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeListenersOutputDeserializer::deserialize("DescribeListenersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeListenersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeListenersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the attributes for the specified Application Load Balancer.</p>"]
-                fn describe_load_balancer_attributes(&self, input: &DescribeLoadBalancerAttributesInput) -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError> {
+                fn describe_load_balancer_attributes(&self, input: &DescribeLoadBalancerAttributesInput) -> Box<Future<Item = DescribeLoadBalancerAttributesOutput, Error = DescribeLoadBalancerAttributesError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7604,11 +7713,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DescribeLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLoadBalancerAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLoadBalancerAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7620,23 +7737,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeLoadBalancerAttributesOutputDeserializer::deserialize("DescribeLoadBalancerAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeLoadBalancerAttributesOutputDeserializer::deserialize("DescribeLoadBalancerAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified Application Load Balancers or all of your Application Load Balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>"]
-                fn describe_load_balancers(&self, input: &DescribeLoadBalancersInput) -> Result<DescribeLoadBalancersOutput, DescribeLoadBalancersError> {
+                fn describe_load_balancers(&self, input: &DescribeLoadBalancersInput) -> Box<Future<Item = DescribeLoadBalancersOutput, Error = DescribeLoadBalancersError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7645,11 +7763,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DescribeLoadBalancersInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLoadBalancersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLoadBalancersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7661,23 +7787,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeLoadBalancersOutputDeserializer::deserialize("DescribeLoadBalancersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeLoadBalancersOutputDeserializer::deserialize("DescribeLoadBalancersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>"]
-                fn describe_rules(&self, input: &DescribeRulesInput) -> Result<DescribeRulesOutput, DescribeRulesError> {
+                fn describe_rules(&self, input: &DescribeRulesInput) -> Box<Future<Item = DescribeRulesOutput, Error = DescribeRulesError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7686,11 +7813,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DescribeRulesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeRulesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeRulesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7702,23 +7837,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeRulesOutputDeserializer::deserialize("DescribeRulesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeRulesOutputDeserializer::deserialize("DescribeRulesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>Note that the only supported policy at this time is ELBSecurityPolicy-2015-05.</p>"]
-                fn describe_ssl_policies(&self, input: &DescribeSSLPoliciesInput) -> Result<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError> {
+                fn describe_ssl_policies(&self, input: &DescribeSSLPoliciesInput) -> Box<Future<Item = DescribeSSLPoliciesOutput, Error = DescribeSSLPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7727,11 +7863,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DescribeSSLPoliciesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSSLPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSSLPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7743,23 +7887,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeSSLPoliciesOutputDeserializer::deserialize("DescribeSSLPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeSSLPoliciesOutputDeserializer::deserialize("DescribeSSLPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSSLPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSSLPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the tags for the specified resources.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsInput) -> Result<DescribeTagsOutput, DescribeTagsError> {
+                fn describe_tags(&self, input: &DescribeTagsInput) -> Box<Future<Item = DescribeTagsOutput, Error = DescribeTagsError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7768,11 +7913,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DescribeTagsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7784,23 +7937,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the attributes for the specified target group.</p>"]
-                fn describe_target_group_attributes(&self, input: &DescribeTargetGroupAttributesInput) -> Result<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError> {
+                fn describe_target_group_attributes(&self, input: &DescribeTargetGroupAttributesInput) -> Box<Future<Item = DescribeTargetGroupAttributesOutput, Error = DescribeTargetGroupAttributesError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7809,11 +7963,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DescribeTargetGroupAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTargetGroupAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTargetGroupAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7825,23 +7987,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeTargetGroupAttributesOutputDeserializer::deserialize("DescribeTargetGroupAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeTargetGroupAttributesOutputDeserializer::deserialize("DescribeTargetGroupAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeTargetGroupAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeTargetGroupAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>"]
-                fn describe_target_groups(&self, input: &DescribeTargetGroupsInput) -> Result<DescribeTargetGroupsOutput, DescribeTargetGroupsError> {
+                fn describe_target_groups(&self, input: &DescribeTargetGroupsInput) -> Box<Future<Item = DescribeTargetGroupsOutput, Error = DescribeTargetGroupsError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7850,11 +8013,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DescribeTargetGroupsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTargetGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTargetGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7866,23 +8037,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeTargetGroupsOutputDeserializer::deserialize("DescribeTargetGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeTargetGroupsOutputDeserializer::deserialize("DescribeTargetGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the health of the specified targets or all of your targets.</p>"]
-                fn describe_target_health(&self, input: &DescribeTargetHealthInput) -> Result<DescribeTargetHealthOutput, DescribeTargetHealthError> {
+                fn describe_target_health(&self, input: &DescribeTargetHealthInput) -> Box<Future<Item = DescribeTargetHealthOutput, Error = DescribeTargetHealthError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7891,11 +8063,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     DescribeTargetHealthInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTargetHealthError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTargetHealthError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7907,23 +8087,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeTargetHealthOutputDeserializer::deserialize("DescribeTargetHealthResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeTargetHealthOutputDeserializer::deserialize("DescribeTargetHealthResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeTargetHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeTargetHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy.</p>"]
-                fn modify_listener(&self, input: &ModifyListenerInput) -> Result<ModifyListenerOutput, ModifyListenerError> {
+                fn modify_listener(&self, input: &ModifyListenerInput) -> Box<Future<Item = ModifyListenerOutput, Error = ModifyListenerError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7932,11 +8113,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     ModifyListenerInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyListenerError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyListenerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7948,23 +8137,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyListenerOutputDeserializer::deserialize("ModifyListenerResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyListenerOutputDeserializer::deserialize("ModifyListenerResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyListenerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyListenerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified attributes of the specified Application Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>"]
-                fn modify_load_balancer_attributes(&self, input: &ModifyLoadBalancerAttributesInput) -> Result<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
+                fn modify_load_balancer_attributes(&self, input: &ModifyLoadBalancerAttributesInput) -> Box<Future<Item = ModifyLoadBalancerAttributesOutput, Error = ModifyLoadBalancerAttributesError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -7973,11 +8163,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     ModifyLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyLoadBalancerAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyLoadBalancerAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7989,23 +8187,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyLoadBalancerAttributesOutputDeserializer::deserialize("ModifyLoadBalancerAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyLoadBalancerAttributesOutputDeserializer::deserialize("ModifyLoadBalancerAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>"]
-                fn modify_rule(&self, input: &ModifyRuleInput) -> Result<ModifyRuleOutput, ModifyRuleError> {
+                fn modify_rule(&self, input: &ModifyRuleInput) -> Box<Future<Item = ModifyRuleOutput, Error = ModifyRuleError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -8014,11 +8213,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     ModifyRuleInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyRuleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -8030,23 +8237,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyRuleOutputDeserializer::deserialize("ModifyRuleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyRuleOutputDeserializer::deserialize("ModifyRuleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>"]
-                fn modify_target_group(&self, input: &ModifyTargetGroupInput) -> Result<ModifyTargetGroupOutput, ModifyTargetGroupError> {
+                fn modify_target_group(&self, input: &ModifyTargetGroupInput) -> Box<Future<Item = ModifyTargetGroupOutput, Error = ModifyTargetGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -8055,11 +8263,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     ModifyTargetGroupInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyTargetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyTargetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -8071,23 +8287,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyTargetGroupOutputDeserializer::deserialize("ModifyTargetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyTargetGroupOutputDeserializer::deserialize("ModifyTargetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyTargetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyTargetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified attributes of the specified target group.</p>"]
-                fn modify_target_group_attributes(&self, input: &ModifyTargetGroupAttributesInput) -> Result<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError> {
+                fn modify_target_group_attributes(&self, input: &ModifyTargetGroupAttributesInput) -> Box<Future<Item = ModifyTargetGroupAttributesOutput, Error = ModifyTargetGroupAttributesError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -8096,11 +8313,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     ModifyTargetGroupAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyTargetGroupAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyTargetGroupAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -8112,23 +8337,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyTargetGroupAttributesOutputDeserializer::deserialize("ModifyTargetGroupAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyTargetGroupAttributesOutputDeserializer::deserialize("ModifyTargetGroupAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyTargetGroupAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyTargetGroupAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Registers the specified targets with the specified target group.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port number for the target group. Alternatively, you can override the port for a target when you register it.</p> <p>The target must be in the virtual private cloud (VPC) that you specified for the target group. If the target is an EC2 instance, it can't be in the <code>stopped</code> or <code>running</code> state when you register it.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>"]
-                fn register_targets(&self, input: &RegisterTargetsInput) -> Result<RegisterTargetsOutput, RegisterTargetsError> {
+                fn register_targets(&self, input: &RegisterTargetsInput) -> Box<Future<Item = RegisterTargetsOutput, Error = RegisterTargetsError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -8137,11 +8363,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     RegisterTargetsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterTargetsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterTargetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -8153,23 +8387,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RegisterTargetsOutputDeserializer::deserialize("RegisterTargetsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RegisterTargetsOutputDeserializer::deserialize("RegisterTargetsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RegisterTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RegisterTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified tags from the specified resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>"]
-                fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError> {
+                fn remove_tags(&self, input: &RemoveTagsInput) -> Box<Future<Item = RemoveTagsOutput, Error = RemoveTagsError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -8178,11 +8413,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     RemoveTagsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -8194,23 +8437,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>"]
-                fn set_rule_priorities(&self, input: &SetRulePrioritiesInput) -> Result<SetRulePrioritiesOutput, SetRulePrioritiesError> {
+                fn set_rule_priorities(&self, input: &SetRulePrioritiesInput) -> Box<Future<Item = SetRulePrioritiesOutput, Error = SetRulePrioritiesError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -8219,11 +8463,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     SetRulePrioritiesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetRulePrioritiesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetRulePrioritiesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -8235,23 +8487,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetRulePrioritiesOutputDeserializer::deserialize("SetRulePrioritiesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetRulePrioritiesOutputDeserializer::deserialize("SetRulePrioritiesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetRulePrioritiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetRulePrioritiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Associates the specified security groups with the specified load balancer. The specified security groups override the previously associated security groups.</p>"]
-                fn set_security_groups(&self, input: &SetSecurityGroupsInput) -> Result<SetSecurityGroupsOutput, SetSecurityGroupsError> {
+                fn set_security_groups(&self, input: &SetSecurityGroupsInput) -> Box<Future<Item = SetSecurityGroupsOutput, Error = SetSecurityGroupsError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -8260,11 +8513,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     SetSecurityGroupsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetSecurityGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetSecurityGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -8276,23 +8537,24 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetSecurityGroupsOutputDeserializer::deserialize("SetSecurityGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetSecurityGroupsOutputDeserializer::deserialize("SetSecurityGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables the Availability Zone for the specified subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p>"]
-                fn set_subnets(&self, input: &SetSubnetsInput) -> Result<SetSubnetsOutput, SetSubnetsError> {
+                fn set_subnets(&self, input: &SetSubnetsInput) -> Box<Future<Item = SetSubnetsOutput, Error = SetSubnetsError>> {
                     let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
                     let mut params = Params::new();
 
@@ -8301,11 +8563,19 @@ SetSubnetsError::Unknown(ref cause) => cause
                     SetSubnetsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetSubnetsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetSubnetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -8317,18 +8587,19 @@ SetSubnetsError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetSubnetsOutputDeserializer::deserialize("SetSubnetsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetSubnetsOutputDeserializer::deserialize("SetSubnetsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

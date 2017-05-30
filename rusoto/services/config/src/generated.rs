@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type ARN = String;
 pub type AccountId = String;
 pub type AllSupported = bool;
@@ -2854,107 +2855,107 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>"]
-                fn delete_config_rule(&self, input: &DeleteConfigRuleRequest)  -> Result<(), DeleteConfigRuleError>;
+                fn delete_config_rule(&self, input: &DeleteConfigRuleRequest)  -> Box<Future<Item = (), Error = DeleteConfigRuleError>>;
                 
 
                 #[doc="<p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>"]
-                fn delete_configuration_recorder(&self, input: &DeleteConfigurationRecorderRequest)  -> Result<(), DeleteConfigurationRecorderError>;
+                fn delete_configuration_recorder(&self, input: &DeleteConfigurationRecorderRequest)  -> Box<Future<Item = (), Error = DeleteConfigurationRecorderError>>;
                 
 
                 #[doc="<p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>"]
-                fn delete_delivery_channel(&self, input: &DeleteDeliveryChannelRequest)  -> Result<(), DeleteDeliveryChannelError>;
+                fn delete_delivery_channel(&self, input: &DeleteDeliveryChannelRequest)  -> Box<Future<Item = (), Error = DeleteDeliveryChannelError>>;
                 
 
                 #[doc="<p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>"]
-                fn delete_evaluation_results(&self, input: &DeleteEvaluationResultsRequest)  -> Result<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError>;
+                fn delete_evaluation_results(&self, input: &DeleteEvaluationResultsRequest)  -> Box<Future<Item = DeleteEvaluationResultsResponse, Error = DeleteEvaluationResultsError>>;
                 
 
                 #[doc="<p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul>"]
-                fn deliver_config_snapshot(&self, input: &DeliverConfigSnapshotRequest)  -> Result<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError>;
+                fn deliver_config_snapshot(&self, input: &DeliverConfigSnapshotRequest)  -> Box<Future<Item = DeliverConfigSnapshotResponse, Error = DeliverConfigSnapshotError>>;
                 
 
                 #[doc="<p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
-                fn describe_compliance_by_config_rule(&self, input: &DescribeComplianceByConfigRuleRequest)  -> Result<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError>;
+                fn describe_compliance_by_config_rule(&self, input: &DescribeComplianceByConfigRuleRequest)  -> Box<Future<Item = DescribeComplianceByConfigRuleResponse, Error = DescribeComplianceByConfigRuleError>>;
                 
 
                 #[doc="<p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
-                fn describe_compliance_by_resource(&self, input: &DescribeComplianceByResourceRequest)  -> Result<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError>;
+                fn describe_compliance_by_resource(&self, input: &DescribeComplianceByResourceRequest)  -> Box<Future<Item = DescribeComplianceByResourceResponse, Error = DescribeComplianceByResourceError>>;
                 
 
                 #[doc="<p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>"]
-                fn describe_config_rule_evaluation_status(&self, input: &DescribeConfigRuleEvaluationStatusRequest)  -> Result<DescribeConfigRuleEvaluationStatusResponse, DescribeConfigRuleEvaluationStatusError>;
+                fn describe_config_rule_evaluation_status(&self, input: &DescribeConfigRuleEvaluationStatusRequest)  -> Box<Future<Item = DescribeConfigRuleEvaluationStatusResponse, Error = DescribeConfigRuleEvaluationStatusError>>;
                 
 
                 #[doc="<p>Returns details about your AWS Config rules.</p>"]
-                fn describe_config_rules(&self, input: &DescribeConfigRulesRequest)  -> Result<DescribeConfigRulesResponse, DescribeConfigRulesError>;
+                fn describe_config_rules(&self, input: &DescribeConfigRulesRequest)  -> Box<Future<Item = DescribeConfigRulesResponse, Error = DescribeConfigRulesError>>;
                 
 
                 #[doc="<p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
-                fn describe_configuration_recorder_status(&self, input: &DescribeConfigurationRecorderStatusRequest)  -> Result<DescribeConfigurationRecorderStatusResponse, DescribeConfigurationRecorderStatusError>;
+                fn describe_configuration_recorder_status(&self, input: &DescribeConfigurationRecorderStatusRequest)  -> Box<Future<Item = DescribeConfigurationRecorderStatusResponse, Error = DescribeConfigurationRecorderStatusError>>;
                 
 
                 #[doc="<p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
-                fn describe_configuration_recorders(&self, input: &DescribeConfigurationRecordersRequest)  -> Result<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError>;
+                fn describe_configuration_recorders(&self, input: &DescribeConfigurationRecordersRequest)  -> Box<Future<Item = DescribeConfigurationRecordersResponse, Error = DescribeConfigurationRecordersError>>;
                 
 
                 #[doc="<p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
-                fn describe_delivery_channel_status(&self, input: &DescribeDeliveryChannelStatusRequest)  -> Result<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError>;
+                fn describe_delivery_channel_status(&self, input: &DescribeDeliveryChannelStatusRequest)  -> Box<Future<Item = DescribeDeliveryChannelStatusResponse, Error = DescribeDeliveryChannelStatusError>>;
                 
 
                 #[doc="<p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
-                fn describe_delivery_channels(&self, input: &DescribeDeliveryChannelsRequest)  -> Result<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError>;
+                fn describe_delivery_channels(&self, input: &DescribeDeliveryChannelsRequest)  -> Box<Future<Item = DescribeDeliveryChannelsResponse, Error = DescribeDeliveryChannelsError>>;
                 
 
                 #[doc="<p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>"]
-                fn get_compliance_details_by_config_rule(&self, input: &GetComplianceDetailsByConfigRuleRequest)  -> Result<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError>;
+                fn get_compliance_details_by_config_rule(&self, input: &GetComplianceDetailsByConfigRuleRequest)  -> Box<Future<Item = GetComplianceDetailsByConfigRuleResponse, Error = GetComplianceDetailsByConfigRuleError>>;
                 
 
                 #[doc="<p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>"]
-                fn get_compliance_details_by_resource(&self, input: &GetComplianceDetailsByResourceRequest)  -> Result<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError>;
+                fn get_compliance_details_by_resource(&self, input: &GetComplianceDetailsByResourceRequest)  -> Box<Future<Item = GetComplianceDetailsByResourceResponse, Error = GetComplianceDetailsByResourceError>>;
                 
 
                 #[doc="<p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>"]
-                fn get_compliance_summary_by_config_rule(&self)  -> Result<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError>;
+                fn get_compliance_summary_by_config_rule(&self)  -> Box<Future<Item = GetComplianceSummaryByConfigRuleResponse, Error = GetComplianceSummaryByConfigRuleError>>;
                 
 
                 #[doc="<p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>"]
-                fn get_compliance_summary_by_resource_type(&self, input: &GetComplianceSummaryByResourceTypeRequest)  -> Result<GetComplianceSummaryByResourceTypeResponse, GetComplianceSummaryByResourceTypeError>;
+                fn get_compliance_summary_by_resource_type(&self, input: &GetComplianceSummaryByResourceTypeRequest)  -> Box<Future<Item = GetComplianceSummaryByResourceTypeResponse, Error = GetComplianceSummaryByResourceTypeError>>;
                 
 
                 #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated, and by default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string, and to get the next page of results, run the request again and enter this string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
-                fn get_resource_config_history(&self, input: &GetResourceConfigHistoryRequest)  -> Result<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError>;
+                fn get_resource_config_history(&self, input: &GetResourceConfigHistoryRequest)  -> Box<Future<Item = GetResourceConfigHistoryResponse, Error = GetResourceConfigHistoryError>>;
                 
 
                 #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated, and by default AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string, and to get the next page of results, run the request again and enter this string for the <code>nextToken</code> parameter.</p>"]
-                fn list_discovered_resources(&self, input: &ListDiscoveredResourcesRequest)  -> Result<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError>;
+                fn list_discovered_resources(&self, input: &ListDiscoveredResourcesRequest)  -> Box<Future<Item = ListDiscoveredResourcesResponse, Error = ListDiscoveredResourcesError>>;
                 
 
                 #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding a new AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">Using AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
-                fn put_config_rule(&self, input: &PutConfigRuleRequest)  -> Result<(), PutConfigRuleError>;
+                fn put_config_rule(&self, input: &PutConfigRuleRequest)  -> Box<Future<Item = (), Error = PutConfigRuleError>>;
                 
 
                 #[doc="<p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note>"]
-                fn put_configuration_recorder(&self, input: &PutConfigurationRecorderRequest)  -> Result<(), PutConfigurationRecorderError>;
+                fn put_configuration_recorder(&self, input: &PutConfigurationRecorderRequest)  -> Box<Future<Item = (), Error = PutConfigurationRecorderError>>;
                 
 
                 #[doc="<p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note>"]
-                fn put_delivery_channel(&self, input: &PutDeliveryChannelRequest)  -> Result<(), PutDeliveryChannelError>;
+                fn put_delivery_channel(&self, input: &PutDeliveryChannelRequest)  -> Box<Future<Item = (), Error = PutDeliveryChannelError>>;
                 
 
                 #[doc="<p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>"]
-                fn put_evaluations(&self, input: &PutEvaluationsRequest)  -> Result<PutEvaluationsResponse, PutEvaluationsError>;
+                fn put_evaluations(&self, input: &PutEvaluationsRequest)  -> Box<Future<Item = PutEvaluationsResponse, Error = PutEvaluationsError>>;
                 
 
                 #[doc="<p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don't need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol>"]
-                fn start_config_rules_evaluation(&self, input: &StartConfigRulesEvaluationRequest)  -> Result<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError>;
+                fn start_config_rules_evaluation(&self, input: &StartConfigRulesEvaluationRequest)  -> Box<Future<Item = StartConfigRulesEvaluationResponse, Error = StartConfigRulesEvaluationError>>;
                 
 
                 #[doc="<p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>"]
-                fn start_configuration_recorder(&self, input: &StartConfigurationRecorderRequest)  -> Result<(), StartConfigurationRecorderError>;
+                fn start_configuration_recorder(&self, input: &StartConfigurationRecorderRequest)  -> Box<Future<Item = (), Error = StartConfigurationRecorderError>>;
                 
 
                 #[doc="<p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>"]
-                fn stop_configuration_recorder(&self, input: &StopConfigurationRecorderRequest)  -> Result<(), StopConfigurationRecorderError>;
+                fn stop_configuration_recorder(&self, input: &StopConfigurationRecorderRequest)  -> Box<Future<Item = (), Error = StopConfigurationRecorderError>>;
                 
 }
 /// A client for the Config Service API.
@@ -2978,7 +2979,7 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>"]
-                fn delete_config_rule(&self, input: &DeleteConfigRuleRequest)  -> Result<(), DeleteConfigRuleError> {
+                fn delete_config_rule(&self, input: &DeleteConfigRuleRequest)  -> Box<Future<Item = (), Error = DeleteConfigRuleError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2986,21 +2987,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteConfigRuleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteConfigRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>"]
-                fn delete_configuration_recorder(&self, input: &DeleteConfigurationRecorderRequest)  -> Result<(), DeleteConfigurationRecorderError> {
+                fn delete_configuration_recorder(&self, input: &DeleteConfigurationRecorderRequest)  -> Box<Future<Item = (), Error = DeleteConfigurationRecorderError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3008,21 +3019,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteConfigurationRecorderError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteConfigurationRecorderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>"]
-                fn delete_delivery_channel(&self, input: &DeleteDeliveryChannelRequest)  -> Result<(), DeleteDeliveryChannelError> {
+                fn delete_delivery_channel(&self, input: &DeleteDeliveryChannelRequest)  -> Box<Future<Item = (), Error = DeleteDeliveryChannelError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3030,21 +3051,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDeliveryChannelError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteDeliveryChannelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDeliveryChannelError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteDeliveryChannelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>"]
-                fn delete_evaluation_results(&self, input: &DeleteEvaluationResultsRequest)  -> Result<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError> {
+                fn delete_evaluation_results(&self, input: &DeleteEvaluationResultsRequest)  -> Box<Future<Item = DeleteEvaluationResultsResponse, Error = DeleteEvaluationResultsError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3052,21 +3083,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteEvaluationResultsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteEvaluationResultsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteEvaluationResultsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteEvaluationResultsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteEvaluationResultsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteEvaluationResultsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul>"]
-                fn deliver_config_snapshot(&self, input: &DeliverConfigSnapshotRequest)  -> Result<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError> {
+                fn deliver_config_snapshot(&self, input: &DeliverConfigSnapshotRequest)  -> Box<Future<Item = DeliverConfigSnapshotResponse, Error = DeliverConfigSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3074,21 +3115,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeliverConfigSnapshotError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeliverConfigSnapshotResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeliverConfigSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeliverConfigSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeliverConfigSnapshotResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeliverConfigSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
-                fn describe_compliance_by_config_rule(&self, input: &DescribeComplianceByConfigRuleRequest)  -> Result<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError> {
+                fn describe_compliance_by_config_rule(&self, input: &DescribeComplianceByConfigRuleRequest)  -> Box<Future<Item = DescribeComplianceByConfigRuleResponse, Error = DescribeComplianceByConfigRuleError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3096,21 +3147,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeComplianceByConfigRuleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeComplianceByConfigRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeComplianceByConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeComplianceByConfigRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeComplianceByConfigRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeComplianceByConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
-                fn describe_compliance_by_resource(&self, input: &DescribeComplianceByResourceRequest)  -> Result<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError> {
+                fn describe_compliance_by_resource(&self, input: &DescribeComplianceByResourceRequest)  -> Box<Future<Item = DescribeComplianceByResourceResponse, Error = DescribeComplianceByResourceError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3118,21 +3179,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeComplianceByResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeComplianceByResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeComplianceByResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeComplianceByResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeComplianceByResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeComplianceByResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>"]
-                fn describe_config_rule_evaluation_status(&self, input: &DescribeConfigRuleEvaluationStatusRequest)  -> Result<DescribeConfigRuleEvaluationStatusResponse, DescribeConfigRuleEvaluationStatusError> {
+                fn describe_config_rule_evaluation_status(&self, input: &DescribeConfigRuleEvaluationStatusRequest)  -> Box<Future<Item = DescribeConfigRuleEvaluationStatusResponse, Error = DescribeConfigRuleEvaluationStatusError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3140,21 +3211,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConfigRuleEvaluationStatusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConfigRuleEvaluationStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeConfigRuleEvaluationStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConfigRuleEvaluationStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeConfigRuleEvaluationStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeConfigRuleEvaluationStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns details about your AWS Config rules.</p>"]
-                fn describe_config_rules(&self, input: &DescribeConfigRulesRequest)  -> Result<DescribeConfigRulesResponse, DescribeConfigRulesError> {
+                fn describe_config_rules(&self, input: &DescribeConfigRulesRequest)  -> Box<Future<Item = DescribeConfigRulesResponse, Error = DescribeConfigRulesError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3162,21 +3243,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConfigRulesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConfigRulesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeConfigRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConfigRulesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeConfigRulesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeConfigRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
-                fn describe_configuration_recorder_status(&self, input: &DescribeConfigurationRecorderStatusRequest)  -> Result<DescribeConfigurationRecorderStatusResponse, DescribeConfigurationRecorderStatusError> {
+                fn describe_configuration_recorder_status(&self, input: &DescribeConfigurationRecorderStatusRequest)  -> Box<Future<Item = DescribeConfigurationRecorderStatusResponse, Error = DescribeConfigurationRecorderStatusError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3184,21 +3275,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConfigurationRecorderStatusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConfigurationRecorderStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeConfigurationRecorderStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConfigurationRecorderStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeConfigurationRecorderStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeConfigurationRecorderStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
-                fn describe_configuration_recorders(&self, input: &DescribeConfigurationRecordersRequest)  -> Result<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError> {
+                fn describe_configuration_recorders(&self, input: &DescribeConfigurationRecordersRequest)  -> Box<Future<Item = DescribeConfigurationRecordersResponse, Error = DescribeConfigurationRecordersError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3206,21 +3307,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConfigurationRecordersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConfigurationRecordersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeConfigurationRecordersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConfigurationRecordersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeConfigurationRecordersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeConfigurationRecordersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
-                fn describe_delivery_channel_status(&self, input: &DescribeDeliveryChannelStatusRequest)  -> Result<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError> {
+                fn describe_delivery_channel_status(&self, input: &DescribeDeliveryChannelStatusRequest)  -> Box<Future<Item = DescribeDeliveryChannelStatusResponse, Error = DescribeDeliveryChannelStatusError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3228,21 +3339,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDeliveryChannelStatusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDeliveryChannelStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeDeliveryChannelStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDeliveryChannelStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeDeliveryChannelStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeDeliveryChannelStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
-                fn describe_delivery_channels(&self, input: &DescribeDeliveryChannelsRequest)  -> Result<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError> {
+                fn describe_delivery_channels(&self, input: &DescribeDeliveryChannelsRequest)  -> Box<Future<Item = DescribeDeliveryChannelsResponse, Error = DescribeDeliveryChannelsError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3250,21 +3371,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDeliveryChannelsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDeliveryChannelsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeDeliveryChannelsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDeliveryChannelsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeDeliveryChannelsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeDeliveryChannelsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>"]
-                fn get_compliance_details_by_config_rule(&self, input: &GetComplianceDetailsByConfigRuleRequest)  -> Result<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError> {
+                fn get_compliance_details_by_config_rule(&self, input: &GetComplianceDetailsByConfigRuleRequest)  -> Box<Future<Item = GetComplianceDetailsByConfigRuleResponse, Error = GetComplianceDetailsByConfigRuleError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3272,21 +3403,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetComplianceDetailsByConfigRuleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetComplianceDetailsByConfigRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetComplianceDetailsByConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetComplianceDetailsByConfigRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetComplianceDetailsByConfigRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetComplianceDetailsByConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>"]
-                fn get_compliance_details_by_resource(&self, input: &GetComplianceDetailsByResourceRequest)  -> Result<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError> {
+                fn get_compliance_details_by_resource(&self, input: &GetComplianceDetailsByResourceRequest)  -> Box<Future<Item = GetComplianceDetailsByResourceResponse, Error = GetComplianceDetailsByResourceError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3294,41 +3435,61 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetComplianceDetailsByResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetComplianceDetailsByResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetComplianceDetailsByResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetComplianceDetailsByResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetComplianceDetailsByResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetComplianceDetailsByResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>"]
-                fn get_compliance_summary_by_config_rule(&self)  -> Result<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError> {
+                fn get_compliance_summary_by_config_rule(&self)  -> Box<Future<Item = GetComplianceSummaryByConfigRuleResponse, Error = GetComplianceSummaryByConfigRuleError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
                     request.add_header("x-amz-target", "StarlingDoveService.GetComplianceSummaryByConfigRule");
                     
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetComplianceSummaryByConfigRuleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetComplianceSummaryByConfigRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetComplianceSummaryByConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetComplianceSummaryByConfigRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetComplianceSummaryByConfigRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetComplianceSummaryByConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>"]
-                fn get_compliance_summary_by_resource_type(&self, input: &GetComplianceSummaryByResourceTypeRequest)  -> Result<GetComplianceSummaryByResourceTypeResponse, GetComplianceSummaryByResourceTypeError> {
+                fn get_compliance_summary_by_resource_type(&self, input: &GetComplianceSummaryByResourceTypeRequest)  -> Box<Future<Item = GetComplianceSummaryByResourceTypeResponse, Error = GetComplianceSummaryByResourceTypeError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3336,21 +3497,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetComplianceSummaryByResourceTypeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetComplianceSummaryByResourceTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetComplianceSummaryByResourceTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetComplianceSummaryByResourceTypeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetComplianceSummaryByResourceTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetComplianceSummaryByResourceTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated, and by default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string, and to get the next page of results, run the request again and enter this string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
-                fn get_resource_config_history(&self, input: &GetResourceConfigHistoryRequest)  -> Result<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError> {
+                fn get_resource_config_history(&self, input: &GetResourceConfigHistoryRequest)  -> Box<Future<Item = GetResourceConfigHistoryResponse, Error = GetResourceConfigHistoryError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3358,21 +3529,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetResourceConfigHistoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetResourceConfigHistoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetResourceConfigHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetResourceConfigHistoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetResourceConfigHistoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetResourceConfigHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated, and by default AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string, and to get the next page of results, run the request again and enter this string for the <code>nextToken</code> parameter.</p>"]
-                fn list_discovered_resources(&self, input: &ListDiscoveredResourcesRequest)  -> Result<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError> {
+                fn list_discovered_resources(&self, input: &ListDiscoveredResourcesRequest)  -> Box<Future<Item = ListDiscoveredResourcesResponse, Error = ListDiscoveredResourcesError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3380,21 +3561,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDiscoveredResourcesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDiscoveredResourcesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDiscoveredResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDiscoveredResourcesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDiscoveredResourcesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDiscoveredResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding a new AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">Using AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
-                fn put_config_rule(&self, input: &PutConfigRuleRequest)  -> Result<(), PutConfigRuleError> {
+                fn put_config_rule(&self, input: &PutConfigRuleRequest)  -> Box<Future<Item = (), Error = PutConfigRuleError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3402,21 +3593,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutConfigRuleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutConfigRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note>"]
-                fn put_configuration_recorder(&self, input: &PutConfigurationRecorderRequest)  -> Result<(), PutConfigurationRecorderError> {
+                fn put_configuration_recorder(&self, input: &PutConfigurationRecorderRequest)  -> Box<Future<Item = (), Error = PutConfigurationRecorderError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3424,21 +3625,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutConfigurationRecorderError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutConfigurationRecorderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note>"]
-                fn put_delivery_channel(&self, input: &PutDeliveryChannelRequest)  -> Result<(), PutDeliveryChannelError> {
+                fn put_delivery_channel(&self, input: &PutDeliveryChannelRequest)  -> Box<Future<Item = (), Error = PutDeliveryChannelError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3446,21 +3657,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutDeliveryChannelError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutDeliveryChannelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutDeliveryChannelError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutDeliveryChannelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>"]
-                fn put_evaluations(&self, input: &PutEvaluationsRequest)  -> Result<PutEvaluationsResponse, PutEvaluationsError> {
+                fn put_evaluations(&self, input: &PutEvaluationsRequest)  -> Box<Future<Item = PutEvaluationsResponse, Error = PutEvaluationsError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3468,21 +3689,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutEvaluationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutEvaluationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutEvaluationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutEvaluationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutEvaluationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutEvaluationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don't need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol>"]
-                fn start_config_rules_evaluation(&self, input: &StartConfigRulesEvaluationRequest)  -> Result<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError> {
+                fn start_config_rules_evaluation(&self, input: &StartConfigRulesEvaluationRequest)  -> Box<Future<Item = StartConfigRulesEvaluationResponse, Error = StartConfigRulesEvaluationError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3490,21 +3721,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StartConfigRulesEvaluationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartConfigRulesEvaluationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StartConfigRulesEvaluationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StartConfigRulesEvaluationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StartConfigRulesEvaluationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StartConfigRulesEvaluationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>"]
-                fn start_configuration_recorder(&self, input: &StartConfigurationRecorderRequest)  -> Result<(), StartConfigurationRecorderError> {
+                fn start_configuration_recorder(&self, input: &StartConfigurationRecorderRequest)  -> Box<Future<Item = (), Error = StartConfigurationRecorderError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3512,21 +3753,31 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StartConfigurationRecorderError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(StartConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StartConfigurationRecorderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(StartConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>"]
-                fn stop_configuration_recorder(&self, input: &StopConfigurationRecorderRequest)  -> Result<(), StopConfigurationRecorderError> {
+                fn stop_configuration_recorder(&self, input: &StopConfigurationRecorderRequest)  -> Box<Future<Item = (), Error = StopConfigurationRecorderError>> {
                     let mut request = SignedRequest::new("POST", "config", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3534,16 +3785,26 @@ StopConfigurationRecorderError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StopConfigurationRecorderError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(StopConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StopConfigurationRecorderError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(StopConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

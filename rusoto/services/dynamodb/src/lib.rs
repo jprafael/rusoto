@@ -3,6 +3,9 @@
 //!
 //! If you're using the service, you're probably looking for [DynamoDbClient](struct.DynamoDbClient.html) and [DynamoDb](trait.DynamoDb.html).
 
+
+extern crate futures;
+extern crate tokio_core;
 extern crate hyper;
 extern crate rusoto_core;
 extern crate serde;

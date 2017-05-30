@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type AccountId = String;
 pub type AccountIdList = Vec<AccountId>;
 #[doc="<p>An activation registers one or more on-premises servers or virtual machines (VMs) with AWS so that you can configure those servers or VMs using Run Command. A server or VM that has been registered with AWS is called a managed instance.</p>"]
@@ -9644,323 +9645,323 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the Amazon EC2 User Guide. </p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Result<AddTagsToResourceResult, AddTagsToResourceError>;
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Box<Future<Item = AddTagsToResourceResult, Error = AddTagsToResourceError>>;
                 
 
                 #[doc="<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>"]
-                fn cancel_command(&self, input: &CancelCommandRequest)  -> Result<CancelCommandResult, CancelCommandError>;
+                fn cancel_command(&self, input: &CancelCommandRequest)  -> Box<Future<Item = CancelCommandResult, Error = CancelCommandError>>;
                 
 
                 #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html\">Setting Up Managed Instances (Linux)</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html\">Setting Up Managed Instances (Windows)</a> in the Amazon EC2 User Guide. </p>"]
-                fn create_activation(&self, input: &CreateActivationRequest)  -> Result<CreateActivationResult, CreateActivationError>;
+                fn create_activation(&self, input: &CreateActivationRequest)  -> Box<Future<Item = CreateActivationResult, Error = CreateActivationError>>;
                 
 
                 #[doc="<p>Associates the specified SSM document with the specified instances or targets.</p> <p>When you associate an SSM document with one or more instances using instance IDs or tags, the SSM agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
-                fn create_association(&self, input: &CreateAssociationRequest)  -> Result<CreateAssociationResult, CreateAssociationError>;
+                fn create_association(&self, input: &CreateAssociationRequest)  -> Box<Future<Item = CreateAssociationResult, Error = CreateAssociationError>>;
                 
 
                 #[doc="<p>Associates the specified SSM document with the specified instances or targets.</p> <p>When you associate an SSM document with one or more instances using instance IDs or tags, the SSM agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
-                fn create_association_batch(&self, input: &CreateAssociationBatchRequest)  -> Result<CreateAssociationBatchResult, CreateAssociationBatchError>;
+                fn create_association_batch(&self, input: &CreateAssociationBatchRequest)  -> Box<Future<Item = CreateAssociationBatchResult, Error = CreateAssociationBatchError>>;
                 
 
                 #[doc="<p>Creates an SSM document.</p> <p>After you create an SSM document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
-                fn create_document(&self, input: &CreateDocumentRequest)  -> Result<CreateDocumentResult, CreateDocumentError>;
+                fn create_document(&self, input: &CreateDocumentRequest)  -> Box<Future<Item = CreateDocumentResult, Error = CreateDocumentError>>;
                 
 
                 #[doc="<p>Creates a new Maintenance Window.</p>"]
-                fn create_maintenance_window(&self, input: &CreateMaintenanceWindowRequest)  -> Result<CreateMaintenanceWindowResult, CreateMaintenanceWindowError>;
+                fn create_maintenance_window(&self, input: &CreateMaintenanceWindowRequest)  -> Box<Future<Item = CreateMaintenanceWindowResult, Error = CreateMaintenanceWindowError>>;
                 
 
                 #[doc="<p>Creates a patch baseline.</p>"]
-                fn create_patch_baseline(&self, input: &CreatePatchBaselineRequest)  -> Result<CreatePatchBaselineResult, CreatePatchBaselineError>;
+                fn create_patch_baseline(&self, input: &CreatePatchBaselineRequest)  -> Box<Future<Item = CreatePatchBaselineResult, Error = CreatePatchBaselineError>>;
                 
 
                 #[doc="<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>"]
-                fn delete_activation(&self, input: &DeleteActivationRequest)  -> Result<DeleteActivationResult, DeleteActivationError>;
+                fn delete_activation(&self, input: &DeleteActivationRequest)  -> Box<Future<Item = DeleteActivationResult, Error = DeleteActivationError>>;
                 
 
                 #[doc="<p>Disassociates the specified SSM document from the specified instance.</p> <p>When you disassociate an SSM document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
-                fn delete_association(&self, input: &DeleteAssociationRequest)  -> Result<DeleteAssociationResult, DeleteAssociationError>;
+                fn delete_association(&self, input: &DeleteAssociationRequest)  -> Box<Future<Item = DeleteAssociationResult, Error = DeleteAssociationError>>;
                 
 
                 #[doc="<p>Deletes the SSM document and all instance associations to the document.</p> <p>Before you delete the SSM document, we recommend that you use DeleteAssociation to disassociate all instances that are associated with the document.</p>"]
-                fn delete_document(&self, input: &DeleteDocumentRequest)  -> Result<DeleteDocumentResult, DeleteDocumentError>;
+                fn delete_document(&self, input: &DeleteDocumentRequest)  -> Box<Future<Item = DeleteDocumentResult, Error = DeleteDocumentError>>;
                 
 
                 #[doc="<p>Deletes a Maintenance Window.</p>"]
-                fn delete_maintenance_window(&self, input: &DeleteMaintenanceWindowRequest)  -> Result<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError>;
+                fn delete_maintenance_window(&self, input: &DeleteMaintenanceWindowRequest)  -> Box<Future<Item = DeleteMaintenanceWindowResult, Error = DeleteMaintenanceWindowError>>;
                 
 
                 #[doc="<p>Delete a parameter from the system.</p>"]
-                fn delete_parameter(&self, input: &DeleteParameterRequest)  -> Result<DeleteParameterResult, DeleteParameterError>;
+                fn delete_parameter(&self, input: &DeleteParameterRequest)  -> Box<Future<Item = DeleteParameterResult, Error = DeleteParameterError>>;
                 
 
                 #[doc="<p>Deletes a patch baseline.</p>"]
-                fn delete_patch_baseline(&self, input: &DeletePatchBaselineRequest)  -> Result<DeletePatchBaselineResult, DeletePatchBaselineError>;
+                fn delete_patch_baseline(&self, input: &DeletePatchBaselineRequest)  -> Box<Future<Item = DeletePatchBaselineResult, Error = DeletePatchBaselineError>>;
                 
 
                 #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don’t plan to use Run Command on the server, we suggest uninstalling the SSM agent first.</p>"]
-                fn deregister_managed_instance(&self, input: &DeregisterManagedInstanceRequest)  -> Result<DeregisterManagedInstanceResult, DeregisterManagedInstanceError>;
+                fn deregister_managed_instance(&self, input: &DeregisterManagedInstanceRequest)  -> Box<Future<Item = DeregisterManagedInstanceResult, Error = DeregisterManagedInstanceError>>;
                 
 
                 #[doc="<p>Removes a patch group from a patch baseline.</p>"]
-                fn deregister_patch_baseline_for_patch_group(&self, input: &DeregisterPatchBaselineForPatchGroupRequest)  -> Result<DeregisterPatchBaselineForPatchGroupResult, DeregisterPatchBaselineForPatchGroupError>;
+                fn deregister_patch_baseline_for_patch_group(&self, input: &DeregisterPatchBaselineForPatchGroupRequest)  -> Box<Future<Item = DeregisterPatchBaselineForPatchGroupResult, Error = DeregisterPatchBaselineForPatchGroupError>>;
                 
 
                 #[doc="<p>Removes a target from a Maintenance Window.</p>"]
-                fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFromMaintenanceWindowRequest)  -> Result<DeregisterTargetFromMaintenanceWindowResult, DeregisterTargetFromMaintenanceWindowError>;
+                fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFromMaintenanceWindowRequest)  -> Box<Future<Item = DeregisterTargetFromMaintenanceWindowResult, Error = DeregisterTargetFromMaintenanceWindowError>>;
                 
 
                 #[doc="<p>Removes a task from a Maintenance Window.</p>"]
-                fn deregister_task_from_maintenance_window(&self, input: &DeregisterTaskFromMaintenanceWindowRequest)  -> Result<DeregisterTaskFromMaintenanceWindowResult, DeregisterTaskFromMaintenanceWindowError>;
+                fn deregister_task_from_maintenance_window(&self, input: &DeregisterTaskFromMaintenanceWindowRequest)  -> Box<Future<Item = DeregisterTaskFromMaintenanceWindowResult, Error = DeregisterTaskFromMaintenanceWindowError>>;
                 
 
                 #[doc="<p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>"]
-                fn describe_activations(&self, input: &DescribeActivationsRequest)  -> Result<DescribeActivationsResult, DescribeActivationsError>;
+                fn describe_activations(&self, input: &DescribeActivationsRequest)  -> Box<Future<Item = DescribeActivationsResult, Error = DescribeActivationsError>>;
                 
 
                 #[doc="<p>Describes the associations for the specified SSM document or instance.</p>"]
-                fn describe_association(&self, input: &DescribeAssociationRequest)  -> Result<DescribeAssociationResult, DescribeAssociationError>;
+                fn describe_association(&self, input: &DescribeAssociationRequest)  -> Box<Future<Item = DescribeAssociationResult, Error = DescribeAssociationError>>;
                 
 
                 #[doc="<p>Provides details about all active and terminated Automation executions.</p>"]
-                fn describe_automation_executions(&self, input: &DescribeAutomationExecutionsRequest)  -> Result<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError>;
+                fn describe_automation_executions(&self, input: &DescribeAutomationExecutionsRequest)  -> Box<Future<Item = DescribeAutomationExecutionsResult, Error = DescribeAutomationExecutionsError>>;
                 
 
                 #[doc="<p>Lists all patches that could possibly be included in a patch baseline.</p>"]
-                fn describe_available_patches(&self, input: &DescribeAvailablePatchesRequest)  -> Result<DescribeAvailablePatchesResult, DescribeAvailablePatchesError>;
+                fn describe_available_patches(&self, input: &DescribeAvailablePatchesRequest)  -> Box<Future<Item = DescribeAvailablePatchesResult, Error = DescribeAvailablePatchesError>>;
                 
 
                 #[doc="<p>Describes the specified SSM document.</p>"]
-                fn describe_document(&self, input: &DescribeDocumentRequest)  -> Result<DescribeDocumentResult, DescribeDocumentError>;
+                fn describe_document(&self, input: &DescribeDocumentRequest)  -> Box<Future<Item = DescribeDocumentResult, Error = DescribeDocumentError>>;
                 
 
                 #[doc="<p>Describes the permissions for an SSM document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user’s AWS account ID) or publicly (<i>All</i>). </p>"]
-                fn describe_document_permission(&self, input: &DescribeDocumentPermissionRequest)  -> Result<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError>;
+                fn describe_document_permission(&self, input: &DescribeDocumentPermissionRequest)  -> Box<Future<Item = DescribeDocumentPermissionResponse, Error = DescribeDocumentPermissionError>>;
                 
 
                 #[doc="<p>All associations for the instance(s).</p>"]
-                fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInstanceAssociationsRequest)  -> Result<DescribeEffectiveInstanceAssociationsResult, DescribeEffectiveInstanceAssociationsError>;
+                fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInstanceAssociationsRequest)  -> Box<Future<Item = DescribeEffectiveInstanceAssociationsResult, Error = DescribeEffectiveInstanceAssociationsError>>;
                 
 
                 #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline.</p>"]
-                fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectivePatchesForPatchBaselineRequest)  -> Result<DescribeEffectivePatchesForPatchBaselineResult, DescribeEffectivePatchesForPatchBaselineError>;
+                fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectivePatchesForPatchBaselineRequest)  -> Box<Future<Item = DescribeEffectivePatchesForPatchBaselineResult, Error = DescribeEffectivePatchesForPatchBaselineError>>;
                 
 
                 #[doc="<p>The status of the associations for the instance(s).</p>"]
-                fn describe_instance_associations_status(&self, input: &DescribeInstanceAssociationsStatusRequest)  -> Result<DescribeInstanceAssociationsStatusResult, DescribeInstanceAssociationsStatusError>;
+                fn describe_instance_associations_status(&self, input: &DescribeInstanceAssociationsStatusRequest)  -> Box<Future<Item = DescribeInstanceAssociationsStatusResult, Error = DescribeInstanceAssociationsStatusError>>;
                 
 
                 #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
-                fn describe_instance_information(&self, input: &DescribeInstanceInformationRequest)  -> Result<DescribeInstanceInformationResult, DescribeInstanceInformationError>;
+                fn describe_instance_information(&self, input: &DescribeInstanceInformationRequest)  -> Box<Future<Item = DescribeInstanceInformationResult, Error = DescribeInstanceInformationError>>;
                 
 
                 #[doc="<p>Retrieves the high-level patch state of one or more instances.</p>"]
-                fn describe_instance_patch_states(&self, input: &DescribeInstancePatchStatesRequest)  -> Result<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError>;
+                fn describe_instance_patch_states(&self, input: &DescribeInstancePatchStatesRequest)  -> Box<Future<Item = DescribeInstancePatchStatesResult, Error = DescribeInstancePatchStatesError>>;
                 
 
                 #[doc="<p>Retrieves the high-level patch state for the instances in the specified patch group.</p>"]
-                fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstancePatchStatesForPatchGroupRequest)  -> Result<DescribeInstancePatchStatesForPatchGroupResult, DescribeInstancePatchStatesForPatchGroupError>;
+                fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstancePatchStatesForPatchGroupRequest)  -> Box<Future<Item = DescribeInstancePatchStatesForPatchGroupResult, Error = DescribeInstancePatchStatesForPatchGroupError>>;
                 
 
                 #[doc="<p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>"]
-                fn describe_instance_patches(&self, input: &DescribeInstancePatchesRequest)  -> Result<DescribeInstancePatchesResult, DescribeInstancePatchesError>;
+                fn describe_instance_patches(&self, input: &DescribeInstancePatchesRequest)  -> Box<Future<Item = DescribeInstancePatchesResult, Error = DescribeInstancePatchesError>>;
                 
 
                 #[doc="<p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>"]
-                fn describe_maintenance_window_execution_task_invocations(&self, input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest)  -> Result<DescribeMaintenanceWindowExecutionTaskInvocationsResult, DescribeMaintenanceWindowExecutionTaskInvocationsError>;
+                fn describe_maintenance_window_execution_task_invocations(&self, input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest)  -> Box<Future<Item = DescribeMaintenanceWindowExecutionTaskInvocationsResult, Error = DescribeMaintenanceWindowExecutionTaskInvocationsError>>;
                 
 
                 #[doc="<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>"]
-                fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanceWindowExecutionTasksRequest)  -> Result<DescribeMaintenanceWindowExecutionTasksResult, DescribeMaintenanceWindowExecutionTasksError>;
+                fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanceWindowExecutionTasksRequest)  -> Box<Future<Item = DescribeMaintenanceWindowExecutionTasksResult, Error = DescribeMaintenanceWindowExecutionTasksError>>;
                 
 
                 #[doc="<p>Lists the executions of a Maintenance Window (meaning, information about when the Maintenance Window was scheduled to be active and information about tasks registered and run with the Maintenance Window).</p>"]
-                fn describe_maintenance_window_executions(&self, input: &DescribeMaintenanceWindowExecutionsRequest)  -> Result<DescribeMaintenanceWindowExecutionsResult, DescribeMaintenanceWindowExecutionsError>;
+                fn describe_maintenance_window_executions(&self, input: &DescribeMaintenanceWindowExecutionsRequest)  -> Box<Future<Item = DescribeMaintenanceWindowExecutionsResult, Error = DescribeMaintenanceWindowExecutionsError>>;
                 
 
                 #[doc="<p>Lists the targets registered with the Maintenance Window.</p>"]
-                fn describe_maintenance_window_targets(&self, input: &DescribeMaintenanceWindowTargetsRequest)  -> Result<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError>;
+                fn describe_maintenance_window_targets(&self, input: &DescribeMaintenanceWindowTargetsRequest)  -> Box<Future<Item = DescribeMaintenanceWindowTargetsResult, Error = DescribeMaintenanceWindowTargetsError>>;
                 
 
                 #[doc="<p>Lists the tasks in a Maintenance Window.</p>"]
-                fn describe_maintenance_window_tasks(&self, input: &DescribeMaintenanceWindowTasksRequest)  -> Result<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError>;
+                fn describe_maintenance_window_tasks(&self, input: &DescribeMaintenanceWindowTasksRequest)  -> Box<Future<Item = DescribeMaintenanceWindowTasksResult, Error = DescribeMaintenanceWindowTasksError>>;
                 
 
                 #[doc="<p>Retrieves the Maintenance Windows in an AWS account.</p>"]
-                fn describe_maintenance_windows(&self, input: &DescribeMaintenanceWindowsRequest)  -> Result<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError>;
+                fn describe_maintenance_windows(&self, input: &DescribeMaintenanceWindowsRequest)  -> Box<Future<Item = DescribeMaintenanceWindowsResult, Error = DescribeMaintenanceWindowsError>>;
                 
 
                 #[doc="<p>Get information about a parameter.</p>"]
-                fn describe_parameters(&self, input: &DescribeParametersRequest)  -> Result<DescribeParametersResult, DescribeParametersError>;
+                fn describe_parameters(&self, input: &DescribeParametersRequest)  -> Box<Future<Item = DescribeParametersResult, Error = DescribeParametersError>>;
                 
 
                 #[doc="<p>Lists the patch baselines in your AWS account.</p>"]
-                fn describe_patch_baselines(&self, input: &DescribePatchBaselinesRequest)  -> Result<DescribePatchBaselinesResult, DescribePatchBaselinesError>;
+                fn describe_patch_baselines(&self, input: &DescribePatchBaselinesRequest)  -> Box<Future<Item = DescribePatchBaselinesResult, Error = DescribePatchBaselinesError>>;
                 
 
                 #[doc="<p>Returns high-level aggregated patch compliance state for a patch group.</p>"]
-                fn describe_patch_group_state(&self, input: &DescribePatchGroupStateRequest)  -> Result<DescribePatchGroupStateResult, DescribePatchGroupStateError>;
+                fn describe_patch_group_state(&self, input: &DescribePatchGroupStateRequest)  -> Box<Future<Item = DescribePatchGroupStateResult, Error = DescribePatchGroupStateError>>;
                 
 
                 #[doc="<p>Lists all patch groups that have been registered with patch baselines.</p>"]
-                fn describe_patch_groups(&self, input: &DescribePatchGroupsRequest)  -> Result<DescribePatchGroupsResult, DescribePatchGroupsError>;
+                fn describe_patch_groups(&self, input: &DescribePatchGroupsRequest)  -> Box<Future<Item = DescribePatchGroupsResult, Error = DescribePatchGroupsError>>;
                 
 
                 #[doc="<p>Get detailed information about a particular Automation execution.</p>"]
-                fn get_automation_execution(&self, input: &GetAutomationExecutionRequest)  -> Result<GetAutomationExecutionResult, GetAutomationExecutionError>;
+                fn get_automation_execution(&self, input: &GetAutomationExecutionRequest)  -> Box<Future<Item = GetAutomationExecutionResult, Error = GetAutomationExecutionError>>;
                 
 
                 #[doc="<p>Returns detailed information about command execution for an invocation or plugin. </p>"]
-                fn get_command_invocation(&self, input: &GetCommandInvocationRequest)  -> Result<GetCommandInvocationResult, GetCommandInvocationError>;
+                fn get_command_invocation(&self, input: &GetCommandInvocationRequest)  -> Box<Future<Item = GetCommandInvocationResult, Error = GetCommandInvocationError>>;
                 
 
                 #[doc="<p>Retrieves the default patch baseline.</p>"]
-                fn get_default_patch_baseline(&self, input: &GetDefaultPatchBaselineRequest)  -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError>;
+                fn get_default_patch_baseline(&self, input: &GetDefaultPatchBaselineRequest)  -> Box<Future<Item = GetDefaultPatchBaselineResult, Error = GetDefaultPatchBaselineError>>;
                 
 
                 #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-ApplyPatchBaseline Systems Manager document. </p>"]
-                fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchSnapshotForInstanceRequest)  -> Result<GetDeployablePatchSnapshotForInstanceResult, GetDeployablePatchSnapshotForInstanceError>;
+                fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchSnapshotForInstanceRequest)  -> Box<Future<Item = GetDeployablePatchSnapshotForInstanceResult, Error = GetDeployablePatchSnapshotForInstanceError>>;
                 
 
                 #[doc="<p>Gets the contents of the specified SSM document.</p>"]
-                fn get_document(&self, input: &GetDocumentRequest)  -> Result<GetDocumentResult, GetDocumentError>;
+                fn get_document(&self, input: &GetDocumentRequest)  -> Box<Future<Item = GetDocumentResult, Error = GetDocumentError>>;
                 
 
                 #[doc="<p>Query inventory information.</p>"]
-                fn get_inventory(&self, input: &GetInventoryRequest)  -> Result<GetInventoryResult, GetInventoryError>;
+                fn get_inventory(&self, input: &GetInventoryRequest)  -> Box<Future<Item = GetInventoryResult, Error = GetInventoryError>>;
                 
 
                 #[doc="<p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>"]
-                fn get_inventory_schema(&self, input: &GetInventorySchemaRequest)  -> Result<GetInventorySchemaResult, GetInventorySchemaError>;
+                fn get_inventory_schema(&self, input: &GetInventorySchemaRequest)  -> Box<Future<Item = GetInventorySchemaResult, Error = GetInventorySchemaError>>;
                 
 
                 #[doc="<p>Retrieves a Maintenance Window.</p>"]
-                fn get_maintenance_window(&self, input: &GetMaintenanceWindowRequest)  -> Result<GetMaintenanceWindowResult, GetMaintenanceWindowError>;
+                fn get_maintenance_window(&self, input: &GetMaintenanceWindowRequest)  -> Box<Future<Item = GetMaintenanceWindowResult, Error = GetMaintenanceWindowError>>;
                 
 
                 #[doc="<p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>"]
-                fn get_maintenance_window_execution(&self, input: &GetMaintenanceWindowExecutionRequest)  -> Result<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError>;
+                fn get_maintenance_window_execution(&self, input: &GetMaintenanceWindowExecutionRequest)  -> Box<Future<Item = GetMaintenanceWindowExecutionResult, Error = GetMaintenanceWindowExecutionError>>;
                 
 
                 #[doc="<p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>"]
-                fn get_maintenance_window_execution_task(&self, input: &GetMaintenanceWindowExecutionTaskRequest)  -> Result<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>;
+                fn get_maintenance_window_execution_task(&self, input: &GetMaintenanceWindowExecutionTaskRequest)  -> Box<Future<Item = GetMaintenanceWindowExecutionTaskResult, Error = GetMaintenanceWindowExecutionTaskError>>;
                 
 
                 #[doc="<p>Query a list of all parameters used by the AWS account.</p>"]
-                fn get_parameter_history(&self, input: &GetParameterHistoryRequest)  -> Result<GetParameterHistoryResult, GetParameterHistoryError>;
+                fn get_parameter_history(&self, input: &GetParameterHistoryRequest)  -> Box<Future<Item = GetParameterHistoryResult, Error = GetParameterHistoryError>>;
                 
 
                 #[doc="<p>Get a list of parameters used by the AWS account.&gt;</p>"]
-                fn get_parameters(&self, input: &GetParametersRequest)  -> Result<GetParametersResult, GetParametersError>;
+                fn get_parameters(&self, input: &GetParametersRequest)  -> Box<Future<Item = GetParametersResult, Error = GetParametersError>>;
                 
 
                 #[doc="<p>Retrieves information about a patch baseline.</p>"]
-                fn get_patch_baseline(&self, input: &GetPatchBaselineRequest)  -> Result<GetPatchBaselineResult, GetPatchBaselineError>;
+                fn get_patch_baseline(&self, input: &GetPatchBaselineRequest)  -> Box<Future<Item = GetPatchBaselineResult, Error = GetPatchBaselineError>>;
                 
 
                 #[doc="<p>Retrieves the patch baseline that should be used for the specified patch group.</p>"]
-                fn get_patch_baseline_for_patch_group(&self, input: &GetPatchBaselineForPatchGroupRequest)  -> Result<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError>;
+                fn get_patch_baseline_for_patch_group(&self, input: &GetPatchBaselineForPatchGroupRequest)  -> Box<Future<Item = GetPatchBaselineForPatchGroupResult, Error = GetPatchBaselineForPatchGroupError>>;
                 
 
                 #[doc="<p>Lists the associations for the specified SSM document or instance.</p>"]
-                fn list_associations(&self, input: &ListAssociationsRequest)  -> Result<ListAssociationsResult, ListAssociationsError>;
+                fn list_associations(&self, input: &ListAssociationsRequest)  -> Box<Future<Item = ListAssociationsResult, Error = ListAssociationsError>>;
                 
 
                 #[doc="<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>"]
-                fn list_command_invocations(&self, input: &ListCommandInvocationsRequest)  -> Result<ListCommandInvocationsResult, ListCommandInvocationsError>;
+                fn list_command_invocations(&self, input: &ListCommandInvocationsRequest)  -> Box<Future<Item = ListCommandInvocationsResult, Error = ListCommandInvocationsError>>;
                 
 
                 #[doc="<p>Lists the commands requested by users of the AWS account.</p>"]
-                fn list_commands(&self, input: &ListCommandsRequest)  -> Result<ListCommandsResult, ListCommandsError>;
+                fn list_commands(&self, input: &ListCommandsRequest)  -> Box<Future<Item = ListCommandsResult, Error = ListCommandsError>>;
                 
 
                 #[doc="<p>List all versions for a document.</p>"]
-                fn list_document_versions(&self, input: &ListDocumentVersionsRequest)  -> Result<ListDocumentVersionsResult, ListDocumentVersionsError>;
+                fn list_document_versions(&self, input: &ListDocumentVersionsRequest)  -> Box<Future<Item = ListDocumentVersionsResult, Error = ListDocumentVersionsError>>;
                 
 
                 #[doc="<p>Describes one or more of your SSM documents.</p>"]
-                fn list_documents(&self, input: &ListDocumentsRequest)  -> Result<ListDocumentsResult, ListDocumentsError>;
+                fn list_documents(&self, input: &ListDocumentsRequest)  -> Box<Future<Item = ListDocumentsResult, Error = ListDocumentsError>>;
                 
 
                 #[doc="<p>A list of inventory items returned by the request.</p>"]
-                fn list_inventory_entries(&self, input: &ListInventoryEntriesRequest)  -> Result<ListInventoryEntriesResult, ListInventoryEntriesError>;
+                fn list_inventory_entries(&self, input: &ListInventoryEntriesRequest)  -> Box<Future<Item = ListInventoryEntriesResult, Error = ListInventoryEntriesError>>;
                 
 
                 #[doc="<p>Returns a list of the tags assigned to the specified resource.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Box<Future<Item = ListTagsForResourceResult, Error = ListTagsForResourceError>>;
                 
 
                 #[doc="<p>Share a document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
-                fn modify_document_permission(&self, input: &ModifyDocumentPermissionRequest)  -> Result<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError>;
+                fn modify_document_permission(&self, input: &ModifyDocumentPermissionRequest)  -> Box<Future<Item = ModifyDocumentPermissionResponse, Error = ModifyDocumentPermissionError>>;
                 
 
                 #[doc="<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>"]
-                fn put_inventory(&self, input: &PutInventoryRequest)  -> Result<PutInventoryResult, PutInventoryError>;
+                fn put_inventory(&self, input: &PutInventoryRequest)  -> Box<Future<Item = PutInventoryResult, Error = PutInventoryError>>;
                 
 
                 #[doc="<p>Add one or more paramaters to the system.</p>"]
-                fn put_parameter(&self, input: &PutParameterRequest)  -> Result<PutParameterResult, PutParameterError>;
+                fn put_parameter(&self, input: &PutParameterRequest)  -> Box<Future<Item = PutParameterResult, Error = PutParameterError>>;
                 
 
                 #[doc="<p>Defines the default patch baseline.</p>"]
-                fn register_default_patch_baseline(&self, input: &RegisterDefaultPatchBaselineRequest)  -> Result<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError>;
+                fn register_default_patch_baseline(&self, input: &RegisterDefaultPatchBaselineRequest)  -> Box<Future<Item = RegisterDefaultPatchBaselineResult, Error = RegisterDefaultPatchBaselineError>>;
                 
 
                 #[doc="<p>Registers a patch baseline for a patch group.</p>"]
-                fn register_patch_baseline_for_patch_group(&self, input: &RegisterPatchBaselineForPatchGroupRequest)  -> Result<RegisterPatchBaselineForPatchGroupResult, RegisterPatchBaselineForPatchGroupError>;
+                fn register_patch_baseline_for_patch_group(&self, input: &RegisterPatchBaselineForPatchGroupRequest)  -> Box<Future<Item = RegisterPatchBaselineForPatchGroupResult, Error = RegisterPatchBaselineForPatchGroupError>>;
                 
 
                 #[doc="<p>Registers a target with a Maintenance Window.</p>"]
-                fn register_target_with_maintenance_window(&self, input: &RegisterTargetWithMaintenanceWindowRequest)  -> Result<RegisterTargetWithMaintenanceWindowResult, RegisterTargetWithMaintenanceWindowError>;
+                fn register_target_with_maintenance_window(&self, input: &RegisterTargetWithMaintenanceWindowRequest)  -> Box<Future<Item = RegisterTargetWithMaintenanceWindowResult, Error = RegisterTargetWithMaintenanceWindowError>>;
                 
 
                 #[doc="<p>Adds a new task to a Maintenance Window.</p>"]
-                fn register_task_with_maintenance_window(&self, input: &RegisterTaskWithMaintenanceWindowRequest)  -> Result<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>;
+                fn register_task_with_maintenance_window(&self, input: &RegisterTaskWithMaintenanceWindowRequest)  -> Box<Future<Item = RegisterTaskWithMaintenanceWindowResult, Error = RegisterTaskWithMaintenanceWindowError>>;
                 
 
                 #[doc="<p>Removes all tags from the specified resource.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Box<Future<Item = RemoveTagsFromResourceResult, Error = RemoveTagsFromResourceError>>;
                 
 
                 #[doc="<p>Executes commands on one or more remote instances.</p>"]
-                fn send_command(&self, input: &SendCommandRequest)  -> Result<SendCommandResult, SendCommandError>;
+                fn send_command(&self, input: &SendCommandRequest)  -> Box<Future<Item = SendCommandResult, Error = SendCommandError>>;
                 
 
                 #[doc="<p>Initiates execution of an Automation document.</p>"]
-                fn start_automation_execution(&self, input: &StartAutomationExecutionRequest)  -> Result<StartAutomationExecutionResult, StartAutomationExecutionError>;
+                fn start_automation_execution(&self, input: &StartAutomationExecutionRequest)  -> Box<Future<Item = StartAutomationExecutionResult, Error = StartAutomationExecutionError>>;
                 
 
                 #[doc="<p>Stop an Automation that is currently executing.</p>"]
-                fn stop_automation_execution(&self, input: &StopAutomationExecutionRequest)  -> Result<StopAutomationExecutionResult, StopAutomationExecutionError>;
+                fn stop_automation_execution(&self, input: &StopAutomationExecutionRequest)  -> Box<Future<Item = StopAutomationExecutionResult, Error = StopAutomationExecutionError>>;
                 
 
                 #[doc="<p>Updates an association. You can only update the document version, schedule, parameters, and Amazon S3 output of an association.</p>"]
-                fn update_association(&self, input: &UpdateAssociationRequest)  -> Result<UpdateAssociationResult, UpdateAssociationError>;
+                fn update_association(&self, input: &UpdateAssociationRequest)  -> Box<Future<Item = UpdateAssociationResult, Error = UpdateAssociationError>>;
                 
 
                 #[doc="<p>Updates the status of the SSM document associated with the specified instance.</p>"]
-                fn update_association_status(&self, input: &UpdateAssociationStatusRequest)  -> Result<UpdateAssociationStatusResult, UpdateAssociationStatusError>;
+                fn update_association_status(&self, input: &UpdateAssociationStatusRequest)  -> Box<Future<Item = UpdateAssociationStatusResult, Error = UpdateAssociationStatusError>>;
                 
 
                 #[doc="<p>The document you want to update.</p>"]
-                fn update_document(&self, input: &UpdateDocumentRequest)  -> Result<UpdateDocumentResult, UpdateDocumentError>;
+                fn update_document(&self, input: &UpdateDocumentRequest)  -> Box<Future<Item = UpdateDocumentResult, Error = UpdateDocumentError>>;
                 
 
                 #[doc="<p>Set the default version of a document. </p>"]
-                fn update_document_default_version(&self, input: &UpdateDocumentDefaultVersionRequest)  -> Result<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError>;
+                fn update_document_default_version(&self, input: &UpdateDocumentDefaultVersionRequest)  -> Box<Future<Item = UpdateDocumentDefaultVersionResult, Error = UpdateDocumentDefaultVersionError>>;
                 
 
                 #[doc="<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>"]
-                fn update_maintenance_window(&self, input: &UpdateMaintenanceWindowRequest)  -> Result<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError>;
+                fn update_maintenance_window(&self, input: &UpdateMaintenanceWindowRequest)  -> Box<Future<Item = UpdateMaintenanceWindowResult, Error = UpdateMaintenanceWindowError>>;
                 
 
                 #[doc="<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>"]
-                fn update_managed_instance_role(&self, input: &UpdateManagedInstanceRoleRequest)  -> Result<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError>;
+                fn update_managed_instance_role(&self, input: &UpdateManagedInstanceRoleRequest)  -> Box<Future<Item = UpdateManagedInstanceRoleResult, Error = UpdateManagedInstanceRoleError>>;
                 
 
                 #[doc="<p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>"]
-                fn update_patch_baseline(&self, input: &UpdatePatchBaselineRequest)  -> Result<UpdatePatchBaselineResult, UpdatePatchBaselineError>;
+                fn update_patch_baseline(&self, input: &UpdatePatchBaselineRequest)  -> Box<Future<Item = UpdatePatchBaselineResult, Error = UpdatePatchBaselineError>>;
                 
 }
 /// A client for the Amazon SSM API.
@@ -9984,7 +9985,7 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the Amazon EC2 User Guide. </p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Result<AddTagsToResourceResult, AddTagsToResourceError> {
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Box<Future<Item = AddTagsToResourceResult, Error = AddTagsToResourceError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9992,21 +9993,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddTagsToResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddTagsToResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>"]
-                fn cancel_command(&self, input: &CancelCommandRequest)  -> Result<CancelCommandResult, CancelCommandError> {
+                fn cancel_command(&self, input: &CancelCommandRequest)  -> Box<Future<Item = CancelCommandResult, Error = CancelCommandError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10014,21 +10025,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelCommandError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelCommandResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CancelCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelCommandError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CancelCommandResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CancelCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html\">Setting Up Managed Instances (Linux)</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html\">Setting Up Managed Instances (Windows)</a> in the Amazon EC2 User Guide. </p>"]
-                fn create_activation(&self, input: &CreateActivationRequest)  -> Result<CreateActivationResult, CreateActivationError> {
+                fn create_activation(&self, input: &CreateActivationRequest)  -> Box<Future<Item = CreateActivationResult, Error = CreateActivationError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10036,21 +10057,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateActivationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateActivationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateActivationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateActivationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Associates the specified SSM document with the specified instances or targets.</p> <p>When you associate an SSM document with one or more instances using instance IDs or tags, the SSM agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
-                fn create_association(&self, input: &CreateAssociationRequest)  -> Result<CreateAssociationResult, CreateAssociationError> {
+                fn create_association(&self, input: &CreateAssociationRequest)  -> Box<Future<Item = CreateAssociationResult, Error = CreateAssociationError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10058,21 +10089,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateAssociationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateAssociationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Associates the specified SSM document with the specified instances or targets.</p> <p>When you associate an SSM document with one or more instances using instance IDs or tags, the SSM agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
-                fn create_association_batch(&self, input: &CreateAssociationBatchRequest)  -> Result<CreateAssociationBatchResult, CreateAssociationBatchError> {
+                fn create_association_batch(&self, input: &CreateAssociationBatchRequest)  -> Box<Future<Item = CreateAssociationBatchResult, Error = CreateAssociationBatchError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10080,21 +10121,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateAssociationBatchError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAssociationBatchResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateAssociationBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateAssociationBatchError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateAssociationBatchResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateAssociationBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an SSM document.</p> <p>After you create an SSM document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
-                fn create_document(&self, input: &CreateDocumentRequest)  -> Result<CreateDocumentResult, CreateDocumentError> {
+                fn create_document(&self, input: &CreateDocumentRequest)  -> Box<Future<Item = CreateDocumentResult, Error = CreateDocumentError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10102,21 +10153,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDocumentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDocumentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new Maintenance Window.</p>"]
-                fn create_maintenance_window(&self, input: &CreateMaintenanceWindowRequest)  -> Result<CreateMaintenanceWindowResult, CreateMaintenanceWindowError> {
+                fn create_maintenance_window(&self, input: &CreateMaintenanceWindowRequest)  -> Box<Future<Item = CreateMaintenanceWindowResult, Error = CreateMaintenanceWindowError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10124,21 +10185,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateMaintenanceWindowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateMaintenanceWindowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a patch baseline.</p>"]
-                fn create_patch_baseline(&self, input: &CreatePatchBaselineRequest)  -> Result<CreatePatchBaselineResult, CreatePatchBaselineError> {
+                fn create_patch_baseline(&self, input: &CreatePatchBaselineRequest)  -> Box<Future<Item = CreatePatchBaselineResult, Error = CreatePatchBaselineError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10146,21 +10217,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePatchBaselineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePatchBaselineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>"]
-                fn delete_activation(&self, input: &DeleteActivationRequest)  -> Result<DeleteActivationResult, DeleteActivationError> {
+                fn delete_activation(&self, input: &DeleteActivationRequest)  -> Box<Future<Item = DeleteActivationResult, Error = DeleteActivationError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10168,21 +10249,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteActivationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteActivationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteActivationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteActivationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disassociates the specified SSM document from the specified instance.</p> <p>When you disassociate an SSM document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
-                fn delete_association(&self, input: &DeleteAssociationRequest)  -> Result<DeleteAssociationResult, DeleteAssociationError> {
+                fn delete_association(&self, input: &DeleteAssociationRequest)  -> Box<Future<Item = DeleteAssociationResult, Error = DeleteAssociationError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10190,21 +10281,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteAssociationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteAssociationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the SSM document and all instance associations to the document.</p> <p>Before you delete the SSM document, we recommend that you use DeleteAssociation to disassociate all instances that are associated with the document.</p>"]
-                fn delete_document(&self, input: &DeleteDocumentRequest)  -> Result<DeleteDocumentResult, DeleteDocumentError> {
+                fn delete_document(&self, input: &DeleteDocumentRequest)  -> Box<Future<Item = DeleteDocumentResult, Error = DeleteDocumentError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10212,21 +10313,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDocumentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDocumentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a Maintenance Window.</p>"]
-                fn delete_maintenance_window(&self, input: &DeleteMaintenanceWindowRequest)  -> Result<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError> {
+                fn delete_maintenance_window(&self, input: &DeleteMaintenanceWindowRequest)  -> Box<Future<Item = DeleteMaintenanceWindowResult, Error = DeleteMaintenanceWindowError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10234,21 +10345,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteMaintenanceWindowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteMaintenanceWindowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Delete a parameter from the system.</p>"]
-                fn delete_parameter(&self, input: &DeleteParameterRequest)  -> Result<DeleteParameterResult, DeleteParameterError> {
+                fn delete_parameter(&self, input: &DeleteParameterRequest)  -> Box<Future<Item = DeleteParameterResult, Error = DeleteParameterError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10256,21 +10377,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteParameterError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteParameterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a patch baseline.</p>"]
-                fn delete_patch_baseline(&self, input: &DeletePatchBaselineRequest)  -> Result<DeletePatchBaselineResult, DeletePatchBaselineError> {
+                fn delete_patch_baseline(&self, input: &DeletePatchBaselineRequest)  -> Box<Future<Item = DeletePatchBaselineResult, Error = DeletePatchBaselineError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10278,21 +10409,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePatchBaselineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeletePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeletePatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePatchBaselineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeletePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeletePatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don’t plan to use Run Command on the server, we suggest uninstalling the SSM agent first.</p>"]
-                fn deregister_managed_instance(&self, input: &DeregisterManagedInstanceRequest)  -> Result<DeregisterManagedInstanceResult, DeregisterManagedInstanceError> {
+                fn deregister_managed_instance(&self, input: &DeregisterManagedInstanceRequest)  -> Box<Future<Item = DeregisterManagedInstanceResult, Error = DeregisterManagedInstanceError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10300,21 +10441,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeregisterManagedInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterManagedInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeregisterManagedInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeregisterManagedInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeregisterManagedInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeregisterManagedInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes a patch group from a patch baseline.</p>"]
-                fn deregister_patch_baseline_for_patch_group(&self, input: &DeregisterPatchBaselineForPatchGroupRequest)  -> Result<DeregisterPatchBaselineForPatchGroupResult, DeregisterPatchBaselineForPatchGroupError> {
+                fn deregister_patch_baseline_for_patch_group(&self, input: &DeregisterPatchBaselineForPatchGroupRequest)  -> Box<Future<Item = DeregisterPatchBaselineForPatchGroupResult, Error = DeregisterPatchBaselineForPatchGroupError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10322,21 +10473,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeregisterPatchBaselineForPatchGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeregisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeregisterPatchBaselineForPatchGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeregisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes a target from a Maintenance Window.</p>"]
-                fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFromMaintenanceWindowRequest)  -> Result<DeregisterTargetFromMaintenanceWindowResult, DeregisterTargetFromMaintenanceWindowError> {
+                fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFromMaintenanceWindowRequest)  -> Box<Future<Item = DeregisterTargetFromMaintenanceWindowResult, Error = DeregisterTargetFromMaintenanceWindowError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10344,21 +10505,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeregisterTargetFromMaintenanceWindowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeregisterTargetFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeregisterTargetFromMaintenanceWindowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeregisterTargetFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes a task from a Maintenance Window.</p>"]
-                fn deregister_task_from_maintenance_window(&self, input: &DeregisterTaskFromMaintenanceWindowRequest)  -> Result<DeregisterTaskFromMaintenanceWindowResult, DeregisterTaskFromMaintenanceWindowError> {
+                fn deregister_task_from_maintenance_window(&self, input: &DeregisterTaskFromMaintenanceWindowRequest)  -> Box<Future<Item = DeregisterTaskFromMaintenanceWindowResult, Error = DeregisterTaskFromMaintenanceWindowError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10366,21 +10537,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeregisterTaskFromMaintenanceWindowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeregisterTaskFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeregisterTaskFromMaintenanceWindowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeregisterTaskFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>"]
-                fn describe_activations(&self, input: &DescribeActivationsRequest)  -> Result<DescribeActivationsResult, DescribeActivationsError> {
+                fn describe_activations(&self, input: &DescribeActivationsRequest)  -> Box<Future<Item = DescribeActivationsResult, Error = DescribeActivationsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10388,21 +10569,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeActivationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeActivationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeActivationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeActivationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeActivationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeActivationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the associations for the specified SSM document or instance.</p>"]
-                fn describe_association(&self, input: &DescribeAssociationRequest)  -> Result<DescribeAssociationResult, DescribeAssociationError> {
+                fn describe_association(&self, input: &DescribeAssociationRequest)  -> Box<Future<Item = DescribeAssociationResult, Error = DescribeAssociationError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10410,21 +10601,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAssociationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAssociationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides details about all active and terminated Automation executions.</p>"]
-                fn describe_automation_executions(&self, input: &DescribeAutomationExecutionsRequest)  -> Result<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError> {
+                fn describe_automation_executions(&self, input: &DescribeAutomationExecutionsRequest)  -> Box<Future<Item = DescribeAutomationExecutionsResult, Error = DescribeAutomationExecutionsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10432,21 +10633,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAutomationExecutionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAutomationExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeAutomationExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAutomationExecutionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeAutomationExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeAutomationExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all patches that could possibly be included in a patch baseline.</p>"]
-                fn describe_available_patches(&self, input: &DescribeAvailablePatchesRequest)  -> Result<DescribeAvailablePatchesResult, DescribeAvailablePatchesError> {
+                fn describe_available_patches(&self, input: &DescribeAvailablePatchesRequest)  -> Box<Future<Item = DescribeAvailablePatchesResult, Error = DescribeAvailablePatchesError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10454,21 +10665,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAvailablePatchesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAvailablePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeAvailablePatchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAvailablePatchesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeAvailablePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeAvailablePatchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified SSM document.</p>"]
-                fn describe_document(&self, input: &DescribeDocumentRequest)  -> Result<DescribeDocumentResult, DescribeDocumentError> {
+                fn describe_document(&self, input: &DescribeDocumentRequest)  -> Box<Future<Item = DescribeDocumentResult, Error = DescribeDocumentError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10476,21 +10697,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDocumentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDocumentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the permissions for an SSM document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user’s AWS account ID) or publicly (<i>All</i>). </p>"]
-                fn describe_document_permission(&self, input: &DescribeDocumentPermissionRequest)  -> Result<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError> {
+                fn describe_document_permission(&self, input: &DescribeDocumentPermissionRequest)  -> Box<Future<Item = DescribeDocumentPermissionResponse, Error = DescribeDocumentPermissionError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10498,21 +10729,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDocumentPermissionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDocumentPermissionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>All associations for the instance(s).</p>"]
-                fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInstanceAssociationsRequest)  -> Result<DescribeEffectiveInstanceAssociationsResult, DescribeEffectiveInstanceAssociationsError> {
+                fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInstanceAssociationsRequest)  -> Box<Future<Item = DescribeEffectiveInstanceAssociationsResult, Error = DescribeEffectiveInstanceAssociationsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10520,21 +10761,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEffectiveInstanceAssociationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeEffectiveInstanceAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEffectiveInstanceAssociationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeEffectiveInstanceAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline.</p>"]
-                fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectivePatchesForPatchBaselineRequest)  -> Result<DescribeEffectivePatchesForPatchBaselineResult, DescribeEffectivePatchesForPatchBaselineError> {
+                fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectivePatchesForPatchBaselineRequest)  -> Box<Future<Item = DescribeEffectivePatchesForPatchBaselineResult, Error = DescribeEffectivePatchesForPatchBaselineError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10542,21 +10793,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEffectivePatchesForPatchBaselineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeEffectivePatchesForPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEffectivePatchesForPatchBaselineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeEffectivePatchesForPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The status of the associations for the instance(s).</p>"]
-                fn describe_instance_associations_status(&self, input: &DescribeInstanceAssociationsStatusRequest)  -> Result<DescribeInstanceAssociationsStatusResult, DescribeInstanceAssociationsStatusError> {
+                fn describe_instance_associations_status(&self, input: &DescribeInstanceAssociationsStatusRequest)  -> Box<Future<Item = DescribeInstanceAssociationsStatusResult, Error = DescribeInstanceAssociationsStatusError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10564,21 +10825,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInstanceAssociationsStatusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeInstanceAssociationsStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInstanceAssociationsStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeInstanceAssociationsStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
-                fn describe_instance_information(&self, input: &DescribeInstanceInformationRequest)  -> Result<DescribeInstanceInformationResult, DescribeInstanceInformationError> {
+                fn describe_instance_information(&self, input: &DescribeInstanceInformationRequest)  -> Box<Future<Item = DescribeInstanceInformationResult, Error = DescribeInstanceInformationError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10586,21 +10857,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInstanceInformationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstanceInformationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeInstanceInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInstanceInformationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeInstanceInformationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeInstanceInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the high-level patch state of one or more instances.</p>"]
-                fn describe_instance_patch_states(&self, input: &DescribeInstancePatchStatesRequest)  -> Result<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError> {
+                fn describe_instance_patch_states(&self, input: &DescribeInstancePatchStatesRequest)  -> Box<Future<Item = DescribeInstancePatchStatesResult, Error = DescribeInstancePatchStatesError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10608,21 +10889,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInstancePatchStatesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancePatchStatesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeInstancePatchStatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInstancePatchStatesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeInstancePatchStatesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeInstancePatchStatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the high-level patch state for the instances in the specified patch group.</p>"]
-                fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstancePatchStatesForPatchGroupRequest)  -> Result<DescribeInstancePatchStatesForPatchGroupResult, DescribeInstancePatchStatesForPatchGroupError> {
+                fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstancePatchStatesForPatchGroupRequest)  -> Box<Future<Item = DescribeInstancePatchStatesForPatchGroupResult, Error = DescribeInstancePatchStatesForPatchGroupError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10630,21 +10921,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInstancePatchStatesForPatchGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeInstancePatchStatesForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInstancePatchStatesForPatchGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeInstancePatchStatesForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>"]
-                fn describe_instance_patches(&self, input: &DescribeInstancePatchesRequest)  -> Result<DescribeInstancePatchesResult, DescribeInstancePatchesError> {
+                fn describe_instance_patches(&self, input: &DescribeInstancePatchesRequest)  -> Box<Future<Item = DescribeInstancePatchesResult, Error = DescribeInstancePatchesError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10652,21 +10953,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInstancePatchesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeInstancePatchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInstancePatchesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeInstancePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeInstancePatchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>"]
-                fn describe_maintenance_window_execution_task_invocations(&self, input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest)  -> Result<DescribeMaintenanceWindowExecutionTaskInvocationsResult, DescribeMaintenanceWindowExecutionTaskInvocationsError> {
+                fn describe_maintenance_window_execution_task_invocations(&self, input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest)  -> Box<Future<Item = DescribeMaintenanceWindowExecutionTaskInvocationsResult, Error = DescribeMaintenanceWindowExecutionTaskInvocationsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10674,21 +10985,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMaintenanceWindowExecutionTaskInvocationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>"]
-                fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanceWindowExecutionTasksRequest)  -> Result<DescribeMaintenanceWindowExecutionTasksResult, DescribeMaintenanceWindowExecutionTasksError> {
+                fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanceWindowExecutionTasksRequest)  -> Box<Future<Item = DescribeMaintenanceWindowExecutionTasksResult, Error = DescribeMaintenanceWindowExecutionTasksError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10696,21 +11017,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMaintenanceWindowExecutionTasksError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeMaintenanceWindowExecutionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMaintenanceWindowExecutionTasksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeMaintenanceWindowExecutionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the executions of a Maintenance Window (meaning, information about when the Maintenance Window was scheduled to be active and information about tasks registered and run with the Maintenance Window).</p>"]
-                fn describe_maintenance_window_executions(&self, input: &DescribeMaintenanceWindowExecutionsRequest)  -> Result<DescribeMaintenanceWindowExecutionsResult, DescribeMaintenanceWindowExecutionsError> {
+                fn describe_maintenance_window_executions(&self, input: &DescribeMaintenanceWindowExecutionsRequest)  -> Box<Future<Item = DescribeMaintenanceWindowExecutionsResult, Error = DescribeMaintenanceWindowExecutionsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10718,21 +11049,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMaintenanceWindowExecutionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeMaintenanceWindowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMaintenanceWindowExecutionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeMaintenanceWindowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the targets registered with the Maintenance Window.</p>"]
-                fn describe_maintenance_window_targets(&self, input: &DescribeMaintenanceWindowTargetsRequest)  -> Result<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError> {
+                fn describe_maintenance_window_targets(&self, input: &DescribeMaintenanceWindowTargetsRequest)  -> Box<Future<Item = DescribeMaintenanceWindowTargetsResult, Error = DescribeMaintenanceWindowTargetsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10740,21 +11081,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMaintenanceWindowTargetsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeMaintenanceWindowTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMaintenanceWindowTargetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeMaintenanceWindowTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the tasks in a Maintenance Window.</p>"]
-                fn describe_maintenance_window_tasks(&self, input: &DescribeMaintenanceWindowTasksRequest)  -> Result<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError> {
+                fn describe_maintenance_window_tasks(&self, input: &DescribeMaintenanceWindowTasksRequest)  -> Box<Future<Item = DescribeMaintenanceWindowTasksResult, Error = DescribeMaintenanceWindowTasksError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10762,21 +11113,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMaintenanceWindowTasksError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeMaintenanceWindowTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMaintenanceWindowTasksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeMaintenanceWindowTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the Maintenance Windows in an AWS account.</p>"]
-                fn describe_maintenance_windows(&self, input: &DescribeMaintenanceWindowsRequest)  -> Result<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError> {
+                fn describe_maintenance_windows(&self, input: &DescribeMaintenanceWindowsRequest)  -> Box<Future<Item = DescribeMaintenanceWindowsResult, Error = DescribeMaintenanceWindowsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10784,21 +11145,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMaintenanceWindowsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeMaintenanceWindowsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMaintenanceWindowsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeMaintenanceWindowsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeMaintenanceWindowsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Get information about a parameter.</p>"]
-                fn describe_parameters(&self, input: &DescribeParametersRequest)  -> Result<DescribeParametersResult, DescribeParametersError> {
+                fn describe_parameters(&self, input: &DescribeParametersRequest)  -> Box<Future<Item = DescribeParametersResult, Error = DescribeParametersError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10806,21 +11177,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeParametersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the patch baselines in your AWS account.</p>"]
-                fn describe_patch_baselines(&self, input: &DescribePatchBaselinesRequest)  -> Result<DescribePatchBaselinesResult, DescribePatchBaselinesError> {
+                fn describe_patch_baselines(&self, input: &DescribePatchBaselinesRequest)  -> Box<Future<Item = DescribePatchBaselinesResult, Error = DescribePatchBaselinesError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10828,21 +11209,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribePatchBaselinesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePatchBaselinesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribePatchBaselinesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribePatchBaselinesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribePatchBaselinesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribePatchBaselinesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns high-level aggregated patch compliance state for a patch group.</p>"]
-                fn describe_patch_group_state(&self, input: &DescribePatchGroupStateRequest)  -> Result<DescribePatchGroupStateResult, DescribePatchGroupStateError> {
+                fn describe_patch_group_state(&self, input: &DescribePatchGroupStateRequest)  -> Box<Future<Item = DescribePatchGroupStateResult, Error = DescribePatchGroupStateError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10850,21 +11241,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribePatchGroupStateError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePatchGroupStateResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribePatchGroupStateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribePatchGroupStateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribePatchGroupStateResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribePatchGroupStateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all patch groups that have been registered with patch baselines.</p>"]
-                fn describe_patch_groups(&self, input: &DescribePatchGroupsRequest)  -> Result<DescribePatchGroupsResult, DescribePatchGroupsError> {
+                fn describe_patch_groups(&self, input: &DescribePatchGroupsRequest)  -> Box<Future<Item = DescribePatchGroupsResult, Error = DescribePatchGroupsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10872,21 +11273,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribePatchGroupsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePatchGroupsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribePatchGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribePatchGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribePatchGroupsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribePatchGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Get detailed information about a particular Automation execution.</p>"]
-                fn get_automation_execution(&self, input: &GetAutomationExecutionRequest)  -> Result<GetAutomationExecutionResult, GetAutomationExecutionError> {
+                fn get_automation_execution(&self, input: &GetAutomationExecutionRequest)  -> Box<Future<Item = GetAutomationExecutionResult, Error = GetAutomationExecutionError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10894,21 +11305,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetAutomationExecutionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetAutomationExecutionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns detailed information about command execution for an invocation or plugin. </p>"]
-                fn get_command_invocation(&self, input: &GetCommandInvocationRequest)  -> Result<GetCommandInvocationResult, GetCommandInvocationError> {
+                fn get_command_invocation(&self, input: &GetCommandInvocationRequest)  -> Box<Future<Item = GetCommandInvocationResult, Error = GetCommandInvocationError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10916,21 +11337,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetCommandInvocationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetCommandInvocationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetCommandInvocationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetCommandInvocationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetCommandInvocationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetCommandInvocationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the default patch baseline.</p>"]
-                fn get_default_patch_baseline(&self, input: &GetDefaultPatchBaselineRequest)  -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError> {
+                fn get_default_patch_baseline(&self, input: &GetDefaultPatchBaselineRequest)  -> Box<Future<Item = GetDefaultPatchBaselineResult, Error = GetDefaultPatchBaselineError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10938,21 +11369,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDefaultPatchBaselineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDefaultPatchBaselineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-ApplyPatchBaseline Systems Manager document. </p>"]
-                fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchSnapshotForInstanceRequest)  -> Result<GetDeployablePatchSnapshotForInstanceResult, GetDeployablePatchSnapshotForInstanceError> {
+                fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchSnapshotForInstanceRequest)  -> Box<Future<Item = GetDeployablePatchSnapshotForInstanceResult, Error = GetDeployablePatchSnapshotForInstanceError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10960,21 +11401,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDeployablePatchSnapshotForInstanceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDeployablePatchSnapshotForInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDeployablePatchSnapshotForInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDeployablePatchSnapshotForInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the contents of the specified SSM document.</p>"]
-                fn get_document(&self, input: &GetDocumentRequest)  -> Result<GetDocumentResult, GetDocumentError> {
+                fn get_document(&self, input: &GetDocumentRequest)  -> Box<Future<Item = GetDocumentResult, Error = GetDocumentError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10982,21 +11433,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDocumentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDocumentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Query inventory information.</p>"]
-                fn get_inventory(&self, input: &GetInventoryRequest)  -> Result<GetInventoryResult, GetInventoryError> {
+                fn get_inventory(&self, input: &GetInventoryRequest)  -> Box<Future<Item = GetInventoryResult, Error = GetInventoryError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11004,21 +11465,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetInventoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInventoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetInventoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetInventoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>"]
-                fn get_inventory_schema(&self, input: &GetInventorySchemaRequest)  -> Result<GetInventorySchemaResult, GetInventorySchemaError> {
+                fn get_inventory_schema(&self, input: &GetInventorySchemaRequest)  -> Box<Future<Item = GetInventorySchemaResult, Error = GetInventorySchemaError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11026,21 +11497,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetInventorySchemaError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInventorySchemaResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetInventorySchemaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetInventorySchemaError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetInventorySchemaResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetInventorySchemaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves a Maintenance Window.</p>"]
-                fn get_maintenance_window(&self, input: &GetMaintenanceWindowRequest)  -> Result<GetMaintenanceWindowResult, GetMaintenanceWindowError> {
+                fn get_maintenance_window(&self, input: &GetMaintenanceWindowRequest)  -> Box<Future<Item = GetMaintenanceWindowResult, Error = GetMaintenanceWindowError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11048,21 +11529,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetMaintenanceWindowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetMaintenanceWindowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>"]
-                fn get_maintenance_window_execution(&self, input: &GetMaintenanceWindowExecutionRequest)  -> Result<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError> {
+                fn get_maintenance_window_execution(&self, input: &GetMaintenanceWindowExecutionRequest)  -> Box<Future<Item = GetMaintenanceWindowExecutionResult, Error = GetMaintenanceWindowExecutionError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11070,21 +11561,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetMaintenanceWindowExecutionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMaintenanceWindowExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetMaintenanceWindowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetMaintenanceWindowExecutionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetMaintenanceWindowExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetMaintenanceWindowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>"]
-                fn get_maintenance_window_execution_task(&self, input: &GetMaintenanceWindowExecutionTaskRequest)  -> Result<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError> {
+                fn get_maintenance_window_execution_task(&self, input: &GetMaintenanceWindowExecutionTaskRequest)  -> Box<Future<Item = GetMaintenanceWindowExecutionTaskResult, Error = GetMaintenanceWindowExecutionTaskError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11092,21 +11593,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetMaintenanceWindowExecutionTaskError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetMaintenanceWindowExecutionTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetMaintenanceWindowExecutionTaskError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetMaintenanceWindowExecutionTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Query a list of all parameters used by the AWS account.</p>"]
-                fn get_parameter_history(&self, input: &GetParameterHistoryRequest)  -> Result<GetParameterHistoryResult, GetParameterHistoryError> {
+                fn get_parameter_history(&self, input: &GetParameterHistoryRequest)  -> Box<Future<Item = GetParameterHistoryResult, Error = GetParameterHistoryError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11114,21 +11625,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetParameterHistoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetParameterHistoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetParameterHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetParameterHistoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetParameterHistoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetParameterHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Get a list of parameters used by the AWS account.&gt;</p>"]
-                fn get_parameters(&self, input: &GetParametersRequest)  -> Result<GetParametersResult, GetParametersError> {
+                fn get_parameters(&self, input: &GetParametersRequest)  -> Box<Future<Item = GetParametersResult, Error = GetParametersError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11136,21 +11657,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetParametersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about a patch baseline.</p>"]
-                fn get_patch_baseline(&self, input: &GetPatchBaselineRequest)  -> Result<GetPatchBaselineResult, GetPatchBaselineError> {
+                fn get_patch_baseline(&self, input: &GetPatchBaselineRequest)  -> Box<Future<Item = GetPatchBaselineResult, Error = GetPatchBaselineError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11158,21 +11689,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPatchBaselineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPatchBaselineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the patch baseline that should be used for the specified patch group.</p>"]
-                fn get_patch_baseline_for_patch_group(&self, input: &GetPatchBaselineForPatchGroupRequest)  -> Result<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError> {
+                fn get_patch_baseline_for_patch_group(&self, input: &GetPatchBaselineForPatchGroupRequest)  -> Box<Future<Item = GetPatchBaselineForPatchGroupResult, Error = GetPatchBaselineForPatchGroupError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11180,21 +11721,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPatchBaselineForPatchGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPatchBaselineForPatchGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the associations for the specified SSM document or instance.</p>"]
-                fn list_associations(&self, input: &ListAssociationsRequest)  -> Result<ListAssociationsResult, ListAssociationsError> {
+                fn list_associations(&self, input: &ListAssociationsRequest)  -> Box<Future<Item = ListAssociationsResult, Error = ListAssociationsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11202,21 +11753,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAssociationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAssociationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>"]
-                fn list_command_invocations(&self, input: &ListCommandInvocationsRequest)  -> Result<ListCommandInvocationsResult, ListCommandInvocationsError> {
+                fn list_command_invocations(&self, input: &ListCommandInvocationsRequest)  -> Box<Future<Item = ListCommandInvocationsResult, Error = ListCommandInvocationsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11224,21 +11785,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListCommandInvocationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCommandInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListCommandInvocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListCommandInvocationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListCommandInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListCommandInvocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the commands requested by users of the AWS account.</p>"]
-                fn list_commands(&self, input: &ListCommandsRequest)  -> Result<ListCommandsResult, ListCommandsError> {
+                fn list_commands(&self, input: &ListCommandsRequest)  -> Box<Future<Item = ListCommandsResult, Error = ListCommandsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11246,21 +11817,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListCommandsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCommandsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListCommandsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListCommandsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListCommandsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListCommandsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>List all versions for a document.</p>"]
-                fn list_document_versions(&self, input: &ListDocumentVersionsRequest)  -> Result<ListDocumentVersionsResult, ListDocumentVersionsError> {
+                fn list_document_versions(&self, input: &ListDocumentVersionsRequest)  -> Box<Future<Item = ListDocumentVersionsResult, Error = ListDocumentVersionsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11268,21 +11849,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDocumentVersionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDocumentVersionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDocumentVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDocumentVersionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDocumentVersionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDocumentVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your SSM documents.</p>"]
-                fn list_documents(&self, input: &ListDocumentsRequest)  -> Result<ListDocumentsResult, ListDocumentsError> {
+                fn list_documents(&self, input: &ListDocumentsRequest)  -> Box<Future<Item = ListDocumentsResult, Error = ListDocumentsError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11290,21 +11881,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDocumentsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDocumentsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDocumentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDocumentsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDocumentsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDocumentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>A list of inventory items returned by the request.</p>"]
-                fn list_inventory_entries(&self, input: &ListInventoryEntriesRequest)  -> Result<ListInventoryEntriesResult, ListInventoryEntriesError> {
+                fn list_inventory_entries(&self, input: &ListInventoryEntriesRequest)  -> Box<Future<Item = ListInventoryEntriesResult, Error = ListInventoryEntriesError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11312,21 +11913,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListInventoryEntriesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInventoryEntriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListInventoryEntriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListInventoryEntriesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListInventoryEntriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListInventoryEntriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the tags assigned to the specified resource.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Box<Future<Item = ListTagsForResourceResult, Error = ListTagsForResourceError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11334,21 +11945,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Share a document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
-                fn modify_document_permission(&self, input: &ModifyDocumentPermissionRequest)  -> Result<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError> {
+                fn modify_document_permission(&self, input: &ModifyDocumentPermissionRequest)  -> Box<Future<Item = ModifyDocumentPermissionResponse, Error = ModifyDocumentPermissionError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11356,21 +11977,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyDocumentPermissionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ModifyDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyDocumentPermissionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ModifyDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ModifyDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>"]
-                fn put_inventory(&self, input: &PutInventoryRequest)  -> Result<PutInventoryResult, PutInventoryError> {
+                fn put_inventory(&self, input: &PutInventoryRequest)  -> Box<Future<Item = PutInventoryResult, Error = PutInventoryError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11378,21 +12009,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutInventoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutInventoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutInventoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutInventoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Add one or more paramaters to the system.</p>"]
-                fn put_parameter(&self, input: &PutParameterRequest)  -> Result<PutParameterResult, PutParameterError> {
+                fn put_parameter(&self, input: &PutParameterRequest)  -> Box<Future<Item = PutParameterResult, Error = PutParameterError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11400,21 +12041,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutParameterError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutParameterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Defines the default patch baseline.</p>"]
-                fn register_default_patch_baseline(&self, input: &RegisterDefaultPatchBaselineRequest)  -> Result<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError> {
+                fn register_default_patch_baseline(&self, input: &RegisterDefaultPatchBaselineRequest)  -> Box<Future<Item = RegisterDefaultPatchBaselineResult, Error = RegisterDefaultPatchBaselineError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11422,21 +12073,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterDefaultPatchBaselineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RegisterDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterDefaultPatchBaselineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RegisterDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RegisterDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Registers a patch baseline for a patch group.</p>"]
-                fn register_patch_baseline_for_patch_group(&self, input: &RegisterPatchBaselineForPatchGroupRequest)  -> Result<RegisterPatchBaselineForPatchGroupResult, RegisterPatchBaselineForPatchGroupError> {
+                fn register_patch_baseline_for_patch_group(&self, input: &RegisterPatchBaselineForPatchGroupRequest)  -> Box<Future<Item = RegisterPatchBaselineForPatchGroupResult, Error = RegisterPatchBaselineForPatchGroupError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11444,21 +12105,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterPatchBaselineForPatchGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RegisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterPatchBaselineForPatchGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RegisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Registers a target with a Maintenance Window.</p>"]
-                fn register_target_with_maintenance_window(&self, input: &RegisterTargetWithMaintenanceWindowRequest)  -> Result<RegisterTargetWithMaintenanceWindowResult, RegisterTargetWithMaintenanceWindowError> {
+                fn register_target_with_maintenance_window(&self, input: &RegisterTargetWithMaintenanceWindowRequest)  -> Box<Future<Item = RegisterTargetWithMaintenanceWindowResult, Error = RegisterTargetWithMaintenanceWindowError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11466,21 +12137,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterTargetWithMaintenanceWindowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RegisterTargetWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterTargetWithMaintenanceWindowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RegisterTargetWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds a new task to a Maintenance Window.</p>"]
-                fn register_task_with_maintenance_window(&self, input: &RegisterTaskWithMaintenanceWindowRequest)  -> Result<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError> {
+                fn register_task_with_maintenance_window(&self, input: &RegisterTaskWithMaintenanceWindowRequest)  -> Box<Future<Item = RegisterTaskWithMaintenanceWindowResult, Error = RegisterTaskWithMaintenanceWindowError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11488,21 +12169,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterTaskWithMaintenanceWindowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RegisterTaskWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterTaskWithMaintenanceWindowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RegisterTaskWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes all tags from the specified resource.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Box<Future<Item = RemoveTagsFromResourceResult, Error = RemoveTagsFromResourceError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11510,21 +12201,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveTagsFromResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveTagsFromResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Executes commands on one or more remote instances.</p>"]
-                fn send_command(&self, input: &SendCommandRequest)  -> Result<SendCommandResult, SendCommandError> {
+                fn send_command(&self, input: &SendCommandRequest)  -> Box<Future<Item = SendCommandResult, Error = SendCommandError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11532,21 +12233,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SendCommandError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SendCommandResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(SendCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SendCommandError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<SendCommandResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(SendCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Initiates execution of an Automation document.</p>"]
-                fn start_automation_execution(&self, input: &StartAutomationExecutionRequest)  -> Result<StartAutomationExecutionResult, StartAutomationExecutionError> {
+                fn start_automation_execution(&self, input: &StartAutomationExecutionRequest)  -> Box<Future<Item = StartAutomationExecutionResult, Error = StartAutomationExecutionError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11554,21 +12265,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StartAutomationExecutionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StartAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StartAutomationExecutionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StartAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StartAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Stop an Automation that is currently executing.</p>"]
-                fn stop_automation_execution(&self, input: &StopAutomationExecutionRequest)  -> Result<StopAutomationExecutionResult, StopAutomationExecutionError> {
+                fn stop_automation_execution(&self, input: &StopAutomationExecutionRequest)  -> Box<Future<Item = StopAutomationExecutionResult, Error = StopAutomationExecutionError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11576,21 +12297,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StopAutomationExecutionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StopAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StopAutomationExecutionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StopAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StopAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates an association. You can only update the document version, schedule, parameters, and Amazon S3 output of an association.</p>"]
-                fn update_association(&self, input: &UpdateAssociationRequest)  -> Result<UpdateAssociationResult, UpdateAssociationError> {
+                fn update_association(&self, input: &UpdateAssociationRequest)  -> Box<Future<Item = UpdateAssociationResult, Error = UpdateAssociationError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11598,21 +12329,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateAssociationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateAssociationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the status of the SSM document associated with the specified instance.</p>"]
-                fn update_association_status(&self, input: &UpdateAssociationStatusRequest)  -> Result<UpdateAssociationStatusResult, UpdateAssociationStatusError> {
+                fn update_association_status(&self, input: &UpdateAssociationStatusRequest)  -> Box<Future<Item = UpdateAssociationStatusResult, Error = UpdateAssociationStatusError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11620,21 +12361,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateAssociationStatusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateAssociationStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateAssociationStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateAssociationStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateAssociationStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateAssociationStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The document you want to update.</p>"]
-                fn update_document(&self, input: &UpdateDocumentRequest)  -> Result<UpdateDocumentResult, UpdateDocumentError> {
+                fn update_document(&self, input: &UpdateDocumentRequest)  -> Box<Future<Item = UpdateDocumentResult, Error = UpdateDocumentError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11642,21 +12393,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateDocumentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateDocumentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Set the default version of a document. </p>"]
-                fn update_document_default_version(&self, input: &UpdateDocumentDefaultVersionRequest)  -> Result<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError> {
+                fn update_document_default_version(&self, input: &UpdateDocumentDefaultVersionRequest)  -> Box<Future<Item = UpdateDocumentDefaultVersionResult, Error = UpdateDocumentDefaultVersionError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11664,21 +12425,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateDocumentDefaultVersionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDocumentDefaultVersionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateDocumentDefaultVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateDocumentDefaultVersionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateDocumentDefaultVersionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateDocumentDefaultVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>"]
-                fn update_maintenance_window(&self, input: &UpdateMaintenanceWindowRequest)  -> Result<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError> {
+                fn update_maintenance_window(&self, input: &UpdateMaintenanceWindowRequest)  -> Box<Future<Item = UpdateMaintenanceWindowResult, Error = UpdateMaintenanceWindowError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11686,21 +12457,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateMaintenanceWindowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateMaintenanceWindowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>"]
-                fn update_managed_instance_role(&self, input: &UpdateManagedInstanceRoleRequest)  -> Result<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError> {
+                fn update_managed_instance_role(&self, input: &UpdateManagedInstanceRoleRequest)  -> Box<Future<Item = UpdateManagedInstanceRoleResult, Error = UpdateManagedInstanceRoleError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11708,21 +12489,31 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateManagedInstanceRoleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateManagedInstanceRoleResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateManagedInstanceRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateManagedInstanceRoleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateManagedInstanceRoleResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateManagedInstanceRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>"]
-                fn update_patch_baseline(&self, input: &UpdatePatchBaselineRequest)  -> Result<UpdatePatchBaselineResult, UpdatePatchBaselineError> {
+                fn update_patch_baseline(&self, input: &UpdatePatchBaselineRequest)  -> Box<Future<Item = UpdatePatchBaselineResult, Error = UpdatePatchBaselineError>> {
                     let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11730,16 +12521,26 @@ UpdatePatchBaselineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdatePatchBaselineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdatePatchBaselineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

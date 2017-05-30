@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type Arn = String;
 #[doc="<p>An object representing authorization data for an Amazon ECR registry.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1944,71 +1945,71 @@ UploadLayerPartError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn batch_check_layer_availability(&self, input: &BatchCheckLayerAvailabilityRequest)  -> Result<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError>;
+                fn batch_check_layer_availability(&self, input: &BatchCheckLayerAvailabilityRequest)  -> Box<Future<Item = BatchCheckLayerAvailabilityResponse, Error = BatchCheckLayerAvailabilityError>>;
                 
 
                 #[doc="<p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>"]
-                fn batch_delete_image(&self, input: &BatchDeleteImageRequest)  -> Result<BatchDeleteImageResponse, BatchDeleteImageError>;
+                fn batch_delete_image(&self, input: &BatchDeleteImageRequest)  -> Box<Future<Item = BatchDeleteImageResponse, Error = BatchDeleteImageError>>;
                 
 
                 #[doc="<p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>"]
-                fn batch_get_image(&self, input: &BatchGetImageRequest)  -> Result<BatchGetImageResponse, BatchGetImageError>;
+                fn batch_get_image(&self, input: &BatchGetImageRequest)  -> Box<Future<Item = BatchGetImageResponse, Error = BatchGetImageError>>;
                 
 
                 #[doc="<p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn complete_layer_upload(&self, input: &CompleteLayerUploadRequest)  -> Result<CompleteLayerUploadResponse, CompleteLayerUploadError>;
+                fn complete_layer_upload(&self, input: &CompleteLayerUploadRequest)  -> Box<Future<Item = CompleteLayerUploadResponse, Error = CompleteLayerUploadError>>;
                 
 
                 #[doc="<p>Creates an image repository.</p>"]
-                fn create_repository(&self, input: &CreateRepositoryRequest)  -> Result<CreateRepositoryResponse, CreateRepositoryError>;
+                fn create_repository(&self, input: &CreateRepositoryRequest)  -> Box<Future<Item = CreateRepositoryResponse, Error = CreateRepositoryError>>;
                 
 
                 #[doc="<p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>"]
-                fn delete_repository(&self, input: &DeleteRepositoryRequest)  -> Result<DeleteRepositoryResponse, DeleteRepositoryError>;
+                fn delete_repository(&self, input: &DeleteRepositoryRequest)  -> Box<Future<Item = DeleteRepositoryResponse, Error = DeleteRepositoryError>>;
                 
 
                 #[doc="<p>Deletes the repository policy from a specified repository.</p>"]
-                fn delete_repository_policy(&self, input: &DeleteRepositoryPolicyRequest)  -> Result<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError>;
+                fn delete_repository_policy(&self, input: &DeleteRepositoryPolicyRequest)  -> Box<Future<Item = DeleteRepositoryPolicyResponse, Error = DeleteRepositoryPolicyError>>;
                 
 
                 #[doc="<p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>"]
-                fn describe_images(&self, input: &DescribeImagesRequest)  -> Result<DescribeImagesResponse, DescribeImagesError>;
+                fn describe_images(&self, input: &DescribeImagesRequest)  -> Box<Future<Item = DescribeImagesResponse, Error = DescribeImagesError>>;
                 
 
                 #[doc="<p>Describes image repositories in a registry.</p>"]
-                fn describe_repositories(&self, input: &DescribeRepositoriesRequest)  -> Result<DescribeRepositoriesResponse, DescribeRepositoriesError>;
+                fn describe_repositories(&self, input: &DescribeRepositoriesRequest)  -> Box<Future<Item = DescribeRepositoriesResponse, Error = DescribeRepositoriesError>>;
                 
 
                 #[doc="<p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>"]
-                fn get_authorization_token(&self, input: &GetAuthorizationTokenRequest)  -> Result<GetAuthorizationTokenResponse, GetAuthorizationTokenError>;
+                fn get_authorization_token(&self, input: &GetAuthorizationTokenRequest)  -> Box<Future<Item = GetAuthorizationTokenResponse, Error = GetAuthorizationTokenError>>;
                 
 
                 #[doc="<p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn get_download_url_for_layer(&self, input: &GetDownloadUrlForLayerRequest)  -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError>;
+                fn get_download_url_for_layer(&self, input: &GetDownloadUrlForLayerRequest)  -> Box<Future<Item = GetDownloadUrlForLayerResponse, Error = GetDownloadUrlForLayerError>>;
                 
 
                 #[doc="<p>Retrieves the repository policy for a specified repository.</p>"]
-                fn get_repository_policy(&self, input: &GetRepositoryPolicyRequest)  -> Result<GetRepositoryPolicyResponse, GetRepositoryPolicyError>;
+                fn get_repository_policy(&self, input: &GetRepositoryPolicyRequest)  -> Box<Future<Item = GetRepositoryPolicyResponse, Error = GetRepositoryPolicyError>>;
                 
 
                 #[doc="<p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn initiate_layer_upload(&self, input: &InitiateLayerUploadRequest)  -> Result<InitiateLayerUploadResponse, InitiateLayerUploadError>;
+                fn initiate_layer_upload(&self, input: &InitiateLayerUploadRequest)  -> Box<Future<Item = InitiateLayerUploadResponse, Error = InitiateLayerUploadError>>;
                 
 
                 #[doc="<p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>"]
-                fn list_images(&self, input: &ListImagesRequest)  -> Result<ListImagesResponse, ListImagesError>;
+                fn list_images(&self, input: &ListImagesRequest)  -> Box<Future<Item = ListImagesResponse, Error = ListImagesError>>;
                 
 
                 #[doc="<p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn put_image(&self, input: &PutImageRequest)  -> Result<PutImageResponse, PutImageError>;
+                fn put_image(&self, input: &PutImageRequest)  -> Box<Future<Item = PutImageResponse, Error = PutImageError>>;
                 
 
                 #[doc="<p>Applies a repository policy on a specified repository to control access permissions.</p>"]
-                fn set_repository_policy(&self, input: &SetRepositoryPolicyRequest)  -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
+                fn set_repository_policy(&self, input: &SetRepositoryPolicyRequest)  -> Box<Future<Item = SetRepositoryPolicyResponse, Error = SetRepositoryPolicyError>>;
                 
 
                 #[doc="<p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn upload_layer_part(&self, input: &UploadLayerPartRequest)  -> Result<UploadLayerPartResponse, UploadLayerPartError>;
+                fn upload_layer_part(&self, input: &UploadLayerPartRequest)  -> Box<Future<Item = UploadLayerPartResponse, Error = UploadLayerPartError>>;
                 
 }
 /// A client for the Amazon ECR API.
@@ -2032,7 +2033,7 @@ UploadLayerPartError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn batch_check_layer_availability(&self, input: &BatchCheckLayerAvailabilityRequest)  -> Result<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
+                fn batch_check_layer_availability(&self, input: &BatchCheckLayerAvailabilityRequest)  -> Box<Future<Item = BatchCheckLayerAvailabilityResponse, Error = BatchCheckLayerAvailabilityError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2040,21 +2041,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchCheckLayerAvailabilityError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchCheckLayerAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchCheckLayerAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchCheckLayerAvailabilityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchCheckLayerAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchCheckLayerAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>"]
-                fn batch_delete_image(&self, input: &BatchDeleteImageRequest)  -> Result<BatchDeleteImageResponse, BatchDeleteImageError> {
+                fn batch_delete_image(&self, input: &BatchDeleteImageRequest)  -> Box<Future<Item = BatchDeleteImageResponse, Error = BatchDeleteImageError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2062,21 +2073,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchDeleteImageError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchDeleteImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchDeleteImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchDeleteImageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchDeleteImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchDeleteImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>"]
-                fn batch_get_image(&self, input: &BatchGetImageRequest)  -> Result<BatchGetImageResponse, BatchGetImageError> {
+                fn batch_get_image(&self, input: &BatchGetImageRequest)  -> Box<Future<Item = BatchGetImageResponse, Error = BatchGetImageError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2084,21 +2105,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BatchGetImageError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(BatchGetImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BatchGetImageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<BatchGetImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(BatchGetImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn complete_layer_upload(&self, input: &CompleteLayerUploadRequest)  -> Result<CompleteLayerUploadResponse, CompleteLayerUploadError> {
+                fn complete_layer_upload(&self, input: &CompleteLayerUploadRequest)  -> Box<Future<Item = CompleteLayerUploadResponse, Error = CompleteLayerUploadError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2106,21 +2137,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CompleteLayerUploadError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CompleteLayerUploadResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CompleteLayerUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CompleteLayerUploadError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CompleteLayerUploadResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CompleteLayerUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an image repository.</p>"]
-                fn create_repository(&self, input: &CreateRepositoryRequest)  -> Result<CreateRepositoryResponse, CreateRepositoryError> {
+                fn create_repository(&self, input: &CreateRepositoryRequest)  -> Box<Future<Item = CreateRepositoryResponse, Error = CreateRepositoryError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2128,21 +2169,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateRepositoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRepositoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateRepositoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateRepositoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>"]
-                fn delete_repository(&self, input: &DeleteRepositoryRequest)  -> Result<DeleteRepositoryResponse, DeleteRepositoryError> {
+                fn delete_repository(&self, input: &DeleteRepositoryRequest)  -> Box<Future<Item = DeleteRepositoryResponse, Error = DeleteRepositoryError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2150,21 +2201,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRepositoryError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRepositoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRepositoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteRepositoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the repository policy from a specified repository.</p>"]
-                fn delete_repository_policy(&self, input: &DeleteRepositoryPolicyRequest)  -> Result<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
+                fn delete_repository_policy(&self, input: &DeleteRepositoryPolicyRequest)  -> Box<Future<Item = DeleteRepositoryPolicyResponse, Error = DeleteRepositoryPolicyError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2172,21 +2233,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRepositoryPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteRepositoryPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRepositoryPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteRepositoryPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>"]
-                fn describe_images(&self, input: &DescribeImagesRequest)  -> Result<DescribeImagesResponse, DescribeImagesError> {
+                fn describe_images(&self, input: &DescribeImagesRequest)  -> Box<Future<Item = DescribeImagesResponse, Error = DescribeImagesError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2194,21 +2265,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeImagesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeImagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeImagesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeImagesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeImagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeImagesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes image repositories in a registry.</p>"]
-                fn describe_repositories(&self, input: &DescribeRepositoriesRequest)  -> Result<DescribeRepositoriesResponse, DescribeRepositoriesError> {
+                fn describe_repositories(&self, input: &DescribeRepositoriesRequest)  -> Box<Future<Item = DescribeRepositoriesResponse, Error = DescribeRepositoriesError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2216,21 +2297,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeRepositoriesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeRepositoriesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeRepositoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeRepositoriesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeRepositoriesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeRepositoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>"]
-                fn get_authorization_token(&self, input: &GetAuthorizationTokenRequest)  -> Result<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
+                fn get_authorization_token(&self, input: &GetAuthorizationTokenRequest)  -> Box<Future<Item = GetAuthorizationTokenResponse, Error = GetAuthorizationTokenError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2238,21 +2329,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetAuthorizationTokenError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAuthorizationTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetAuthorizationTokenError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetAuthorizationTokenError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetAuthorizationTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetAuthorizationTokenError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn get_download_url_for_layer(&self, input: &GetDownloadUrlForLayerRequest)  -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
+                fn get_download_url_for_layer(&self, input: &GetDownloadUrlForLayerRequest)  -> Box<Future<Item = GetDownloadUrlForLayerResponse, Error = GetDownloadUrlForLayerError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2260,21 +2361,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDownloadUrlForLayerError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDownloadUrlForLayerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDownloadUrlForLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDownloadUrlForLayerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDownloadUrlForLayerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDownloadUrlForLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the repository policy for a specified repository.</p>"]
-                fn get_repository_policy(&self, input: &GetRepositoryPolicyRequest)  -> Result<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
+                fn get_repository_policy(&self, input: &GetRepositoryPolicyRequest)  -> Box<Future<Item = GetRepositoryPolicyResponse, Error = GetRepositoryPolicyError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2282,21 +2393,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetRepositoryPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetRepositoryPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetRepositoryPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetRepositoryPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn initiate_layer_upload(&self, input: &InitiateLayerUploadRequest)  -> Result<InitiateLayerUploadResponse, InitiateLayerUploadError> {
+                fn initiate_layer_upload(&self, input: &InitiateLayerUploadRequest)  -> Box<Future<Item = InitiateLayerUploadResponse, Error = InitiateLayerUploadError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2304,21 +2425,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(InitiateLayerUploadError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<InitiateLayerUploadResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(InitiateLayerUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| InitiateLayerUploadError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<InitiateLayerUploadResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(InitiateLayerUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>"]
-                fn list_images(&self, input: &ListImagesRequest)  -> Result<ListImagesResponse, ListImagesError> {
+                fn list_images(&self, input: &ListImagesRequest)  -> Box<Future<Item = ListImagesResponse, Error = ListImagesError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2326,21 +2457,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListImagesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListImagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListImagesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListImagesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListImagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListImagesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn put_image(&self, input: &PutImageRequest)  -> Result<PutImageResponse, PutImageError> {
+                fn put_image(&self, input: &PutImageRequest)  -> Box<Future<Item = PutImageResponse, Error = PutImageError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2348,21 +2489,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutImageError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutImageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Applies a repository policy on a specified repository to control access permissions.</p>"]
-                fn set_repository_policy(&self, input: &SetRepositoryPolicyRequest)  -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
+                fn set_repository_policy(&self, input: &SetRepositoryPolicyRequest)  -> Box<Future<Item = SetRepositoryPolicyResponse, Error = SetRepositoryPolicyError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2370,21 +2521,31 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetRepositoryPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SetRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(SetRepositoryPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetRepositoryPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<SetRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(SetRepositoryPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-                fn upload_layer_part(&self, input: &UploadLayerPartRequest)  -> Result<UploadLayerPartResponse, UploadLayerPartError> {
+                fn upload_layer_part(&self, input: &UploadLayerPartRequest)  -> Box<Future<Item = UploadLayerPartResponse, Error = UploadLayerPartError>> {
                     let mut request = SignedRequest::new("POST", "ecr", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2392,16 +2553,26 @@ UploadLayerPartError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UploadLayerPartError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UploadLayerPartResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UploadLayerPartError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UploadLayerPartError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UploadLayerPartResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UploadLayerPartError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

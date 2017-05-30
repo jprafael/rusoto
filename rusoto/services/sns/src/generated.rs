@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -4497,123 +4507,123 @@ UnsubscribeError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>"]
-                fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError>;
+                fn add_permission(&self, input: &AddPermissionInput) -> Box<Future<Item = (), Error = AddPermissionError>>;
                 
 
                 #[doc="<p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>"]
-                fn check_if_phone_number_is_opted_out(&self, input: &CheckIfPhoneNumberIsOptedOutInput) -> Result<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError>;
+                fn check_if_phone_number_is_opted_out(&self, input: &CheckIfPhoneNumberIsOptedOutInput) -> Box<Future<Item = CheckIfPhoneNumberIsOptedOutResponse, Error = CheckIfPhoneNumberIsOptedOutError>>;
                 
 
                 #[doc="<p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to \"true\".</p>"]
-                fn confirm_subscription(&self, input: &ConfirmSubscriptionInput) -> Result<ConfirmSubscriptionResponse, ConfirmSubscriptionError>;
+                fn confirm_subscription(&self, input: &ConfirmSubscriptionInput) -> Box<Future<Item = ConfirmSubscriptionResponse, Error = ConfirmSubscriptionError>>;
                 
 
                 #[doc="<p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is \"SSL certificate\". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is \"Package Security Identifier\". For MPNS, PlatformPrincipal is \"TLS certificate\". For Baidu, PlatformPrincipal is \"API key\".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is \"private key\". For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\". For WNS, PlatformCredential is \"secret key\". For MPNS, PlatformCredential is \"private key\". For Baidu, PlatformCredential is \"secret key\". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html\">Getting Started with Apple Push Notification Service</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html\">Getting Started with Amazon Device Messaging</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html\">Getting Started with Baidu Cloud Push</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html\">Getting Started with Google Cloud Messaging for Android</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html\">Getting Started with MPNS</a>, or <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html\">Getting Started with WNS</a>. </p>"]
-                fn create_platform_application(&self, input: &CreatePlatformApplicationInput) -> Result<CreatePlatformApplicationResponse, CreatePlatformApplicationError>;
+                fn create_platform_application(&self, input: &CreatePlatformApplicationInput) -> Box<Future<Item = CreatePlatformApplicationResponse, Error = CreatePlatformApplicationError>>;
                 
 
                 #[doc="<p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html\">Creating an Amazon SNS Endpoint for Baidu</a>. </p>"]
-                fn create_platform_endpoint(&self, input: &CreatePlatformEndpointInput) -> Result<CreateEndpointResponse, CreatePlatformEndpointError>;
+                fn create_platform_endpoint(&self, input: &CreatePlatformEndpointInput) -> Box<Future<Item = CreateEndpointResponse, Error = CreatePlatformEndpointError>>;
                 
 
                 #[doc="<p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href=\"http://aws.amazon.com/sns/\">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>"]
-                fn create_topic(&self, input: &CreateTopicInput) -> Result<CreateTopicResponse, CreateTopicError>;
+                fn create_topic(&self, input: &CreateTopicInput) -> Box<Future<Item = CreateTopicResponse, Error = CreateTopicError>>;
                 
 
                 #[doc="<p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>"]
-                fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError>;
+                fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Box<Future<Item = (), Error = DeleteEndpointError>>;
                 
 
                 #[doc="<p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn delete_platform_application(&self, input: &DeletePlatformApplicationInput) -> Result<(), DeletePlatformApplicationError>;
+                fn delete_platform_application(&self, input: &DeletePlatformApplicationInput) -> Box<Future<Item = (), Error = DeletePlatformApplicationError>>;
                 
 
                 #[doc="<p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>"]
-                fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError>;
+                fn delete_topic(&self, input: &DeleteTopicInput) -> Box<Future<Item = (), Error = DeleteTopicError>>;
                 
 
                 #[doc="<p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn get_endpoint_attributes(&self, input: &GetEndpointAttributesInput) -> Result<GetEndpointAttributesResponse, GetEndpointAttributesError>;
+                fn get_endpoint_attributes(&self, input: &GetEndpointAttributesInput) -> Box<Future<Item = GetEndpointAttributesResponse, Error = GetEndpointAttributesError>>;
                 
 
                 #[doc="<p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn get_platform_application_attributes(&self, input: &GetPlatformApplicationAttributesInput) -> Result<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>;
+                fn get_platform_application_attributes(&self, input: &GetPlatformApplicationAttributesInput) -> Box<Future<Item = GetPlatformApplicationAttributesResponse, Error = GetPlatformApplicationAttributesError>>;
                 
 
                 #[doc="<p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>"]
-                fn get_sms_attributes(&self, input: &GetSMSAttributesInput) -> Result<GetSMSAttributesResponse, GetSMSAttributesError>;
+                fn get_sms_attributes(&self, input: &GetSMSAttributesInput) -> Box<Future<Item = GetSMSAttributesResponse, Error = GetSMSAttributesError>>;
                 
 
                 #[doc="<p>Returns all of the properties of a subscription.</p>"]
-                fn get_subscription_attributes(&self, input: &GetSubscriptionAttributesInput) -> Result<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError>;
+                fn get_subscription_attributes(&self, input: &GetSubscriptionAttributesInput) -> Box<Future<Item = GetSubscriptionAttributesResponse, Error = GetSubscriptionAttributesError>>;
                 
 
                 #[doc="<p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>"]
-                fn get_topic_attributes(&self, input: &GetTopicAttributesInput) -> Result<GetTopicAttributesResponse, GetTopicAttributesError>;
+                fn get_topic_attributes(&self, input: &GetTopicAttributesInput) -> Box<Future<Item = GetTopicAttributesResponse, Error = GetTopicAttributesError>>;
                 
 
                 #[doc="<p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn list_endpoints_by_platform_application(&self, input: &ListEndpointsByPlatformApplicationInput) -> Result<ListEndpointsByPlatformApplicationResponse, ListEndpointsByPlatformApplicationError>;
+                fn list_endpoints_by_platform_application(&self, input: &ListEndpointsByPlatformApplicationInput) -> Box<Future<Item = ListEndpointsByPlatformApplicationResponse, Error = ListEndpointsByPlatformApplicationError>>;
                 
 
                 #[doc="<p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>"]
-                fn list_phone_numbers_opted_out(&self, input: &ListPhoneNumbersOptedOutInput) -> Result<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError>;
+                fn list_phone_numbers_opted_out(&self, input: &ListPhoneNumbersOptedOutInput) -> Box<Future<Item = ListPhoneNumbersOptedOutResponse, Error = ListPhoneNumbersOptedOutError>>;
                 
 
                 #[doc="<p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn list_platform_applications(&self, input: &ListPlatformApplicationsInput) -> Result<ListPlatformApplicationsResponse, ListPlatformApplicationsError>;
+                fn list_platform_applications(&self, input: &ListPlatformApplicationsInput) -> Box<Future<Item = ListPlatformApplicationsResponse, Error = ListPlatformApplicationsError>>;
                 
 
                 #[doc="<p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>"]
-                fn list_subscriptions(&self, input: &ListSubscriptionsInput) -> Result<ListSubscriptionsResponse, ListSubscriptionsError>;
+                fn list_subscriptions(&self, input: &ListSubscriptionsInput) -> Box<Future<Item = ListSubscriptionsResponse, Error = ListSubscriptionsError>>;
                 
 
                 #[doc="<p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>"]
-                fn list_subscriptions_by_topic(&self, input: &ListSubscriptionsByTopicInput) -> Result<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError>;
+                fn list_subscriptions_by_topic(&self, input: &ListSubscriptionsByTopicInput) -> Box<Future<Item = ListSubscriptionsByTopicResponse, Error = ListSubscriptionsByTopicError>>;
                 
 
                 #[doc="<p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>"]
-                fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError>;
+                fn list_topics(&self, input: &ListTopicsInput) -> Box<Future<Item = ListTopicsResponse, Error = ListTopicsError>>;
                 
 
                 #[doc="<p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>"]
-                fn opt_in_phone_number(&self, input: &OptInPhoneNumberInput) -> Result<OptInPhoneNumberResponse, OptInPhoneNumberError>;
+                fn opt_in_phone_number(&self, input: &OptInPhoneNumberInput) -> Box<Future<Item = OptInPhoneNumberResponse, Error = OptInPhoneNumberError>>;
                 
 
                 #[doc="<p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html\">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>"]
-                fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError>;
+                fn publish(&self, input: &PublishInput) -> Box<Future<Item = PublishResponse, Error = PublishError>>;
                 
 
                 #[doc="<p>Removes a statement from a topic's access control policy.</p>"]
-                fn remove_permission(&self, input: &RemovePermissionInput) -> Result<(), RemovePermissionError>;
+                fn remove_permission(&self, input: &RemovePermissionInput) -> Box<Future<Item = (), Error = RemovePermissionError>>;
                 
 
                 #[doc="<p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn set_endpoint_attributes(&self, input: &SetEndpointAttributesInput) -> Result<(), SetEndpointAttributesError>;
+                fn set_endpoint_attributes(&self, input: &SetEndpointAttributesInput) -> Box<Future<Item = (), Error = SetEndpointAttributesError>>;
                 
 
                 #[doc="<p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html\">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>"]
-                fn set_platform_application_attributes(&self, input: &SetPlatformApplicationAttributesInput) -> Result<(), SetPlatformApplicationAttributesError>;
+                fn set_platform_application_attributes(&self, input: &SetPlatformApplicationAttributesInput) -> Box<Future<Item = (), Error = SetPlatformApplicationAttributesError>>;
                 
 
                 #[doc="<p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html\">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
-                fn set_sms_attributes(&self, input: &SetSMSAttributesInput) -> Result<SetSMSAttributesResponse, SetSMSAttributesError>;
+                fn set_sms_attributes(&self, input: &SetSMSAttributesInput) -> Box<Future<Item = SetSMSAttributesResponse, Error = SetSMSAttributesError>>;
                 
 
                 #[doc="<p>Allows a subscription owner to set an attribute of the topic to a new value.</p>"]
-                fn set_subscription_attributes(&self, input: &SetSubscriptionAttributesInput) -> Result<(), SetSubscriptionAttributesError>;
+                fn set_subscription_attributes(&self, input: &SetSubscriptionAttributesInput) -> Box<Future<Item = (), Error = SetSubscriptionAttributesError>>;
                 
 
                 #[doc="<p>Allows a topic owner to set an attribute of the topic to a new value.</p>"]
-                fn set_topic_attributes(&self, input: &SetTopicAttributesInput) -> Result<(), SetTopicAttributesError>;
+                fn set_topic_attributes(&self, input: &SetTopicAttributesInput) -> Box<Future<Item = (), Error = SetTopicAttributesError>>;
                 
 
                 #[doc="<p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>"]
-                fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError>;
+                fn subscribe(&self, input: &SubscribeInput) -> Box<Future<Item = SubscribeResponse, Error = SubscribeError>>;
                 
 
                 #[doc="<p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>"]
-                fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError>;
+                fn unsubscribe(&self, input: &UnsubscribeInput) -> Box<Future<Item = (), Error = UnsubscribeError>>;
                 
 }
 /// A client for the Amazon SNS API.
@@ -4637,7 +4647,7 @@ UnsubscribeError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>"]
-                fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError> {
+                fn add_permission(&self, input: &AddPermissionInput) -> Box<Future<Item = (), Error = AddPermissionError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4646,22 +4656,31 @@ UnsubscribeError::Unknown(ref cause) => cause
                     AddPermissionInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddPermissionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddPermissionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>"]
-                fn check_if_phone_number_is_opted_out(&self, input: &CheckIfPhoneNumberIsOptedOutInput) -> Result<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError> {
+                fn check_if_phone_number_is_opted_out(&self, input: &CheckIfPhoneNumberIsOptedOutInput) -> Box<Future<Item = CheckIfPhoneNumberIsOptedOutResponse, Error = CheckIfPhoneNumberIsOptedOutError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4670,11 +4689,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     CheckIfPhoneNumberIsOptedOutInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CheckIfPhoneNumberIsOptedOutError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CheckIfPhoneNumberIsOptedOutError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -4686,23 +4713,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize("CheckIfPhoneNumberIsOptedOutResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize("CheckIfPhoneNumberIsOptedOutResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CheckIfPhoneNumberIsOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CheckIfPhoneNumberIsOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to \"true\".</p>"]
-                fn confirm_subscription(&self, input: &ConfirmSubscriptionInput) -> Result<ConfirmSubscriptionResponse, ConfirmSubscriptionError> {
+                fn confirm_subscription(&self, input: &ConfirmSubscriptionInput) -> Box<Future<Item = ConfirmSubscriptionResponse, Error = ConfirmSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4711,11 +4739,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     ConfirmSubscriptionInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ConfirmSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ConfirmSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -4727,23 +4763,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ConfirmSubscriptionResponseDeserializer::deserialize("ConfirmSubscriptionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ConfirmSubscriptionResponseDeserializer::deserialize("ConfirmSubscriptionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ConfirmSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ConfirmSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is \"SSL certificate\". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is \"Package Security Identifier\". For MPNS, PlatformPrincipal is \"TLS certificate\". For Baidu, PlatformPrincipal is \"API key\".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is \"private key\". For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\". For WNS, PlatformCredential is \"secret key\". For MPNS, PlatformCredential is \"private key\". For Baidu, PlatformCredential is \"secret key\". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html\">Getting Started with Apple Push Notification Service</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html\">Getting Started with Amazon Device Messaging</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html\">Getting Started with Baidu Cloud Push</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html\">Getting Started with Google Cloud Messaging for Android</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html\">Getting Started with MPNS</a>, or <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html\">Getting Started with WNS</a>. </p>"]
-                fn create_platform_application(&self, input: &CreatePlatformApplicationInput) -> Result<CreatePlatformApplicationResponse, CreatePlatformApplicationError> {
+                fn create_platform_application(&self, input: &CreatePlatformApplicationInput) -> Box<Future<Item = CreatePlatformApplicationResponse, Error = CreatePlatformApplicationError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4752,11 +4789,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     CreatePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePlatformApplicationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePlatformApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -4768,23 +4813,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreatePlatformApplicationResponseDeserializer::deserialize("CreatePlatformApplicationResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreatePlatformApplicationResponseDeserializer::deserialize("CreatePlatformApplicationResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreatePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreatePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html\">Creating an Amazon SNS Endpoint for Baidu</a>. </p>"]
-                fn create_platform_endpoint(&self, input: &CreatePlatformEndpointInput) -> Result<CreateEndpointResponse, CreatePlatformEndpointError> {
+                fn create_platform_endpoint(&self, input: &CreatePlatformEndpointInput) -> Box<Future<Item = CreateEndpointResponse, Error = CreatePlatformEndpointError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4793,11 +4839,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     CreatePlatformEndpointInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePlatformEndpointError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePlatformEndpointError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -4809,23 +4863,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateEndpointResponseDeserializer::deserialize("CreatePlatformEndpointResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateEndpointResponseDeserializer::deserialize("CreatePlatformEndpointResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreatePlatformEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreatePlatformEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href=\"http://aws.amazon.com/sns/\">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>"]
-                fn create_topic(&self, input: &CreateTopicInput) -> Result<CreateTopicResponse, CreateTopicError> {
+                fn create_topic(&self, input: &CreateTopicInput) -> Box<Future<Item = CreateTopicResponse, Error = CreateTopicError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4834,11 +4889,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     CreateTopicInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTopicError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTopicError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -4850,23 +4913,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateTopicResponseDeserializer::deserialize("CreateTopicResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateTopicResponseDeserializer::deserialize("CreateTopicResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>"]
-                fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError> {
+                fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Box<Future<Item = (), Error = DeleteEndpointError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4875,22 +4939,31 @@ UnsubscribeError::Unknown(ref cause) => cause
                     DeleteEndpointInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteEndpointError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteEndpointError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn delete_platform_application(&self, input: &DeletePlatformApplicationInput) -> Result<(), DeletePlatformApplicationError> {
+                fn delete_platform_application(&self, input: &DeletePlatformApplicationInput) -> Box<Future<Item = (), Error = DeletePlatformApplicationError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4899,22 +4972,31 @@ UnsubscribeError::Unknown(ref cause) => cause
                     DeletePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeletePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePlatformApplicationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePlatformApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeletePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>"]
-                fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError> {
+                fn delete_topic(&self, input: &DeleteTopicInput) -> Box<Future<Item = (), Error = DeleteTopicError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4923,22 +5005,31 @@ UnsubscribeError::Unknown(ref cause) => cause
                     DeleteTopicInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTopicError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTopicError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn get_endpoint_attributes(&self, input: &GetEndpointAttributesInput) -> Result<GetEndpointAttributesResponse, GetEndpointAttributesError> {
+                fn get_endpoint_attributes(&self, input: &GetEndpointAttributesInput) -> Box<Future<Item = GetEndpointAttributesResponse, Error = GetEndpointAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4947,11 +5038,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     GetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetEndpointAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetEndpointAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -4963,23 +5062,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetEndpointAttributesResponseDeserializer::deserialize("GetEndpointAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetEndpointAttributesResponseDeserializer::deserialize("GetEndpointAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn get_platform_application_attributes(&self, input: &GetPlatformApplicationAttributesInput) -> Result<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError> {
+                fn get_platform_application_attributes(&self, input: &GetPlatformApplicationAttributesInput) -> Box<Future<Item = GetPlatformApplicationAttributesResponse, Error = GetPlatformApplicationAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -4988,11 +5088,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     GetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPlatformApplicationAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPlatformApplicationAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5004,23 +5112,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetPlatformApplicationAttributesResponseDeserializer::deserialize("GetPlatformApplicationAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetPlatformApplicationAttributesResponseDeserializer::deserialize("GetPlatformApplicationAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>"]
-                fn get_sms_attributes(&self, input: &GetSMSAttributesInput) -> Result<GetSMSAttributesResponse, GetSMSAttributesError> {
+                fn get_sms_attributes(&self, input: &GetSMSAttributesInput) -> Box<Future<Item = GetSMSAttributesResponse, Error = GetSMSAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5029,11 +5138,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     GetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetSMSAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetSMSAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5045,23 +5162,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetSMSAttributesResponseDeserializer::deserialize("GetSMSAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetSMSAttributesResponseDeserializer::deserialize("GetSMSAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns all of the properties of a subscription.</p>"]
-                fn get_subscription_attributes(&self, input: &GetSubscriptionAttributesInput) -> Result<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError> {
+                fn get_subscription_attributes(&self, input: &GetSubscriptionAttributesInput) -> Box<Future<Item = GetSubscriptionAttributesResponse, Error = GetSubscriptionAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5070,11 +5188,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     GetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetSubscriptionAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetSubscriptionAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5086,23 +5212,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetSubscriptionAttributesResponseDeserializer::deserialize("GetSubscriptionAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetSubscriptionAttributesResponseDeserializer::deserialize("GetSubscriptionAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>"]
-                fn get_topic_attributes(&self, input: &GetTopicAttributesInput) -> Result<GetTopicAttributesResponse, GetTopicAttributesError> {
+                fn get_topic_attributes(&self, input: &GetTopicAttributesInput) -> Box<Future<Item = GetTopicAttributesResponse, Error = GetTopicAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5111,11 +5238,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     GetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetTopicAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetTopicAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5127,23 +5262,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetTopicAttributesResponseDeserializer::deserialize("GetTopicAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetTopicAttributesResponseDeserializer::deserialize("GetTopicAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn list_endpoints_by_platform_application(&self, input: &ListEndpointsByPlatformApplicationInput) -> Result<ListEndpointsByPlatformApplicationResponse, ListEndpointsByPlatformApplicationError> {
+                fn list_endpoints_by_platform_application(&self, input: &ListEndpointsByPlatformApplicationInput) -> Box<Future<Item = ListEndpointsByPlatformApplicationResponse, Error = ListEndpointsByPlatformApplicationError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5152,11 +5288,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     ListEndpointsByPlatformApplicationInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListEndpointsByPlatformApplicationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListEndpointsByPlatformApplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5168,23 +5312,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListEndpointsByPlatformApplicationResponseDeserializer::deserialize("ListEndpointsByPlatformApplicationResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListEndpointsByPlatformApplicationResponseDeserializer::deserialize("ListEndpointsByPlatformApplicationResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListEndpointsByPlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListEndpointsByPlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>"]
-                fn list_phone_numbers_opted_out(&self, input: &ListPhoneNumbersOptedOutInput) -> Result<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError> {
+                fn list_phone_numbers_opted_out(&self, input: &ListPhoneNumbersOptedOutInput) -> Box<Future<Item = ListPhoneNumbersOptedOutResponse, Error = ListPhoneNumbersOptedOutError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5193,11 +5338,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     ListPhoneNumbersOptedOutInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPhoneNumbersOptedOutError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPhoneNumbersOptedOutError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5209,23 +5362,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListPhoneNumbersOptedOutResponseDeserializer::deserialize("ListPhoneNumbersOptedOutResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListPhoneNumbersOptedOutResponseDeserializer::deserialize("ListPhoneNumbersOptedOutResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListPhoneNumbersOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListPhoneNumbersOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn list_platform_applications(&self, input: &ListPlatformApplicationsInput) -> Result<ListPlatformApplicationsResponse, ListPlatformApplicationsError> {
+                fn list_platform_applications(&self, input: &ListPlatformApplicationsInput) -> Box<Future<Item = ListPlatformApplicationsResponse, Error = ListPlatformApplicationsError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5234,11 +5388,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     ListPlatformApplicationsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPlatformApplicationsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPlatformApplicationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5250,23 +5412,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListPlatformApplicationsResponseDeserializer::deserialize("ListPlatformApplicationsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListPlatformApplicationsResponseDeserializer::deserialize("ListPlatformApplicationsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListPlatformApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListPlatformApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>"]
-                fn list_subscriptions(&self, input: &ListSubscriptionsInput) -> Result<ListSubscriptionsResponse, ListSubscriptionsError> {
+                fn list_subscriptions(&self, input: &ListSubscriptionsInput) -> Box<Future<Item = ListSubscriptionsResponse, Error = ListSubscriptionsError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5275,11 +5438,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     ListSubscriptionsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListSubscriptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListSubscriptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5291,23 +5462,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListSubscriptionsResponseDeserializer::deserialize("ListSubscriptionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListSubscriptionsResponseDeserializer::deserialize("ListSubscriptionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>"]
-                fn list_subscriptions_by_topic(&self, input: &ListSubscriptionsByTopicInput) -> Result<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError> {
+                fn list_subscriptions_by_topic(&self, input: &ListSubscriptionsByTopicInput) -> Box<Future<Item = ListSubscriptionsByTopicResponse, Error = ListSubscriptionsByTopicError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5316,11 +5488,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     ListSubscriptionsByTopicInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListSubscriptionsByTopicError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListSubscriptionsByTopicError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5332,23 +5512,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListSubscriptionsByTopicResponseDeserializer::deserialize("ListSubscriptionsByTopicResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListSubscriptionsByTopicResponseDeserializer::deserialize("ListSubscriptionsByTopicResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListSubscriptionsByTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListSubscriptionsByTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>"]
-                fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError> {
+                fn list_topics(&self, input: &ListTopicsInput) -> Box<Future<Item = ListTopicsResponse, Error = ListTopicsError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5357,11 +5538,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     ListTopicsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTopicsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTopicsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5373,23 +5562,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListTopicsResponseDeserializer::deserialize("ListTopicsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListTopicsResponseDeserializer::deserialize("ListTopicsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListTopicsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListTopicsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>"]
-                fn opt_in_phone_number(&self, input: &OptInPhoneNumberInput) -> Result<OptInPhoneNumberResponse, OptInPhoneNumberError> {
+                fn opt_in_phone_number(&self, input: &OptInPhoneNumberInput) -> Box<Future<Item = OptInPhoneNumberResponse, Error = OptInPhoneNumberError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5398,11 +5588,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     OptInPhoneNumberInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(OptInPhoneNumberError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| OptInPhoneNumberError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5414,23 +5612,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(OptInPhoneNumberResponseDeserializer::deserialize("OptInPhoneNumberResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(OptInPhoneNumberResponseDeserializer::deserialize("OptInPhoneNumberResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(OptInPhoneNumberError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(OptInPhoneNumberError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html\">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>"]
-                fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError> {
+                fn publish(&self, input: &PublishInput) -> Box<Future<Item = PublishResponse, Error = PublishError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5439,11 +5638,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     PublishInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PublishError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PublishError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5455,23 +5662,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PublishResponseDeserializer::deserialize("PublishResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PublishResponseDeserializer::deserialize("PublishResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PublishError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PublishError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes a statement from a topic's access control policy.</p>"]
-                fn remove_permission(&self, input: &RemovePermissionInput) -> Result<(), RemovePermissionError> {
+                fn remove_permission(&self, input: &RemovePermissionInput) -> Box<Future<Item = (), Error = RemovePermissionError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5480,22 +5688,31 @@ UnsubscribeError::Unknown(ref cause) => cause
                     RemovePermissionInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemovePermissionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemovePermissionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn set_endpoint_attributes(&self, input: &SetEndpointAttributesInput) -> Result<(), SetEndpointAttributesError> {
+                fn set_endpoint_attributes(&self, input: &SetEndpointAttributesInput) -> Box<Future<Item = (), Error = SetEndpointAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5504,22 +5721,31 @@ UnsubscribeError::Unknown(ref cause) => cause
                     SetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetEndpointAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetEndpointAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html\">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>"]
-                fn set_platform_application_attributes(&self, input: &SetPlatformApplicationAttributesInput) -> Result<(), SetPlatformApplicationAttributesError> {
+                fn set_platform_application_attributes(&self, input: &SetPlatformApplicationAttributesInput) -> Box<Future<Item = (), Error = SetPlatformApplicationAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5528,22 +5754,31 @@ UnsubscribeError::Unknown(ref cause) => cause
                     SetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetPlatformApplicationAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetPlatformApplicationAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html\">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
-                fn set_sms_attributes(&self, input: &SetSMSAttributesInput) -> Result<SetSMSAttributesResponse, SetSMSAttributesError> {
+                fn set_sms_attributes(&self, input: &SetSMSAttributesInput) -> Box<Future<Item = SetSMSAttributesResponse, Error = SetSMSAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5552,11 +5787,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     SetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetSMSAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetSMSAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5568,23 +5811,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetSMSAttributesResponseDeserializer::deserialize("SetSMSAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetSMSAttributesResponseDeserializer::deserialize("SetSMSAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Allows a subscription owner to set an attribute of the topic to a new value.</p>"]
-                fn set_subscription_attributes(&self, input: &SetSubscriptionAttributesInput) -> Result<(), SetSubscriptionAttributesError> {
+                fn set_subscription_attributes(&self, input: &SetSubscriptionAttributesInput) -> Box<Future<Item = (), Error = SetSubscriptionAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5593,22 +5837,31 @@ UnsubscribeError::Unknown(ref cause) => cause
                     SetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetSubscriptionAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetSubscriptionAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Allows a topic owner to set an attribute of the topic to a new value.</p>"]
-                fn set_topic_attributes(&self, input: &SetTopicAttributesInput) -> Result<(), SetTopicAttributesError> {
+                fn set_topic_attributes(&self, input: &SetTopicAttributesInput) -> Box<Future<Item = (), Error = SetTopicAttributesError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5617,22 +5870,31 @@ UnsubscribeError::Unknown(ref cause) => cause
                     SetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetTopicAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetTopicAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>"]
-                fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError> {
+                fn subscribe(&self, input: &SubscribeInput) -> Box<Future<Item = SubscribeResponse, Error = SubscribeError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5641,11 +5903,19 @@ UnsubscribeError::Unknown(ref cause) => cause
                     SubscribeInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SubscribeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SubscribeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -5657,23 +5927,24 @@ UnsubscribeError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SubscribeResponseDeserializer::deserialize("SubscribeResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SubscribeResponseDeserializer::deserialize("SubscribeResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>"]
-                fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError> {
+                fn unsubscribe(&self, input: &UnsubscribeInput) -> Box<Future<Item = (), Error = UnsubscribeError>> {
                     let mut request = SignedRequest::new("POST", "sns", self.region, "/");
                     let mut params = Params::new();
 
@@ -5682,17 +5953,26 @@ UnsubscribeError::Unknown(ref cause) => cause
                     UnsubscribeInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UnsubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UnsubscribeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UnsubscribeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UnsubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -5718,6 +5998,39 @@ UnsubscribeError::Unknown(ref cause) => cause
         }
             
         #[test]
+        fn test_parse_valid_sns_get_topic_attributes() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-get-topic-attributes.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = GetTopicAttributesInput::default();
+            let result = client.get_topic_attributes(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_sns_list_topics() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-list-topics.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ListTopicsInput::default();
+            let result = client.list_topics(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_sns_list_subscriptions_by_topic() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-list-subscriptions-by-topic.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ListSubscriptionsByTopicInput::default();
+            let result = client.list_subscriptions_by_topic(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
         fn test_parse_valid_sns_add_permission() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-add-permission.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
@@ -5740,45 +6053,12 @@ UnsubscribeError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_sns_create_topic() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-create-topic.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateTopicInput::default();
-            let result = client.create_topic(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
         fn test_parse_valid_sns_get_subscription_attributes() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-get-subscription-attributes.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = GetSubscriptionAttributesInput::default();
             let result = client.get_subscription_attributes(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_get_topic_attributes() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-get-topic-attributes.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetTopicAttributesInput::default();
-            let result = client.get_topic_attributes(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_list_subscriptions_by_topic() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-list-subscriptions-by-topic.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListSubscriptionsByTopicInput::default();
-            let result = client.list_subscriptions_by_topic(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -5795,12 +6075,23 @@ UnsubscribeError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_sns_list_topics() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-list-topics.xml");
+        fn test_parse_valid_sns_subscribe() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-subscribe.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListTopicsInput::default();
-            let result = client.list_topics(&request);
+            let request = SubscribeInput::default();
+            let result = client.subscribe(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_sns_create_topic() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-create-topic.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateTopicInput::default();
+            let result = client.create_topic(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -5812,17 +6103,6 @@ UnsubscribeError::Unknown(ref cause) => cause
             let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = PublishInput::default();
             let result = client.publish(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_subscribe() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-subscribe.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = SubscribeInput::default();
-            let result = client.subscribe(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -2674,47 +2684,47 @@ SetAlarmStateError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>"]
-                fn delete_alarms(&self, input: &DeleteAlarmsInput) -> Result<(), DeleteAlarmsError>;
+                fn delete_alarms(&self, input: &DeleteAlarmsInput) -> Box<Future<Item = (), Error = DeleteAlarmsError>>;
                 
 
                 #[doc="<p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for all alarms are returned.</p> <p>Note that Amazon CloudWatch retains the history of an alarm even if you delete the alarm.</p>"]
-                fn describe_alarm_history(&self, input: &DescribeAlarmHistoryInput) -> Result<DescribeAlarmHistoryOutput, DescribeAlarmHistoryError>;
+                fn describe_alarm_history(&self, input: &DescribeAlarmHistoryInput) -> Box<Future<Item = DescribeAlarmHistoryOutput, Error = DescribeAlarmHistoryError>>;
                 
 
                 #[doc="<p>Retrieves the specified alarms. If no alarms are specified, all alarms are returned. Alarms can be retrieved by using only a prefix for the alarm name, the alarm state, or a prefix for any action.</p>"]
-                fn describe_alarms(&self, input: &DescribeAlarmsInput) -> Result<DescribeAlarmsOutput, DescribeAlarmsError>;
+                fn describe_alarms(&self, input: &DescribeAlarmsInput) -> Box<Future<Item = DescribeAlarmsOutput, Error = DescribeAlarmsError>>;
                 
 
                 #[doc="<p>Retrieves the alarms for the specified metric. Specify a statistic, period, or unit to filter the results.</p>"]
-                fn describe_alarms_for_metric(&self, input: &DescribeAlarmsForMetricInput) -> Result<DescribeAlarmsForMetricOutput, DescribeAlarmsForMetricError>;
+                fn describe_alarms_for_metric(&self, input: &DescribeAlarmsForMetricInput) -> Box<Future<Item = DescribeAlarmsForMetricOutput, Error = DescribeAlarmsForMetricError>>;
                 
 
                 #[doc="<p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>"]
-                fn disable_alarm_actions(&self, input: &DisableAlarmActionsInput) -> Result<(), DisableAlarmActionsError>;
+                fn disable_alarm_actions(&self, input: &DisableAlarmActionsInput) -> Box<Future<Item = (), Error = DisableAlarmActionsError>>;
                 
 
                 #[doc="<p>Enables the actions for the specified alarms.</p>"]
-                fn enable_alarm_actions(&self, input: &EnableAlarmActionsInput) -> Result<(), EnableAlarmActionsError>;
+                fn enable_alarm_actions(&self, input: &EnableAlarmActionsInput) -> Box<Future<Item = (), Error = EnableAlarmActionsError>>;
                 
 
                 #[doc="<p>Gets statistics for the specified metric.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of 60 seconds (1 minute) are available for 15 days</p> </li> <li> <p>Data points with a period of 300 seconds (5 minute) are available for 63 days</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months)</p> </li> </ul> <p>Note that CloudWatch started retaining 5-minute and 1-hour metric data as of 9 July 2016.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, Amazon CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. A period can be as short as one minute (60 seconds). Note that data points are not returned in chronological order.</p> <p>Amazon CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, Amazon CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>For a list of metrics and dimensions supported by AWS services, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html\">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
-                fn get_metric_statistics(&self, input: &GetMetricStatisticsInput) -> Result<GetMetricStatisticsOutput, GetMetricStatisticsError>;
+                fn get_metric_statistics(&self, input: &GetMetricStatisticsInput) -> Box<Future<Item = GetMetricStatisticsOutput, Error = GetMetricStatisticsError>>;
                 
 
                 #[doc="<p>List the specified metrics. You can use the returned metrics with <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricStatistics</a>.</p>"]
-                fn list_metrics(&self, input: &ListMetricsInput) -> Result<ListMetricsOutput, ListMetricsError>;
+                fn list_metrics(&self, input: &ListMetricsInput) -> Box<Future<Item = ListMetricsOutput, Error = ListMetricsError>>;
                 
 
                 #[doc="<p>Creates or updates an alarm and associates it with the specified metric. Optionally, this operation can associate one or more Amazon SNS resources with the alarm.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is evaluated and its state is set appropriately. Any actions associated with the state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an AWS Identity and Access Management (IAM) user, you must have Amazon EC2 permissions for some operations:</p> <ul> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions won't be performed. However, if you are later granted the required permissions, the alarm actions that you created earlier will be performed.</p> <p>If you are using an IAM role (for example, an Amazon EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using the AWS Security Token Service (AWS STS), you cannot stop or terminate an Amazon EC2 instance using alarm actions.</p> <p>Note that you must create at least one stop, terminate, or reboot alarm using the Amazon EC2 or CloudWatch console to create the <b>EC2ActionsAccess</b> IAM role. After this IAM role is created, you can create stop, terminate, or reboot alarms using a command-line interface or an API.</p>"]
-                fn put_metric_alarm(&self, input: &PutMetricAlarmInput) -> Result<(), PutMetricAlarmError>;
+                fn put_metric_alarm(&self, input: &PutMetricAlarmInput) -> Box<Future<Item = (), Error = PutMetricAlarmError>>;
                 
 
                 #[doc="<p>Publishes metric data points to Amazon CloudWatch. Amazon CloudWatch associates the data points with the specified metric. If the specified metric does not exist, Amazon CloudWatch creates the metric. When Amazon CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 8 KB in size for HTTP GET requests and is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p>"]
-                fn put_metric_data(&self, input: &PutMetricDataInput) -> Result<(), PutMetricDataError>;
+                fn put_metric_data(&self, input: &PutMetricDataInput) -> Box<Future<Item = (), Error = PutMetricDataError>>;
                 
 
                 #[doc="<p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an Amazon SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens very quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>"]
-                fn set_alarm_state(&self, input: &SetAlarmStateInput) -> Result<(), SetAlarmStateError>;
+                fn set_alarm_state(&self, input: &SetAlarmStateInput) -> Box<Future<Item = (), Error = SetAlarmStateError>>;
                 
 }
 /// A client for the CloudWatch API.
@@ -2738,7 +2748,7 @@ SetAlarmStateError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>"]
-                fn delete_alarms(&self, input: &DeleteAlarmsInput) -> Result<(), DeleteAlarmsError> {
+                fn delete_alarms(&self, input: &DeleteAlarmsInput) -> Box<Future<Item = (), Error = DeleteAlarmsError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -2747,22 +2757,31 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     DeleteAlarmsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteAlarmsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteAlarmsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteAlarmsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteAlarmsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for all alarms are returned.</p> <p>Note that Amazon CloudWatch retains the history of an alarm even if you delete the alarm.</p>"]
-                fn describe_alarm_history(&self, input: &DescribeAlarmHistoryInput) -> Result<DescribeAlarmHistoryOutput, DescribeAlarmHistoryError> {
+                fn describe_alarm_history(&self, input: &DescribeAlarmHistoryInput) -> Box<Future<Item = DescribeAlarmHistoryOutput, Error = DescribeAlarmHistoryError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -2771,11 +2790,19 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     DescribeAlarmHistoryInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAlarmHistoryError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAlarmHistoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -2787,23 +2814,24 @@ SetAlarmStateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeAlarmHistoryOutputDeserializer::deserialize("DescribeAlarmHistoryResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeAlarmHistoryOutputDeserializer::deserialize("DescribeAlarmHistoryResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAlarmHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAlarmHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the specified alarms. If no alarms are specified, all alarms are returned. Alarms can be retrieved by using only a prefix for the alarm name, the alarm state, or a prefix for any action.</p>"]
-                fn describe_alarms(&self, input: &DescribeAlarmsInput) -> Result<DescribeAlarmsOutput, DescribeAlarmsError> {
+                fn describe_alarms(&self, input: &DescribeAlarmsInput) -> Box<Future<Item = DescribeAlarmsOutput, Error = DescribeAlarmsError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -2812,11 +2840,19 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     DescribeAlarmsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAlarmsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAlarmsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -2828,23 +2864,24 @@ SetAlarmStateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeAlarmsOutputDeserializer::deserialize("DescribeAlarmsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeAlarmsOutputDeserializer::deserialize("DescribeAlarmsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAlarmsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAlarmsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the alarms for the specified metric. Specify a statistic, period, or unit to filter the results.</p>"]
-                fn describe_alarms_for_metric(&self, input: &DescribeAlarmsForMetricInput) -> Result<DescribeAlarmsForMetricOutput, DescribeAlarmsForMetricError> {
+                fn describe_alarms_for_metric(&self, input: &DescribeAlarmsForMetricInput) -> Box<Future<Item = DescribeAlarmsForMetricOutput, Error = DescribeAlarmsForMetricError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -2853,11 +2890,19 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     DescribeAlarmsForMetricInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAlarmsForMetricError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAlarmsForMetricError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -2869,23 +2914,24 @@ SetAlarmStateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeAlarmsForMetricOutputDeserializer::deserialize("DescribeAlarmsForMetricResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeAlarmsForMetricOutputDeserializer::deserialize("DescribeAlarmsForMetricResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAlarmsForMetricError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAlarmsForMetricError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>"]
-                fn disable_alarm_actions(&self, input: &DisableAlarmActionsInput) -> Result<(), DisableAlarmActionsError> {
+                fn disable_alarm_actions(&self, input: &DisableAlarmActionsInput) -> Box<Future<Item = (), Error = DisableAlarmActionsError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -2894,22 +2940,31 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     DisableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisableAlarmActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableAlarmActionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableAlarmActionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisableAlarmActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables the actions for the specified alarms.</p>"]
-                fn enable_alarm_actions(&self, input: &EnableAlarmActionsInput) -> Result<(), EnableAlarmActionsError> {
+                fn enable_alarm_actions(&self, input: &EnableAlarmActionsInput) -> Box<Future<Item = (), Error = EnableAlarmActionsError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -2918,22 +2973,31 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     EnableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnableAlarmActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableAlarmActionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableAlarmActionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnableAlarmActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets statistics for the specified metric.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of 60 seconds (1 minute) are available for 15 days</p> </li> <li> <p>Data points with a period of 300 seconds (5 minute) are available for 63 days</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months)</p> </li> </ul> <p>Note that CloudWatch started retaining 5-minute and 1-hour metric data as of 9 July 2016.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, Amazon CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. A period can be as short as one minute (60 seconds). Note that data points are not returned in chronological order.</p> <p>Amazon CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, Amazon CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>For a list of metrics and dimensions supported by AWS services, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html\">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
-                fn get_metric_statistics(&self, input: &GetMetricStatisticsInput) -> Result<GetMetricStatisticsOutput, GetMetricStatisticsError> {
+                fn get_metric_statistics(&self, input: &GetMetricStatisticsInput) -> Box<Future<Item = GetMetricStatisticsOutput, Error = GetMetricStatisticsError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -2942,11 +3006,19 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     GetMetricStatisticsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetMetricStatisticsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetMetricStatisticsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -2958,23 +3030,24 @@ SetAlarmStateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetMetricStatisticsOutputDeserializer::deserialize("GetMetricStatisticsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetMetricStatisticsOutputDeserializer::deserialize("GetMetricStatisticsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetMetricStatisticsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetMetricStatisticsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>List the specified metrics. You can use the returned metrics with <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricStatistics</a>.</p>"]
-                fn list_metrics(&self, input: &ListMetricsInput) -> Result<ListMetricsOutput, ListMetricsError> {
+                fn list_metrics(&self, input: &ListMetricsInput) -> Box<Future<Item = ListMetricsOutput, Error = ListMetricsError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -2983,11 +3056,19 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     ListMetricsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListMetricsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListMetricsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -2999,23 +3080,24 @@ SetAlarmStateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListMetricsOutputDeserializer::deserialize("ListMetricsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListMetricsOutputDeserializer::deserialize("ListMetricsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListMetricsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListMetricsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates an alarm and associates it with the specified metric. Optionally, this operation can associate one or more Amazon SNS resources with the alarm.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is evaluated and its state is set appropriately. Any actions associated with the state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an AWS Identity and Access Management (IAM) user, you must have Amazon EC2 permissions for some operations:</p> <ul> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions won't be performed. However, if you are later granted the required permissions, the alarm actions that you created earlier will be performed.</p> <p>If you are using an IAM role (for example, an Amazon EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using the AWS Security Token Service (AWS STS), you cannot stop or terminate an Amazon EC2 instance using alarm actions.</p> <p>Note that you must create at least one stop, terminate, or reboot alarm using the Amazon EC2 or CloudWatch console to create the <b>EC2ActionsAccess</b> IAM role. After this IAM role is created, you can create stop, terminate, or reboot alarms using a command-line interface or an API.</p>"]
-                fn put_metric_alarm(&self, input: &PutMetricAlarmInput) -> Result<(), PutMetricAlarmError> {
+                fn put_metric_alarm(&self, input: &PutMetricAlarmInput) -> Box<Future<Item = (), Error = PutMetricAlarmError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -3024,22 +3106,31 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     PutMetricAlarmInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutMetricAlarmError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutMetricAlarmError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutMetricAlarmError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutMetricAlarmError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Publishes metric data points to Amazon CloudWatch. Amazon CloudWatch associates the data points with the specified metric. If the specified metric does not exist, Amazon CloudWatch creates the metric. When Amazon CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 8 KB in size for HTTP GET requests and is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p>"]
-                fn put_metric_data(&self, input: &PutMetricDataInput) -> Result<(), PutMetricDataError> {
+                fn put_metric_data(&self, input: &PutMetricDataInput) -> Box<Future<Item = (), Error = PutMetricDataError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -3048,22 +3139,31 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     PutMetricDataInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutMetricDataError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutMetricDataError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutMetricDataError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutMetricDataError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an Amazon SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens very quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>"]
-                fn set_alarm_state(&self, input: &SetAlarmStateInput) -> Result<(), SetAlarmStateError> {
+                fn set_alarm_state(&self, input: &SetAlarmStateInput) -> Box<Future<Item = (), Error = SetAlarmStateError>> {
                     let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
                     let mut params = Params::new();
 
@@ -3072,17 +3172,26 @@ SetAlarmStateError::Unknown(ref cause) => cause
                     SetAlarmStateInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetAlarmStateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetAlarmStateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetAlarmStateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetAlarmStateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -3108,12 +3217,12 @@ SetAlarmStateError::Unknown(ref cause) => cause
         }
             
         #[test]
-        fn test_parse_valid_cloudwatch_describe_alarm_history() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudwatch-describe-alarm-history.xml");
+        fn test_parse_valid_cloudwatch_list_metrics() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudwatch-list-metrics.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = CloudWatchClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeAlarmHistoryInput::default();
-            let result = client.describe_alarm_history(&request);
+            let request = ListMetricsInput::default();
+            let result = client.list_metrics(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -3130,12 +3239,12 @@ SetAlarmStateError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_cloudwatch_list_metrics() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudwatch-list-metrics.xml");
+        fn test_parse_valid_cloudwatch_describe_alarm_history() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudwatch-describe-alarm-history.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = CloudWatchClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListMetricsInput::default();
-            let result = client.list_metrics(&request);
+            let request = DescribeAlarmHistoryInput::default();
+            let result = client.describe_alarm_history(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

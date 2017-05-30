@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -49518,887 +49528,887 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Accepts the Convertible Reserved Instance exchange quote described in the <a>GetReservedInstancesExchangeQuote</a> call.</p>"]
-                fn accept_reserved_instances_exchange_quote(&self, input: &AcceptReservedInstancesExchangeQuoteRequest) -> Result<AcceptReservedInstancesExchangeQuoteResult, AcceptReservedInstancesExchangeQuoteError>;
+                fn accept_reserved_instances_exchange_quote(&self, input: &AcceptReservedInstancesExchangeQuoteRequest) -> Box<Future<Item = AcceptReservedInstancesExchangeQuoteResult, Error = AcceptReservedInstancesExchangeQuoteError>>;
                 
 
                 #[doc="<p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use the <code>DescribeVpcPeeringConnections</code> request to view your outstanding VPC peering connection requests.</p>"]
-                fn accept_vpc_peering_connection(&self, input: &AcceptVpcPeeringConnectionRequest) -> Result<AcceptVpcPeeringConnectionResult, AcceptVpcPeeringConnectionError>;
+                fn accept_vpc_peering_connection(&self, input: &AcceptVpcPeeringConnectionRequest) -> Box<Future<Item = AcceptVpcPeeringConnectionResult, Error = AcceptVpcPeeringConnectionError>>;
                 
 
                 #[doc="<p>Acquires an Elastic IP address.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn allocate_address(&self, input: &AllocateAddressRequest) -> Result<AllocateAddressResult, AllocateAddressError>;
+                fn allocate_address(&self, input: &AllocateAddressRequest) -> Box<Future<Item = AllocateAddressResult, Error = AllocateAddressError>>;
                 
 
                 #[doc="<p>Allocates a Dedicated Host to your account. At minimum you need to specify the instance size type, Availability Zone, and quantity of hosts you want to allocate.</p>"]
-                fn allocate_hosts(&self, input: &AllocateHostsRequest) -> Result<AllocateHostsResult, AllocateHostsError>;
+                fn allocate_hosts(&self, input: &AllocateHostsRequest) -> Box<Future<Item = AllocateHostsResult, Error = AllocateHostsError>>;
                 
 
                 #[doc="<p>Assigns one or more IPv6 addresses to the specified network interface. You can specify one or more specific IPv6 addresses, or you can specify the number of IPv6 addresses to be automatically assigned from within the subnet's IPv6 CIDR block range. You can assign as many IPv6 addresses to a network interface as you can assign private IPv4 addresses, and the limit varies per instance type. For information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI\">IP Addresses Per Network Interface Per Instance Type</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn assign_ipv_6_addresses(&self, input: &AssignIpv6AddressesRequest) -> Result<AssignIpv6AddressesResult, AssignIpv6AddressesError>;
+                fn assign_ipv_6_addresses(&self, input: &AssignIpv6AddressesRequest) -> Box<Future<Item = AssignIpv6AddressesResult, Error = AssignIpv6AddressesError>>;
                 
 
                 #[doc="<p>Assigns one or more secondary private IP addresses to the specified network interface. You can specify one or more specific secondary IP addresses, or you can specify the number of secondary IP addresses to be automatically assigned within the subnet's CIDR block range. The number of secondary IP addresses that you can assign to an instance varies by instance type. For information about instance types, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about Elastic IP addresses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>AssignPrivateIpAddresses is available only in EC2-VPC.</p>"]
-                fn assign_private_ip_addresses(&self, input: &AssignPrivateIpAddressesRequest) -> Result<(), AssignPrivateIpAddressesError>;
+                fn assign_private_ip_addresses(&self, input: &AssignPrivateIpAddressesRequest) -> Box<Future<Item = (), Error = AssignPrivateIpAddressesError>>;
                 
 
                 #[doc="<p>Associates an Elastic IP address with an instance or a network interface.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP address is already associated with a different instance, it is disassociated from that instance and associated with the specified instance.</p> <p>[VPC in an EC2-Classic account] If you don't specify a private IP address, the Elastic IP address is associated with the primary IP address. If the Elastic IP address is already associated with a different instance or a network interface, you get an error unless you allow reassociation.</p> <important> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error, and you may be charged for each time the Elastic IP address is remapped to the same instance. For more information, see the <i>Elastic IP Addresses</i> section of <a href=\"http://aws.amazon.com/ec2/pricing/\">Amazon EC2 Pricing</a>.</p> </important>"]
-                fn associate_address(&self, input: &AssociateAddressRequest) -> Result<AssociateAddressResult, AssociateAddressError>;
+                fn associate_address(&self, input: &AssociateAddressRequest) -> Box<Future<Item = AssociateAddressResult, Error = AssociateAddressError>>;
                 
 
                 #[doc="<p>Associates a set of DHCP options (that you've previously created) with the specified VPC, or associates no DHCP options with the VPC.</p> <p>After you associate the options with the VPC, any existing instances and all new instances that you launch in that VPC use the options. You don't need to restart or relaunch the instances. They automatically pick up the changes within a few hours, depending on how frequently the instance renews its DHCP lease. You can explicitly renew the lease using the operating system on the instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn associate_dhcp_options(&self, input: &AssociateDhcpOptionsRequest) -> Result<(), AssociateDhcpOptionsError>;
+                fn associate_dhcp_options(&self, input: &AssociateDhcpOptionsRequest) -> Box<Future<Item = (), Error = AssociateDhcpOptionsError>>;
                 
 
                 #[doc="<p>Associates a subnet with a route table. The subnet and route table must be in the same VPC. This association causes traffic originating from the subnet to be routed according to the routes in the route table. The action returns an association ID, which you need in order to disassociate the route table from the subnet later. A route table can be associated with multiple subnets.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn associate_route_table(&self, input: &AssociateRouteTableRequest) -> Result<AssociateRouteTableResult, AssociateRouteTableError>;
+                fn associate_route_table(&self, input: &AssociateRouteTableRequest) -> Box<Future<Item = AssociateRouteTableResult, Error = AssociateRouteTableError>>;
                 
 
                 #[doc="<p>Associates a CIDR block with your subnet. You can only associate a single IPv6 CIDR block with your subnet. An IPv6 CIDR block must have a prefix length of /64.</p>"]
-                fn associate_subnet_cidr_block(&self, input: &AssociateSubnetCidrBlockRequest) -> Result<AssociateSubnetCidrBlockResult, AssociateSubnetCidrBlockError>;
+                fn associate_subnet_cidr_block(&self, input: &AssociateSubnetCidrBlockRequest) -> Box<Future<Item = AssociateSubnetCidrBlockResult, Error = AssociateSubnetCidrBlockError>>;
                 
 
                 #[doc="<p>Associates a CIDR block with your VPC. You can only associate a single Amazon-provided IPv6 CIDR block with your VPC. The IPv6 CIDR block size is fixed at /56.</p>"]
-                fn associate_vpc_cidr_block(&self, input: &AssociateVpcCidrBlockRequest) -> Result<AssociateVpcCidrBlockResult, AssociateVpcCidrBlockError>;
+                fn associate_vpc_cidr_block(&self, input: &AssociateVpcCidrBlockRequest) -> Box<Future<Item = AssociateVpcCidrBlockResult, Error = AssociateVpcCidrBlockError>>;
                 
 
                 #[doc="<p>Links an EC2-Classic instance to a ClassicLink-enabled VPC through one or more of the VPC's security groups. You cannot link an EC2-Classic instance to more than one VPC at a time. You can only link an instance that's in the <code>running</code> state. An instance is automatically unlinked from a VPC when it's stopped - you can link it to the VPC again when you restart it.</p> <p>After you've linked an instance, you cannot change the VPC security groups that are associated with it. To change the security groups, you must first unlink the instance, and then link it again.</p> <p>Linking your instance to a VPC is sometimes referred to as <i>attaching</i> your instance.</p>"]
-                fn attach_classic_link_vpc(&self, input: &AttachClassicLinkVpcRequest) -> Result<AttachClassicLinkVpcResult, AttachClassicLinkVpcError>;
+                fn attach_classic_link_vpc(&self, input: &AttachClassicLinkVpcRequest) -> Box<Future<Item = AttachClassicLinkVpcResult, Error = AttachClassicLinkVpcError>>;
                 
 
                 #[doc="<p>Attaches an Internet gateway to a VPC, enabling connectivity between the Internet and the VPC. For more information about your VPC and Internet gateway, see the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/\">Amazon Virtual Private Cloud User Guide</a>.</p>"]
-                fn attach_internet_gateway(&self, input: &AttachInternetGatewayRequest) -> Result<(), AttachInternetGatewayError>;
+                fn attach_internet_gateway(&self, input: &AttachInternetGatewayRequest) -> Box<Future<Item = (), Error = AttachInternetGatewayError>>;
                 
 
                 #[doc="<p>Attaches a network interface to an instance.</p>"]
-                fn attach_network_interface(&self, input: &AttachNetworkInterfaceRequest) -> Result<AttachNetworkInterfaceResult, AttachNetworkInterfaceError>;
+                fn attach_network_interface(&self, input: &AttachNetworkInterfaceRequest) -> Box<Future<Item = AttachNetworkInterfaceResult, Error = AttachNetworkInterfaceError>>;
                 
 
                 #[doc="<p>Attaches an EBS volume to a running or stopped instance and exposes it to the instance with the specified device name.</p> <p>Encrypted EBS volumes may only be attached to instances that support Amazon EBS encryption. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For a list of supported device names, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html\">Attaching an EBS Volume to an Instance</a>. Any device names that aren't reserved for instance store volumes can be used for EBS volumes. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html\">Amazon EC2 Instance Store</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If a volume has an AWS Marketplace product code:</p> <ul> <li> <p>The volume can be attached only to a stopped instance.</p> </li> <li> <p>AWS Marketplace product codes are copied from the volume to the instance.</p> </li> <li> <p>You must be subscribed to the product.</p> </li> <li> <p>The instance type and operating system of the instance must support the product. For example, you can't detach a volume from a Windows instance and attach it to a Linux instance.</p> </li> </ul> <p>For an overview of the AWS Marketplace, see <a href=\"https://aws.amazon.com/marketplace/help/200900000\">Introducing AWS Marketplace</a>.</p> <p>For more information about EBS volumes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html\">Attaching Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn attach_volume(&self, input: &AttachVolumeRequest) -> Result<VolumeAttachment, AttachVolumeError>;
+                fn attach_volume(&self, input: &AttachVolumeRequest) -> Box<Future<Item = VolumeAttachment, Error = AttachVolumeError>>;
                 
 
                 #[doc="<p>Attaches a virtual private gateway to a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn attach_vpn_gateway(&self, input: &AttachVpnGatewayRequest) -> Result<AttachVpnGatewayResult, AttachVpnGatewayError>;
+                fn attach_vpn_gateway(&self, input: &AttachVpnGatewayRequest) -> Box<Future<Item = AttachVpnGatewayResult, Error = AttachVpnGatewayError>>;
                 
 
                 #[doc="<p>[EC2-VPC only] Adds one or more egress rules to a security group for use with a VPC. Specifically, this action permits instances to send traffic to one or more destination IPv4 or IPv6 CIDR address ranges, or to one or more destination security groups for the same VPC. This action doesn't apply to security groups for use in EC2-Classic. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html\">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. For more information about security group limits, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html\">Amazon VPC Limits</a>.</p> <p>Each rule consists of the protocol (for example, TCP), plus either a CIDR range or a source group. For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p>"]
-                fn authorize_security_group_egress(&self, input: &AuthorizeSecurityGroupEgressRequest) -> Result<(), AuthorizeSecurityGroupEgressError>;
+                fn authorize_security_group_egress(&self, input: &AuthorizeSecurityGroupEgressRequest) -> Box<Future<Item = (), Error = AuthorizeSecurityGroupEgressError>>;
                 
 
                 #[doc="<p>Adds one or more ingress rules to a security group.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>[EC2-Classic] This action gives one or more IPv4 CIDR address ranges permission to access a security group in your account, or gives one or more security groups (called the <i>source groups</i>) permission to access a security group for your account. A source group can be for your own AWS account, or another. You can have up to 100 rules per group.</p> <p>[EC2-VPC] This action gives one or more IPv4 or IPv6 CIDR address ranges permission to access a security group in your VPC, or gives one or more other security groups (called the <i>source groups</i>) permission to access a security group for your VPC. The security groups must all be for the same VPC or a peer VPC in a VPC peering connection. For more information about VPC security group limits, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html\">Amazon VPC Limits</a>.</p>"]
-                fn authorize_security_group_ingress(&self, input: &AuthorizeSecurityGroupIngressRequest) -> Result<(), AuthorizeSecurityGroupIngressError>;
+                fn authorize_security_group_ingress(&self, input: &AuthorizeSecurityGroupIngressRequest) -> Box<Future<Item = (), Error = AuthorizeSecurityGroupIngressError>>;
                 
 
                 #[doc="<p>Bundles an Amazon instance store-backed Windows instance.</p> <p>During bundling, only the root device volume (C:\\) is bundled. Data on other instance store volumes is not preserved.</p> <note> <p>This action is not applicable for Linux/Unix instances or Windows instances that are backed by Amazon EBS.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/Creating_InstanceStoreBacked_WinAMI.html\">Creating an Instance Store-Backed Windows AMI</a>.</p>"]
-                fn bundle_instance(&self, input: &BundleInstanceRequest) -> Result<BundleInstanceResult, BundleInstanceError>;
+                fn bundle_instance(&self, input: &BundleInstanceRequest) -> Box<Future<Item = BundleInstanceResult, Error = BundleInstanceError>>;
                 
 
                 #[doc="<p>Cancels a bundling operation for an instance store-backed Windows instance.</p>"]
-                fn cancel_bundle_task(&self, input: &CancelBundleTaskRequest) -> Result<CancelBundleTaskResult, CancelBundleTaskError>;
+                fn cancel_bundle_task(&self, input: &CancelBundleTaskRequest) -> Box<Future<Item = CancelBundleTaskResult, Error = CancelBundleTaskError>>;
                 
 
                 #[doc="<p>Cancels an active conversion task. The task can be the import of an instance or volume. The action removes all artifacts of the conversion, including a partially uploaded volume or instance. If the conversion is complete or is in the process of transferring the final disk image, the command fails and returns an exception.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ec2-cli-vmimport-export.html\">Importing a Virtual Machine Using the Amazon EC2 CLI</a>.</p>"]
-                fn cancel_conversion_task(&self, input: &CancelConversionRequest) -> Result<(), CancelConversionTaskError>;
+                fn cancel_conversion_task(&self, input: &CancelConversionRequest) -> Box<Future<Item = (), Error = CancelConversionTaskError>>;
                 
 
                 #[doc="<p>Cancels an active export task. The request removes all artifacts of the export, including any partially-created Amazon S3 objects. If the export task is complete or is in the process of transferring the final disk image, the command fails and returns an error.</p>"]
-                fn cancel_export_task(&self, input: &CancelExportTaskRequest) -> Result<(), CancelExportTaskError>;
+                fn cancel_export_task(&self, input: &CancelExportTaskRequest) -> Box<Future<Item = (), Error = CancelExportTaskError>>;
                 
 
                 #[doc="<p>Cancels an in-process import virtual machine or import snapshot task.</p>"]
-                fn cancel_import_task(&self, input: &CancelImportTaskRequest) -> Result<CancelImportTaskResult, CancelImportTaskError>;
+                fn cancel_import_task(&self, input: &CancelImportTaskRequest) -> Box<Future<Item = CancelImportTaskResult, Error = CancelImportTaskError>>;
                 
 
                 #[doc="<p>Cancels the specified Reserved Instance listing in the Reserved Instance Marketplace.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn cancel_reserved_instances_listing(&self, input: &CancelReservedInstancesListingRequest) -> Result<CancelReservedInstancesListingResult, CancelReservedInstancesListingError>;
+                fn cancel_reserved_instances_listing(&self, input: &CancelReservedInstancesListingRequest) -> Box<Future<Item = CancelReservedInstancesListingResult, Error = CancelReservedInstancesListingError>>;
                 
 
                 #[doc="<p>Cancels the specified Spot fleet requests.</p> <p>After you cancel a Spot fleet request, the Spot fleet launches no new Spot instances. You must specify whether the Spot fleet should also terminate its Spot instances. If you terminate the instances, the Spot fleet request enters the <code>cancelled_terminating</code> state. Otherwise, the Spot fleet request enters the <code>cancelled_running</code> state and the instances continue to run until they are interrupted or you terminate them manually.</p>"]
-                fn cancel_spot_fleet_requests(&self, input: &CancelSpotFleetRequestsRequest) -> Result<CancelSpotFleetRequestsResponse, EC2CancelSpotFleetRequestsError>;
+                fn cancel_spot_fleet_requests(&self, input: &CancelSpotFleetRequestsRequest) -> Box<Future<Item = CancelSpotFleetRequestsResponse, Error = EC2CancelSpotFleetRequestsError>>;
                 
 
                 #[doc="<p>Cancels one or more Spot instance requests. Spot instances are instances that Amazon EC2 starts on your behalf when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot instance capacity and current Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html\">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Canceling a Spot instance request does not terminate running Spot instances associated with the request.</p> </important>"]
-                fn cancel_spot_instance_requests(&self, input: &CancelSpotInstanceRequestsRequest) -> Result<CancelSpotInstanceRequestsResult, CancelSpotInstanceRequestsError>;
+                fn cancel_spot_instance_requests(&self, input: &CancelSpotInstanceRequestsRequest) -> Box<Future<Item = CancelSpotInstanceRequestsResult, Error = CancelSpotInstanceRequestsError>>;
                 
 
                 #[doc="<p>Determines whether a product code is associated with an instance. This action can only be used by the owner of the product code. It is useful when a product code owner needs to verify whether another user's instance is eligible for support.</p>"]
-                fn confirm_product_instance(&self, input: &ConfirmProductInstanceRequest) -> Result<ConfirmProductInstanceResult, ConfirmProductInstanceError>;
+                fn confirm_product_instance(&self, input: &ConfirmProductInstanceRequest) -> Box<Future<Item = ConfirmProductInstanceResult, Error = ConfirmProductInstanceError>>;
                 
 
                 #[doc="<p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html\">Copying AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn copy_image(&self, input: &CopyImageRequest) -> Result<CopyImageResult, CopyImageError>;
+                fn copy_image(&self, input: &CopyImageRequest) -> Box<Future<Item = CopyImageResult, Error = CopyImageError>>;
                 
 
                 #[doc="<p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same region or from one region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs). The snapshot is copied to the regional endpoint that you send the HTTP request to.</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless the <code>Encrypted</code> flag is specified during the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a non-default CMK with the <code>KmsKeyId</code> parameter. </p> <note> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> </note> <note> <p>Snapshots created by the CopySnapshot action have an arbitrary volume ID that should not be used for any purpose.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html\">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn copy_snapshot(&self, input: &CopySnapshotRequest) -> Result<CopySnapshotResult, CopySnapshotError>;
+                fn copy_snapshot(&self, input: &CopySnapshotRequest) -> Box<Future<Item = CopySnapshotResult, Error = CopySnapshotError>>;
                 
 
                 #[doc="<p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway's external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device's BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don't have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> region, and 9059, which is reserved in the <code>eu-west-1</code> region.</p> </note> <p>For more information about VPN customer gateways, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important>"]
-                fn create_customer_gateway(&self, input: &CreateCustomerGatewayRequest) -> Result<CreateCustomerGatewayResult, CreateCustomerGatewayError>;
+                fn create_customer_gateway(&self, input: &CreateCustomerGatewayRequest) -> Box<Future<Item = CreateCustomerGatewayResult, Error = CreateCustomerGatewayError>>;
                 
 
                 #[doc="<p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. If you want your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in \"us-east-1\", specify \"ec2.internal\". If you're using AmazonProvidedDNS in another region, specify \"region.compute.internal\" (for example, \"ap-northeast-1.compute.internal\"). Otherwise, specify a domain name (for example, \"MyCompany.com\"). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an Internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_dhcp_options(&self, input: &CreateDhcpOptionsRequest) -> Result<CreateDhcpOptionsResult, CreateDhcpOptionsError>;
+                fn create_dhcp_options(&self, input: &CreateDhcpOptionsRequest) -> Box<Future<Item = CreateDhcpOptionsResult, Error = CreateDhcpOptionsError>>;
                 
 
                 #[doc="<p>[IPv6 only] Creates an egress-only Internet gateway for your VPC. An egress-only Internet gateway is used to enable outbound communication over IPv6 from instances in your VPC to the Internet, and prevents hosts outside of your VPC from initiating an IPv6 connection with your instance.</p>"]
-                fn create_egress_only_internet_gateway(&self, input: &CreateEgressOnlyInternetGatewayRequest) -> Result<CreateEgressOnlyInternetGatewayResult, CreateEgressOnlyInternetGatewayError>;
+                fn create_egress_only_internet_gateway(&self, input: &CreateEgressOnlyInternetGatewayRequest) -> Box<Future<Item = CreateEgressOnlyInternetGatewayResult, Error = CreateEgressOnlyInternetGatewayError>>;
                 
 
                 #[doc="<p>Creates one or more flow logs to capture IP traffic for a specific network interface, subnet, or VPC. Flow logs are delivered to a specified log group in Amazon CloudWatch Logs. If you specify a VPC or subnet in the request, a log stream is created in CloudWatch Logs for each network interface in the subnet or VPC. Log streams can include information about accepted and rejected traffic to a network interface. You can view the data in your log streams using Amazon CloudWatch Logs.</p> <p>In your request, you must also specify an IAM role that has permission to publish logs to CloudWatch Logs.</p>"]
-                fn create_flow_logs(&self, input: &CreateFlowLogsRequest) -> Result<CreateFlowLogsResult, CreateFlowLogsError>;
+                fn create_flow_logs(&self, input: &CreateFlowLogsRequest) -> Box<Future<Item = CreateFlowLogsResult, Error = CreateFlowLogsError>>;
                 
 
                 #[doc="<p>Creates an Amazon EBS-backed AMI from an Amazon EBS-backed instance that is either running or stopped.</p> <p>If you customized your instance with instance store volumes or EBS volumes in addition to the root device volume, the new AMI contains block device mapping information for those volumes. When you launch an instance from this new AMI, the instance automatically launches with those additional volumes.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami-ebs.html\">Creating Amazon EBS-Backed Linux AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_image(&self, input: &CreateImageRequest) -> Result<CreateImageResult, CreateImageError>;
+                fn create_image(&self, input: &CreateImageRequest) -> Box<Future<Item = CreateImageResult, Error = CreateImageError>>;
                 
 
                 #[doc="<p>Exports a running or stopped instance to an S3 bucket.</p> <p>For information about the supported operating systems, image formats, and known limitations for the types of instances you can export, see <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/vmexport.html\">Exporting an Instance as a VM Using VM Import/Export</a> in the <i>VM Import/Export User Guide</i>.</p>"]
-                fn create_instance_export_task(&self, input: &CreateInstanceExportTaskRequest) -> Result<CreateInstanceExportTaskResult, CreateInstanceExportTaskError>;
+                fn create_instance_export_task(&self, input: &CreateInstanceExportTaskRequest) -> Box<Future<Item = CreateInstanceExportTaskResult, Error = CreateInstanceExportTaskError>>;
                 
 
                 #[doc="<p>Creates an Internet gateway for use with a VPC. After creating the Internet gateway, you attach it to a VPC using <a>AttachInternetGateway</a>.</p> <p>For more information about your VPC and Internet gateway, see the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/\">Amazon Virtual Private Cloud User Guide</a>.</p>"]
-                fn create_internet_gateway(&self, input: &CreateInternetGatewayRequest) -> Result<CreateInternetGatewayResult, CreateInternetGatewayError>;
+                fn create_internet_gateway(&self, input: &CreateInternetGatewayRequest) -> Box<Future<Item = CreateInternetGatewayResult, Error = CreateInternetGatewayError>>;
                 
 
                 #[doc="<p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#8 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per region.</p> <p>The key pair returned to you is available only in the region in which you create it. To create a key pair that is available in all regions, use <a>ImportKeyPair</a>.</p> <p>For more information about key pairs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_key_pair(&self, input: &CreateKeyPairRequest) -> Result<KeyPair, CreateKeyPairError>;
+                fn create_key_pair(&self, input: &CreateKeyPairRequest) -> Box<Future<Item = KeyPair, Error = CreateKeyPairError>>;
                 
 
                 #[doc="<p>Creates a NAT gateway in the specified subnet. A NAT gateway can be used to enable instances in a private subnet to connect to the Internet. This action creates a network interface in the specified subnet with a private IP address from the IP address range of the subnet. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">NAT Gateways</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_nat_gateway(&self, input: &CreateNatGatewayRequest) -> Result<CreateNatGatewayResult, CreateNatGatewayError>;
+                fn create_nat_gateway(&self, input: &CreateNatGatewayRequest) -> Box<Future<Item = CreateNatGatewayResult, Error = CreateNatGatewayError>>;
                 
 
                 #[doc="<p>Creates a network ACL in a VPC. Network ACLs provide an optional layer of security (in addition to security groups) for the instances in your VPC.</p> <p>For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_network_acl(&self, input: &CreateNetworkAclRequest) -> Result<CreateNetworkAclResult, CreateNetworkAclError>;
+                fn create_network_acl(&self, input: &CreateNetworkAclRequest) -> Box<Future<Item = CreateNetworkAclResult, Error = CreateNetworkAclError>>;
                 
 
                 #[doc="<p>Creates an entry (a rule) in a network ACL with the specified rule number. Each network ACL has a set of numbered ingress rules and a separate set of numbered egress rules. When determining whether a packet should be allowed in or out of a subnet associated with the ACL, we process the entries in the ACL according to the rule numbers, in ascending order. Each network ACL has a set of ingress rules and a separate set of egress rules.</p> <p>We recommend that you leave room between the rule numbers (for example, 100, 110, 120, ...), and not number them one right after the other (for example, 101, 102, 103, ...). This makes it easier to add a rule between existing ones without having to renumber the rules.</p> <p>After you add an entry, you can't modify it; you must either replace it, or create an entry and delete the old one.</p> <p>For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_network_acl_entry(&self, input: &CreateNetworkAclEntryRequest) -> Result<(), CreateNetworkAclEntryError>;
+                fn create_network_acl_entry(&self, input: &CreateNetworkAclEntryRequest) -> Box<Future<Item = (), Error = CreateNetworkAclEntryError>>;
                 
 
                 #[doc="<p>Creates a network interface in the specified subnet.</p> <p>For more information about network interfaces, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html\">Elastic Network Interfaces</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_network_interface(&self, input: &CreateNetworkInterfaceRequest) -> Result<CreateNetworkInterfaceResult, CreateNetworkInterfaceError>;
+                fn create_network_interface(&self, input: &CreateNetworkInterfaceRequest) -> Box<Future<Item = CreateNetworkInterfaceResult, Error = CreateNetworkInterfaceError>>;
                 
 
                 #[doc="<p>Creates a placement group that you launch cluster instances into. You must give the group a name that's unique within the scope of your account.</p> <p>For more information about placement groups and cluster instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html\">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_placement_group(&self, input: &CreatePlacementGroupRequest) -> Result<(), CreatePlacementGroupError>;
+                fn create_placement_group(&self, input: &CreatePlacementGroupRequest) -> Box<Future<Item = (), Error = CreatePlacementGroupError>>;
                 
 
                 #[doc="<p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_reserved_instances_listing(&self, input: &CreateReservedInstancesListingRequest) -> Result<CreateReservedInstancesListingResult, CreateReservedInstancesListingError>;
+                fn create_reserved_instances_listing(&self, input: &CreateReservedInstancesListingRequest) -> Box<Future<Item = CreateReservedInstancesListingResult, Error = CreateReservedInstancesListingError>>;
                 
 
                 #[doc="<p>Creates a route in a route table within a VPC.</p> <p>You must specify one of the following targets: Internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only Internet gateway.</p> <p>When determining how to route traffic, we use the route with the most specific match. For example, traffic is destined for the IPv4 address <code>192.0.2.3</code>, and the route table includes the following two IPv4 routes:</p> <ul> <li> <p> <code>192.0.2.0/24</code> (goes to some target A)</p> </li> <li> <p> <code>192.0.2.0/28</code> (goes to some target B)</p> </li> </ul> <p>Both routes apply to the traffic destined for <code>192.0.2.3</code>. However, the second route in the list covers a smaller number of IP addresses and is therefore more specific, so we use that route to determine where to target the traffic.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_route(&self, input: &CreateRouteRequest) -> Result<CreateRouteResult, CreateRouteError>;
+                fn create_route(&self, input: &CreateRouteRequest) -> Box<Future<Item = CreateRouteResult, Error = CreateRouteError>>;
                 
 
                 #[doc="<p>Creates a route table for the specified VPC. After you create a route table, you can add routes and associate the table with a subnet.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_route_table(&self, input: &CreateRouteTableRequest) -> Result<CreateRouteTableResult, CreateRouteTableError>;
+                fn create_route_table(&self, input: &CreateRouteTableRequest) -> Box<Future<Item = CreateRouteTableResult, Error = CreateRouteTableError>>;
                 
 
                 #[doc="<p>Creates a security group.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html\">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>EC2-Classic: You can have up to 500 security groups.</p> <p>EC2-VPC: You can create up to 500 security groups per VPC.</p> </important> <p>When you create a security group, you specify a friendly name of your choice. You can have a security group for use in EC2-Classic with the same name as a security group for use in a VPC. However, you can't have two security groups for use in EC2-Classic with the same name or two security groups for use in a VPC with the same name.</p> <p>You have a default security group for use in EC2-Classic and a default security group for use in your VPC. If you don't specify a security group when you launch an instance, the instance is launched into the appropriate default security group. A default security group includes a default rule that grants instances unrestricted network access to each other.</p> <p>You can add or remove rules from your security groups using <a>AuthorizeSecurityGroupIngress</a>, <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupIngress</a>, and <a>RevokeSecurityGroupEgress</a>.</p>"]
-                fn create_security_group(&self, input: &CreateSecurityGroupRequest) -> Result<CreateSecurityGroupResult, CreateSecurityGroupError>;
+                fn create_security_group(&self, input: &CreateSecurityGroupRequest) -> Box<Future<Item = CreateSecurityGroupResult, Error = CreateSecurityGroupError>>;
                 
 
                 #[doc="<p>Creates a snapshot of an EBS volume and stores it in Amazon S3. You can use snapshots for backups, to make copies of EBS volumes, and to save data before shutting down an instance.</p> <p>When a snapshot is created, any AWS Marketplace product codes that are associated with the source volume are propagated to the snapshot.</p> <p>You can take a snapshot of an attached volume that is in use. However, snapshots only capture data that has been written to your EBS volume at the time the snapshot command is issued; this may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the volume long enough to take a snapshot, your snapshot should be complete. However, if you cannot pause all file writes to the volume, you should unmount the volume from within the instance, issue the snapshot command, and then remount the volume to ensure a consistent and complete snapshot. You may remount and use your volume while the snapshot status is <code>pending</code>.</p> <p>To create a snapshot for EBS volumes that serve as root devices, you should stop the instance before taking the snapshot.</p> <p>Snapshots that are taken from encrypted volumes are automatically encrypted. Volumes that are created from encrypted snapshots are also automatically encrypted. Your encrypted volumes and any associated snapshots always remain protected.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html\">Amazon Elastic Block Store</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_snapshot(&self, input: &CreateSnapshotRequest) -> Result<Snapshot, CreateSnapshotError>;
+                fn create_snapshot(&self, input: &CreateSnapshotRequest) -> Box<Future<Item = Snapshot, Error = CreateSnapshotError>>;
                 
 
                 #[doc="<p>Creates a data feed for Spot instances, enabling you to view Spot instance usage logs. You can create one data feed per AWS account. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html\">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_spot_datafeed_subscription(&self, input: &CreateSpotDatafeedSubscriptionRequest) -> Result<CreateSpotDatafeedSubscriptionResult, CreateSpotDatafeedSubscriptionError>;
+                fn create_spot_datafeed_subscription(&self, input: &CreateSpotDatafeedSubscriptionRequest) -> Box<Future<Item = CreateSpotDatafeedSubscriptionResult, Error = CreateSpotDatafeedSubscriptionError>>;
                 
 
                 #[doc="<p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The subnet's IPv4 CIDR block can be the same as the VPC's IPv4 CIDR block (assuming you want only a single subnet in the VPC), or a subset of the VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IP address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_subnet(&self, input: &CreateSubnetRequest) -> Result<CreateSubnetResult, CreateSubnetError>;
+                fn create_subnet(&self, input: &CreateSubnetRequest) -> Box<Future<Item = CreateSubnetResult, Error = CreateSubnetError>>;
                 
 
                 #[doc="<p>Adds or overwrites one or more tags for the specified Amazon EC2 resource or resources. Each resource can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique per resource.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about creating IAM policies that control users' access to resources based on tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-iam-actions-resources.html\">Supported Resource-Level Permissions for Amazon EC2 API Actions</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_tags(&self, input: &CreateTagsRequest) -> Result<(), CreateTagsError>;
+                fn create_tags(&self, input: &CreateTagsRequest) -> Box<Future<Item = (), Error = CreateTagsError>>;
                 
 
                 #[doc="<p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes with the <code>Encrypted</code> parameter. Encrypted volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html\">Creating or Restoring an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_volume(&self, input: &CreateVolumeRequest) -> Result<Volume, CreateVolumeError>;
+                fn create_volume(&self, input: &CreateVolumeRequest) -> Box<Future<Item = Volume, Error = CreateVolumeError>>;
                 
 
                 #[doc="<p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). To help you decide how big to make your VPC, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which includes only a default DNS server that we provide (AmazonProvidedDNS). For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/dedicated-instance.html.html\">Dedicated Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_vpc(&self, input: &CreateVpcRequest) -> Result<CreateVpcResult, CreateVpcError>;
+                fn create_vpc(&self, input: &CreateVpcRequest) -> Box<Future<Item = CreateVpcResult, Error = CreateVpcError>>;
                 
 
                 #[doc="<p>Creates a VPC endpoint for a specified AWS service. An endpoint enables you to create a private connection between your VPC and another AWS service in your account. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>Currently, only endpoints to Amazon S3 are supported.</p>"]
-                fn create_vpc_endpoint(&self, input: &CreateVpcEndpointRequest) -> Result<CreateVpcEndpointResult, CreateVpcEndpointError>;
+                fn create_vpc_endpoint(&self, input: &CreateVpcEndpointRequest) -> Box<Future<Item = CreateVpcEndpointResult, Error = CreateVpcEndpointError>>;
                 
 
                 #[doc="<p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and a peer VPC with which to create the connection. The peer VPC can belong to another AWS account. The requester VPC and peer VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the peer VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>A <code>CreateVpcPeeringConnection</code> request between VPCs with overlapping CIDR blocks results in the VPC peering connection having a status of <code>failed</code>.</p>"]
-                fn create_vpc_peering_connection(&self, input: &CreateVpcPeeringConnectionRequest) -> Result<CreateVpcPeeringConnectionResult, CreateVpcPeeringConnectionError>;
+                fn create_vpc_peering_connection(&self, input: &CreateVpcPeeringConnectionRequest) -> Box<Future<Item = CreateVpcPeeringConnectionResult, Error = CreateVpcPeeringConnectionError>>;
                 
 
                 #[doc="<p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The only supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information about VPN connections, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_vpn_connection(&self, input: &CreateVpnConnectionRequest) -> Result<CreateVpnConnectionResult, CreateVpnConnectionError>;
+                fn create_vpn_connection(&self, input: &CreateVpnConnectionRequest) -> Box<Future<Item = CreateVpnConnectionResult, Error = CreateVpnConnectionError>>;
                 
 
                 #[doc="<p>Creates a static route associated with a VPN connection between an existing virtual private gateway and a VPN customer gateway. The static route allows traffic to be routed from the virtual private gateway to the VPN customer gateway.</p> <p>For more information about VPN connections, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_vpn_connection_route(&self, input: &CreateVpnConnectionRouteRequest) -> Result<(), CreateVpnConnectionRouteError>;
+                fn create_vpn_connection_route(&self, input: &CreateVpnConnectionRouteRequest) -> Box<Future<Item = (), Error = CreateVpnConnectionRouteError>>;
                 
 
                 #[doc="<p>Creates a virtual private gateway. A virtual private gateway is the endpoint on the VPC side of your VPN connection. You can create a virtual private gateway before creating the VPC itself.</p> <p>For more information about virtual private gateways, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_vpn_gateway(&self, input: &CreateVpnGatewayRequest) -> Result<CreateVpnGatewayResult, CreateVpnGatewayError>;
+                fn create_vpn_gateway(&self, input: &CreateVpnGatewayRequest) -> Box<Future<Item = CreateVpnGatewayResult, Error = CreateVpnGatewayError>>;
                 
 
                 #[doc="<p>Deletes the specified customer gateway. You must delete the VPN connection before you can delete the customer gateway.</p>"]
-                fn delete_customer_gateway(&self, input: &DeleteCustomerGatewayRequest) -> Result<(), DeleteCustomerGatewayError>;
+                fn delete_customer_gateway(&self, input: &DeleteCustomerGatewayRequest) -> Box<Future<Item = (), Error = DeleteCustomerGatewayError>>;
                 
 
                 #[doc="<p>Deletes the specified set of DHCP options. You must disassociate the set of DHCP options before you can delete it. You can disassociate the set of DHCP options by associating either a new set of options or the default set of options with the VPC.</p>"]
-                fn delete_dhcp_options(&self, input: &DeleteDhcpOptionsRequest) -> Result<(), DeleteDhcpOptionsError>;
+                fn delete_dhcp_options(&self, input: &DeleteDhcpOptionsRequest) -> Box<Future<Item = (), Error = DeleteDhcpOptionsError>>;
                 
 
                 #[doc="<p>Deletes an egress-only Internet gateway.</p>"]
-                fn delete_egress_only_internet_gateway(&self, input: &DeleteEgressOnlyInternetGatewayRequest) -> Result<DeleteEgressOnlyInternetGatewayResult, DeleteEgressOnlyInternetGatewayError>;
+                fn delete_egress_only_internet_gateway(&self, input: &DeleteEgressOnlyInternetGatewayRequest) -> Box<Future<Item = DeleteEgressOnlyInternetGatewayResult, Error = DeleteEgressOnlyInternetGatewayError>>;
                 
 
                 #[doc="<p>Deletes one or more flow logs.</p>"]
-                fn delete_flow_logs(&self, input: &DeleteFlowLogsRequest) -> Result<DeleteFlowLogsResult, DeleteFlowLogsError>;
+                fn delete_flow_logs(&self, input: &DeleteFlowLogsRequest) -> Box<Future<Item = DeleteFlowLogsResult, Error = DeleteFlowLogsError>>;
                 
 
                 #[doc="<p>Deletes the specified Internet gateway. You must detach the Internet gateway from the VPC before you can delete it.</p>"]
-                fn delete_internet_gateway(&self, input: &DeleteInternetGatewayRequest) -> Result<(), DeleteInternetGatewayError>;
+                fn delete_internet_gateway(&self, input: &DeleteInternetGatewayRequest) -> Box<Future<Item = (), Error = DeleteInternetGatewayError>>;
                 
 
                 #[doc="<p>Deletes the specified key pair, by removing the public key from Amazon EC2.</p>"]
-                fn delete_key_pair(&self, input: &DeleteKeyPairRequest) -> Result<(), DeleteKeyPairError>;
+                fn delete_key_pair(&self, input: &DeleteKeyPairRequest) -> Box<Future<Item = (), Error = DeleteKeyPairError>>;
                 
 
                 #[doc="<p>Deletes the specified NAT gateway. Deleting a NAT gateway disassociates its Elastic IP address, but does not release the address from your account. Deleting a NAT gateway does not delete any NAT gateway routes in your route tables.</p>"]
-                fn delete_nat_gateway(&self, input: &DeleteNatGatewayRequest) -> Result<DeleteNatGatewayResult, DeleteNatGatewayError>;
+                fn delete_nat_gateway(&self, input: &DeleteNatGatewayRequest) -> Box<Future<Item = DeleteNatGatewayResult, Error = DeleteNatGatewayError>>;
                 
 
                 #[doc="<p>Deletes the specified network ACL. You can't delete the ACL if it's associated with any subnets. You can't delete the default network ACL.</p>"]
-                fn delete_network_acl(&self, input: &DeleteNetworkAclRequest) -> Result<(), DeleteNetworkAclError>;
+                fn delete_network_acl(&self, input: &DeleteNetworkAclRequest) -> Box<Future<Item = (), Error = DeleteNetworkAclError>>;
                 
 
                 #[doc="<p>Deletes the specified ingress or egress entry (rule) from the specified network ACL.</p>"]
-                fn delete_network_acl_entry(&self, input: &DeleteNetworkAclEntryRequest) -> Result<(), DeleteNetworkAclEntryError>;
+                fn delete_network_acl_entry(&self, input: &DeleteNetworkAclEntryRequest) -> Box<Future<Item = (), Error = DeleteNetworkAclEntryError>>;
                 
 
                 #[doc="<p>Deletes the specified network interface. You must detach the network interface before you can delete it.</p>"]
-                fn delete_network_interface(&self, input: &DeleteNetworkInterfaceRequest) -> Result<(), DeleteNetworkInterfaceError>;
+                fn delete_network_interface(&self, input: &DeleteNetworkInterfaceRequest) -> Box<Future<Item = (), Error = DeleteNetworkInterfaceError>>;
                 
 
                 #[doc="<p>Deletes the specified placement group. You must terminate all instances in the placement group before you can delete the placement group. For more information about placement groups and cluster instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html\">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn delete_placement_group(&self, input: &DeletePlacementGroupRequest) -> Result<(), DeletePlacementGroupError>;
+                fn delete_placement_group(&self, input: &DeletePlacementGroupRequest) -> Box<Future<Item = (), Error = DeletePlacementGroupError>>;
                 
 
                 #[doc="<p>Deletes the specified route from the specified route table.</p>"]
-                fn delete_route(&self, input: &DeleteRouteRequest) -> Result<(), DeleteRouteError>;
+                fn delete_route(&self, input: &DeleteRouteRequest) -> Box<Future<Item = (), Error = DeleteRouteError>>;
                 
 
                 #[doc="<p>Deletes the specified route table. You must disassociate the route table from any subnets before you can delete it. You can't delete the main route table.</p>"]
-                fn delete_route_table(&self, input: &DeleteRouteTableRequest) -> Result<(), DeleteRouteTableError>;
+                fn delete_route_table(&self, input: &DeleteRouteTableRequest) -> Box<Future<Item = (), Error = DeleteRouteTableError>>;
                 
 
                 #[doc="<p>Deletes a security group.</p> <p>If you attempt to delete a security group that is associated with an instance, or is referenced by another security group, the operation fails with <code>InvalidGroup.InUse</code> in EC2-Classic or <code>DependencyViolation</code> in EC2-VPC.</p>"]
-                fn delete_security_group(&self, input: &DeleteSecurityGroupRequest) -> Result<(), DeleteSecurityGroupError>;
+                fn delete_security_group(&self, input: &DeleteSecurityGroupRequest) -> Box<Future<Item = (), Error = DeleteSecurityGroupError>>;
                 
 
                 #[doc="<p>Deletes the specified snapshot.</p> <p>When you make periodic snapshots of a volume, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the volume.</p> <p>You cannot delete a snapshot of the root device of an EBS volume used by a registered AMI. You must first de-register the AMI before you can delete the snapshot.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-snapshot.html\">Deleting an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn delete_snapshot(&self, input: &DeleteSnapshotRequest) -> Result<(), DeleteSnapshotError>;
+                fn delete_snapshot(&self, input: &DeleteSnapshotRequest) -> Box<Future<Item = (), Error = DeleteSnapshotError>>;
                 
 
                 #[doc="<p>Deletes the data feed for Spot instances.</p>"]
-                fn delete_spot_datafeed_subscription(&self, input: &DeleteSpotDatafeedSubscriptionRequest) -> Result<(), DeleteSpotDatafeedSubscriptionError>;
+                fn delete_spot_datafeed_subscription(&self, input: &DeleteSpotDatafeedSubscriptionRequest) -> Box<Future<Item = (), Error = DeleteSpotDatafeedSubscriptionError>>;
                 
 
                 #[doc="<p>Deletes the specified subnet. You must terminate all running instances in the subnet before you can delete the subnet.</p>"]
-                fn delete_subnet(&self, input: &DeleteSubnetRequest) -> Result<(), DeleteSubnetError>;
+                fn delete_subnet(&self, input: &DeleteSubnetRequest) -> Box<Future<Item = (), Error = DeleteSubnetError>>;
                 
 
                 #[doc="<p>Deletes the specified set of tags from the specified set of resources. This call is designed to follow a <code>DescribeTags</code> request.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<(), DeleteTagsError>;
+                fn delete_tags(&self, input: &DeleteTagsRequest) -> Box<Future<Item = (), Error = DeleteTagsError>>;
                 
 
                 #[doc="<p>Deletes the specified EBS volume. The volume must be in the <code>available</code> state (not attached to an instance).</p> <note> <p>The volume may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-volume.html\">Deleting an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn delete_volume(&self, input: &DeleteVolumeRequest) -> Result<(), DeleteVolumeError>;
+                fn delete_volume(&self, input: &DeleteVolumeRequest) -> Box<Future<Item = (), Error = DeleteVolumeError>>;
                 
 
                 #[doc="<p>Deletes the specified VPC. You must detach or delete all gateways and resources that are associated with the VPC before you can delete it. For example, you must terminate all instances running in the VPC, delete all security groups associated with the VPC (except the default one), delete all route tables associated with the VPC (except the default one), and so on.</p>"]
-                fn delete_vpc(&self, input: &DeleteVpcRequest) -> Result<(), DeleteVpcError>;
+                fn delete_vpc(&self, input: &DeleteVpcRequest) -> Box<Future<Item = (), Error = DeleteVpcError>>;
                 
 
                 #[doc="<p>Deletes one or more specified VPC endpoints. Deleting the endpoint also deletes the endpoint routes in the route tables that were associated with the endpoint.</p>"]
-                fn delete_vpc_endpoints(&self, input: &DeleteVpcEndpointsRequest) -> Result<DeleteVpcEndpointsResult, DeleteVpcEndpointsError>;
+                fn delete_vpc_endpoints(&self, input: &DeleteVpcEndpointsRequest) -> Box<Future<Item = DeleteVpcEndpointsResult, Error = DeleteVpcEndpointsError>>;
                 
 
                 #[doc="<p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the peer VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. </p>"]
-                fn delete_vpc_peering_connection(&self, input: &DeleteVpcPeeringConnectionRequest) -> Result<DeleteVpcPeeringConnectionResult, DeleteVpcPeeringConnectionError>;
+                fn delete_vpc_peering_connection(&self, input: &DeleteVpcPeeringConnectionRequest) -> Box<Future<Item = DeleteVpcPeeringConnectionResult, Error = DeleteVpcPeeringConnectionError>>;
                 
 
                 #[doc="<p>Deletes the specified VPN connection.</p> <p>If you're deleting the VPC and its associated components, we recommend that you detach the virtual private gateway from the VPC and delete the VPC before deleting the VPN connection. If you believe that the tunnel credentials for your VPN connection have been compromised, you can delete the VPN connection and create a new one that has new keys, without needing to delete the VPC or virtual private gateway. If you create a new VPN connection, you must reconfigure the customer gateway using the new configuration information returned with the new VPN connection ID.</p>"]
-                fn delete_vpn_connection(&self, input: &DeleteVpnConnectionRequest) -> Result<(), DeleteVpnConnectionError>;
+                fn delete_vpn_connection(&self, input: &DeleteVpnConnectionRequest) -> Box<Future<Item = (), Error = DeleteVpnConnectionError>>;
                 
 
                 #[doc="<p>Deletes the specified static route associated with a VPN connection between an existing virtual private gateway and a VPN customer gateway. The static route allows traffic to be routed from the virtual private gateway to the VPN customer gateway.</p>"]
-                fn delete_vpn_connection_route(&self, input: &DeleteVpnConnectionRouteRequest) -> Result<(), DeleteVpnConnectionRouteError>;
+                fn delete_vpn_connection_route(&self, input: &DeleteVpnConnectionRouteRequest) -> Box<Future<Item = (), Error = DeleteVpnConnectionRouteError>>;
                 
 
                 #[doc="<p>Deletes the specified virtual private gateway. We recommend that before you delete a virtual private gateway, you detach it from the VPC and delete the VPN connection. Note that you don't need to delete the virtual private gateway if you plan to delete and recreate the VPN connection between your VPC and your network.</p>"]
-                fn delete_vpn_gateway(&self, input: &DeleteVpnGatewayRequest) -> Result<(), DeleteVpnGatewayError>;
+                fn delete_vpn_gateway(&self, input: &DeleteVpnGatewayRequest) -> Box<Future<Item = (), Error = DeleteVpnGatewayError>>;
                 
 
                 #[doc="<p>Deregisters the specified AMI. After you deregister an AMI, it can't be used to launch new instances.</p> <p>This command does not delete the AMI.</p>"]
-                fn deregister_image(&self, input: &DeregisterImageRequest) -> Result<(), DeregisterImageError>;
+                fn deregister_image(&self, input: &DeregisterImageRequest) -> Box<Future<Item = (), Error = DeregisterImageError>>;
                 
 
                 #[doc="<p>Describes attributes of your AWS account. The following are the supported account attributes:</p> <ul> <li> <p> <code>supported-platforms</code>: Indicates whether your account can launch instances into EC2-Classic and EC2-VPC, or only into EC2-VPC.</p> </li> <li> <p> <code>default-vpc</code>: The ID of the default VPC for your account, or <code>none</code>.</p> </li> <li> <p> <code>max-instances</code>: The maximum number of On-Demand instances that you can run.</p> </li> <li> <p> <code>vpc-max-security-groups-per-interface</code>: The maximum number of security groups that you can assign to a network interface.</p> </li> <li> <p> <code>max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-Classic. </p> </li> <li> <p> <code>vpc-max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-VPC.</p> </li> </ul>"]
-                fn describe_account_attributes(&self, input: &DescribeAccountAttributesRequest) -> Result<DescribeAccountAttributesResult, DescribeAccountAttributesError>;
+                fn describe_account_attributes(&self, input: &DescribeAccountAttributesRequest) -> Box<Future<Item = DescribeAccountAttributesResult, Error = DescribeAccountAttributesError>>;
                 
 
                 #[doc="<p>Describes one or more of your Elastic IP addresses.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_addresses(&self, input: &DescribeAddressesRequest) -> Result<DescribeAddressesResult, DescribeAddressesError>;
+                fn describe_addresses(&self, input: &DescribeAddressesRequest) -> Box<Future<Item = DescribeAddressesResult, Error = DescribeAddressesError>>;
                 
 
                 #[doc="<p>Describes one or more of the Availability Zones that are available to you. The results include zones only for the region you're currently using. If there is an event impacting an Availability Zone, you can use this request to view the state and any provided message for that Availability Zone.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html\">Regions and Availability Zones</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_availability_zones(&self, input: &DescribeAvailabilityZonesRequest) -> Result<DescribeAvailabilityZonesResult, DescribeAvailabilityZonesError>;
+                fn describe_availability_zones(&self, input: &DescribeAvailabilityZonesRequest) -> Box<Future<Item = DescribeAvailabilityZonesResult, Error = DescribeAvailabilityZonesError>>;
                 
 
                 #[doc="<p>Describes one or more of your bundling tasks.</p> <note> <p>Completed bundle tasks are listed for only a limited time. If your bundle task is no longer in the list, you can still register an AMI from it. Just use <code>RegisterImage</code> with the Amazon S3 bucket name and image manifest name you provided to the bundle task.</p> </note>"]
-                fn describe_bundle_tasks(&self, input: &DescribeBundleTasksRequest) -> Result<DescribeBundleTasksResult, DescribeBundleTasksError>;
+                fn describe_bundle_tasks(&self, input: &DescribeBundleTasksRequest) -> Box<Future<Item = DescribeBundleTasksResult, Error = DescribeBundleTasksError>>;
                 
 
                 #[doc="<p>Describes one or more of your linked EC2-Classic instances. This request only returns information about EC2-Classic instances linked to a VPC through ClassicLink; you cannot use this request to return information about other instances.</p>"]
-                fn describe_classic_link_instances(&self, input: &DescribeClassicLinkInstancesRequest) -> Result<DescribeClassicLinkInstancesResult, DescribeClassicLinkInstancesError>;
+                fn describe_classic_link_instances(&self, input: &DescribeClassicLinkInstancesRequest) -> Box<Future<Item = DescribeClassicLinkInstancesResult, Error = DescribeClassicLinkInstancesError>>;
                 
 
                 #[doc="<p>Describes one or more of your conversion tasks. For more information, see the <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/\">VM Import/Export User Guide</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
-                fn describe_conversion_tasks(&self, input: &DescribeConversionTasksRequest) -> Result<DescribeConversionTasksResult, DescribeConversionTasksError>;
+                fn describe_conversion_tasks(&self, input: &DescribeConversionTasksRequest) -> Box<Future<Item = DescribeConversionTasksResult, Error = DescribeConversionTasksError>>;
                 
 
                 #[doc="<p>Describes one or more of your VPN customer gateways.</p> <p>For more information about VPN customer gateways, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_customer_gateways(&self, input: &DescribeCustomerGatewaysRequest) -> Result<DescribeCustomerGatewaysResult, DescribeCustomerGatewaysError>;
+                fn describe_customer_gateways(&self, input: &DescribeCustomerGatewaysRequest) -> Box<Future<Item = DescribeCustomerGatewaysResult, Error = DescribeCustomerGatewaysError>>;
                 
 
                 #[doc="<p>Describes one or more of your DHCP options sets.</p> <p>For more information about DHCP options sets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_dhcp_options(&self, input: &DescribeDhcpOptionsRequest) -> Result<DescribeDhcpOptionsResult, DescribeDhcpOptionsError>;
+                fn describe_dhcp_options(&self, input: &DescribeDhcpOptionsRequest) -> Box<Future<Item = DescribeDhcpOptionsResult, Error = DescribeDhcpOptionsError>>;
                 
 
                 #[doc="<p>Describes one or more of your egress-only Internet gateways.</p>"]
-                fn describe_egress_only_internet_gateways(&self, input: &DescribeEgressOnlyInternetGatewaysRequest) -> Result<DescribeEgressOnlyInternetGatewaysResult, DescribeEgressOnlyInternetGatewaysError>;
+                fn describe_egress_only_internet_gateways(&self, input: &DescribeEgressOnlyInternetGatewaysRequest) -> Box<Future<Item = DescribeEgressOnlyInternetGatewaysResult, Error = DescribeEgressOnlyInternetGatewaysError>>;
                 
 
                 #[doc="<p>Describes one or more of your export tasks.</p>"]
-                fn describe_export_tasks(&self, input: &DescribeExportTasksRequest) -> Result<DescribeExportTasksResult, DescribeExportTasksError>;
+                fn describe_export_tasks(&self, input: &DescribeExportTasksRequest) -> Box<Future<Item = DescribeExportTasksResult, Error = DescribeExportTasksError>>;
                 
 
                 #[doc="<p>Describes one or more flow logs. To view the information in your flow logs (the log streams for the network interfaces), you must use the CloudWatch Logs console or the CloudWatch Logs API.</p>"]
-                fn describe_flow_logs(&self, input: &DescribeFlowLogsRequest) -> Result<DescribeFlowLogsResult, DescribeFlowLogsError>;
+                fn describe_flow_logs(&self, input: &DescribeFlowLogsRequest) -> Box<Future<Item = DescribeFlowLogsResult, Error = DescribeFlowLogsError>>;
                 
 
                 #[doc="<p>Describes the Dedicated Host Reservations that are available to purchase.</p> <p>The results describe all the Dedicated Host Reservation offerings, including offerings that may not match the instance family and region of your Dedicated Hosts. When purchasing an offering, ensure that the the instance family and region of the offering matches that of the Dedicated Host/s it will be associated with. For an overview of supported instance types, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html\">Dedicated Hosts Overview</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>"]
-                fn describe_host_reservation_offerings(&self, input: &DescribeHostReservationOfferingsRequest) -> Result<DescribeHostReservationOfferingsResult, DescribeHostReservationOfferingsError>;
+                fn describe_host_reservation_offerings(&self, input: &DescribeHostReservationOfferingsRequest) -> Box<Future<Item = DescribeHostReservationOfferingsResult, Error = DescribeHostReservationOfferingsError>>;
                 
 
                 #[doc="<p>Describes Dedicated Host Reservations which are associated with Dedicated Hosts in your account.</p>"]
-                fn describe_host_reservations(&self, input: &DescribeHostReservationsRequest) -> Result<DescribeHostReservationsResult, DescribeHostReservationsError>;
+                fn describe_host_reservations(&self, input: &DescribeHostReservationsRequest) -> Box<Future<Item = DescribeHostReservationsResult, Error = DescribeHostReservationsError>>;
                 
 
                 #[doc="<p>Describes one or more of your Dedicated Hosts.</p> <p>The results describe only the Dedicated Hosts in the region you're currently using. All listed instances consume capacity on your Dedicated Host. Dedicated Hosts that have recently been released will be listed with the state <code>released</code>.</p>"]
-                fn describe_hosts(&self, input: &DescribeHostsRequest) -> Result<DescribeHostsResult, DescribeHostsError>;
+                fn describe_hosts(&self, input: &DescribeHostsRequest) -> Box<Future<Item = DescribeHostsResult, Error = DescribeHostsError>>;
                 
 
                 #[doc="<p>Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>"]
-                fn describe_id_format(&self, input: &DescribeIdFormatRequest) -> Result<DescribeIdFormatResult, DescribeIdFormatError>;
+                fn describe_id_format(&self, input: &DescribeIdFormatRequest) -> Box<Future<Item = DescribeIdFormatResult, Error = DescribeIdFormatError>>;
                 
 
                 #[doc="<p>Describes the ID format settings for resources for the specified IAM user, IAM role, or root user. For example, you can view the resource types that are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html\">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. </p> <p>These settings apply to the principal specified in the request. They do not apply to the principal that makes the request.</p>"]
-                fn describe_identity_id_format(&self, input: &DescribeIdentityIdFormatRequest) -> Result<DescribeIdentityIdFormatResult, DescribeIdentityIdFormatError>;
+                fn describe_identity_id_format(&self, input: &DescribeIdentityIdFormatRequest) -> Box<Future<Item = DescribeIdentityIdFormatResult, Error = DescribeIdentityIdFormatError>>;
                 
 
                 #[doc="<p>Describes the specified attribute of the specified AMI. You can specify only one attribute at a time.</p>"]
-                fn describe_image_attribute(&self, input: &DescribeImageAttributeRequest) -> Result<ImageAttribute, DescribeImageAttributeError>;
+                fn describe_image_attribute(&self, input: &DescribeImageAttributeRequest) -> Box<Future<Item = ImageAttribute, Error = DescribeImageAttributeError>>;
                 
 
                 #[doc="<p>Describes one or more of the images (AMIs, AKIs, and ARIs) available to you. Images available to you include public images, private images that you own, and private images owned by other AWS accounts but for which you have explicit launch permissions.</p> <note> <p>Deregistered images are included in the returned results for an unspecified interval after deregistration.</p> </note>"]
-                fn describe_images(&self, input: &DescribeImagesRequest) -> Result<DescribeImagesResult, DescribeImagesError>;
+                fn describe_images(&self, input: &DescribeImagesRequest) -> Box<Future<Item = DescribeImagesResult, Error = DescribeImagesError>>;
                 
 
                 #[doc="<p>Displays details about an import virtual machine or import snapshot tasks that are already created.</p>"]
-                fn describe_import_image_tasks(&self, input: &DescribeImportImageTasksRequest) -> Result<DescribeImportImageTasksResult, DescribeImportImageTasksError>;
+                fn describe_import_image_tasks(&self, input: &DescribeImportImageTasksRequest) -> Box<Future<Item = DescribeImportImageTasksResult, Error = DescribeImportImageTasksError>>;
                 
 
                 #[doc="<p>Describes your import snapshot tasks.</p>"]
-                fn describe_import_snapshot_tasks(&self, input: &DescribeImportSnapshotTasksRequest) -> Result<DescribeImportSnapshotTasksResult, DescribeImportSnapshotTasksError>;
+                fn describe_import_snapshot_tasks(&self, input: &DescribeImportSnapshotTasksRequest) -> Box<Future<Item = DescribeImportSnapshotTasksResult, Error = DescribeImportSnapshotTasksError>>;
                 
 
                 #[doc="<p>Describes the specified attribute of the specified instance. You can specify only one attribute at a time. Valid attribute values are: <code>instanceType</code> | <code>kernel</code> | <code>ramdisk</code> | <code>userData</code> | <code>disableApiTermination</code> | <code>instanceInitiatedShutdownBehavior</code> | <code>rootDeviceName</code> | <code>blockDeviceMapping</code> | <code>productCodes</code> | <code>sourceDestCheck</code> | <code>groupSet</code> | <code>ebsOptimized</code> | <code>sriovNetSupport</code> </p>"]
-                fn describe_instance_attribute(&self, input: &DescribeInstanceAttributeRequest) -> Result<InstanceAttribute, DescribeInstanceAttributeError>;
+                fn describe_instance_attribute(&self, input: &DescribeInstanceAttributeRequest) -> Box<Future<Item = InstanceAttribute, Error = DescribeInstanceAttributeError>>;
                 
 
                 #[doc="<p>Describes the status of one or more instances. By default, only running instances are described, unless specified otherwise.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html\">Status Checks for Your Instances</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html\">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html\">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul>"]
-                fn describe_instance_status(&self, input: &DescribeInstanceStatusRequest) -> Result<DescribeInstanceStatusResult, DescribeInstanceStatusError>;
+                fn describe_instance_status(&self, input: &DescribeInstanceStatusRequest) -> Box<Future<Item = DescribeInstanceStatusResult, Error = DescribeInstanceStatusError>>;
                 
 
                 #[doc="<p>Describes one or more of your instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>"]
-                fn describe_instances(&self, input: &DescribeInstancesRequest) -> Result<DescribeInstancesResult, DescribeInstancesError>;
+                fn describe_instances(&self, input: &DescribeInstancesRequest) -> Box<Future<Item = DescribeInstancesResult, Error = DescribeInstancesError>>;
                 
 
                 #[doc="<p>Describes one or more of your Internet gateways.</p>"]
-                fn describe_internet_gateways(&self, input: &DescribeInternetGatewaysRequest) -> Result<DescribeInternetGatewaysResult, DescribeInternetGatewaysError>;
+                fn describe_internet_gateways(&self, input: &DescribeInternetGatewaysRequest) -> Box<Future<Item = DescribeInternetGatewaysResult, Error = DescribeInternetGatewaysError>>;
                 
 
                 #[doc="<p>Describes one or more of your key pairs.</p> <p>For more information about key pairs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_key_pairs(&self, input: &DescribeKeyPairsRequest) -> Result<DescribeKeyPairsResult, DescribeKeyPairsError>;
+                fn describe_key_pairs(&self, input: &DescribeKeyPairsRequest) -> Box<Future<Item = DescribeKeyPairsResult, Error = DescribeKeyPairsError>>;
                 
 
                 #[doc="<p>Describes your Elastic IP addresses that are being moved to the EC2-VPC platform, or that are being restored to the EC2-Classic platform. This request does not return information about any other Elastic IP addresses in your account.</p>"]
-                fn describe_moving_addresses(&self, input: &DescribeMovingAddressesRequest) -> Result<DescribeMovingAddressesResult, DescribeMovingAddressesError>;
+                fn describe_moving_addresses(&self, input: &DescribeMovingAddressesRequest) -> Box<Future<Item = DescribeMovingAddressesResult, Error = DescribeMovingAddressesError>>;
                 
 
                 #[doc="<p>Describes one or more of the your NAT gateways.</p>"]
-                fn describe_nat_gateways(&self, input: &DescribeNatGatewaysRequest) -> Result<DescribeNatGatewaysResult, DescribeNatGatewaysError>;
+                fn describe_nat_gateways(&self, input: &DescribeNatGatewaysRequest) -> Box<Future<Item = DescribeNatGatewaysResult, Error = DescribeNatGatewaysError>>;
                 
 
                 #[doc="<p>Describes one or more of your network ACLs.</p> <p>For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_network_acls(&self, input: &DescribeNetworkAclsRequest) -> Result<DescribeNetworkAclsResult, DescribeNetworkAclsError>;
+                fn describe_network_acls(&self, input: &DescribeNetworkAclsRequest) -> Box<Future<Item = DescribeNetworkAclsResult, Error = DescribeNetworkAclsError>>;
                 
 
                 #[doc="<p>Describes a network interface attribute. You can specify only one attribute at a time.</p>"]
-                fn describe_network_interface_attribute(&self, input: &DescribeNetworkInterfaceAttributeRequest) -> Result<DescribeNetworkInterfaceAttributeResult, DescribeNetworkInterfaceAttributeError>;
+                fn describe_network_interface_attribute(&self, input: &DescribeNetworkInterfaceAttributeRequest) -> Box<Future<Item = DescribeNetworkInterfaceAttributeResult, Error = DescribeNetworkInterfaceAttributeError>>;
                 
 
                 #[doc="<p>Describes one or more of your network interfaces.</p>"]
-                fn describe_network_interfaces(&self, input: &DescribeNetworkInterfacesRequest) -> Result<DescribeNetworkInterfacesResult, DescribeNetworkInterfacesError>;
+                fn describe_network_interfaces(&self, input: &DescribeNetworkInterfacesRequest) -> Box<Future<Item = DescribeNetworkInterfacesResult, Error = DescribeNetworkInterfacesError>>;
                 
 
                 #[doc="<p>Describes one or more of your placement groups. For more information about placement groups and cluster instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html\">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_placement_groups(&self, input: &DescribePlacementGroupsRequest) -> Result<DescribePlacementGroupsResult, DescribePlacementGroupsError>;
+                fn describe_placement_groups(&self, input: &DescribePlacementGroupsRequest) -> Box<Future<Item = DescribePlacementGroupsResult, Error = DescribePlacementGroupsError>>;
                 
 
                 #[doc="<p>Describes available AWS services in a prefix list format, which includes the prefix list name and prefix list ID of the service and the IP address range for the service. A prefix list ID is required for creating an outbound security group rule that allows traffic from a VPC to access an AWS service through a VPC endpoint.</p>"]
-                fn describe_prefix_lists(&self, input: &DescribePrefixListsRequest) -> Result<DescribePrefixListsResult, DescribePrefixListsError>;
+                fn describe_prefix_lists(&self, input: &DescribePrefixListsRequest) -> Box<Future<Item = DescribePrefixListsResult, Error = DescribePrefixListsError>>;
                 
 
                 #[doc="<p>Describes one or more regions that are currently available to you.</p> <p>For a list of the regions supported by Amazon EC2, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region\">Regions and Endpoints</a>.</p>"]
-                fn describe_regions(&self, input: &DescribeRegionsRequest) -> Result<DescribeRegionsResult, DescribeRegionsError>;
+                fn describe_regions(&self, input: &DescribeRegionsRequest) -> Box<Future<Item = DescribeRegionsResult, Error = DescribeRegionsError>>;
                 
 
                 #[doc="<p>Describes one or more of the Reserved Instances that you purchased.</p> <p>For more information about Reserved Instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html\">Reserved Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_reserved_instances(&self, input: &DescribeReservedInstancesRequest) -> Result<DescribeReservedInstancesResult, DescribeReservedInstancesError>;
+                fn describe_reserved_instances(&self, input: &DescribeReservedInstancesRequest) -> Box<Future<Item = DescribeReservedInstancesResult, Error = DescribeReservedInstancesError>>;
                 
 
                 #[doc="<p>Describes your account's Reserved Instance listings in the Reserved Instance Marketplace.</p> <p>The Reserved Instance Marketplace matches sellers who want to resell Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>As a seller, you choose to list some or all of your Reserved Instances, and you specify the upfront price to receive for them. Your Reserved Instances are then listed in the Reserved Instance Marketplace and are available for purchase.</p> <p>As a buyer, you specify the configuration of the Reserved Instance to purchase, and the Marketplace matches what you're searching for with what's available. The Marketplace first sells the lowest priced Reserved Instances to you, and continues to sell available Reserved Instance listings to you until your demand is met. You are charged based on the total price of all of the listings that you purchase.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_reserved_instances_listings(&self, input: &DescribeReservedInstancesListingsRequest) -> Result<DescribeReservedInstancesListingsResult, DescribeReservedInstancesListingsError>;
+                fn describe_reserved_instances_listings(&self, input: &DescribeReservedInstancesListingsRequest) -> Box<Future<Item = DescribeReservedInstancesListingsResult, Error = DescribeReservedInstancesListingsError>>;
                 
 
                 #[doc="<p>Describes the modifications made to your Reserved Instances. If no parameter is specified, information about all your Reserved Instances modification requests is returned. If a modification ID is specified, only information about the specific modification is returned.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html\">Modifying Reserved Instances</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInstancesModificationsRequest) -> Result<DescribeReservedInstancesModificationsResult, DescribeReservedInstancesModificationsError>;
+                fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInstancesModificationsRequest) -> Box<Future<Item = DescribeReservedInstancesModificationsResult, Error = DescribeReservedInstancesModificationsError>>;
                 
 
                 #[doc="<p>Describes Reserved Instance offerings that are available for purchase. With Reserved Instances, you purchase the right to launch instances for a period of time. During that time period, you do not receive insufficient capacity errors, and you pay a lower usage rate than the rate charged for On-Demand instances for the actual time used.</p> <p>If you have listed your own Reserved Instances for sale in the Reserved Instance Marketplace, they will be excluded from these results. This is to ensure that you do not purchase your own Reserved Instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_reserved_instances_offerings(&self, input: &DescribeReservedInstancesOfferingsRequest) -> Result<DescribeReservedInstancesOfferingsResult, DescribeReservedInstancesOfferingsError>;
+                fn describe_reserved_instances_offerings(&self, input: &DescribeReservedInstancesOfferingsRequest) -> Box<Future<Item = DescribeReservedInstancesOfferingsResult, Error = DescribeReservedInstancesOfferingsError>>;
                 
 
                 #[doc="<p>Describes one or more of your route tables.</p> <p>Each subnet in your VPC must be associated with a route table. If a subnet is not explicitly associated with any route table, it is implicitly associated with the main route table. This command does not return the subnet ID for implicit associations.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_route_tables(&self, input: &DescribeRouteTablesRequest) -> Result<DescribeRouteTablesResult, DescribeRouteTablesError>;
+                fn describe_route_tables(&self, input: &DescribeRouteTablesRequest) -> Box<Future<Item = DescribeRouteTablesResult, Error = DescribeRouteTablesError>>;
                 
 
                 #[doc="<p>Finds available schedules that meet the specified criteria.</p> <p>You can search for an available schedule no more than 3 months in advance. You must meet the minimum required duration of 1,200 hours per year. For example, the minimum daily schedule is 4 hours, the minimum weekly schedule is 24 hours, and the minimum monthly schedule is 100 hours.</p> <p>After you find a schedule that meets your needs, call <a>PurchaseScheduledInstances</a> to purchase Scheduled Instances with that schedule.</p>"]
-                fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInstanceAvailabilityRequest) -> Result<DescribeScheduledInstanceAvailabilityResult, DescribeScheduledInstanceAvailabilityError>;
+                fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInstanceAvailabilityRequest) -> Box<Future<Item = DescribeScheduledInstanceAvailabilityResult, Error = DescribeScheduledInstanceAvailabilityError>>;
                 
 
                 #[doc="<p>Describes one or more of your Scheduled Instances.</p>"]
-                fn describe_scheduled_instances(&self, input: &DescribeScheduledInstancesRequest) -> Result<DescribeScheduledInstancesResult, DescribeScheduledInstancesError>;
+                fn describe_scheduled_instances(&self, input: &DescribeScheduledInstancesRequest) -> Box<Future<Item = DescribeScheduledInstancesResult, Error = DescribeScheduledInstancesError>>;
                 
 
                 #[doc="<p>[EC2-VPC only] Describes the VPCs on the other side of a VPC peering connection that are referencing the security groups you've specified in this request.</p>"]
-                fn describe_security_group_references(&self, input: &DescribeSecurityGroupReferencesRequest) -> Result<DescribeSecurityGroupReferencesResult, DescribeSecurityGroupReferencesError>;
+                fn describe_security_group_references(&self, input: &DescribeSecurityGroupReferencesRequest) -> Box<Future<Item = DescribeSecurityGroupReferencesResult, Error = DescribeSecurityGroupReferencesError>>;
                 
 
                 #[doc="<p>Describes one or more of your security groups.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html\">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_security_groups(&self, input: &DescribeSecurityGroupsRequest) -> Result<DescribeSecurityGroupsResult, DescribeSecurityGroupsError>;
+                fn describe_security_groups(&self, input: &DescribeSecurityGroupsRequest) -> Box<Future<Item = DescribeSecurityGroupsResult, Error = DescribeSecurityGroupsError>>;
                 
 
                 #[doc="<p>Describes the specified attribute of the specified snapshot. You can specify only one attribute at a time.</p> <p>For more information about EBS snapshots, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html\">Amazon EBS Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_snapshot_attribute(&self, input: &DescribeSnapshotAttributeRequest) -> Result<DescribeSnapshotAttributeResult, DescribeSnapshotAttributeError>;
+                fn describe_snapshot_attribute(&self, input: &DescribeSnapshotAttributeRequest) -> Box<Future<Item = DescribeSnapshotAttributeResult, Error = DescribeSnapshotAttributeError>>;
                 
 
                 #[doc="<p>Describes one or more of the EBS snapshots available to you. Available snapshots include public snapshots available for any AWS account to launch, private snapshots that you own, and private snapshots owned by another AWS account but for which you've been given explicit create volume permissions.</p> <p>The create volume permissions fall into the following categories:</p> <ul> <li> <p> <i>public</i>: The owner of the snapshot granted create volume permissions for the snapshot to the <code>all</code> group. All AWS accounts have create volume permissions for these snapshots.</p> </li> <li> <p> <i>explicit</i>: The owner of the snapshot granted create volume permissions to a specific AWS account.</p> </li> <li> <p> <i>implicit</i>: An AWS account has implicit create volume permissions for all snapshots it owns.</p> </li> </ul> <p>The list of snapshots returned can be modified by specifying snapshot IDs, snapshot owners, or AWS accounts with create volume permissions. If no options are specified, Amazon EC2 returns all snapshots for which you have create volume permissions.</p> <p>If you specify one or more snapshot IDs, only snapshots that have the specified IDs are returned. If you specify an invalid snapshot ID, an error is returned. If you specify a snapshot ID for which you do not have access, it is not included in the returned results.</p> <p>If you specify one or more snapshot owners using the <code>OwnerIds</code> option, only snapshots from the specified owners and for which you have access are returned. The results can include the AWS account IDs of the specified owners, <code>amazon</code> for snapshots owned by Amazon, or <code>self</code> for snapshots that you own.</p> <p>If you specify a list of restorable users, only snapshots with create snapshot permissions for those users are returned. You can specify AWS account IDs (if you own the snapshots), <code>self</code> for snapshots for which you own or have explicit permissions, or <code>all</code> for public snapshots.</p> <p>If you are describing a long list of snapshots, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeSnapshots</code> request to retrieve the remaining results.</p> <p>For more information about EBS snapshots, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html\">Amazon EBS Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_snapshots(&self, input: &DescribeSnapshotsRequest) -> Result<DescribeSnapshotsResult, DescribeSnapshotsError>;
+                fn describe_snapshots(&self, input: &DescribeSnapshotsRequest) -> Box<Future<Item = DescribeSnapshotsResult, Error = DescribeSnapshotsError>>;
                 
 
                 #[doc="<p>Describes the data feed for Spot instances. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html\">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_spot_datafeed_subscription(&self, input: &DescribeSpotDatafeedSubscriptionRequest) -> Result<DescribeSpotDatafeedSubscriptionResult, DescribeSpotDatafeedSubscriptionError>;
+                fn describe_spot_datafeed_subscription(&self, input: &DescribeSpotDatafeedSubscriptionRequest) -> Box<Future<Item = DescribeSpotDatafeedSubscriptionResult, Error = DescribeSpotDatafeedSubscriptionError>>;
                 
 
                 #[doc="<p>Describes the running instances for the specified Spot fleet.</p>"]
-                fn describe_spot_fleet_instances(&self, input: &DescribeSpotFleetInstancesRequest) -> Result<DescribeSpotFleetInstancesResponse, DescribeSpotFleetInstancesError>;
+                fn describe_spot_fleet_instances(&self, input: &DescribeSpotFleetInstancesRequest) -> Box<Future<Item = DescribeSpotFleetInstancesResponse, Error = DescribeSpotFleetInstancesError>>;
                 
 
                 #[doc="<p>Describes the events for the specified Spot fleet request during the specified time.</p> <p>Spot fleet events are delayed by up to 30 seconds before they can be described. This ensures that you can query by the last evaluated time and not miss a recorded event.</p>"]
-                fn describe_spot_fleet_request_history(&self, input: &DescribeSpotFleetRequestHistoryRequest) -> Result<DescribeSpotFleetRequestHistoryResponse, DescribeSpotFleetRequestHistoryError>;
+                fn describe_spot_fleet_request_history(&self, input: &DescribeSpotFleetRequestHistoryRequest) -> Box<Future<Item = DescribeSpotFleetRequestHistoryResponse, Error = DescribeSpotFleetRequestHistoryError>>;
                 
 
                 #[doc="<p>Describes your Spot fleet requests.</p> <p>Spot fleet requests are deleted 48 hours after they are canceled and their instances are terminated.</p>"]
-                fn describe_spot_fleet_requests(&self, input: &DescribeSpotFleetRequestsRequest) -> Result<DescribeSpotFleetRequestsResponse, DescribeSpotFleetRequestsError>;
+                fn describe_spot_fleet_requests(&self, input: &DescribeSpotFleetRequestsRequest) -> Box<Future<Item = DescribeSpotFleetRequestsResponse, Error = DescribeSpotFleetRequestsError>>;
                 
 
                 #[doc="<p>Describes the Spot instance requests that belong to your account. Spot instances are instances that Amazon EC2 launches when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot instance capacity and current Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html\">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can use <code>DescribeSpotInstanceRequests</code> to find a running Spot instance by examining the response. If the status of the Spot instance is <code>fulfilled</code>, the instance ID appears in the response and contains the identifier of the instance. Alternatively, you can use <a>DescribeInstances</a> with a filter to look for instances where the instance lifecycle is <code>spot</code>.</p> <p>Spot instance requests are deleted 4 hours after they are canceled and their instances are terminated.</p>"]
-                fn describe_spot_instance_requests(&self, input: &DescribeSpotInstanceRequestsRequest) -> Result<DescribeSpotInstanceRequestsResult, DescribeSpotInstanceRequestsError>;
+                fn describe_spot_instance_requests(&self, input: &DescribeSpotInstanceRequestsRequest) -> Box<Future<Item = DescribeSpotInstanceRequestsResult, Error = DescribeSpotInstanceRequestsError>>;
                 
 
                 #[doc="<p>Describes the Spot price history. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances-history.html\">Spot Instance Pricing History</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>When you specify a start and end time, this operation returns the prices of the instance types within the time range that you specified and the time when the price changed. The price is valid within the time period that you specified; the response merely indicates the last time that the price changed.</p>"]
-                fn describe_spot_price_history(&self, input: &DescribeSpotPriceHistoryRequest) -> Result<DescribeSpotPriceHistoryResult, DescribeSpotPriceHistoryError>;
+                fn describe_spot_price_history(&self, input: &DescribeSpotPriceHistoryRequest) -> Box<Future<Item = DescribeSpotPriceHistoryResult, Error = DescribeSpotPriceHistoryError>>;
                 
 
                 #[doc="<p>[EC2-VPC only] Describes the stale security group rules for security groups in a specified VPC. Rules are stale when they reference a deleted security group in a peer VPC, or a security group in a peer VPC for which the VPC peering connection has been deleted.</p>"]
-                fn describe_stale_security_groups(&self, input: &DescribeStaleSecurityGroupsRequest) -> Result<DescribeStaleSecurityGroupsResult, DescribeStaleSecurityGroupsError>;
+                fn describe_stale_security_groups(&self, input: &DescribeStaleSecurityGroupsRequest) -> Box<Future<Item = DescribeStaleSecurityGroupsResult, Error = DescribeStaleSecurityGroupsError>>;
                 
 
                 #[doc="<p>Describes one or more of your subnets.</p> <p>For more information about subnets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_subnets(&self, input: &DescribeSubnetsRequest) -> Result<DescribeSubnetsResult, DescribeSubnetsError>;
+                fn describe_subnets(&self, input: &DescribeSubnetsRequest) -> Box<Future<Item = DescribeSubnetsResult, Error = DescribeSubnetsError>>;
                 
 
                 #[doc="<p>Describes one or more of the tags for your EC2 resources.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsRequest) -> Result<DescribeTagsResult, DescribeTagsError>;
+                fn describe_tags(&self, input: &DescribeTagsRequest) -> Box<Future<Item = DescribeTagsResult, Error = DescribeTagsError>>;
                 
 
                 #[doc="<p>Describes the specified attribute of the specified volume. You can specify only one attribute at a time.</p> <p>For more information about EBS volumes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html\">Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_volume_attribute(&self, input: &DescribeVolumeAttributeRequest) -> Result<DescribeVolumeAttributeResult, DescribeVolumeAttributeError>;
+                fn describe_volume_attribute(&self, input: &DescribeVolumeAttributeRequest) -> Box<Future<Item = DescribeVolumeAttributeResult, Error = DescribeVolumeAttributeError>>;
                 
 
                 #[doc="<p>Describes the status of the specified volumes. Volume status provides the result of the checks performed on your volumes to determine events that can impair the performance of your volumes. The performance of a volume can be affected if an issue occurs on the volume's underlying host. If the volume's underlying host experiences a power outage or system issue, after the system is restored, there could be data inconsistencies on the volume. Volume events notify you if this occurs. Volume actions notify you if any action needs to be taken in response to the event.</p> <p>The <code>DescribeVolumeStatus</code> operation provides the following information about the specified volumes:</p> <p> <i>Status</i>: Reflects the current status of the volume. The possible values are <code>ok</code>, <code>impaired</code> , <code>warning</code>, or <code>insufficient-data</code>. If all checks pass, the overall status of the volume is <code>ok</code>. If the check fails, the overall status is <code>impaired</code>. If the status is <code>insufficient-data</code>, then the checks may still be taking place on your volume at the time. We recommend that you retry the request. For more information on volume status, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-volume-status.html\">Monitoring the Status of Your Volumes</a>.</p> <p> <i>Events</i>: Reflect the cause of a volume status and may require you to take action. For example, if your volume returns an <code>impaired</code> status, then the volume event might be <code>potential-data-inconsistency</code>. This means that your volume has been affected by an issue with the underlying host, has all I/O operations disabled, and may have inconsistent data.</p> <p> <i>Actions</i>: Reflect the actions you may have to take in response to an event. For example, if the status of the volume is <code>impaired</code> and the volume event shows <code>potential-data-inconsistency</code>, then the action shows <code>enable-volume-io</code>. This means that you may want to enable the I/O operations for the volume by calling the <a>EnableVolumeIO</a> action and then check the volume for data consistency.</p> <note> <p>Volume status is based on the volume status checks, and does not reflect the volume state. Therefore, volume status does not indicate volumes in the <code>error</code> state (for example, when a volume is incapable of accepting I/O.)</p> </note>"]
-                fn describe_volume_status(&self, input: &DescribeVolumeStatusRequest) -> Result<DescribeVolumeStatusResult, DescribeVolumeStatusError>;
+                fn describe_volume_status(&self, input: &DescribeVolumeStatusRequest) -> Box<Future<Item = DescribeVolumeStatusResult, Error = DescribeVolumeStatusError>>;
                 
 
                 #[doc="<p>Describes the specified EBS volumes.</p> <p>If you are describing a long list of volumes, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeVolumes</code> request to retrieve the remaining results.</p> <p>For more information about EBS volumes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html\">Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_volumes(&self, input: &DescribeVolumesRequest) -> Result<DescribeVolumesResult, DescribeVolumesError>;
+                fn describe_volumes(&self, input: &DescribeVolumesRequest) -> Box<Future<Item = DescribeVolumesResult, Error = DescribeVolumesError>>;
                 
 
                 #[doc="<p>Describes the specified attribute of the specified VPC. You can specify only one attribute at a time.</p>"]
-                fn describe_vpc_attribute(&self, input: &DescribeVpcAttributeRequest) -> Result<DescribeVpcAttributeResult, DescribeVpcAttributeError>;
+                fn describe_vpc_attribute(&self, input: &DescribeVpcAttributeRequest) -> Box<Future<Item = DescribeVpcAttributeResult, Error = DescribeVpcAttributeError>>;
                 
 
                 #[doc="<p>Describes the ClassicLink status of one or more VPCs.</p>"]
-                fn describe_vpc_classic_link(&self, input: &DescribeVpcClassicLinkRequest) -> Result<DescribeVpcClassicLinkResult, DescribeVpcClassicLinkError>;
+                fn describe_vpc_classic_link(&self, input: &DescribeVpcClassicLinkRequest) -> Box<Future<Item = DescribeVpcClassicLinkResult, Error = DescribeVpcClassicLinkError>>;
                 
 
                 #[doc="<p>Describes the ClassicLink DNS support status of one or more VPCs. If enabled, the DNS hostname of a linked EC2-Classic instance resolves to its private IP address when addressed from an instance in the VPC to which it's linked. Similarly, the DNS hostname of an instance in a VPC resolves to its private IP address when addressed from a linked EC2-Classic instance. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn describe_vpc_classic_link_dns_support(&self, input: &DescribeVpcClassicLinkDnsSupportRequest) -> Result<DescribeVpcClassicLinkDnsSupportResult, DescribeVpcClassicLinkDnsSupportError>;
+                fn describe_vpc_classic_link_dns_support(&self, input: &DescribeVpcClassicLinkDnsSupportRequest) -> Box<Future<Item = DescribeVpcClassicLinkDnsSupportResult, Error = DescribeVpcClassicLinkDnsSupportError>>;
                 
 
                 #[doc="<p>Describes all supported AWS services that can be specified when creating a VPC endpoint.</p>"]
-                fn describe_vpc_endpoint_services(&self, input: &DescribeVpcEndpointServicesRequest) -> Result<DescribeVpcEndpointServicesResult, DescribeVpcEndpointServicesError>;
+                fn describe_vpc_endpoint_services(&self, input: &DescribeVpcEndpointServicesRequest) -> Box<Future<Item = DescribeVpcEndpointServicesResult, Error = DescribeVpcEndpointServicesError>>;
                 
 
                 #[doc="<p>Describes one or more of your VPC endpoints.</p>"]
-                fn describe_vpc_endpoints(&self, input: &DescribeVpcEndpointsRequest) -> Result<DescribeVpcEndpointsResult, DescribeVpcEndpointsError>;
+                fn describe_vpc_endpoints(&self, input: &DescribeVpcEndpointsRequest) -> Box<Future<Item = DescribeVpcEndpointsResult, Error = DescribeVpcEndpointsError>>;
                 
 
                 #[doc="<p>Describes one or more of your VPC peering connections.</p>"]
-                fn describe_vpc_peering_connections(&self, input: &DescribeVpcPeeringConnectionsRequest) -> Result<DescribeVpcPeeringConnectionsResult, DescribeVpcPeeringConnectionsError>;
+                fn describe_vpc_peering_connections(&self, input: &DescribeVpcPeeringConnectionsRequest) -> Box<Future<Item = DescribeVpcPeeringConnectionsResult, Error = DescribeVpcPeeringConnectionsError>>;
                 
 
                 #[doc="<p>Describes one or more of your VPCs.</p>"]
-                fn describe_vpcs(&self, input: &DescribeVpcsRequest) -> Result<DescribeVpcsResult, DescribeVpcsError>;
+                fn describe_vpcs(&self, input: &DescribeVpcsRequest) -> Box<Future<Item = DescribeVpcsResult, Error = DescribeVpcsError>>;
                 
 
                 #[doc="<p>Describes one or more of your VPN connections.</p> <p>For more information about VPN connections, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_vpn_connections(&self, input: &DescribeVpnConnectionsRequest) -> Result<DescribeVpnConnectionsResult, DescribeVpnConnectionsError>;
+                fn describe_vpn_connections(&self, input: &DescribeVpnConnectionsRequest) -> Box<Future<Item = DescribeVpnConnectionsResult, Error = DescribeVpnConnectionsError>>;
                 
 
                 #[doc="<p>Describes one or more of your virtual private gateways.</p> <p>For more information about virtual private gateways, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding an IPsec Hardware VPN to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_vpn_gateways(&self, input: &DescribeVpnGatewaysRequest) -> Result<DescribeVpnGatewaysResult, DescribeVpnGatewaysError>;
+                fn describe_vpn_gateways(&self, input: &DescribeVpnGatewaysRequest) -> Box<Future<Item = DescribeVpnGatewaysResult, Error = DescribeVpnGatewaysError>>;
                 
 
                 #[doc="<p>Unlinks (detaches) a linked EC2-Classic instance from a VPC. After the instance has been unlinked, the VPC security groups are no longer associated with it. An instance is automatically unlinked from a VPC when it's stopped.</p>"]
-                fn detach_classic_link_vpc(&self, input: &DetachClassicLinkVpcRequest) -> Result<DetachClassicLinkVpcResult, DetachClassicLinkVpcError>;
+                fn detach_classic_link_vpc(&self, input: &DetachClassicLinkVpcRequest) -> Box<Future<Item = DetachClassicLinkVpcResult, Error = DetachClassicLinkVpcError>>;
                 
 
                 #[doc="<p>Detaches an Internet gateway from a VPC, disabling connectivity between the Internet and the VPC. The VPC must not contain any running instances with Elastic IP addresses.</p>"]
-                fn detach_internet_gateway(&self, input: &DetachInternetGatewayRequest) -> Result<(), DetachInternetGatewayError>;
+                fn detach_internet_gateway(&self, input: &DetachInternetGatewayRequest) -> Box<Future<Item = (), Error = DetachInternetGatewayError>>;
                 
 
                 #[doc="<p>Detaches a network interface from an instance.</p>"]
-                fn detach_network_interface(&self, input: &DetachNetworkInterfaceRequest) -> Result<(), DetachNetworkInterfaceError>;
+                fn detach_network_interface(&self, input: &DetachNetworkInterfaceRequest) -> Box<Future<Item = (), Error = DetachNetworkInterfaceError>>;
                 
 
                 #[doc="<p>Detaches an EBS volume from an instance. Make sure to unmount any file systems on the device within your operating system before detaching the volume. Failure to do so can result in the volume becoming stuck in the <code>busy</code> state while detaching. If this happens, detachment can be delayed indefinitely until you unmount the volume, force detachment, reboot the instance, or all three. If an EBS volume is the root device of an instance, it can't be detached while the instance is running. To detach the root volume, stop the instance first.</p> <p>When a volume with an AWS Marketplace product code is detached from an instance, the product code is no longer associated with the instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-detaching-volume.html\">Detaching an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn detach_volume(&self, input: &DetachVolumeRequest) -> Result<VolumeAttachment, DetachVolumeError>;
+                fn detach_volume(&self, input: &DetachVolumeRequest) -> Box<Future<Item = VolumeAttachment, Error = DetachVolumeError>>;
                 
 
                 #[doc="<p>Detaches a virtual private gateway from a VPC. You do this if you're planning to turn off the VPC and not use it anymore. You can confirm a virtual private gateway has been completely detached from a VPC by describing the virtual private gateway (any attachments to the virtual private gateway are also described).</p> <p>You must wait for the attachment's state to switch to <code>detached</code> before you can delete the VPC or attach a different VPC to the virtual private gateway.</p>"]
-                fn detach_vpn_gateway(&self, input: &DetachVpnGatewayRequest) -> Result<(), DetachVpnGatewayError>;
+                fn detach_vpn_gateway(&self, input: &DetachVpnGatewayRequest) -> Box<Future<Item = (), Error = DetachVpnGatewayError>>;
                 
 
                 #[doc="<p>Disables a virtual private gateway (VGW) from propagating routes to a specified route table of a VPC.</p>"]
-                fn disable_vgw_route_propagation(&self, input: &DisableVgwRoutePropagationRequest) -> Result<(), DisableVgwRoutePropagationError>;
+                fn disable_vgw_route_propagation(&self, input: &DisableVgwRoutePropagationRequest) -> Box<Future<Item = (), Error = DisableVgwRoutePropagationError>>;
                 
 
                 #[doc="<p>Disables ClassicLink for a VPC. You cannot disable ClassicLink for a VPC that has EC2-Classic instances linked to it.</p>"]
-                fn disable_vpc_classic_link(&self, input: &DisableVpcClassicLinkRequest) -> Result<DisableVpcClassicLinkResult, DisableVpcClassicLinkError>;
+                fn disable_vpc_classic_link(&self, input: &DisableVpcClassicLinkRequest) -> Box<Future<Item = DisableVpcClassicLinkResult, Error = DisableVpcClassicLinkError>>;
                 
 
                 #[doc="<p>Disables ClassicLink DNS support for a VPC. If disabled, DNS hostnames resolve to public IP addresses when addressed between a linked EC2-Classic instance and instances in the VPC to which it's linked. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn disable_vpc_classic_link_dns_support(&self, input: &DisableVpcClassicLinkDnsSupportRequest) -> Result<DisableVpcClassicLinkDnsSupportResult, DisableVpcClassicLinkDnsSupportError>;
+                fn disable_vpc_classic_link_dns_support(&self, input: &DisableVpcClassicLinkDnsSupportRequest) -> Box<Future<Item = DisableVpcClassicLinkDnsSupportResult, Error = DisableVpcClassicLinkDnsSupportError>>;
                 
 
                 #[doc="<p>Disassociates an Elastic IP address from the instance or network interface it's associated with.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p>"]
-                fn disassociate_address(&self, input: &DisassociateAddressRequest) -> Result<(), DisassociateAddressError>;
+                fn disassociate_address(&self, input: &DisassociateAddressRequest) -> Box<Future<Item = (), Error = DisassociateAddressError>>;
                 
 
                 #[doc="<p>Disassociates a subnet from a route table.</p> <p>After you perform this action, the subnet no longer uses the routes in the route table. Instead, it uses the routes in the VPC's main route table. For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn disassociate_route_table(&self, input: &DisassociateRouteTableRequest) -> Result<(), DisassociateRouteTableError>;
+                fn disassociate_route_table(&self, input: &DisassociateRouteTableRequest) -> Box<Future<Item = (), Error = DisassociateRouteTableError>>;
                 
 
                 #[doc="<p>Disassociates a CIDR block from a subnet. Currently, you can disassociate an IPv6 CIDR block only. You must detach or delete all gateways and resources that are associated with the CIDR block before you can disassociate it. </p>"]
-                fn disassociate_subnet_cidr_block(&self, input: &DisassociateSubnetCidrBlockRequest) -> Result<DisassociateSubnetCidrBlockResult, DisassociateSubnetCidrBlockError>;
+                fn disassociate_subnet_cidr_block(&self, input: &DisassociateSubnetCidrBlockRequest) -> Box<Future<Item = DisassociateSubnetCidrBlockResult, Error = DisassociateSubnetCidrBlockError>>;
                 
 
                 #[doc="<p>Disassociates a CIDR block from a VPC. Currently, you can disassociate an IPv6 CIDR block only. You must detach or delete all gateways and resources that are associated with the CIDR block before you can disassociate it. </p>"]
-                fn disassociate_vpc_cidr_block(&self, input: &DisassociateVpcCidrBlockRequest) -> Result<DisassociateVpcCidrBlockResult, DisassociateVpcCidrBlockError>;
+                fn disassociate_vpc_cidr_block(&self, input: &DisassociateVpcCidrBlockRequest) -> Box<Future<Item = DisassociateVpcCidrBlockResult, Error = DisassociateVpcCidrBlockError>>;
                 
 
                 #[doc="<p>Enables a virtual private gateway (VGW) to propagate routes to the specified route table of a VPC.</p>"]
-                fn enable_vgw_route_propagation(&self, input: &EnableVgwRoutePropagationRequest) -> Result<(), EnableVgwRoutePropagationError>;
+                fn enable_vgw_route_propagation(&self, input: &EnableVgwRoutePropagationRequest) -> Box<Future<Item = (), Error = EnableVgwRoutePropagationError>>;
                 
 
                 #[doc="<p>Enables I/O operations for a volume that had I/O operations disabled because the data on the volume was potentially inconsistent.</p>"]
-                fn enable_volume_io(&self, input: &EnableVolumeIORequest) -> Result<(), EnableVolumeIOError>;
+                fn enable_volume_io(&self, input: &EnableVolumeIORequest) -> Box<Future<Item = (), Error = EnableVolumeIOError>>;
                 
 
                 #[doc="<p>Enables a VPC for ClassicLink. You can then link EC2-Classic instances to your ClassicLink-enabled VPC to allow communication over private IP addresses. You cannot enable your VPC for ClassicLink if any of your VPC's route tables have existing routes for address ranges within the <code>10.0.0.0/8</code> IP address range, excluding local routes for VPCs in the <code>10.0.0.0/16</code> and <code>10.1.0.0/16</code> IP address ranges. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn enable_vpc_classic_link(&self, input: &EnableVpcClassicLinkRequest) -> Result<EnableVpcClassicLinkResult, EnableVpcClassicLinkError>;
+                fn enable_vpc_classic_link(&self, input: &EnableVpcClassicLinkRequest) -> Box<Future<Item = EnableVpcClassicLinkResult, Error = EnableVpcClassicLinkError>>;
                 
 
                 #[doc="<p>Enables a VPC to support DNS hostname resolution for ClassicLink. If enabled, the DNS hostname of a linked EC2-Classic instance resolves to its private IP address when addressed from an instance in the VPC to which it's linked. Similarly, the DNS hostname of an instance in a VPC resolves to its private IP address when addressed from a linked EC2-Classic instance. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn enable_vpc_classic_link_dns_support(&self, input: &EnableVpcClassicLinkDnsSupportRequest) -> Result<EnableVpcClassicLinkDnsSupportResult, EnableVpcClassicLinkDnsSupportError>;
+                fn enable_vpc_classic_link_dns_support(&self, input: &EnableVpcClassicLinkDnsSupportRequest) -> Box<Future<Item = EnableVpcClassicLinkDnsSupportResult, Error = EnableVpcClassicLinkDnsSupportError>>;
                 
 
                 #[doc="<p>Gets the console output for the specified instance.</p> <p>Instances do not have a physical monitor through which you can view their console output. They also lack physical controls that allow you to power up, reboot, or shut them down. To allow these actions, we provide them through the Amazon EC2 API and command line interface.</p> <p>Instance console output is buffered and posted shortly after instance boot, reboot, and termination. Amazon EC2 preserves the most recent 64 KB output which is available for at least one hour after the most recent post.</p> <p>For Linux instances, the instance console output displays the exact console output that would normally be displayed on a physical monitor attached to a computer. This output is buffered because the instance produces it and then posts it to a store where the instance's owner can retrieve it.</p> <p>For Windows instances, the instance console output includes output from the EC2Config service.</p>"]
-                fn get_console_output(&self, input: &GetConsoleOutputRequest) -> Result<GetConsoleOutputResult, GetConsoleOutputError>;
+                fn get_console_output(&self, input: &GetConsoleOutputRequest) -> Box<Future<Item = GetConsoleOutputResult, Error = GetConsoleOutputError>>;
                 
 
                 #[doc="<p>Retrieve a JPG-format screenshot of a running instance to help with troubleshooting.</p> <p>The returned content is Base64-encoded.</p>"]
-                fn get_console_screenshot(&self, input: &GetConsoleScreenshotRequest) -> Result<GetConsoleScreenshotResult, GetConsoleScreenshotError>;
+                fn get_console_screenshot(&self, input: &GetConsoleScreenshotRequest) -> Box<Future<Item = GetConsoleScreenshotResult, Error = GetConsoleScreenshotError>>;
                 
 
                 #[doc="<p>Preview a reservation purchase with configurations that match those of your Dedicated Host. You must have active Dedicated Hosts in your account before you purchase a reservation.</p> <p>This is a preview of the <a>PurchaseHostReservation</a> action and does not result in the offering being purchased.</p>"]
-                fn get_host_reservation_purchase_preview(&self, input: &GetHostReservationPurchasePreviewRequest) -> Result<GetHostReservationPurchasePreviewResult, GetHostReservationPurchasePreviewError>;
+                fn get_host_reservation_purchase_preview(&self, input: &GetHostReservationPurchasePreviewRequest) -> Box<Future<Item = GetHostReservationPurchasePreviewResult, Error = GetHostReservationPurchasePreviewError>>;
                 
 
                 #[doc="<p>Retrieves the encrypted administrator password for an instance running Windows.</p> <p>The Windows password is generated at boot if the <code>EC2Config</code> service plugin, <code>Ec2SetPassword</code>, is enabled. This usually only happens the first time an AMI is launched, and then <code>Ec2SetPassword</code> is automatically disabled. The password is not generated for rebundled AMIs unless <code>Ec2SetPassword</code> is enabled before bundling.</p> <p>The password is encrypted using the key pair that you specified when you launched the instance. You must provide the corresponding key pair file.</p> <p>Password generation and encryption takes a few moments. We recommend that you wait up to 15 minutes after launching an instance before trying to retrieve the generated password.</p>"]
-                fn get_password_data(&self, input: &GetPasswordDataRequest) -> Result<GetPasswordDataResult, GetPasswordDataError>;
+                fn get_password_data(&self, input: &GetPasswordDataRequest) -> Box<Future<Item = GetPasswordDataResult, Error = GetPasswordDataError>>;
                 
 
                 #[doc="<p>Returns details about the values and term of your specified Convertible Reserved Instances. When a target configuration is specified, it returns information about whether the exchange is valid and can be performed.</p>"]
-                fn get_reserved_instances_exchange_quote(&self, input: &GetReservedInstancesExchangeQuoteRequest) -> Result<GetReservedInstancesExchangeQuoteResult, GetReservedInstancesExchangeQuoteError>;
+                fn get_reserved_instances_exchange_quote(&self, input: &GetReservedInstancesExchangeQuoteRequest) -> Box<Future<Item = GetReservedInstancesExchangeQuoteResult, Error = GetReservedInstancesExchangeQuoteError>>;
                 
 
                 #[doc="<p>Import single or multi-volume disk images or EBS snapshots into an Amazon Machine Image (AMI). For more information, see <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html\">Importing a VM as an Image Using VM Import/Export</a> in the <i>VM Import/Export User Guide</i>.</p>"]
-                fn import_image(&self, input: &ImportImageRequest) -> Result<ImportImageResult, ImportImageError>;
+                fn import_image(&self, input: &ImportImageRequest) -> Box<Future<Item = ImportImageResult, Error = ImportImageError>>;
                 
 
                 #[doc="<p>Creates an import instance task using metadata from the specified disk image. <code>ImportInstance</code> only supports single-volume VMs. To import multi-volume VMs, use <a>ImportImage</a>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ec2-cli-vmimport-export.html\">Importing a Virtual Machine Using the Amazon EC2 CLI</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
-                fn import_instance(&self, input: &ImportInstanceRequest) -> Result<ImportInstanceResult, ImportInstanceError>;
+                fn import_instance(&self, input: &ImportInstanceRequest) -> Box<Future<Item = ImportInstanceResult, Error = ImportInstanceError>>;
                 
 
                 #[doc="<p>Imports the public key from an RSA key pair that you created with a third-party tool. Compare this with <a>CreateKeyPair</a>, in which AWS creates the key pair and gives the keys to you (AWS keeps a copy of the public key). With ImportKeyPair, you create the key pair and give AWS just the public key. The private key is never transferred between you and AWS.</p> <p>For more information about key pairs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn import_key_pair(&self, input: &ImportKeyPairRequest) -> Result<ImportKeyPairResult, ImportKeyPairError>;
+                fn import_key_pair(&self, input: &ImportKeyPairRequest) -> Box<Future<Item = ImportKeyPairResult, Error = ImportKeyPairError>>;
                 
 
                 #[doc="<p>Imports a disk into an EBS snapshot.</p>"]
-                fn import_snapshot(&self, input: &ImportSnapshotRequest) -> Result<ImportSnapshotResult, ImportSnapshotError>;
+                fn import_snapshot(&self, input: &ImportSnapshotRequest) -> Box<Future<Item = ImportSnapshotResult, Error = ImportSnapshotError>>;
                 
 
                 #[doc="<p>Creates an import volume task using metadata from the specified disk image.For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/importing-your-volumes-into-amazon-ebs.html\">Importing Disks to Amazon EBS</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
-                fn import_volume(&self, input: &ImportVolumeRequest) -> Result<ImportVolumeResult, ImportVolumeError>;
+                fn import_volume(&self, input: &ImportVolumeRequest) -> Box<Future<Item = ImportVolumeResult, Error = ImportVolumeError>>;
                 
 
                 #[doc="<p>Modify the auto-placement setting of a Dedicated Host. When auto-placement is enabled, AWS will place instances that you launch with a tenancy of <code>host</code>, but without targeting a specific host ID, onto any available Dedicated Host in your account which has auto-placement enabled. When auto-placement is disabled, you need to provide a host ID if you want the instance to launch onto a specific host. If no host ID is provided, the instance will be launched onto a suitable host which has auto-placement enabled.</p>"]
-                fn modify_hosts(&self, input: &ModifyHostsRequest) -> Result<ModifyHostsResult, ModifyHostsError>;
+                fn modify_hosts(&self, input: &ModifyHostsRequest) -> Box<Future<Item = ModifyHostsResult, Error = ModifyHostsError>>;
                 
 
                 #[doc="<p>Modifies the ID format for the specified resource on a per-region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created. The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html\">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>"]
-                fn modify_id_format(&self, input: &ModifyIdFormatRequest) -> Result<(), ModifyIdFormatError>;
+                fn modify_id_format(&self, input: &ModifyIdFormatRequest) -> Box<Future<Item = (), Error = ModifyIdFormatError>>;
                 
 
                 #[doc="<p>Modifies the ID format of a resource for a specified IAM user, IAM role, or the root user for an account; or all IAM users, IAM roles, and the root user for an account. You can specify that resources should receive longer IDs (17-character IDs) when they are created. </p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html\">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>This setting applies to the principal specified in the request; it does not apply to the principal that makes the request. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>"]
-                fn modify_identity_id_format(&self, input: &ModifyIdentityIdFormatRequest) -> Result<(), ModifyIdentityIdFormatError>;
+                fn modify_identity_id_format(&self, input: &ModifyIdentityIdFormatRequest) -> Box<Future<Item = (), Error = ModifyIdentityIdFormatError>>;
                 
 
                 #[doc="<p>Modifies the specified attribute of the specified AMI. You can specify only one attribute at a time.</p> <note> <p>AWS Marketplace product codes cannot be modified. Images with an AWS Marketplace product code cannot be made public.</p> </note> <note> <p>The SriovNetSupport enhanced networking attribute cannot be changed using this command. Instead, enable SriovNetSupport on an instance and create an AMI from the instance. This will result in an image with SriovNetSupport enabled.</p> </note>"]
-                fn modify_image_attribute(&self, input: &ModifyImageAttributeRequest) -> Result<(), ModifyImageAttributeError>;
+                fn modify_image_attribute(&self, input: &ModifyImageAttributeRequest) -> Box<Future<Item = (), Error = ModifyImageAttributeError>>;
                 
 
                 #[doc="<p>Modifies the specified attribute of the specified instance. You can specify only one attribute at a time.</p> <p>To modify some attributes, the instance must be stopped. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_ChangingAttributesWhileInstanceStopped.html\">Modifying Attributes of a Stopped Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn modify_instance_attribute(&self, input: &ModifyInstanceAttributeRequest) -> Result<(), ModifyInstanceAttributeError>;
+                fn modify_instance_attribute(&self, input: &ModifyInstanceAttributeRequest) -> Box<Future<Item = (), Error = ModifyInstanceAttributeError>>;
                 
 
                 #[doc="<p>Set the instance affinity value for a specific stopped instance and modify the instance tenancy setting.</p> <p>Instance affinity is disabled by default. When instance affinity is <code>host</code> and it is not associated with a specific Dedicated Host, the next time it is launched it will automatically be associated with the host it lands on. This relationship will persist if the instance is stopped/started, or rebooted.</p> <p>You can modify the host ID associated with a stopped instance. If a stopped instance has a new host ID association, the instance will target that host when restarted.</p> <p>You can modify the tenancy of a stopped instance with a tenancy of <code>host</code> or <code>dedicated</code>.</p> <p>Affinity, hostID, and tenancy are not required parameters, but at least one of them must be specified in the request. Affinity and tenancy can be modified in the same request, but tenancy can only be modified on instances that are stopped.</p>"]
-                fn modify_instance_placement(&self, input: &ModifyInstancePlacementRequest) -> Result<ModifyInstancePlacementResult, ModifyInstancePlacementError>;
+                fn modify_instance_placement(&self, input: &ModifyInstancePlacementRequest) -> Box<Future<Item = ModifyInstancePlacementResult, Error = ModifyInstancePlacementError>>;
                 
 
                 #[doc="<p>Modifies the specified network interface attribute. You can specify only one attribute at a time.</p>"]
-                fn modify_network_interface_attribute(&self, input: &ModifyNetworkInterfaceAttributeRequest) -> Result<(), ModifyNetworkInterfaceAttributeError>;
+                fn modify_network_interface_attribute(&self, input: &ModifyNetworkInterfaceAttributeRequest) -> Box<Future<Item = (), Error = ModifyNetworkInterfaceAttributeError>>;
                 
 
                 #[doc="<p>Modifies the Availability Zone, instance count, instance type, or network platform (EC2-Classic or EC2-VPC) of your Standard Reserved Instances. The Reserved Instances to be modified must be identical, except for Availability Zone, network platform, and instance type.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html\">Modifying Reserved Instances</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn modify_reserved_instances(&self, input: &ModifyReservedInstancesRequest) -> Result<ModifyReservedInstancesResult, ModifyReservedInstancesError>;
+                fn modify_reserved_instances(&self, input: &ModifyReservedInstancesRequest) -> Box<Future<Item = ModifyReservedInstancesResult, Error = ModifyReservedInstancesError>>;
                 
 
                 #[doc="<p>Adds or removes permission settings for the specified snapshot. You may add or remove specified AWS account IDs from a snapshot's list of create volume permissions, but you cannot do both in a single API call. If you need to both add and remove account IDs for a snapshot, you must use multiple API calls.</p> <note> <p>Encrypted snapshots and snapshots with AWS Marketplace product codes cannot be made public. Snapshots encrypted with your default CMK cannot be shared with other accounts.</p> </note> <p>For more information on modifying snapshot permissions, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html\">Sharing Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn modify_snapshot_attribute(&self, input: &ModifySnapshotAttributeRequest) -> Result<(), ModifySnapshotAttributeError>;
+                fn modify_snapshot_attribute(&self, input: &ModifySnapshotAttributeRequest) -> Box<Future<Item = (), Error = ModifySnapshotAttributeError>>;
                 
 
                 #[doc="<p>Modifies the specified Spot fleet request.</p> <p>While the Spot fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot fleet, increase its target capacity. The Spot fleet launches the additional Spot instances according to the allocation strategy for the Spot fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot fleet, decrease its target capacity. First, the Spot fleet cancels any open bids that exceed the new target capacity. You can request that the Spot fleet terminate Spot instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot fleet keep the fleet at its current size, but not replace any Spot instances that are interrupted or that you terminate manually.</p>"]
-                fn modify_spot_fleet_request(&self, input: &ModifySpotFleetRequestRequest) -> Result<ModifySpotFleetRequestResponse, ModifySpotFleetRequestError>;
+                fn modify_spot_fleet_request(&self, input: &ModifySpotFleetRequestRequest) -> Box<Future<Item = ModifySpotFleetRequestResponse, Error = ModifySpotFleetRequestError>>;
                 
 
                 #[doc="<p>Modifies a subnet attribute. You can only modify one attribute at a time.</p>"]
-                fn modify_subnet_attribute(&self, input: &ModifySubnetAttributeRequest) -> Result<(), ModifySubnetAttributeError>;
+                fn modify_subnet_attribute(&self, input: &ModifySubnetAttributeRequest) -> Box<Future<Item = (), Error = ModifySubnetAttributeError>>;
                 
 
                 #[doc="<p>Modifies a volume attribute.</p> <p>By default, all I/O operations for the volume are suspended when the data on the volume is determined to be potentially inconsistent, to prevent undetectable, latent data corruption. The I/O access to the volume can be resumed by first enabling I/O access and then checking the data consistency on your volume.</p> <p>You can change the default behavior to resume I/O operations. We recommend that you change this only for boot volumes or for volumes that are stateless or disposable.</p>"]
-                fn modify_volume_attribute(&self, input: &ModifyVolumeAttributeRequest) -> Result<(), ModifyVolumeAttributeError>;
+                fn modify_volume_attribute(&self, input: &ModifyVolumeAttributeRequest) -> Box<Future<Item = (), Error = ModifyVolumeAttributeError>>;
                 
 
                 #[doc="<p>Modifies the specified attribute of the specified VPC.</p>"]
-                fn modify_vpc_attribute(&self, input: &ModifyVpcAttributeRequest) -> Result<(), ModifyVpcAttributeError>;
+                fn modify_vpc_attribute(&self, input: &ModifyVpcAttributeRequest) -> Box<Future<Item = (), Error = ModifyVpcAttributeError>>;
                 
 
                 #[doc="<p>Modifies attributes of a specified VPC endpoint. You can modify the policy associated with the endpoint, and you can add and remove route tables associated with the endpoint.</p>"]
-                fn modify_vpc_endpoint(&self, input: &ModifyVpcEndpointRequest) -> Result<ModifyVpcEndpointResult, ModifyVpcEndpointError>;
+                fn modify_vpc_endpoint(&self, input: &ModifyVpcEndpointRequest) -> Box<Future<Item = ModifyVpcEndpointResult, Error = ModifyVpcEndpointError>>;
                 
 
                 #[doc="<p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in different accounts, each owner must initiate a separate request to modify the peering connection options, depending on whether their VPC was the requester or accepter for the VPC peering connection. If the peered VPCs are in the same account, you can modify the requester and accepter options in the same request. To confirm which VPC is the accepter and requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>"]
-                fn modify_vpc_peering_connection_options(&self, input: &ModifyVpcPeeringConnectionOptionsRequest) -> Result<ModifyVpcPeeringConnectionOptionsResult, ModifyVpcPeeringConnectionOptionsError>;
+                fn modify_vpc_peering_connection_options(&self, input: &ModifyVpcPeeringConnectionOptionsRequest) -> Box<Future<Item = ModifyVpcPeeringConnectionOptionsResult, Error = ModifyVpcPeeringConnectionOptionsError>>;
                 
 
                 #[doc="<p>Enables detailed monitoring for a running instance. Otherwise, basic monitoring is enabled. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html\">Monitoring Your Instances and Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>To disable detailed monitoring, see .</p>"]
-                fn monitor_instances(&self, input: &MonitorInstancesRequest) -> Result<MonitorInstancesResult, MonitorInstancesError>;
+                fn monitor_instances(&self, input: &MonitorInstancesRequest) -> Box<Future<Item = MonitorInstancesResult, Error = MonitorInstancesError>>;
                 
 
                 #[doc="<p>Moves an Elastic IP address from the EC2-Classic platform to the EC2-VPC platform. The Elastic IP address must be allocated to your account for more than 24 hours, and it must not be associated with an instance. After the Elastic IP address is moved, it is no longer available for use in the EC2-Classic platform, unless you move it back using the <a>RestoreAddressToClassic</a> request. You cannot move an Elastic IP address that was originally allocated for use in the EC2-VPC platform to the EC2-Classic platform. </p>"]
-                fn move_address_to_vpc(&self, input: &MoveAddressToVpcRequest) -> Result<MoveAddressToVpcResult, MoveAddressToVpcError>;
+                fn move_address_to_vpc(&self, input: &MoveAddressToVpcRequest) -> Box<Future<Item = MoveAddressToVpcResult, Error = MoveAddressToVpcError>>;
                 
 
                 #[doc="<p>Purchase a reservation with configurations that match those of your Dedicated Host. You must have active Dedicated Hosts in your account before you purchase a reservation. This action results in the specified reservation being purchased and charged to your account.</p>"]
-                fn purchase_host_reservation(&self, input: &PurchaseHostReservationRequest) -> Result<PurchaseHostReservationResult, PurchaseHostReservationError>;
+                fn purchase_host_reservation(&self, input: &PurchaseHostReservationRequest) -> Box<Future<Item = PurchaseHostReservationResult, Error = PurchaseHostReservationError>>;
                 
 
                 #[doc="<p>Purchases a Reserved Instance for use with your account. With Reserved Instances, you pay a lower hourly rate compared to On-Demand instance pricing.</p> <p>Use <a>DescribeReservedInstancesOfferings</a> to get a list of Reserved Instance offerings that match your specifications. After you've purchased a Reserved Instance, you can check for your new Reserved Instance with <a>DescribeReservedInstances</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html\">Reserved Instances</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn purchase_reserved_instances_offering(&self, input: &PurchaseReservedInstancesOfferingRequest) -> Result<PurchaseReservedInstancesOfferingResult, PurchaseReservedInstancesOfferingError>;
+                fn purchase_reserved_instances_offering(&self, input: &PurchaseReservedInstancesOfferingRequest) -> Box<Future<Item = PurchaseReservedInstancesOfferingResult, Error = PurchaseReservedInstancesOfferingError>>;
                 
 
                 #[doc="<p>Purchases one or more Scheduled Instances with the specified schedule.</p> <p>Scheduled Instances enable you to purchase Amazon EC2 compute capacity by the hour for a one-year term. Before you can purchase a Scheduled Instance, you must call <a>DescribeScheduledInstanceAvailability</a> to check for available schedules and obtain a purchase token. After you purchase a Scheduled Instance, you must call <a>RunScheduledInstances</a> during each scheduled time period.</p> <p>After you purchase a Scheduled Instance, you can't cancel, modify, or resell your purchase.</p>"]
-                fn purchase_scheduled_instances(&self, input: &PurchaseScheduledInstancesRequest) -> Result<PurchaseScheduledInstancesResult, PurchaseScheduledInstancesError>;
+                fn purchase_scheduled_instances(&self, input: &PurchaseScheduledInstancesRequest) -> Box<Future<Item = PurchaseScheduledInstancesResult, Error = PurchaseScheduledInstancesError>>;
                 
 
                 #[doc="<p>Requests a reboot of one or more instances. This operation is asynchronous; it only queues a request to reboot the specified instances. The operation succeeds if the instances are valid and belong to you. Requests to reboot terminated instances are ignored.</p> <p>If an instance does not cleanly shut down within four minutes, Amazon EC2 performs a hard reboot.</p> <p>For more information about troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html\">Getting Console Output and Rebooting Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn reboot_instances(&self, input: &RebootInstancesRequest) -> Result<(), RebootInstancesError>;
+                fn reboot_instances(&self, input: &RebootInstancesRequest) -> Box<Future<Item = (), Error = RebootInstancesError>>;
                 
 
                 #[doc="<p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html\">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_LaunchingInstanceFromSnapshot.html\">Launching an Instance from a Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 <code>billingProduct</code> code associated with an AMI to verify subscription status for package updates. Creating an AMI from an EBS snapshot does not maintain this billing code, and subsequent instances launched from such an AMI will not be able to connect to package update infrastructure.</p> <p>Similarly, although you can create a Windows AMI from a snapshot, you can't successfully launch an instance from the AMI.</p> <p>To create Windows AMIs or to create AMIs for Linux operating systems that must retain AMI billing codes to work properly, see <a>CreateImage</a>.</p> </important> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p> <note> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> </note>"]
-                fn register_image(&self, input: &RegisterImageRequest) -> Result<RegisterImageResult, RegisterImageError>;
+                fn register_image(&self, input: &RegisterImageRequest) -> Box<Future<Item = RegisterImageResult, Error = RegisterImageError>>;
                 
 
                 #[doc="<p>Rejects a VPC peering connection request. The VPC peering connection must be in the <code>pending-acceptance</code> state. Use the <a>DescribeVpcPeeringConnections</a> request to view your outstanding VPC peering connection requests. To delete an active VPC peering connection, or to delete a VPC peering connection request that you initiated, use <a>DeleteVpcPeeringConnection</a>.</p>"]
-                fn reject_vpc_peering_connection(&self, input: &RejectVpcPeeringConnectionRequest) -> Result<RejectVpcPeeringConnectionResult, RejectVpcPeeringConnectionError>;
+                fn reject_vpc_peering_connection(&self, input: &RejectVpcPeeringConnectionRequest) -> Box<Future<Item = RejectVpcPeeringConnectionResult, Error = RejectVpcPeeringConnectionError>>;
                 
 
                 #[doc="<p>Releases the specified Elastic IP address.</p> <p>After releasing an Elastic IP address, it is released to the IP address pool and might be unavailable to you. Be sure to update your DNS records and any servers or devices that communicate with the address. If you attempt to release an Elastic IP address that you already released, you'll get an <code>AuthFailure</code> error if the address is already allocated to another AWS account.</p> <p>[EC2-Classic, default VPC] Releasing an Elastic IP address automatically disassociates it from any instance that it's associated with. To disassociate an Elastic IP address without releasing it, use <a>DisassociateAddress</a>.</p> <p>[Nondefault VPC] You must use <a>DisassociateAddress</a> to disassociate the Elastic IP address before you try to release it. Otherwise, Amazon EC2 returns an error (<code>InvalidIPAddress.InUse</code>).</p>"]
-                fn release_address(&self, input: &ReleaseAddressRequest) -> Result<(), ReleaseAddressError>;
+                fn release_address(&self, input: &ReleaseAddressRequest) -> Box<Future<Item = (), Error = ReleaseAddressError>>;
                 
 
                 #[doc="<p>When you no longer want to use an On-Demand Dedicated Host it can be released. On-Demand billing is stopped and the host goes into <code>released</code> state. The host ID of Dedicated Hosts that have been released can no longer be specified in another request, e.g., ModifyHosts. You must stop or terminate all instances on a host before it can be released.</p> <p>When Dedicated Hosts are released, it make take some time for them to stop counting toward your limit and you may receive capacity errors when trying to allocate new Dedicated hosts. Try waiting a few minutes, and then try again.</p> <p>Released hosts will still appear in a <a>DescribeHosts</a> response.</p>"]
-                fn release_hosts(&self, input: &ReleaseHostsRequest) -> Result<ReleaseHostsResult, ReleaseHostsError>;
+                fn release_hosts(&self, input: &ReleaseHostsRequest) -> Box<Future<Item = ReleaseHostsResult, Error = ReleaseHostsError>>;
                 
 
                 #[doc="<p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn replace_network_acl_association(&self, input: &ReplaceNetworkAclAssociationRequest) -> Result<ReplaceNetworkAclAssociationResult, ReplaceNetworkAclAssociationError>;
+                fn replace_network_acl_association(&self, input: &ReplaceNetworkAclAssociationRequest) -> Box<Future<Item = ReplaceNetworkAclAssociationResult, Error = ReplaceNetworkAclAssociationError>>;
                 
 
                 #[doc="<p>Replaces an entry (rule) in a network ACL. For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn replace_network_acl_entry(&self, input: &ReplaceNetworkAclEntryRequest) -> Result<(), ReplaceNetworkAclEntryError>;
+                fn replace_network_acl_entry(&self, input: &ReplaceNetworkAclEntryRequest) -> Box<Future<Item = (), Error = ReplaceNetworkAclEntryError>>;
                 
 
                 #[doc="<p>Replaces an existing route within a route table in a VPC. You must provide only one of the following: Internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only Internet gateway.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn replace_route(&self, input: &ReplaceRouteRequest) -> Result<(), ReplaceRouteError>;
+                fn replace_route(&self, input: &ReplaceRouteRequest) -> Box<Future<Item = (), Error = ReplaceRouteError>>;
                 
 
                 #[doc="<p>Changes the route table associated with a given subnet in a VPC. After the operation completes, the subnet uses the routes in the new route table it's associated with. For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can also use ReplaceRouteTableAssociation to change which table is the main route table in the VPC. You just specify the main route table's association ID and the route table to be the new main route table.</p>"]
-                fn replace_route_table_association(&self, input: &ReplaceRouteTableAssociationRequest) -> Result<ReplaceRouteTableAssociationResult, ReplaceRouteTableAssociationError>;
+                fn replace_route_table_association(&self, input: &ReplaceRouteTableAssociationRequest) -> Box<Future<Item = ReplaceRouteTableAssociationResult, Error = ReplaceRouteTableAssociationError>>;
                 
 
                 #[doc="<p>Submits feedback about the status of an instance. The instance must be in the <code>running</code> state. If your experience with the instance differs from the instance status returned by <a>DescribeInstanceStatus</a>, use <a>ReportInstanceStatus</a> to report your experience with the instance. Amazon EC2 collects this information to improve the accuracy of status checks.</p> <p>Use of this action does not change the value returned by <a>DescribeInstanceStatus</a>.</p>"]
-                fn report_instance_status(&self, input: &ReportInstanceStatusRequest) -> Result<(), ReportInstanceStatusError>;
+                fn report_instance_status(&self, input: &ReportInstanceStatusRequest) -> Box<Future<Item = (), Error = ReportInstanceStatusError>>;
                 
 
                 #[doc="<p>Creates a Spot fleet request.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot fleet requests Spot instances in the Spot pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot instances in your Spot fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html\">Spot Fleet Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn request_spot_fleet(&self, input: &RequestSpotFleetRequest) -> Result<RequestSpotFleetResponse, RequestSpotFleetError>;
+                fn request_spot_fleet(&self, input: &RequestSpotFleetRequest) -> Box<Future<Item = RequestSpotFleetResponse, Error = RequestSpotFleetError>>;
                 
 
                 #[doc="<p>Creates a Spot instance request. Spot instances are instances that Amazon EC2 launches when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot Instance capacity and current Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html\">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn request_spot_instances(&self, input: &RequestSpotInstancesRequest) -> Result<RequestSpotInstancesResult, RequestSpotInstancesError>;
+                fn request_spot_instances(&self, input: &RequestSpotInstancesRequest) -> Box<Future<Item = RequestSpotInstancesResult, Error = RequestSpotInstancesError>>;
                 
 
                 #[doc="<p>Resets an attribute of an AMI to its default value.</p> <note> <p>The productCodes attribute can't be reset.</p> </note>"]
-                fn reset_image_attribute(&self, input: &ResetImageAttributeRequest) -> Result<(), ResetImageAttributeError>;
+                fn reset_image_attribute(&self, input: &ResetImageAttributeRequest) -> Box<Future<Item = (), Error = ResetImageAttributeError>>;
                 
 
                 #[doc="<p>Resets an attribute of an instance to its default value. To reset the <code>kernel</code> or <code>ramdisk</code>, the instance must be in a stopped state. To reset the <code>sourceDestCheck</code>, the instance can be either running or stopped.</p> <p>The <code>sourceDestCheck</code> attribute controls whether source/destination checking is enabled. The default value is <code>true</code>, which means checking is enabled. This value must be <code>false</code> for a NAT instance to perform NAT. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html\">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn reset_instance_attribute(&self, input: &ResetInstanceAttributeRequest) -> Result<(), ResetInstanceAttributeError>;
+                fn reset_instance_attribute(&self, input: &ResetInstanceAttributeRequest) -> Box<Future<Item = (), Error = ResetInstanceAttributeError>>;
                 
 
                 #[doc="<p>Resets a network interface attribute. You can specify only one attribute at a time.</p>"]
-                fn reset_network_interface_attribute(&self, input: &ResetNetworkInterfaceAttributeRequest) -> Result<(), ResetNetworkInterfaceAttributeError>;
+                fn reset_network_interface_attribute(&self, input: &ResetNetworkInterfaceAttributeRequest) -> Box<Future<Item = (), Error = ResetNetworkInterfaceAttributeError>>;
                 
 
                 #[doc="<p>Resets permission settings for the specified snapshot.</p> <p>For more information on modifying snapshot permissions, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html\">Sharing Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn reset_snapshot_attribute(&self, input: &ResetSnapshotAttributeRequest) -> Result<(), ResetSnapshotAttributeError>;
+                fn reset_snapshot_attribute(&self, input: &ResetSnapshotAttributeRequest) -> Box<Future<Item = (), Error = ResetSnapshotAttributeError>>;
                 
 
                 #[doc="<p>Restores an Elastic IP address that was previously moved to the EC2-VPC platform back to the EC2-Classic platform. You cannot move an Elastic IP address that was originally allocated for use in EC2-VPC. The Elastic IP address must not be associated with an instance or network interface.</p>"]
-                fn restore_address_to_classic(&self, input: &RestoreAddressToClassicRequest) -> Result<RestoreAddressToClassicResult, RestoreAddressToClassicError>;
+                fn restore_address_to_classic(&self, input: &RestoreAddressToClassicRequest) -> Box<Future<Item = RestoreAddressToClassicResult, Error = RestoreAddressToClassicError>>;
                 
 
                 #[doc="<p>[EC2-VPC only] Removes one or more egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be revoked.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>"]
-                fn revoke_security_group_egress(&self, input: &RevokeSecurityGroupEgressRequest) -> Result<(), RevokeSecurityGroupEgressError>;
+                fn revoke_security_group_egress(&self, input: &RevokeSecurityGroupEgressRequest) -> Box<Future<Item = (), Error = RevokeSecurityGroupEgressError>>;
                 
 
                 #[doc="<p>Removes one or more ingress rules from a security group. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be removed.</p> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>"]
-                fn revoke_security_group_ingress(&self, input: &RevokeSecurityGroupIngressRequest) -> Result<(), RevokeSecurityGroupIngressError>;
+                fn revoke_security_group_ingress(&self, input: &RevokeSecurityGroupIngressRequest) -> Box<Future<Item = (), Error = RevokeSecurityGroupIngressError>>;
                 
 
                 #[doc="<p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types\">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create 5 separate launch requests for 100 instances each instead of 1 launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. After launch, you can apply tags to your running instance (requires a resource ID). For more information, see <a>CreateTags</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html\">What To Do If An Instance Immediately Terminates</a>, and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html\">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn run_instances(&self, input: &RunInstancesRequest) -> Result<Reservation, RunInstancesError>;
+                fn run_instances(&self, input: &RunInstancesRequest) -> Box<Future<Item = Reservation, Error = RunInstancesError>>;
                 
 
                 #[doc="<p>Launches the specified Scheduled Instances.</p> <p>Before you can launch a Scheduled Instance, you must purchase it and obtain an identifier using <a>PurchaseScheduledInstances</a>.</p> <p>You must launch a Scheduled Instance during its scheduled time period. You can't stop or reboot a Scheduled Instance, but you can terminate it as needed. If you terminate a Scheduled Instance before the current scheduled time period ends, you can launch it again after a few minutes. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-scheduled-instances.html\">Scheduled Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn run_scheduled_instances(&self, input: &RunScheduledInstancesRequest) -> Result<RunScheduledInstancesResult, RunScheduledInstancesError>;
+                fn run_scheduled_instances(&self, input: &RunScheduledInstancesRequest) -> Box<Future<Item = RunScheduledInstancesResult, Error = RunScheduledInstancesError>>;
                 
 
                 #[doc="<p>Starts an Amazon EBS-backed AMI that you've previously stopped.</p> <p>Instances that use Amazon EBS volumes as their root devices can be quickly stopped and started. When an instance is stopped, the compute resources are released and you are not billed for hourly instance usage. However, your root partition Amazon EBS volume remains, continues to persist your data, and you are charged for Amazon EBS volume usage. You can restart your instance at any time. Each time you transition an instance from stopped to started, Amazon EC2 charges a full instance hour, even if transitions happen multiple times within a single hour.</p> <p>Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Performing this operation on an instance that uses an instance store as its root device returns an error.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html\">Stopping Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn start_instances(&self, input: &StartInstancesRequest) -> Result<StartInstancesResult, StartInstancesError>;
+                fn start_instances(&self, input: &StartInstancesRequest) -> Box<Future<Item = StartInstancesResult, Error = StartInstancesError>>;
                 
 
                 #[doc="<p>Stops an Amazon EBS-backed instance.</p> <p>We don't charge hourly usage for a stopped instance, or data transfer fees; however, your root partition Amazon EBS volume remains, continues to persist your data, and you are charged for Amazon EBS volume usage. Each time you transition an instance from stopped to started, Amazon EC2 charges a full instance hour, even if transitions happen multiple times within a single hour.</p> <p>You can't start or stop Spot instances, and you can't stop instance store-backed instances.</p> <p>When you stop an instance, we shut it down. You can restart your instance at any time. Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Stopping an instance is different to rebooting or terminating it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, the root device and any other devices attached during the instance launch are automatically deleted. For more information about the differences between rebooting, stopping, and terminating instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>When you stop an instance, we attempt to shut it down forcibly after a short while. If your instance appears stuck in the stopping state after a period of time, there may be an issue with the underlying host computer. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesStopping.html\">Troubleshooting Stopping Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn stop_instances(&self, input: &StopInstancesRequest) -> Result<StopInstancesResult, StopInstancesError>;
+                fn stop_instances(&self, input: &StopInstancesRequest) -> Box<Future<Item = StopInstancesResult, Error = StopInstancesError>>;
                 
 
                 #[doc="<p>Shuts down one or more instances. This operation is idempotent; if you terminate an instance more than once, each call succeeds. </p> <p>If you specify multiple instances and the request fails (for example, because of a single incorrect instance ID), none of the instances are terminated.</p> <p>Terminated instances remain visible after termination (for approximately one hour).</p> <p>By default, Amazon EC2 deletes all EBS volumes that were attached when the instance launched. Volumes attached after instance launch continue running.</p> <p>You can stop, start, and terminate EBS-backed instances. You can only terminate instance store-backed instances. What happens to an instance differs if you stop it or terminate it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, any attached EBS volumes with the <code>DeleteOnTermination</code> block device mapping parameter set to <code>true</code> are automatically deleted. For more information about the differences between stopping and terminating instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information about troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesShuttingDown.html\">Troubleshooting Terminating Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn terminate_instances(&self, input: &TerminateInstancesRequest) -> Result<TerminateInstancesResult, TerminateInstancesError>;
+                fn terminate_instances(&self, input: &TerminateInstancesRequest) -> Box<Future<Item = TerminateInstancesResult, Error = TerminateInstancesError>>;
                 
 
                 #[doc="<p>Unassigns one or more IPv6 addresses from a network interface.</p>"]
-                fn unassign_ipv_6_addresses(&self, input: &UnassignIpv6AddressesRequest) -> Result<UnassignIpv6AddressesResult, UnassignIpv6AddressesError>;
+                fn unassign_ipv_6_addresses(&self, input: &UnassignIpv6AddressesRequest) -> Box<Future<Item = UnassignIpv6AddressesResult, Error = UnassignIpv6AddressesError>>;
                 
 
                 #[doc="<p>Unassigns one or more secondary private IP addresses from a network interface.</p>"]
-                fn unassign_private_ip_addresses(&self, input: &UnassignPrivateIpAddressesRequest) -> Result<(), UnassignPrivateIpAddressesError>;
+                fn unassign_private_ip_addresses(&self, input: &UnassignPrivateIpAddressesRequest) -> Box<Future<Item = (), Error = UnassignPrivateIpAddressesError>>;
                 
 
                 #[doc="<p>Disables detailed monitoring for a running instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html\">Monitoring Your Instances and Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn unmonitor_instances(&self, input: &UnmonitorInstancesRequest) -> Result<UnmonitorInstancesResult, UnmonitorInstancesError>;
+                fn unmonitor_instances(&self, input: &UnmonitorInstancesRequest) -> Box<Future<Item = UnmonitorInstancesResult, Error = UnmonitorInstancesError>>;
                 
 }
 /// A client for the Amazon EC2 API.
@@ -50422,7 +50432,7 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Accepts the Convertible Reserved Instance exchange quote described in the <a>GetReservedInstancesExchangeQuote</a> call.</p>"]
-                fn accept_reserved_instances_exchange_quote(&self, input: &AcceptReservedInstancesExchangeQuoteRequest) -> Result<AcceptReservedInstancesExchangeQuoteResult, AcceptReservedInstancesExchangeQuoteError> {
+                fn accept_reserved_instances_exchange_quote(&self, input: &AcceptReservedInstancesExchangeQuoteRequest) -> Box<Future<Item = AcceptReservedInstancesExchangeQuoteResult, Error = AcceptReservedInstancesExchangeQuoteError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50431,11 +50441,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AcceptReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AcceptReservedInstancesExchangeQuoteError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AcceptReservedInstancesExchangeQuoteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50447,20 +50465,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AcceptReservedInstancesExchangeQuoteResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AcceptReservedInstancesExchangeQuoteResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AcceptReservedInstancesExchangeQuoteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AcceptReservedInstancesExchangeQuoteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use the <code>DescribeVpcPeeringConnections</code> request to view your outstanding VPC peering connection requests.</p>"]
-                fn accept_vpc_peering_connection(&self, input: &AcceptVpcPeeringConnectionRequest) -> Result<AcceptVpcPeeringConnectionResult, AcceptVpcPeeringConnectionError> {
+                fn accept_vpc_peering_connection(&self, input: &AcceptVpcPeeringConnectionRequest) -> Box<Future<Item = AcceptVpcPeeringConnectionResult, Error = AcceptVpcPeeringConnectionError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50469,11 +50488,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AcceptVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AcceptVpcPeeringConnectionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AcceptVpcPeeringConnectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50485,20 +50512,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AcceptVpcPeeringConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AcceptVpcPeeringConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AcceptVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AcceptVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Acquires an Elastic IP address.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn allocate_address(&self, input: &AllocateAddressRequest) -> Result<AllocateAddressResult, AllocateAddressError> {
+                fn allocate_address(&self, input: &AllocateAddressRequest) -> Box<Future<Item = AllocateAddressResult, Error = AllocateAddressError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50507,11 +50535,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AllocateAddressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AllocateAddressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AllocateAddressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50523,20 +50559,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AllocateAddressResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AllocateAddressResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AllocateAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AllocateAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Allocates a Dedicated Host to your account. At minimum you need to specify the instance size type, Availability Zone, and quantity of hosts you want to allocate.</p>"]
-                fn allocate_hosts(&self, input: &AllocateHostsRequest) -> Result<AllocateHostsResult, AllocateHostsError> {
+                fn allocate_hosts(&self, input: &AllocateHostsRequest) -> Box<Future<Item = AllocateHostsResult, Error = AllocateHostsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50545,11 +50582,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AllocateHostsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AllocateHostsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AllocateHostsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50561,20 +50606,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AllocateHostsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AllocateHostsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AllocateHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AllocateHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Assigns one or more IPv6 addresses to the specified network interface. You can specify one or more specific IPv6 addresses, or you can specify the number of IPv6 addresses to be automatically assigned from within the subnet's IPv6 CIDR block range. You can assign as many IPv6 addresses to a network interface as you can assign private IPv4 addresses, and the limit varies per instance type. For information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI\">IP Addresses Per Network Interface Per Instance Type</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn assign_ipv_6_addresses(&self, input: &AssignIpv6AddressesRequest) -> Result<AssignIpv6AddressesResult, AssignIpv6AddressesError> {
+                fn assign_ipv_6_addresses(&self, input: &AssignIpv6AddressesRequest) -> Box<Future<Item = AssignIpv6AddressesResult, Error = AssignIpv6AddressesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50583,11 +50629,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AssignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AssignIpv6AddressesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AssignIpv6AddressesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50599,20 +50653,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AssignIpv6AddressesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AssignIpv6AddressesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AssignIpv6AddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AssignIpv6AddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Assigns one or more secondary private IP addresses to the specified network interface. You can specify one or more specific secondary IP addresses, or you can specify the number of secondary IP addresses to be automatically assigned within the subnet's CIDR block range. The number of secondary IP addresses that you can assign to an instance varies by instance type. For information about instance types, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about Elastic IP addresses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>AssignPrivateIpAddresses is available only in EC2-VPC.</p>"]
-                fn assign_private_ip_addresses(&self, input: &AssignPrivateIpAddressesRequest) -> Result<(), AssignPrivateIpAddressesError> {
+                fn assign_private_ip_addresses(&self, input: &AssignPrivateIpAddressesRequest) -> Box<Future<Item = (), Error = AssignPrivateIpAddressesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50621,22 +50676,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AssignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AssignPrivateIpAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AssignPrivateIpAddressesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AssignPrivateIpAddressesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AssignPrivateIpAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Associates an Elastic IP address with an instance or a network interface.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP address is already associated with a different instance, it is disassociated from that instance and associated with the specified instance.</p> <p>[VPC in an EC2-Classic account] If you don't specify a private IP address, the Elastic IP address is associated with the primary IP address. If the Elastic IP address is already associated with a different instance or a network interface, you get an error unless you allow reassociation.</p> <important> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error, and you may be charged for each time the Elastic IP address is remapped to the same instance. For more information, see the <i>Elastic IP Addresses</i> section of <a href=\"http://aws.amazon.com/ec2/pricing/\">Amazon EC2 Pricing</a>.</p> </important>"]
-                fn associate_address(&self, input: &AssociateAddressRequest) -> Result<AssociateAddressResult, AssociateAddressError> {
+                fn associate_address(&self, input: &AssociateAddressRequest) -> Box<Future<Item = AssociateAddressResult, Error = AssociateAddressError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50645,11 +50709,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AssociateAddressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AssociateAddressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AssociateAddressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50661,20 +50733,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AssociateAddressResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AssociateAddressResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AssociateAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AssociateAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Associates a set of DHCP options (that you've previously created) with the specified VPC, or associates no DHCP options with the VPC.</p> <p>After you associate the options with the VPC, any existing instances and all new instances that you launch in that VPC use the options. You don't need to restart or relaunch the instances. They automatically pick up the changes within a few hours, depending on how frequently the instance renews its DHCP lease. You can explicitly renew the lease using the operating system on the instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn associate_dhcp_options(&self, input: &AssociateDhcpOptionsRequest) -> Result<(), AssociateDhcpOptionsError> {
+                fn associate_dhcp_options(&self, input: &AssociateDhcpOptionsRequest) -> Box<Future<Item = (), Error = AssociateDhcpOptionsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50683,22 +50756,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AssociateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AssociateDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AssociateDhcpOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AssociateDhcpOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AssociateDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Associates a subnet with a route table. The subnet and route table must be in the same VPC. This association causes traffic originating from the subnet to be routed according to the routes in the route table. The action returns an association ID, which you need in order to disassociate the route table from the subnet later. A route table can be associated with multiple subnets.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn associate_route_table(&self, input: &AssociateRouteTableRequest) -> Result<AssociateRouteTableResult, AssociateRouteTableError> {
+                fn associate_route_table(&self, input: &AssociateRouteTableRequest) -> Box<Future<Item = AssociateRouteTableResult, Error = AssociateRouteTableError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50707,11 +50789,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AssociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AssociateRouteTableError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AssociateRouteTableError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50723,20 +50813,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AssociateRouteTableResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AssociateRouteTableResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AssociateRouteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AssociateRouteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Associates a CIDR block with your subnet. You can only associate a single IPv6 CIDR block with your subnet. An IPv6 CIDR block must have a prefix length of /64.</p>"]
-                fn associate_subnet_cidr_block(&self, input: &AssociateSubnetCidrBlockRequest) -> Result<AssociateSubnetCidrBlockResult, AssociateSubnetCidrBlockError> {
+                fn associate_subnet_cidr_block(&self, input: &AssociateSubnetCidrBlockRequest) -> Box<Future<Item = AssociateSubnetCidrBlockResult, Error = AssociateSubnetCidrBlockError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50745,11 +50836,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AssociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AssociateSubnetCidrBlockError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AssociateSubnetCidrBlockError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50761,20 +50860,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AssociateSubnetCidrBlockResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AssociateSubnetCidrBlockResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AssociateSubnetCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AssociateSubnetCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Associates a CIDR block with your VPC. You can only associate a single Amazon-provided IPv6 CIDR block with your VPC. The IPv6 CIDR block size is fixed at /56.</p>"]
-                fn associate_vpc_cidr_block(&self, input: &AssociateVpcCidrBlockRequest) -> Result<AssociateVpcCidrBlockResult, AssociateVpcCidrBlockError> {
+                fn associate_vpc_cidr_block(&self, input: &AssociateVpcCidrBlockRequest) -> Box<Future<Item = AssociateVpcCidrBlockResult, Error = AssociateVpcCidrBlockError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50783,11 +50883,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AssociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AssociateVpcCidrBlockError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AssociateVpcCidrBlockError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50799,20 +50907,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AssociateVpcCidrBlockResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AssociateVpcCidrBlockResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AssociateVpcCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AssociateVpcCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Links an EC2-Classic instance to a ClassicLink-enabled VPC through one or more of the VPC's security groups. You cannot link an EC2-Classic instance to more than one VPC at a time. You can only link an instance that's in the <code>running</code> state. An instance is automatically unlinked from a VPC when it's stopped - you can link it to the VPC again when you restart it.</p> <p>After you've linked an instance, you cannot change the VPC security groups that are associated with it. To change the security groups, you must first unlink the instance, and then link it again.</p> <p>Linking your instance to a VPC is sometimes referred to as <i>attaching</i> your instance.</p>"]
-                fn attach_classic_link_vpc(&self, input: &AttachClassicLinkVpcRequest) -> Result<AttachClassicLinkVpcResult, AttachClassicLinkVpcError> {
+                fn attach_classic_link_vpc(&self, input: &AttachClassicLinkVpcRequest) -> Box<Future<Item = AttachClassicLinkVpcResult, Error = AttachClassicLinkVpcError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50821,11 +50930,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AttachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachClassicLinkVpcError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachClassicLinkVpcError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50837,20 +50954,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AttachClassicLinkVpcResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AttachClassicLinkVpcResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachClassicLinkVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachClassicLinkVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches an Internet gateway to a VPC, enabling connectivity between the Internet and the VPC. For more information about your VPC and Internet gateway, see the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/\">Amazon Virtual Private Cloud User Guide</a>.</p>"]
-                fn attach_internet_gateway(&self, input: &AttachInternetGatewayRequest) -> Result<(), AttachInternetGatewayError> {
+                fn attach_internet_gateway(&self, input: &AttachInternetGatewayRequest) -> Box<Future<Item = (), Error = AttachInternetGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50859,22 +50977,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AttachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachInternetGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachInternetGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches a network interface to an instance.</p>"]
-                fn attach_network_interface(&self, input: &AttachNetworkInterfaceRequest) -> Result<AttachNetworkInterfaceResult, AttachNetworkInterfaceError> {
+                fn attach_network_interface(&self, input: &AttachNetworkInterfaceRequest) -> Box<Future<Item = AttachNetworkInterfaceResult, Error = AttachNetworkInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50883,11 +51010,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AttachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachNetworkInterfaceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachNetworkInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50899,20 +51034,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AttachNetworkInterfaceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AttachNetworkInterfaceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches an EBS volume to a running or stopped instance and exposes it to the instance with the specified device name.</p> <p>Encrypted EBS volumes may only be attached to instances that support Amazon EBS encryption. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For a list of supported device names, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html\">Attaching an EBS Volume to an Instance</a>. Any device names that aren't reserved for instance store volumes can be used for EBS volumes. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html\">Amazon EC2 Instance Store</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If a volume has an AWS Marketplace product code:</p> <ul> <li> <p>The volume can be attached only to a stopped instance.</p> </li> <li> <p>AWS Marketplace product codes are copied from the volume to the instance.</p> </li> <li> <p>You must be subscribed to the product.</p> </li> <li> <p>The instance type and operating system of the instance must support the product. For example, you can't detach a volume from a Windows instance and attach it to a Linux instance.</p> </li> </ul> <p>For an overview of the AWS Marketplace, see <a href=\"https://aws.amazon.com/marketplace/help/200900000\">Introducing AWS Marketplace</a>.</p> <p>For more information about EBS volumes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html\">Attaching Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn attach_volume(&self, input: &AttachVolumeRequest) -> Result<VolumeAttachment, AttachVolumeError> {
+                fn attach_volume(&self, input: &AttachVolumeRequest) -> Box<Future<Item = VolumeAttachment, Error = AttachVolumeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50921,11 +51057,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AttachVolumeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachVolumeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachVolumeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50937,20 +51081,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(VolumeAttachmentDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(VolumeAttachmentDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches a virtual private gateway to a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn attach_vpn_gateway(&self, input: &AttachVpnGatewayRequest) -> Result<AttachVpnGatewayResult, AttachVpnGatewayError> {
+                fn attach_vpn_gateway(&self, input: &AttachVpnGatewayRequest) -> Box<Future<Item = AttachVpnGatewayResult, Error = AttachVpnGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50959,11 +51104,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AttachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachVpnGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachVpnGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -50975,20 +51128,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AttachVpnGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AttachVpnGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachVpnGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachVpnGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>[EC2-VPC only] Adds one or more egress rules to a security group for use with a VPC. Specifically, this action permits instances to send traffic to one or more destination IPv4 or IPv6 CIDR address ranges, or to one or more destination security groups for the same VPC. This action doesn't apply to security groups for use in EC2-Classic. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html\">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. For more information about security group limits, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html\">Amazon VPC Limits</a>.</p> <p>Each rule consists of the protocol (for example, TCP), plus either a CIDR range or a source group. For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p>"]
-                fn authorize_security_group_egress(&self, input: &AuthorizeSecurityGroupEgressRequest) -> Result<(), AuthorizeSecurityGroupEgressError> {
+                fn authorize_security_group_egress(&self, input: &AuthorizeSecurityGroupEgressRequest) -> Box<Future<Item = (), Error = AuthorizeSecurityGroupEgressError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -50997,22 +51151,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AuthorizeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AuthorizeSecurityGroupEgressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AuthorizeSecurityGroupEgressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AuthorizeSecurityGroupEgressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AuthorizeSecurityGroupEgressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds one or more ingress rules to a security group.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>[EC2-Classic] This action gives one or more IPv4 CIDR address ranges permission to access a security group in your account, or gives one or more security groups (called the <i>source groups</i>) permission to access a security group for your account. A source group can be for your own AWS account, or another. You can have up to 100 rules per group.</p> <p>[EC2-VPC] This action gives one or more IPv4 or IPv6 CIDR address ranges permission to access a security group in your VPC, or gives one or more other security groups (called the <i>source groups</i>) permission to access a security group for your VPC. The security groups must all be for the same VPC or a peer VPC in a VPC peering connection. For more information about VPC security group limits, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html\">Amazon VPC Limits</a>.</p>"]
-                fn authorize_security_group_ingress(&self, input: &AuthorizeSecurityGroupIngressRequest) -> Result<(), AuthorizeSecurityGroupIngressError> {
+                fn authorize_security_group_ingress(&self, input: &AuthorizeSecurityGroupIngressRequest) -> Box<Future<Item = (), Error = AuthorizeSecurityGroupIngressError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51021,22 +51184,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     AuthorizeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AuthorizeSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AuthorizeSecurityGroupIngressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AuthorizeSecurityGroupIngressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AuthorizeSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Bundles an Amazon instance store-backed Windows instance.</p> <p>During bundling, only the root device volume (C:\\) is bundled. Data on other instance store volumes is not preserved.</p> <note> <p>This action is not applicable for Linux/Unix instances or Windows instances that are backed by Amazon EBS.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/Creating_InstanceStoreBacked_WinAMI.html\">Creating an Instance Store-Backed Windows AMI</a>.</p>"]
-                fn bundle_instance(&self, input: &BundleInstanceRequest) -> Result<BundleInstanceResult, BundleInstanceError> {
+                fn bundle_instance(&self, input: &BundleInstanceRequest) -> Box<Future<Item = BundleInstanceResult, Error = BundleInstanceError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51045,11 +51217,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     BundleInstanceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BundleInstanceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BundleInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51061,20 +51241,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(BundleInstanceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(BundleInstanceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(BundleInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(BundleInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels a bundling operation for an instance store-backed Windows instance.</p>"]
-                fn cancel_bundle_task(&self, input: &CancelBundleTaskRequest) -> Result<CancelBundleTaskResult, CancelBundleTaskError> {
+                fn cancel_bundle_task(&self, input: &CancelBundleTaskRequest) -> Box<Future<Item = CancelBundleTaskResult, Error = CancelBundleTaskError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51083,11 +51264,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CancelBundleTaskRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelBundleTaskError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelBundleTaskError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51099,20 +51288,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CancelBundleTaskResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CancelBundleTaskResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CancelBundleTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CancelBundleTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels an active conversion task. The task can be the import of an instance or volume. The action removes all artifacts of the conversion, including a partially uploaded volume or instance. If the conversion is complete or is in the process of transferring the final disk image, the command fails and returns an exception.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ec2-cli-vmimport-export.html\">Importing a Virtual Machine Using the Amazon EC2 CLI</a>.</p>"]
-                fn cancel_conversion_task(&self, input: &CancelConversionRequest) -> Result<(), CancelConversionTaskError> {
+                fn cancel_conversion_task(&self, input: &CancelConversionRequest) -> Box<Future<Item = (), Error = CancelConversionTaskError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51121,22 +51311,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CancelConversionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CancelConversionTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelConversionTaskError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelConversionTaskError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CancelConversionTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels an active export task. The request removes all artifacts of the export, including any partially-created Amazon S3 objects. If the export task is complete or is in the process of transferring the final disk image, the command fails and returns an error.</p>"]
-                fn cancel_export_task(&self, input: &CancelExportTaskRequest) -> Result<(), CancelExportTaskError> {
+                fn cancel_export_task(&self, input: &CancelExportTaskRequest) -> Box<Future<Item = (), Error = CancelExportTaskError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51145,22 +51344,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CancelExportTaskRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelExportTaskError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelExportTaskError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CancelExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels an in-process import virtual machine or import snapshot task.</p>"]
-                fn cancel_import_task(&self, input: &CancelImportTaskRequest) -> Result<CancelImportTaskResult, CancelImportTaskError> {
+                fn cancel_import_task(&self, input: &CancelImportTaskRequest) -> Box<Future<Item = CancelImportTaskResult, Error = CancelImportTaskError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51169,11 +51377,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CancelImportTaskRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelImportTaskError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelImportTaskError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51185,20 +51401,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CancelImportTaskResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CancelImportTaskResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CancelImportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CancelImportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels the specified Reserved Instance listing in the Reserved Instance Marketplace.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn cancel_reserved_instances_listing(&self, input: &CancelReservedInstancesListingRequest) -> Result<CancelReservedInstancesListingResult, CancelReservedInstancesListingError> {
+                fn cancel_reserved_instances_listing(&self, input: &CancelReservedInstancesListingRequest) -> Box<Future<Item = CancelReservedInstancesListingResult, Error = CancelReservedInstancesListingError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51207,11 +51424,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CancelReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelReservedInstancesListingError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelReservedInstancesListingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51223,20 +51448,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CancelReservedInstancesListingResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CancelReservedInstancesListingResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CancelReservedInstancesListingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CancelReservedInstancesListingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels the specified Spot fleet requests.</p> <p>After you cancel a Spot fleet request, the Spot fleet launches no new Spot instances. You must specify whether the Spot fleet should also terminate its Spot instances. If you terminate the instances, the Spot fleet request enters the <code>cancelled_terminating</code> state. Otherwise, the Spot fleet request enters the <code>cancelled_running</code> state and the instances continue to run until they are interrupted or you terminate them manually.</p>"]
-                fn cancel_spot_fleet_requests(&self, input: &CancelSpotFleetRequestsRequest) -> Result<CancelSpotFleetRequestsResponse, EC2CancelSpotFleetRequestsError> {
+                fn cancel_spot_fleet_requests(&self, input: &CancelSpotFleetRequestsRequest) -> Box<Future<Item = CancelSpotFleetRequestsResponse, Error = EC2CancelSpotFleetRequestsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51245,11 +51471,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CancelSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EC2CancelSpotFleetRequestsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EC2CancelSpotFleetRequestsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51261,20 +51495,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CancelSpotFleetRequestsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CancelSpotFleetRequestsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EC2CancelSpotFleetRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(EC2CancelSpotFleetRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels one or more Spot instance requests. Spot instances are instances that Amazon EC2 starts on your behalf when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot instance capacity and current Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html\">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Canceling a Spot instance request does not terminate running Spot instances associated with the request.</p> </important>"]
-                fn cancel_spot_instance_requests(&self, input: &CancelSpotInstanceRequestsRequest) -> Result<CancelSpotInstanceRequestsResult, CancelSpotInstanceRequestsError> {
+                fn cancel_spot_instance_requests(&self, input: &CancelSpotInstanceRequestsRequest) -> Box<Future<Item = CancelSpotInstanceRequestsResult, Error = CancelSpotInstanceRequestsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51283,11 +51518,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CancelSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelSpotInstanceRequestsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelSpotInstanceRequestsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51299,20 +51542,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CancelSpotInstanceRequestsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CancelSpotInstanceRequestsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CancelSpotInstanceRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CancelSpotInstanceRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Determines whether a product code is associated with an instance. This action can only be used by the owner of the product code. It is useful when a product code owner needs to verify whether another user's instance is eligible for support.</p>"]
-                fn confirm_product_instance(&self, input: &ConfirmProductInstanceRequest) -> Result<ConfirmProductInstanceResult, ConfirmProductInstanceError> {
+                fn confirm_product_instance(&self, input: &ConfirmProductInstanceRequest) -> Box<Future<Item = ConfirmProductInstanceResult, Error = ConfirmProductInstanceError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51321,11 +51565,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ConfirmProductInstanceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ConfirmProductInstanceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ConfirmProductInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51337,20 +51589,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ConfirmProductInstanceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ConfirmProductInstanceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ConfirmProductInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ConfirmProductInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html\">Copying AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn copy_image(&self, input: &CopyImageRequest) -> Result<CopyImageResult, CopyImageError> {
+                fn copy_image(&self, input: &CopyImageRequest) -> Box<Future<Item = CopyImageResult, Error = CopyImageError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51359,11 +51612,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CopyImageRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopyImageError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopyImageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51375,20 +51636,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CopyImageResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CopyImageResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CopyImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CopyImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same region or from one region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs). The snapshot is copied to the regional endpoint that you send the HTTP request to.</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless the <code>Encrypted</code> flag is specified during the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a non-default CMK with the <code>KmsKeyId</code> parameter. </p> <note> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> </note> <note> <p>Snapshots created by the CopySnapshot action have an arbitrary volume ID that should not be used for any purpose.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html\">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn copy_snapshot(&self, input: &CopySnapshotRequest) -> Result<CopySnapshotResult, CopySnapshotError> {
+                fn copy_snapshot(&self, input: &CopySnapshotRequest) -> Box<Future<Item = CopySnapshotResult, Error = CopySnapshotError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51397,11 +51659,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CopySnapshotRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopySnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopySnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51413,20 +51683,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CopySnapshotResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CopySnapshotResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CopySnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CopySnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway's external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device's BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don't have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> region, and 9059, which is reserved in the <code>eu-west-1</code> region.</p> </note> <p>For more information about VPN customer gateways, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important>"]
-                fn create_customer_gateway(&self, input: &CreateCustomerGatewayRequest) -> Result<CreateCustomerGatewayResult, CreateCustomerGatewayError> {
+                fn create_customer_gateway(&self, input: &CreateCustomerGatewayRequest) -> Box<Future<Item = CreateCustomerGatewayResult, Error = CreateCustomerGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51435,11 +51706,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateCustomerGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateCustomerGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51451,20 +51730,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateCustomerGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateCustomerGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateCustomerGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateCustomerGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. If you want your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in \"us-east-1\", specify \"ec2.internal\". If you're using AmazonProvidedDNS in another region, specify \"region.compute.internal\" (for example, \"ap-northeast-1.compute.internal\"). Otherwise, specify a domain name (for example, \"MyCompany.com\"). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an Internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_dhcp_options(&self, input: &CreateDhcpOptionsRequest) -> Result<CreateDhcpOptionsResult, CreateDhcpOptionsError> {
+                fn create_dhcp_options(&self, input: &CreateDhcpOptionsRequest) -> Box<Future<Item = CreateDhcpOptionsResult, Error = CreateDhcpOptionsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51473,11 +51753,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDhcpOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDhcpOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51489,20 +51777,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateDhcpOptionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateDhcpOptionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>[IPv6 only] Creates an egress-only Internet gateway for your VPC. An egress-only Internet gateway is used to enable outbound communication over IPv6 from instances in your VPC to the Internet, and prevents hosts outside of your VPC from initiating an IPv6 connection with your instance.</p>"]
-                fn create_egress_only_internet_gateway(&self, input: &CreateEgressOnlyInternetGatewayRequest) -> Result<CreateEgressOnlyInternetGatewayResult, CreateEgressOnlyInternetGatewayError> {
+                fn create_egress_only_internet_gateway(&self, input: &CreateEgressOnlyInternetGatewayRequest) -> Box<Future<Item = CreateEgressOnlyInternetGatewayResult, Error = CreateEgressOnlyInternetGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51511,11 +51800,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateEgressOnlyInternetGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateEgressOnlyInternetGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51527,20 +51824,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateEgressOnlyInternetGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateEgressOnlyInternetGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateEgressOnlyInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateEgressOnlyInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates one or more flow logs to capture IP traffic for a specific network interface, subnet, or VPC. Flow logs are delivered to a specified log group in Amazon CloudWatch Logs. If you specify a VPC or subnet in the request, a log stream is created in CloudWatch Logs for each network interface in the subnet or VPC. Log streams can include information about accepted and rejected traffic to a network interface. You can view the data in your log streams using Amazon CloudWatch Logs.</p> <p>In your request, you must also specify an IAM role that has permission to publish logs to CloudWatch Logs.</p>"]
-                fn create_flow_logs(&self, input: &CreateFlowLogsRequest) -> Result<CreateFlowLogsResult, CreateFlowLogsError> {
+                fn create_flow_logs(&self, input: &CreateFlowLogsRequest) -> Box<Future<Item = CreateFlowLogsResult, Error = CreateFlowLogsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51549,11 +51847,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateFlowLogsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateFlowLogsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateFlowLogsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51565,20 +51871,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateFlowLogsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateFlowLogsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateFlowLogsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateFlowLogsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an Amazon EBS-backed AMI from an Amazon EBS-backed instance that is either running or stopped.</p> <p>If you customized your instance with instance store volumes or EBS volumes in addition to the root device volume, the new AMI contains block device mapping information for those volumes. When you launch an instance from this new AMI, the instance automatically launches with those additional volumes.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami-ebs.html\">Creating Amazon EBS-Backed Linux AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_image(&self, input: &CreateImageRequest) -> Result<CreateImageResult, CreateImageError> {
+                fn create_image(&self, input: &CreateImageRequest) -> Box<Future<Item = CreateImageResult, Error = CreateImageError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51587,11 +51894,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateImageRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateImageError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateImageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51603,20 +51918,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateImageResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateImageResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Exports a running or stopped instance to an S3 bucket.</p> <p>For information about the supported operating systems, image formats, and known limitations for the types of instances you can export, see <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/vmexport.html\">Exporting an Instance as a VM Using VM Import/Export</a> in the <i>VM Import/Export User Guide</i>.</p>"]
-                fn create_instance_export_task(&self, input: &CreateInstanceExportTaskRequest) -> Result<CreateInstanceExportTaskResult, CreateInstanceExportTaskError> {
+                fn create_instance_export_task(&self, input: &CreateInstanceExportTaskRequest) -> Box<Future<Item = CreateInstanceExportTaskResult, Error = CreateInstanceExportTaskError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51625,11 +51941,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateInstanceExportTaskRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateInstanceExportTaskError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateInstanceExportTaskError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51641,20 +51965,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateInstanceExportTaskResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateInstanceExportTaskResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateInstanceExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateInstanceExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an Internet gateway for use with a VPC. After creating the Internet gateway, you attach it to a VPC using <a>AttachInternetGateway</a>.</p> <p>For more information about your VPC and Internet gateway, see the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/\">Amazon Virtual Private Cloud User Guide</a>.</p>"]
-                fn create_internet_gateway(&self, input: &CreateInternetGatewayRequest) -> Result<CreateInternetGatewayResult, CreateInternetGatewayError> {
+                fn create_internet_gateway(&self, input: &CreateInternetGatewayRequest) -> Box<Future<Item = CreateInternetGatewayResult, Error = CreateInternetGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51663,11 +51988,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateInternetGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateInternetGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51679,20 +52012,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateInternetGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateInternetGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#8 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per region.</p> <p>The key pair returned to you is available only in the region in which you create it. To create a key pair that is available in all regions, use <a>ImportKeyPair</a>.</p> <p>For more information about key pairs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_key_pair(&self, input: &CreateKeyPairRequest) -> Result<KeyPair, CreateKeyPairError> {
+                fn create_key_pair(&self, input: &CreateKeyPairRequest) -> Box<Future<Item = KeyPair, Error = CreateKeyPairError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51701,11 +52035,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateKeyPairRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateKeyPairError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateKeyPairError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51717,20 +52059,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(KeyPairDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(KeyPairDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a NAT gateway in the specified subnet. A NAT gateway can be used to enable instances in a private subnet to connect to the Internet. This action creates a network interface in the specified subnet with a private IP address from the IP address range of the subnet. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">NAT Gateways</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_nat_gateway(&self, input: &CreateNatGatewayRequest) -> Result<CreateNatGatewayResult, CreateNatGatewayError> {
+                fn create_nat_gateway(&self, input: &CreateNatGatewayRequest) -> Box<Future<Item = CreateNatGatewayResult, Error = CreateNatGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51739,11 +52082,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateNatGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateNatGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateNatGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51755,20 +52106,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateNatGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateNatGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateNatGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateNatGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a network ACL in a VPC. Network ACLs provide an optional layer of security (in addition to security groups) for the instances in your VPC.</p> <p>For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_network_acl(&self, input: &CreateNetworkAclRequest) -> Result<CreateNetworkAclResult, CreateNetworkAclError> {
+                fn create_network_acl(&self, input: &CreateNetworkAclRequest) -> Box<Future<Item = CreateNetworkAclResult, Error = CreateNetworkAclError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51777,11 +52129,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateNetworkAclRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateNetworkAclError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateNetworkAclError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51793,20 +52153,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateNetworkAclResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateNetworkAclResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateNetworkAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateNetworkAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an entry (a rule) in a network ACL with the specified rule number. Each network ACL has a set of numbered ingress rules and a separate set of numbered egress rules. When determining whether a packet should be allowed in or out of a subnet associated with the ACL, we process the entries in the ACL according to the rule numbers, in ascending order. Each network ACL has a set of ingress rules and a separate set of egress rules.</p> <p>We recommend that you leave room between the rule numbers (for example, 100, 110, 120, ...), and not number them one right after the other (for example, 101, 102, 103, ...). This makes it easier to add a rule between existing ones without having to renumber the rules.</p> <p>After you add an entry, you can't modify it; you must either replace it, or create an entry and delete the old one.</p> <p>For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_network_acl_entry(&self, input: &CreateNetworkAclEntryRequest) -> Result<(), CreateNetworkAclEntryError> {
+                fn create_network_acl_entry(&self, input: &CreateNetworkAclEntryRequest) -> Box<Future<Item = (), Error = CreateNetworkAclEntryError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51815,22 +52176,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateNetworkAclEntryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateNetworkAclEntryError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateNetworkAclEntryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateNetworkAclEntryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a network interface in the specified subnet.</p> <p>For more information about network interfaces, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html\">Elastic Network Interfaces</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_network_interface(&self, input: &CreateNetworkInterfaceRequest) -> Result<CreateNetworkInterfaceResult, CreateNetworkInterfaceError> {
+                fn create_network_interface(&self, input: &CreateNetworkInterfaceRequest) -> Box<Future<Item = CreateNetworkInterfaceResult, Error = CreateNetworkInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51839,11 +52209,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateNetworkInterfaceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateNetworkInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51855,20 +52233,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateNetworkInterfaceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateNetworkInterfaceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a placement group that you launch cluster instances into. You must give the group a name that's unique within the scope of your account.</p> <p>For more information about placement groups and cluster instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html\">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_placement_group(&self, input: &CreatePlacementGroupRequest) -> Result<(), CreatePlacementGroupError> {
+                fn create_placement_group(&self, input: &CreatePlacementGroupRequest) -> Box<Future<Item = (), Error = CreatePlacementGroupError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51877,22 +52256,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreatePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreatePlacementGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePlacementGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePlacementGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreatePlacementGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_reserved_instances_listing(&self, input: &CreateReservedInstancesListingRequest) -> Result<CreateReservedInstancesListingResult, CreateReservedInstancesListingError> {
+                fn create_reserved_instances_listing(&self, input: &CreateReservedInstancesListingRequest) -> Box<Future<Item = CreateReservedInstancesListingResult, Error = CreateReservedInstancesListingError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51901,11 +52289,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateReservedInstancesListingError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateReservedInstancesListingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51917,20 +52313,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateReservedInstancesListingResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateReservedInstancesListingResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateReservedInstancesListingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateReservedInstancesListingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a route in a route table within a VPC.</p> <p>You must specify one of the following targets: Internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only Internet gateway.</p> <p>When determining how to route traffic, we use the route with the most specific match. For example, traffic is destined for the IPv4 address <code>192.0.2.3</code>, and the route table includes the following two IPv4 routes:</p> <ul> <li> <p> <code>192.0.2.0/24</code> (goes to some target A)</p> </li> <li> <p> <code>192.0.2.0/28</code> (goes to some target B)</p> </li> </ul> <p>Both routes apply to the traffic destined for <code>192.0.2.3</code>. However, the second route in the list covers a smaller number of IP addresses and is therefore more specific, so we use that route to determine where to target the traffic.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_route(&self, input: &CreateRouteRequest) -> Result<CreateRouteResult, CreateRouteError> {
+                fn create_route(&self, input: &CreateRouteRequest) -> Box<Future<Item = CreateRouteResult, Error = CreateRouteError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51939,11 +52336,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateRouteRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateRouteError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateRouteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51955,20 +52360,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateRouteResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateRouteResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a route table for the specified VPC. After you create a route table, you can add routes and associate the table with a subnet.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_route_table(&self, input: &CreateRouteTableRequest) -> Result<CreateRouteTableResult, CreateRouteTableError> {
+                fn create_route_table(&self, input: &CreateRouteTableRequest) -> Box<Future<Item = CreateRouteTableResult, Error = CreateRouteTableError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -51977,11 +52383,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateRouteTableRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateRouteTableError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateRouteTableError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -51993,20 +52407,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateRouteTableResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateRouteTableResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateRouteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateRouteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a security group.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html\">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>EC2-Classic: You can have up to 500 security groups.</p> <p>EC2-VPC: You can create up to 500 security groups per VPC.</p> </important> <p>When you create a security group, you specify a friendly name of your choice. You can have a security group for use in EC2-Classic with the same name as a security group for use in a VPC. However, you can't have two security groups for use in EC2-Classic with the same name or two security groups for use in a VPC with the same name.</p> <p>You have a default security group for use in EC2-Classic and a default security group for use in your VPC. If you don't specify a security group when you launch an instance, the instance is launched into the appropriate default security group. A default security group includes a default rule that grants instances unrestricted network access to each other.</p> <p>You can add or remove rules from your security groups using <a>AuthorizeSecurityGroupIngress</a>, <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupIngress</a>, and <a>RevokeSecurityGroupEgress</a>.</p>"]
-                fn create_security_group(&self, input: &CreateSecurityGroupRequest) -> Result<CreateSecurityGroupResult, CreateSecurityGroupError> {
+                fn create_security_group(&self, input: &CreateSecurityGroupRequest) -> Box<Future<Item = CreateSecurityGroupResult, Error = CreateSecurityGroupError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52015,11 +52430,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSecurityGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSecurityGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52031,20 +52454,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateSecurityGroupResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateSecurityGroupResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a snapshot of an EBS volume and stores it in Amazon S3. You can use snapshots for backups, to make copies of EBS volumes, and to save data before shutting down an instance.</p> <p>When a snapshot is created, any AWS Marketplace product codes that are associated with the source volume are propagated to the snapshot.</p> <p>You can take a snapshot of an attached volume that is in use. However, snapshots only capture data that has been written to your EBS volume at the time the snapshot command is issued; this may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the volume long enough to take a snapshot, your snapshot should be complete. However, if you cannot pause all file writes to the volume, you should unmount the volume from within the instance, issue the snapshot command, and then remount the volume to ensure a consistent and complete snapshot. You may remount and use your volume while the snapshot status is <code>pending</code>.</p> <p>To create a snapshot for EBS volumes that serve as root devices, you should stop the instance before taking the snapshot.</p> <p>Snapshots that are taken from encrypted volumes are automatically encrypted. Volumes that are created from encrypted snapshots are also automatically encrypted. Your encrypted volumes and any associated snapshots always remain protected.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html\">Amazon Elastic Block Store</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_snapshot(&self, input: &CreateSnapshotRequest) -> Result<Snapshot, CreateSnapshotError> {
+                fn create_snapshot(&self, input: &CreateSnapshotRequest) -> Box<Future<Item = Snapshot, Error = CreateSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52053,11 +52477,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateSnapshotRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52069,20 +52501,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(SnapshotDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(SnapshotDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a data feed for Spot instances, enabling you to view Spot instance usage logs. You can create one data feed per AWS account. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html\">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_spot_datafeed_subscription(&self, input: &CreateSpotDatafeedSubscriptionRequest) -> Result<CreateSpotDatafeedSubscriptionResult, CreateSpotDatafeedSubscriptionError> {
+                fn create_spot_datafeed_subscription(&self, input: &CreateSpotDatafeedSubscriptionRequest) -> Box<Future<Item = CreateSpotDatafeedSubscriptionResult, Error = CreateSpotDatafeedSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52091,11 +52524,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSpotDatafeedSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSpotDatafeedSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52107,20 +52548,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateSpotDatafeedSubscriptionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateSpotDatafeedSubscriptionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The subnet's IPv4 CIDR block can be the same as the VPC's IPv4 CIDR block (assuming you want only a single subnet in the VPC), or a subset of the VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IP address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_subnet(&self, input: &CreateSubnetRequest) -> Result<CreateSubnetResult, CreateSubnetError> {
+                fn create_subnet(&self, input: &CreateSubnetRequest) -> Box<Future<Item = CreateSubnetResult, Error = CreateSubnetError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52129,11 +52571,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateSubnetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSubnetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSubnetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52145,20 +52595,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateSubnetResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateSubnetResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateSubnetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateSubnetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds or overwrites one or more tags for the specified Amazon EC2 resource or resources. Each resource can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique per resource.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about creating IAM policies that control users' access to resources based on tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-iam-actions-resources.html\">Supported Resource-Level Permissions for Amazon EC2 API Actions</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_tags(&self, input: &CreateTagsRequest) -> Result<(), CreateTagsError> {
+                fn create_tags(&self, input: &CreateTagsRequest) -> Box<Future<Item = (), Error = CreateTagsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52167,22 +52618,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateTagsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes with the <code>Encrypted</code> parameter. Encrypted volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html\">Creating or Restoring an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn create_volume(&self, input: &CreateVolumeRequest) -> Result<Volume, CreateVolumeError> {
+                fn create_volume(&self, input: &CreateVolumeRequest) -> Box<Future<Item = Volume, Error = CreateVolumeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52191,11 +52651,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateVolumeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateVolumeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateVolumeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52207,20 +52675,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(VolumeDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(VolumeDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). To help you decide how big to make your VPC, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which includes only a default DNS server that we provide (AmazonProvidedDNS). For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/dedicated-instance.html.html\">Dedicated Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_vpc(&self, input: &CreateVpcRequest) -> Result<CreateVpcResult, CreateVpcError> {
+                fn create_vpc(&self, input: &CreateVpcRequest) -> Box<Future<Item = CreateVpcResult, Error = CreateVpcError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52229,11 +52698,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateVpcRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateVpcError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateVpcError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52245,20 +52722,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateVpcResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateVpcResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a VPC endpoint for a specified AWS service. An endpoint enables you to create a private connection between your VPC and another AWS service in your account. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>Currently, only endpoints to Amazon S3 are supported.</p>"]
-                fn create_vpc_endpoint(&self, input: &CreateVpcEndpointRequest) -> Result<CreateVpcEndpointResult, CreateVpcEndpointError> {
+                fn create_vpc_endpoint(&self, input: &CreateVpcEndpointRequest) -> Box<Future<Item = CreateVpcEndpointResult, Error = CreateVpcEndpointError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52267,11 +52745,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateVpcEndpointError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateVpcEndpointError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52283,20 +52769,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateVpcEndpointResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateVpcEndpointResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateVpcEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateVpcEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and a peer VPC with which to create the connection. The peer VPC can belong to another AWS account. The requester VPC and peer VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the peer VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>A <code>CreateVpcPeeringConnection</code> request between VPCs with overlapping CIDR blocks results in the VPC peering connection having a status of <code>failed</code>.</p>"]
-                fn create_vpc_peering_connection(&self, input: &CreateVpcPeeringConnectionRequest) -> Result<CreateVpcPeeringConnectionResult, CreateVpcPeeringConnectionError> {
+                fn create_vpc_peering_connection(&self, input: &CreateVpcPeeringConnectionRequest) -> Box<Future<Item = CreateVpcPeeringConnectionResult, Error = CreateVpcPeeringConnectionError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52305,11 +52792,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateVpcPeeringConnectionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateVpcPeeringConnectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52321,20 +52816,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateVpcPeeringConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateVpcPeeringConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The only supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information about VPN connections, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_vpn_connection(&self, input: &CreateVpnConnectionRequest) -> Result<CreateVpnConnectionResult, CreateVpnConnectionError> {
+                fn create_vpn_connection(&self, input: &CreateVpnConnectionRequest) -> Box<Future<Item = CreateVpnConnectionResult, Error = CreateVpnConnectionError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52343,11 +52839,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateVpnConnectionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateVpnConnectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52359,20 +52863,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateVpnConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateVpnConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateVpnConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateVpnConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a static route associated with a VPN connection between an existing virtual private gateway and a VPN customer gateway. The static route allows traffic to be routed from the virtual private gateway to the VPN customer gateway.</p> <p>For more information about VPN connections, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_vpn_connection_route(&self, input: &CreateVpnConnectionRouteRequest) -> Result<(), CreateVpnConnectionRouteError> {
+                fn create_vpn_connection_route(&self, input: &CreateVpnConnectionRouteRequest) -> Box<Future<Item = (), Error = CreateVpnConnectionRouteError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52381,22 +52886,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateVpnConnectionRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateVpnConnectionRouteError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateVpnConnectionRouteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateVpnConnectionRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a virtual private gateway. A virtual private gateway is the endpoint on the VPC side of your VPN connection. You can create a virtual private gateway before creating the VPC itself.</p> <p>For more information about virtual private gateways, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn create_vpn_gateway(&self, input: &CreateVpnGatewayRequest) -> Result<CreateVpnGatewayResult, CreateVpnGatewayError> {
+                fn create_vpn_gateway(&self, input: &CreateVpnGatewayRequest) -> Box<Future<Item = CreateVpnGatewayResult, Error = CreateVpnGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52405,11 +52919,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     CreateVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateVpnGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateVpnGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52421,20 +52943,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateVpnGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateVpnGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateVpnGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateVpnGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified customer gateway. You must delete the VPN connection before you can delete the customer gateway.</p>"]
-                fn delete_customer_gateway(&self, input: &DeleteCustomerGatewayRequest) -> Result<(), DeleteCustomerGatewayError> {
+                fn delete_customer_gateway(&self, input: &DeleteCustomerGatewayRequest) -> Box<Future<Item = (), Error = DeleteCustomerGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52443,22 +52966,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteCustomerGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteCustomerGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteCustomerGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteCustomerGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified set of DHCP options. You must disassociate the set of DHCP options before you can delete it. You can disassociate the set of DHCP options by associating either a new set of options or the default set of options with the VPC.</p>"]
-                fn delete_dhcp_options(&self, input: &DeleteDhcpOptionsRequest) -> Result<(), DeleteDhcpOptionsError> {
+                fn delete_dhcp_options(&self, input: &DeleteDhcpOptionsRequest) -> Box<Future<Item = (), Error = DeleteDhcpOptionsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52467,22 +52999,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDhcpOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDhcpOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an egress-only Internet gateway.</p>"]
-                fn delete_egress_only_internet_gateway(&self, input: &DeleteEgressOnlyInternetGatewayRequest) -> Result<DeleteEgressOnlyInternetGatewayResult, DeleteEgressOnlyInternetGatewayError> {
+                fn delete_egress_only_internet_gateway(&self, input: &DeleteEgressOnlyInternetGatewayRequest) -> Box<Future<Item = DeleteEgressOnlyInternetGatewayResult, Error = DeleteEgressOnlyInternetGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52491,11 +53032,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteEgressOnlyInternetGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteEgressOnlyInternetGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52507,20 +53056,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteEgressOnlyInternetGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteEgressOnlyInternetGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteEgressOnlyInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteEgressOnlyInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes one or more flow logs.</p>"]
-                fn delete_flow_logs(&self, input: &DeleteFlowLogsRequest) -> Result<DeleteFlowLogsResult, DeleteFlowLogsError> {
+                fn delete_flow_logs(&self, input: &DeleteFlowLogsRequest) -> Box<Future<Item = DeleteFlowLogsResult, Error = DeleteFlowLogsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52529,11 +53079,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteFlowLogsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteFlowLogsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteFlowLogsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52545,20 +53103,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteFlowLogsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteFlowLogsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteFlowLogsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteFlowLogsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified Internet gateway. You must detach the Internet gateway from the VPC before you can delete it.</p>"]
-                fn delete_internet_gateway(&self, input: &DeleteInternetGatewayRequest) -> Result<(), DeleteInternetGatewayError> {
+                fn delete_internet_gateway(&self, input: &DeleteInternetGatewayRequest) -> Box<Future<Item = (), Error = DeleteInternetGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52567,22 +53126,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteInternetGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteInternetGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified key pair, by removing the public key from Amazon EC2.</p>"]
-                fn delete_key_pair(&self, input: &DeleteKeyPairRequest) -> Result<(), DeleteKeyPairError> {
+                fn delete_key_pair(&self, input: &DeleteKeyPairRequest) -> Box<Future<Item = (), Error = DeleteKeyPairError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52591,22 +53159,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteKeyPairRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteKeyPairError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteKeyPairError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified NAT gateway. Deleting a NAT gateway disassociates its Elastic IP address, but does not release the address from your account. Deleting a NAT gateway does not delete any NAT gateway routes in your route tables.</p>"]
-                fn delete_nat_gateway(&self, input: &DeleteNatGatewayRequest) -> Result<DeleteNatGatewayResult, DeleteNatGatewayError> {
+                fn delete_nat_gateway(&self, input: &DeleteNatGatewayRequest) -> Box<Future<Item = DeleteNatGatewayResult, Error = DeleteNatGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52615,11 +53192,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteNatGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteNatGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteNatGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52631,20 +53216,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteNatGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteNatGatewayResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteNatGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteNatGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified network ACL. You can't delete the ACL if it's associated with any subnets. You can't delete the default network ACL.</p>"]
-                fn delete_network_acl(&self, input: &DeleteNetworkAclRequest) -> Result<(), DeleteNetworkAclError> {
+                fn delete_network_acl(&self, input: &DeleteNetworkAclRequest) -> Box<Future<Item = (), Error = DeleteNetworkAclError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52653,22 +53239,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteNetworkAclRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteNetworkAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteNetworkAclError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteNetworkAclError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteNetworkAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified ingress or egress entry (rule) from the specified network ACL.</p>"]
-                fn delete_network_acl_entry(&self, input: &DeleteNetworkAclEntryRequest) -> Result<(), DeleteNetworkAclEntryError> {
+                fn delete_network_acl_entry(&self, input: &DeleteNetworkAclEntryRequest) -> Box<Future<Item = (), Error = DeleteNetworkAclEntryError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52677,22 +53272,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteNetworkAclEntryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteNetworkAclEntryError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteNetworkAclEntryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteNetworkAclEntryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified network interface. You must detach the network interface before you can delete it.</p>"]
-                fn delete_network_interface(&self, input: &DeleteNetworkInterfaceRequest) -> Result<(), DeleteNetworkInterfaceError> {
+                fn delete_network_interface(&self, input: &DeleteNetworkInterfaceRequest) -> Box<Future<Item = (), Error = DeleteNetworkInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52701,22 +53305,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteNetworkInterfaceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteNetworkInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified placement group. You must terminate all instances in the placement group before you can delete the placement group. For more information about placement groups and cluster instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html\">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn delete_placement_group(&self, input: &DeletePlacementGroupRequest) -> Result<(), DeletePlacementGroupError> {
+                fn delete_placement_group(&self, input: &DeletePlacementGroupRequest) -> Box<Future<Item = (), Error = DeletePlacementGroupError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52725,22 +53338,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeletePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeletePlacementGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePlacementGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePlacementGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeletePlacementGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified route from the specified route table.</p>"]
-                fn delete_route(&self, input: &DeleteRouteRequest) -> Result<(), DeleteRouteError> {
+                fn delete_route(&self, input: &DeleteRouteRequest) -> Box<Future<Item = (), Error = DeleteRouteError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52749,22 +53371,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteRouteRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRouteError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRouteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified route table. You must disassociate the route table from any subnets before you can delete it. You can't delete the main route table.</p>"]
-                fn delete_route_table(&self, input: &DeleteRouteTableRequest) -> Result<(), DeleteRouteTableError> {
+                fn delete_route_table(&self, input: &DeleteRouteTableRequest) -> Box<Future<Item = (), Error = DeleteRouteTableError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52773,22 +53404,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteRouteTableRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteRouteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRouteTableError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRouteTableError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteRouteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a security group.</p> <p>If you attempt to delete a security group that is associated with an instance, or is referenced by another security group, the operation fails with <code>InvalidGroup.InUse</code> in EC2-Classic or <code>DependencyViolation</code> in EC2-VPC.</p>"]
-                fn delete_security_group(&self, input: &DeleteSecurityGroupRequest) -> Result<(), DeleteSecurityGroupError> {
+                fn delete_security_group(&self, input: &DeleteSecurityGroupRequest) -> Box<Future<Item = (), Error = DeleteSecurityGroupError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52797,22 +53437,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSecurityGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSecurityGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified snapshot.</p> <p>When you make periodic snapshots of a volume, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the volume.</p> <p>You cannot delete a snapshot of the root device of an EBS volume used by a registered AMI. You must first de-register the AMI before you can delete the snapshot.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-snapshot.html\">Deleting an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn delete_snapshot(&self, input: &DeleteSnapshotRequest) -> Result<(), DeleteSnapshotError> {
+                fn delete_snapshot(&self, input: &DeleteSnapshotRequest) -> Box<Future<Item = (), Error = DeleteSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52821,22 +53470,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteSnapshotRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the data feed for Spot instances.</p>"]
-                fn delete_spot_datafeed_subscription(&self, input: &DeleteSpotDatafeedSubscriptionRequest) -> Result<(), DeleteSpotDatafeedSubscriptionError> {
+                fn delete_spot_datafeed_subscription(&self, input: &DeleteSpotDatafeedSubscriptionRequest) -> Box<Future<Item = (), Error = DeleteSpotDatafeedSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52845,22 +53503,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSpotDatafeedSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSpotDatafeedSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified subnet. You must terminate all running instances in the subnet before you can delete the subnet.</p>"]
-                fn delete_subnet(&self, input: &DeleteSubnetRequest) -> Result<(), DeleteSubnetError> {
+                fn delete_subnet(&self, input: &DeleteSubnetRequest) -> Box<Future<Item = (), Error = DeleteSubnetError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52869,22 +53536,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteSubnetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSubnetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSubnetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSubnetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSubnetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified set of tags from the specified set of resources. This call is designed to follow a <code>DescribeTags</code> request.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<(), DeleteTagsError> {
+                fn delete_tags(&self, input: &DeleteTagsRequest) -> Box<Future<Item = (), Error = DeleteTagsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52893,22 +53569,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteTagsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified EBS volume. The volume must be in the <code>available</code> state (not attached to an instance).</p> <note> <p>The volume may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-volume.html\">Deleting an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn delete_volume(&self, input: &DeleteVolumeRequest) -> Result<(), DeleteVolumeError> {
+                fn delete_volume(&self, input: &DeleteVolumeRequest) -> Box<Future<Item = (), Error = DeleteVolumeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52917,22 +53602,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteVolumeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVolumeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVolumeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified VPC. You must detach or delete all gateways and resources that are associated with the VPC before you can delete it. For example, you must terminate all instances running in the VPC, delete all security groups associated with the VPC (except the default one), delete all route tables associated with the VPC (except the default one), and so on.</p>"]
-                fn delete_vpc(&self, input: &DeleteVpcRequest) -> Result<(), DeleteVpcError> {
+                fn delete_vpc(&self, input: &DeleteVpcRequest) -> Box<Future<Item = (), Error = DeleteVpcError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52941,22 +53635,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteVpcRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVpcError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVpcError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes one or more specified VPC endpoints. Deleting the endpoint also deletes the endpoint routes in the route tables that were associated with the endpoint.</p>"]
-                fn delete_vpc_endpoints(&self, input: &DeleteVpcEndpointsRequest) -> Result<DeleteVpcEndpointsResult, DeleteVpcEndpointsError> {
+                fn delete_vpc_endpoints(&self, input: &DeleteVpcEndpointsRequest) -> Box<Future<Item = DeleteVpcEndpointsResult, Error = DeleteVpcEndpointsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -52965,11 +53668,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVpcEndpointsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVpcEndpointsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -52981,20 +53692,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteVpcEndpointsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteVpcEndpointsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteVpcEndpointsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteVpcEndpointsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the peer VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. </p>"]
-                fn delete_vpc_peering_connection(&self, input: &DeleteVpcPeeringConnectionRequest) -> Result<DeleteVpcPeeringConnectionResult, DeleteVpcPeeringConnectionError> {
+                fn delete_vpc_peering_connection(&self, input: &DeleteVpcPeeringConnectionRequest) -> Box<Future<Item = DeleteVpcPeeringConnectionResult, Error = DeleteVpcPeeringConnectionError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53003,11 +53715,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVpcPeeringConnectionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVpcPeeringConnectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53019,20 +53739,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteVpcPeeringConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteVpcPeeringConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified VPN connection.</p> <p>If you're deleting the VPC and its associated components, we recommend that you detach the virtual private gateway from the VPC and delete the VPC before deleting the VPN connection. If you believe that the tunnel credentials for your VPN connection have been compromised, you can delete the VPN connection and create a new one that has new keys, without needing to delete the VPC or virtual private gateway. If you create a new VPN connection, you must reconfigure the customer gateway using the new configuration information returned with the new VPN connection ID.</p>"]
-                fn delete_vpn_connection(&self, input: &DeleteVpnConnectionRequest) -> Result<(), DeleteVpnConnectionError> {
+                fn delete_vpn_connection(&self, input: &DeleteVpnConnectionRequest) -> Box<Future<Item = (), Error = DeleteVpnConnectionError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53041,22 +53762,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteVpnConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVpnConnectionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVpnConnectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteVpnConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified static route associated with a VPN connection between an existing virtual private gateway and a VPN customer gateway. The static route allows traffic to be routed from the virtual private gateway to the VPN customer gateway.</p>"]
-                fn delete_vpn_connection_route(&self, input: &DeleteVpnConnectionRouteRequest) -> Result<(), DeleteVpnConnectionRouteError> {
+                fn delete_vpn_connection_route(&self, input: &DeleteVpnConnectionRouteRequest) -> Box<Future<Item = (), Error = DeleteVpnConnectionRouteError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53065,22 +53795,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteVpnConnectionRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVpnConnectionRouteError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVpnConnectionRouteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteVpnConnectionRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified virtual private gateway. We recommend that before you delete a virtual private gateway, you detach it from the VPC and delete the VPN connection. Note that you don't need to delete the virtual private gateway if you plan to delete and recreate the VPN connection between your VPC and your network.</p>"]
-                fn delete_vpn_gateway(&self, input: &DeleteVpnGatewayRequest) -> Result<(), DeleteVpnGatewayError> {
+                fn delete_vpn_gateway(&self, input: &DeleteVpnGatewayRequest) -> Box<Future<Item = (), Error = DeleteVpnGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53089,22 +53828,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeleteVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteVpnGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVpnGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVpnGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteVpnGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deregisters the specified AMI. After you deregister an AMI, it can't be used to launch new instances.</p> <p>This command does not delete the AMI.</p>"]
-                fn deregister_image(&self, input: &DeregisterImageRequest) -> Result<(), DeregisterImageError> {
+                fn deregister_image(&self, input: &DeregisterImageRequest) -> Box<Future<Item = (), Error = DeregisterImageError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53113,22 +53861,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DeregisterImageRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeregisterImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeregisterImageError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeregisterImageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeregisterImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes attributes of your AWS account. The following are the supported account attributes:</p> <ul> <li> <p> <code>supported-platforms</code>: Indicates whether your account can launch instances into EC2-Classic and EC2-VPC, or only into EC2-VPC.</p> </li> <li> <p> <code>default-vpc</code>: The ID of the default VPC for your account, or <code>none</code>.</p> </li> <li> <p> <code>max-instances</code>: The maximum number of On-Demand instances that you can run.</p> </li> <li> <p> <code>vpc-max-security-groups-per-interface</code>: The maximum number of security groups that you can assign to a network interface.</p> </li> <li> <p> <code>max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-Classic. </p> </li> <li> <p> <code>vpc-max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-VPC.</p> </li> </ul>"]
-                fn describe_account_attributes(&self, input: &DescribeAccountAttributesRequest) -> Result<DescribeAccountAttributesResult, DescribeAccountAttributesError> {
+                fn describe_account_attributes(&self, input: &DescribeAccountAttributesRequest) -> Box<Future<Item = DescribeAccountAttributesResult, Error = DescribeAccountAttributesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53137,11 +53894,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeAccountAttributesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAccountAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAccountAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53153,20 +53918,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeAccountAttributesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeAccountAttributesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your Elastic IP addresses.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_addresses(&self, input: &DescribeAddressesRequest) -> Result<DescribeAddressesResult, DescribeAddressesError> {
+                fn describe_addresses(&self, input: &DescribeAddressesRequest) -> Box<Future<Item = DescribeAddressesResult, Error = DescribeAddressesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53175,11 +53941,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeAddressesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAddressesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAddressesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53191,20 +53965,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeAddressesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeAddressesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of the Availability Zones that are available to you. The results include zones only for the region you're currently using. If there is an event impacting an Availability Zone, you can use this request to view the state and any provided message for that Availability Zone.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html\">Regions and Availability Zones</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_availability_zones(&self, input: &DescribeAvailabilityZonesRequest) -> Result<DescribeAvailabilityZonesResult, DescribeAvailabilityZonesError> {
+                fn describe_availability_zones(&self, input: &DescribeAvailabilityZonesRequest) -> Box<Future<Item = DescribeAvailabilityZonesResult, Error = DescribeAvailabilityZonesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53213,11 +53988,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeAvailabilityZonesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAvailabilityZonesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAvailabilityZonesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53229,20 +54012,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeAvailabilityZonesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeAvailabilityZonesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAvailabilityZonesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAvailabilityZonesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your bundling tasks.</p> <note> <p>Completed bundle tasks are listed for only a limited time. If your bundle task is no longer in the list, you can still register an AMI from it. Just use <code>RegisterImage</code> with the Amazon S3 bucket name and image manifest name you provided to the bundle task.</p> </note>"]
-                fn describe_bundle_tasks(&self, input: &DescribeBundleTasksRequest) -> Result<DescribeBundleTasksResult, DescribeBundleTasksError> {
+                fn describe_bundle_tasks(&self, input: &DescribeBundleTasksRequest) -> Box<Future<Item = DescribeBundleTasksResult, Error = DescribeBundleTasksError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53251,11 +54035,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeBundleTasksRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeBundleTasksError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeBundleTasksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53267,20 +54059,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeBundleTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeBundleTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeBundleTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeBundleTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your linked EC2-Classic instances. This request only returns information about EC2-Classic instances linked to a VPC through ClassicLink; you cannot use this request to return information about other instances.</p>"]
-                fn describe_classic_link_instances(&self, input: &DescribeClassicLinkInstancesRequest) -> Result<DescribeClassicLinkInstancesResult, DescribeClassicLinkInstancesError> {
+                fn describe_classic_link_instances(&self, input: &DescribeClassicLinkInstancesRequest) -> Box<Future<Item = DescribeClassicLinkInstancesResult, Error = DescribeClassicLinkInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53289,11 +54082,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeClassicLinkInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeClassicLinkInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeClassicLinkInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53305,20 +54106,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeClassicLinkInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeClassicLinkInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeClassicLinkInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeClassicLinkInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your conversion tasks. For more information, see the <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/\">VM Import/Export User Guide</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
-                fn describe_conversion_tasks(&self, input: &DescribeConversionTasksRequest) -> Result<DescribeConversionTasksResult, DescribeConversionTasksError> {
+                fn describe_conversion_tasks(&self, input: &DescribeConversionTasksRequest) -> Box<Future<Item = DescribeConversionTasksResult, Error = DescribeConversionTasksError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53327,11 +54129,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeConversionTasksRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConversionTasksError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConversionTasksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53343,20 +54153,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeConversionTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeConversionTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeConversionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeConversionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your VPN customer gateways.</p> <p>For more information about VPN customer gateways, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_customer_gateways(&self, input: &DescribeCustomerGatewaysRequest) -> Result<DescribeCustomerGatewaysResult, DescribeCustomerGatewaysError> {
+                fn describe_customer_gateways(&self, input: &DescribeCustomerGatewaysRequest) -> Box<Future<Item = DescribeCustomerGatewaysResult, Error = DescribeCustomerGatewaysError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53365,11 +54176,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeCustomerGatewaysRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCustomerGatewaysError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCustomerGatewaysError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53381,20 +54200,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeCustomerGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeCustomerGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeCustomerGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeCustomerGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your DHCP options sets.</p> <p>For more information about DHCP options sets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_dhcp_options(&self, input: &DescribeDhcpOptionsRequest) -> Result<DescribeDhcpOptionsResult, DescribeDhcpOptionsError> {
+                fn describe_dhcp_options(&self, input: &DescribeDhcpOptionsRequest) -> Box<Future<Item = DescribeDhcpOptionsResult, Error = DescribeDhcpOptionsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53403,11 +54223,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDhcpOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDhcpOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53419,20 +54247,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeDhcpOptionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeDhcpOptionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your egress-only Internet gateways.</p>"]
-                fn describe_egress_only_internet_gateways(&self, input: &DescribeEgressOnlyInternetGatewaysRequest) -> Result<DescribeEgressOnlyInternetGatewaysResult, DescribeEgressOnlyInternetGatewaysError> {
+                fn describe_egress_only_internet_gateways(&self, input: &DescribeEgressOnlyInternetGatewaysRequest) -> Box<Future<Item = DescribeEgressOnlyInternetGatewaysResult, Error = DescribeEgressOnlyInternetGatewaysError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53441,11 +54270,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeEgressOnlyInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEgressOnlyInternetGatewaysError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEgressOnlyInternetGatewaysError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53457,20 +54294,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeEgressOnlyInternetGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeEgressOnlyInternetGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEgressOnlyInternetGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEgressOnlyInternetGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your export tasks.</p>"]
-                fn describe_export_tasks(&self, input: &DescribeExportTasksRequest) -> Result<DescribeExportTasksResult, DescribeExportTasksError> {
+                fn describe_export_tasks(&self, input: &DescribeExportTasksRequest) -> Box<Future<Item = DescribeExportTasksResult, Error = DescribeExportTasksError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53479,11 +54317,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeExportTasksRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeExportTasksError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeExportTasksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53495,20 +54341,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeExportTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeExportTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more flow logs. To view the information in your flow logs (the log streams for the network interfaces), you must use the CloudWatch Logs console or the CloudWatch Logs API.</p>"]
-                fn describe_flow_logs(&self, input: &DescribeFlowLogsRequest) -> Result<DescribeFlowLogsResult, DescribeFlowLogsError> {
+                fn describe_flow_logs(&self, input: &DescribeFlowLogsRequest) -> Box<Future<Item = DescribeFlowLogsResult, Error = DescribeFlowLogsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53517,11 +54364,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeFlowLogsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeFlowLogsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeFlowLogsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53533,20 +54388,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeFlowLogsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeFlowLogsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeFlowLogsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeFlowLogsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the Dedicated Host Reservations that are available to purchase.</p> <p>The results describe all the Dedicated Host Reservation offerings, including offerings that may not match the instance family and region of your Dedicated Hosts. When purchasing an offering, ensure that the the instance family and region of the offering matches that of the Dedicated Host/s it will be associated with. For an overview of supported instance types, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html\">Dedicated Hosts Overview</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>"]
-                fn describe_host_reservation_offerings(&self, input: &DescribeHostReservationOfferingsRequest) -> Result<DescribeHostReservationOfferingsResult, DescribeHostReservationOfferingsError> {
+                fn describe_host_reservation_offerings(&self, input: &DescribeHostReservationOfferingsRequest) -> Box<Future<Item = DescribeHostReservationOfferingsResult, Error = DescribeHostReservationOfferingsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53555,11 +54411,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeHostReservationOfferingsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeHostReservationOfferingsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeHostReservationOfferingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53571,20 +54435,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeHostReservationOfferingsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeHostReservationOfferingsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeHostReservationOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeHostReservationOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes Dedicated Host Reservations which are associated with Dedicated Hosts in your account.</p>"]
-                fn describe_host_reservations(&self, input: &DescribeHostReservationsRequest) -> Result<DescribeHostReservationsResult, DescribeHostReservationsError> {
+                fn describe_host_reservations(&self, input: &DescribeHostReservationsRequest) -> Box<Future<Item = DescribeHostReservationsResult, Error = DescribeHostReservationsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53593,11 +54458,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeHostReservationsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeHostReservationsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeHostReservationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53609,20 +54482,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeHostReservationsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeHostReservationsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeHostReservationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeHostReservationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your Dedicated Hosts.</p> <p>The results describe only the Dedicated Hosts in the region you're currently using. All listed instances consume capacity on your Dedicated Host. Dedicated Hosts that have recently been released will be listed with the state <code>released</code>.</p>"]
-                fn describe_hosts(&self, input: &DescribeHostsRequest) -> Result<DescribeHostsResult, DescribeHostsError> {
+                fn describe_hosts(&self, input: &DescribeHostsRequest) -> Box<Future<Item = DescribeHostsResult, Error = DescribeHostsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53631,11 +54505,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeHostsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeHostsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeHostsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53647,20 +54529,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeHostsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeHostsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>"]
-                fn describe_id_format(&self, input: &DescribeIdFormatRequest) -> Result<DescribeIdFormatResult, DescribeIdFormatError> {
+                fn describe_id_format(&self, input: &DescribeIdFormatRequest) -> Box<Future<Item = DescribeIdFormatResult, Error = DescribeIdFormatError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53669,11 +54552,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeIdFormatRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeIdFormatError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeIdFormatError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53685,20 +54576,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeIdFormatResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeIdFormatResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeIdFormatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeIdFormatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the ID format settings for resources for the specified IAM user, IAM role, or root user. For example, you can view the resource types that are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html\">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. </p> <p>These settings apply to the principal specified in the request. They do not apply to the principal that makes the request.</p>"]
-                fn describe_identity_id_format(&self, input: &DescribeIdentityIdFormatRequest) -> Result<DescribeIdentityIdFormatResult, DescribeIdentityIdFormatError> {
+                fn describe_identity_id_format(&self, input: &DescribeIdentityIdFormatRequest) -> Box<Future<Item = DescribeIdentityIdFormatResult, Error = DescribeIdentityIdFormatError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53707,11 +54599,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeIdentityIdFormatError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeIdentityIdFormatError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53723,20 +54623,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeIdentityIdFormatResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeIdentityIdFormatResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeIdentityIdFormatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeIdentityIdFormatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified attribute of the specified AMI. You can specify only one attribute at a time.</p>"]
-                fn describe_image_attribute(&self, input: &DescribeImageAttributeRequest) -> Result<ImageAttribute, DescribeImageAttributeError> {
+                fn describe_image_attribute(&self, input: &DescribeImageAttributeRequest) -> Box<Future<Item = ImageAttribute, Error = DescribeImageAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53745,11 +54646,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeImageAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeImageAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeImageAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53761,20 +54670,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ImageAttributeDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ImageAttributeDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeImageAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeImageAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of the images (AMIs, AKIs, and ARIs) available to you. Images available to you include public images, private images that you own, and private images owned by other AWS accounts but for which you have explicit launch permissions.</p> <note> <p>Deregistered images are included in the returned results for an unspecified interval after deregistration.</p> </note>"]
-                fn describe_images(&self, input: &DescribeImagesRequest) -> Result<DescribeImagesResult, DescribeImagesError> {
+                fn describe_images(&self, input: &DescribeImagesRequest) -> Box<Future<Item = DescribeImagesResult, Error = DescribeImagesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53783,11 +54693,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeImagesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeImagesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeImagesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53799,20 +54717,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeImagesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeImagesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeImagesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeImagesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Displays details about an import virtual machine or import snapshot tasks that are already created.</p>"]
-                fn describe_import_image_tasks(&self, input: &DescribeImportImageTasksRequest) -> Result<DescribeImportImageTasksResult, DescribeImportImageTasksError> {
+                fn describe_import_image_tasks(&self, input: &DescribeImportImageTasksRequest) -> Box<Future<Item = DescribeImportImageTasksResult, Error = DescribeImportImageTasksError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53821,11 +54740,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeImportImageTasksRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeImportImageTasksError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeImportImageTasksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53837,20 +54764,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeImportImageTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeImportImageTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeImportImageTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeImportImageTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes your import snapshot tasks.</p>"]
-                fn describe_import_snapshot_tasks(&self, input: &DescribeImportSnapshotTasksRequest) -> Result<DescribeImportSnapshotTasksResult, DescribeImportSnapshotTasksError> {
+                fn describe_import_snapshot_tasks(&self, input: &DescribeImportSnapshotTasksRequest) -> Box<Future<Item = DescribeImportSnapshotTasksResult, Error = DescribeImportSnapshotTasksError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53859,11 +54787,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeImportSnapshotTasksRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeImportSnapshotTasksError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeImportSnapshotTasksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53875,20 +54811,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeImportSnapshotTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeImportSnapshotTasksResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeImportSnapshotTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeImportSnapshotTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified attribute of the specified instance. You can specify only one attribute at a time. Valid attribute values are: <code>instanceType</code> | <code>kernel</code> | <code>ramdisk</code> | <code>userData</code> | <code>disableApiTermination</code> | <code>instanceInitiatedShutdownBehavior</code> | <code>rootDeviceName</code> | <code>blockDeviceMapping</code> | <code>productCodes</code> | <code>sourceDestCheck</code> | <code>groupSet</code> | <code>ebsOptimized</code> | <code>sriovNetSupport</code> </p>"]
-                fn describe_instance_attribute(&self, input: &DescribeInstanceAttributeRequest) -> Result<InstanceAttribute, DescribeInstanceAttributeError> {
+                fn describe_instance_attribute(&self, input: &DescribeInstanceAttributeRequest) -> Box<Future<Item = InstanceAttribute, Error = DescribeInstanceAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53897,11 +54834,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInstanceAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInstanceAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53913,20 +54858,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(InstanceAttributeDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(InstanceAttributeDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeInstanceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeInstanceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the status of one or more instances. By default, only running instances are described, unless specified otherwise.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html\">Status Checks for Your Instances</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html\">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html\">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul>"]
-                fn describe_instance_status(&self, input: &DescribeInstanceStatusRequest) -> Result<DescribeInstanceStatusResult, DescribeInstanceStatusError> {
+                fn describe_instance_status(&self, input: &DescribeInstanceStatusRequest) -> Box<Future<Item = DescribeInstanceStatusResult, Error = DescribeInstanceStatusError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53935,11 +54881,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInstanceStatusError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInstanceStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53951,20 +54905,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeInstanceStatusResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeInstanceStatusResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeInstanceStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeInstanceStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>"]
-                fn describe_instances(&self, input: &DescribeInstancesRequest) -> Result<DescribeInstancesResult, DescribeInstancesError> {
+                fn describe_instances(&self, input: &DescribeInstancesRequest) -> Box<Future<Item = DescribeInstancesResult, Error = DescribeInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -53973,11 +54928,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -53989,20 +54952,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your Internet gateways.</p>"]
-                fn describe_internet_gateways(&self, input: &DescribeInternetGatewaysRequest) -> Result<DescribeInternetGatewaysResult, DescribeInternetGatewaysError> {
+                fn describe_internet_gateways(&self, input: &DescribeInternetGatewaysRequest) -> Box<Future<Item = DescribeInternetGatewaysResult, Error = DescribeInternetGatewaysError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54011,11 +54975,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInternetGatewaysError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInternetGatewaysError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54027,20 +54999,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeInternetGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeInternetGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeInternetGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeInternetGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your key pairs.</p> <p>For more information about key pairs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_key_pairs(&self, input: &DescribeKeyPairsRequest) -> Result<DescribeKeyPairsResult, DescribeKeyPairsError> {
+                fn describe_key_pairs(&self, input: &DescribeKeyPairsRequest) -> Box<Future<Item = DescribeKeyPairsResult, Error = DescribeKeyPairsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54049,11 +55022,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeKeyPairsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeKeyPairsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeKeyPairsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54065,20 +55046,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeKeyPairsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeKeyPairsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeKeyPairsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeKeyPairsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes your Elastic IP addresses that are being moved to the EC2-VPC platform, or that are being restored to the EC2-Classic platform. This request does not return information about any other Elastic IP addresses in your account.</p>"]
-                fn describe_moving_addresses(&self, input: &DescribeMovingAddressesRequest) -> Result<DescribeMovingAddressesResult, DescribeMovingAddressesError> {
+                fn describe_moving_addresses(&self, input: &DescribeMovingAddressesRequest) -> Box<Future<Item = DescribeMovingAddressesResult, Error = DescribeMovingAddressesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54087,11 +55069,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeMovingAddressesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMovingAddressesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMovingAddressesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54103,20 +55093,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeMovingAddressesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeMovingAddressesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeMovingAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeMovingAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of the your NAT gateways.</p>"]
-                fn describe_nat_gateways(&self, input: &DescribeNatGatewaysRequest) -> Result<DescribeNatGatewaysResult, DescribeNatGatewaysError> {
+                fn describe_nat_gateways(&self, input: &DescribeNatGatewaysRequest) -> Box<Future<Item = DescribeNatGatewaysResult, Error = DescribeNatGatewaysError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54125,11 +55116,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeNatGatewaysRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeNatGatewaysError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeNatGatewaysError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54141,20 +55140,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeNatGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeNatGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeNatGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeNatGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your network ACLs.</p> <p>For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_network_acls(&self, input: &DescribeNetworkAclsRequest) -> Result<DescribeNetworkAclsResult, DescribeNetworkAclsError> {
+                fn describe_network_acls(&self, input: &DescribeNetworkAclsRequest) -> Box<Future<Item = DescribeNetworkAclsResult, Error = DescribeNetworkAclsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54163,11 +55163,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeNetworkAclsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeNetworkAclsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeNetworkAclsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54179,20 +55187,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeNetworkAclsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeNetworkAclsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeNetworkAclsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeNetworkAclsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes a network interface attribute. You can specify only one attribute at a time.</p>"]
-                fn describe_network_interface_attribute(&self, input: &DescribeNetworkInterfaceAttributeRequest) -> Result<DescribeNetworkInterfaceAttributeResult, DescribeNetworkInterfaceAttributeError> {
+                fn describe_network_interface_attribute(&self, input: &DescribeNetworkInterfaceAttributeRequest) -> Box<Future<Item = DescribeNetworkInterfaceAttributeResult, Error = DescribeNetworkInterfaceAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54201,11 +55210,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeNetworkInterfaceAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeNetworkInterfaceAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54217,20 +55234,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeNetworkInterfaceAttributeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeNetworkInterfaceAttributeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your network interfaces.</p>"]
-                fn describe_network_interfaces(&self, input: &DescribeNetworkInterfacesRequest) -> Result<DescribeNetworkInterfacesResult, DescribeNetworkInterfacesError> {
+                fn describe_network_interfaces(&self, input: &DescribeNetworkInterfacesRequest) -> Box<Future<Item = DescribeNetworkInterfacesResult, Error = DescribeNetworkInterfacesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54239,11 +55257,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeNetworkInterfacesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeNetworkInterfacesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeNetworkInterfacesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54255,20 +55281,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeNetworkInterfacesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeNetworkInterfacesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeNetworkInterfacesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeNetworkInterfacesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your placement groups. For more information about placement groups and cluster instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html\">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_placement_groups(&self, input: &DescribePlacementGroupsRequest) -> Result<DescribePlacementGroupsResult, DescribePlacementGroupsError> {
+                fn describe_placement_groups(&self, input: &DescribePlacementGroupsRequest) -> Box<Future<Item = DescribePlacementGroupsResult, Error = DescribePlacementGroupsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54277,11 +55304,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribePlacementGroupsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribePlacementGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribePlacementGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54293,20 +55328,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribePlacementGroupsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribePlacementGroupsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribePlacementGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribePlacementGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes available AWS services in a prefix list format, which includes the prefix list name and prefix list ID of the service and the IP address range for the service. A prefix list ID is required for creating an outbound security group rule that allows traffic from a VPC to access an AWS service through a VPC endpoint.</p>"]
-                fn describe_prefix_lists(&self, input: &DescribePrefixListsRequest) -> Result<DescribePrefixListsResult, DescribePrefixListsError> {
+                fn describe_prefix_lists(&self, input: &DescribePrefixListsRequest) -> Box<Future<Item = DescribePrefixListsResult, Error = DescribePrefixListsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54315,11 +55351,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribePrefixListsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribePrefixListsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribePrefixListsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54331,20 +55375,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribePrefixListsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribePrefixListsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribePrefixListsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribePrefixListsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more regions that are currently available to you.</p> <p>For a list of the regions supported by Amazon EC2, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region\">Regions and Endpoints</a>.</p>"]
-                fn describe_regions(&self, input: &DescribeRegionsRequest) -> Result<DescribeRegionsResult, DescribeRegionsError> {
+                fn describe_regions(&self, input: &DescribeRegionsRequest) -> Box<Future<Item = DescribeRegionsResult, Error = DescribeRegionsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54353,11 +55398,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeRegionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeRegionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeRegionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54369,20 +55422,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeRegionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeRegionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeRegionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeRegionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of the Reserved Instances that you purchased.</p> <p>For more information about Reserved Instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html\">Reserved Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_reserved_instances(&self, input: &DescribeReservedInstancesRequest) -> Result<DescribeReservedInstancesResult, DescribeReservedInstancesError> {
+                fn describe_reserved_instances(&self, input: &DescribeReservedInstancesRequest) -> Box<Future<Item = DescribeReservedInstancesResult, Error = DescribeReservedInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54391,11 +55445,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54407,20 +55469,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeReservedInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeReservedInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes your account's Reserved Instance listings in the Reserved Instance Marketplace.</p> <p>The Reserved Instance Marketplace matches sellers who want to resell Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>As a seller, you choose to list some or all of your Reserved Instances, and you specify the upfront price to receive for them. Your Reserved Instances are then listed in the Reserved Instance Marketplace and are available for purchase.</p> <p>As a buyer, you specify the configuration of the Reserved Instance to purchase, and the Marketplace matches what you're searching for with what's available. The Marketplace first sells the lowest priced Reserved Instances to you, and continues to sell available Reserved Instance listings to you until your demand is met. You are charged based on the total price of all of the listings that you purchase.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_reserved_instances_listings(&self, input: &DescribeReservedInstancesListingsRequest) -> Result<DescribeReservedInstancesListingsResult, DescribeReservedInstancesListingsError> {
+                fn describe_reserved_instances_listings(&self, input: &DescribeReservedInstancesListingsRequest) -> Box<Future<Item = DescribeReservedInstancesListingsResult, Error = DescribeReservedInstancesListingsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54429,11 +55492,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeReservedInstancesListingsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedInstancesListingsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedInstancesListingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54445,20 +55516,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeReservedInstancesListingsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeReservedInstancesListingsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedInstancesListingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedInstancesListingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the modifications made to your Reserved Instances. If no parameter is specified, information about all your Reserved Instances modification requests is returned. If a modification ID is specified, only information about the specific modification is returned.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html\">Modifying Reserved Instances</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInstancesModificationsRequest) -> Result<DescribeReservedInstancesModificationsResult, DescribeReservedInstancesModificationsError> {
+                fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInstancesModificationsRequest) -> Box<Future<Item = DescribeReservedInstancesModificationsResult, Error = DescribeReservedInstancesModificationsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54467,11 +55539,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeReservedInstancesModificationsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedInstancesModificationsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedInstancesModificationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54483,20 +55563,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeReservedInstancesModificationsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeReservedInstancesModificationsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedInstancesModificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedInstancesModificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes Reserved Instance offerings that are available for purchase. With Reserved Instances, you purchase the right to launch instances for a period of time. During that time period, you do not receive insufficient capacity errors, and you pay a lower usage rate than the rate charged for On-Demand instances for the actual time used.</p> <p>If you have listed your own Reserved Instances for sale in the Reserved Instance Marketplace, they will be excluded from these results. This is to ensure that you do not purchase your own Reserved Instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_reserved_instances_offerings(&self, input: &DescribeReservedInstancesOfferingsRequest) -> Result<DescribeReservedInstancesOfferingsResult, DescribeReservedInstancesOfferingsError> {
+                fn describe_reserved_instances_offerings(&self, input: &DescribeReservedInstancesOfferingsRequest) -> Box<Future<Item = DescribeReservedInstancesOfferingsResult, Error = DescribeReservedInstancesOfferingsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54505,11 +55586,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeReservedInstancesOfferingsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedInstancesOfferingsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedInstancesOfferingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54521,20 +55610,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeReservedInstancesOfferingsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeReservedInstancesOfferingsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedInstancesOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedInstancesOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your route tables.</p> <p>Each subnet in your VPC must be associated with a route table. If a subnet is not explicitly associated with any route table, it is implicitly associated with the main route table. This command does not return the subnet ID for implicit associations.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_route_tables(&self, input: &DescribeRouteTablesRequest) -> Result<DescribeRouteTablesResult, DescribeRouteTablesError> {
+                fn describe_route_tables(&self, input: &DescribeRouteTablesRequest) -> Box<Future<Item = DescribeRouteTablesResult, Error = DescribeRouteTablesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54543,11 +55633,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeRouteTablesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeRouteTablesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeRouteTablesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54559,20 +55657,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeRouteTablesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeRouteTablesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeRouteTablesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeRouteTablesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Finds available schedules that meet the specified criteria.</p> <p>You can search for an available schedule no more than 3 months in advance. You must meet the minimum required duration of 1,200 hours per year. For example, the minimum daily schedule is 4 hours, the minimum weekly schedule is 24 hours, and the minimum monthly schedule is 100 hours.</p> <p>After you find a schedule that meets your needs, call <a>PurchaseScheduledInstances</a> to purchase Scheduled Instances with that schedule.</p>"]
-                fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInstanceAvailabilityRequest) -> Result<DescribeScheduledInstanceAvailabilityResult, DescribeScheduledInstanceAvailabilityError> {
+                fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInstanceAvailabilityRequest) -> Box<Future<Item = DescribeScheduledInstanceAvailabilityResult, Error = DescribeScheduledInstanceAvailabilityError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54581,11 +55680,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeScheduledInstanceAvailabilityRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeScheduledInstanceAvailabilityError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeScheduledInstanceAvailabilityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54597,20 +55704,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeScheduledInstanceAvailabilityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeScheduledInstanceAvailabilityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeScheduledInstanceAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeScheduledInstanceAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your Scheduled Instances.</p>"]
-                fn describe_scheduled_instances(&self, input: &DescribeScheduledInstancesRequest) -> Result<DescribeScheduledInstancesResult, DescribeScheduledInstancesError> {
+                fn describe_scheduled_instances(&self, input: &DescribeScheduledInstancesRequest) -> Box<Future<Item = DescribeScheduledInstancesResult, Error = DescribeScheduledInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54619,11 +55727,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeScheduledInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeScheduledInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54635,20 +55751,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeScheduledInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeScheduledInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeScheduledInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeScheduledInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>[EC2-VPC only] Describes the VPCs on the other side of a VPC peering connection that are referencing the security groups you've specified in this request.</p>"]
-                fn describe_security_group_references(&self, input: &DescribeSecurityGroupReferencesRequest) -> Result<DescribeSecurityGroupReferencesResult, DescribeSecurityGroupReferencesError> {
+                fn describe_security_group_references(&self, input: &DescribeSecurityGroupReferencesRequest) -> Box<Future<Item = DescribeSecurityGroupReferencesResult, Error = DescribeSecurityGroupReferencesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54657,11 +55774,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSecurityGroupReferencesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSecurityGroupReferencesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSecurityGroupReferencesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54673,20 +55798,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSecurityGroupReferencesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSecurityGroupReferencesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSecurityGroupReferencesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSecurityGroupReferencesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your security groups.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html\">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_security_groups(&self, input: &DescribeSecurityGroupsRequest) -> Result<DescribeSecurityGroupsResult, DescribeSecurityGroupsError> {
+                fn describe_security_groups(&self, input: &DescribeSecurityGroupsRequest) -> Box<Future<Item = DescribeSecurityGroupsResult, Error = DescribeSecurityGroupsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54695,11 +55821,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSecurityGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSecurityGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54711,20 +55845,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSecurityGroupsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSecurityGroupsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified attribute of the specified snapshot. You can specify only one attribute at a time.</p> <p>For more information about EBS snapshots, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html\">Amazon EBS Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_snapshot_attribute(&self, input: &DescribeSnapshotAttributeRequest) -> Result<DescribeSnapshotAttributeResult, DescribeSnapshotAttributeError> {
+                fn describe_snapshot_attribute(&self, input: &DescribeSnapshotAttributeRequest) -> Box<Future<Item = DescribeSnapshotAttributeResult, Error = DescribeSnapshotAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54733,11 +55868,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSnapshotAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSnapshotAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54749,20 +55892,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSnapshotAttributeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSnapshotAttributeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of the EBS snapshots available to you. Available snapshots include public snapshots available for any AWS account to launch, private snapshots that you own, and private snapshots owned by another AWS account but for which you've been given explicit create volume permissions.</p> <p>The create volume permissions fall into the following categories:</p> <ul> <li> <p> <i>public</i>: The owner of the snapshot granted create volume permissions for the snapshot to the <code>all</code> group. All AWS accounts have create volume permissions for these snapshots.</p> </li> <li> <p> <i>explicit</i>: The owner of the snapshot granted create volume permissions to a specific AWS account.</p> </li> <li> <p> <i>implicit</i>: An AWS account has implicit create volume permissions for all snapshots it owns.</p> </li> </ul> <p>The list of snapshots returned can be modified by specifying snapshot IDs, snapshot owners, or AWS accounts with create volume permissions. If no options are specified, Amazon EC2 returns all snapshots for which you have create volume permissions.</p> <p>If you specify one or more snapshot IDs, only snapshots that have the specified IDs are returned. If you specify an invalid snapshot ID, an error is returned. If you specify a snapshot ID for which you do not have access, it is not included in the returned results.</p> <p>If you specify one or more snapshot owners using the <code>OwnerIds</code> option, only snapshots from the specified owners and for which you have access are returned. The results can include the AWS account IDs of the specified owners, <code>amazon</code> for snapshots owned by Amazon, or <code>self</code> for snapshots that you own.</p> <p>If you specify a list of restorable users, only snapshots with create snapshot permissions for those users are returned. You can specify AWS account IDs (if you own the snapshots), <code>self</code> for snapshots for which you own or have explicit permissions, or <code>all</code> for public snapshots.</p> <p>If you are describing a long list of snapshots, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeSnapshots</code> request to retrieve the remaining results.</p> <p>For more information about EBS snapshots, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html\">Amazon EBS Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_snapshots(&self, input: &DescribeSnapshotsRequest) -> Result<DescribeSnapshotsResult, DescribeSnapshotsError> {
+                fn describe_snapshots(&self, input: &DescribeSnapshotsRequest) -> Box<Future<Item = DescribeSnapshotsResult, Error = DescribeSnapshotsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54771,11 +55915,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSnapshotsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSnapshotsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSnapshotsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54787,20 +55939,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSnapshotsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSnapshotsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the data feed for Spot instances. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html\">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_spot_datafeed_subscription(&self, input: &DescribeSpotDatafeedSubscriptionRequest) -> Result<DescribeSpotDatafeedSubscriptionResult, DescribeSpotDatafeedSubscriptionError> {
+                fn describe_spot_datafeed_subscription(&self, input: &DescribeSpotDatafeedSubscriptionRequest) -> Box<Future<Item = DescribeSpotDatafeedSubscriptionResult, Error = DescribeSpotDatafeedSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54809,11 +55962,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSpotDatafeedSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSpotDatafeedSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54825,20 +55986,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSpotDatafeedSubscriptionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSpotDatafeedSubscriptionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the running instances for the specified Spot fleet.</p>"]
-                fn describe_spot_fleet_instances(&self, input: &DescribeSpotFleetInstancesRequest) -> Result<DescribeSpotFleetInstancesResponse, DescribeSpotFleetInstancesError> {
+                fn describe_spot_fleet_instances(&self, input: &DescribeSpotFleetInstancesRequest) -> Box<Future<Item = DescribeSpotFleetInstancesResponse, Error = DescribeSpotFleetInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54847,11 +56009,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSpotFleetInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSpotFleetInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSpotFleetInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54863,20 +56033,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSpotFleetInstancesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSpotFleetInstancesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSpotFleetInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSpotFleetInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the events for the specified Spot fleet request during the specified time.</p> <p>Spot fleet events are delayed by up to 30 seconds before they can be described. This ensures that you can query by the last evaluated time and not miss a recorded event.</p>"]
-                fn describe_spot_fleet_request_history(&self, input: &DescribeSpotFleetRequestHistoryRequest) -> Result<DescribeSpotFleetRequestHistoryResponse, DescribeSpotFleetRequestHistoryError> {
+                fn describe_spot_fleet_request_history(&self, input: &DescribeSpotFleetRequestHistoryRequest) -> Box<Future<Item = DescribeSpotFleetRequestHistoryResponse, Error = DescribeSpotFleetRequestHistoryError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54885,11 +56056,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSpotFleetRequestHistoryRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSpotFleetRequestHistoryError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSpotFleetRequestHistoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54901,20 +56080,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSpotFleetRequestHistoryResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSpotFleetRequestHistoryResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSpotFleetRequestHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSpotFleetRequestHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes your Spot fleet requests.</p> <p>Spot fleet requests are deleted 48 hours after they are canceled and their instances are terminated.</p>"]
-                fn describe_spot_fleet_requests(&self, input: &DescribeSpotFleetRequestsRequest) -> Result<DescribeSpotFleetRequestsResponse, DescribeSpotFleetRequestsError> {
+                fn describe_spot_fleet_requests(&self, input: &DescribeSpotFleetRequestsRequest) -> Box<Future<Item = DescribeSpotFleetRequestsResponse, Error = DescribeSpotFleetRequestsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54923,11 +56103,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSpotFleetRequestsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSpotFleetRequestsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54939,20 +56127,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSpotFleetRequestsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSpotFleetRequestsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSpotFleetRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSpotFleetRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the Spot instance requests that belong to your account. Spot instances are instances that Amazon EC2 launches when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot instance capacity and current Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html\">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can use <code>DescribeSpotInstanceRequests</code> to find a running Spot instance by examining the response. If the status of the Spot instance is <code>fulfilled</code>, the instance ID appears in the response and contains the identifier of the instance. Alternatively, you can use <a>DescribeInstances</a> with a filter to look for instances where the instance lifecycle is <code>spot</code>.</p> <p>Spot instance requests are deleted 4 hours after they are canceled and their instances are terminated.</p>"]
-                fn describe_spot_instance_requests(&self, input: &DescribeSpotInstanceRequestsRequest) -> Result<DescribeSpotInstanceRequestsResult, DescribeSpotInstanceRequestsError> {
+                fn describe_spot_instance_requests(&self, input: &DescribeSpotInstanceRequestsRequest) -> Box<Future<Item = DescribeSpotInstanceRequestsResult, Error = DescribeSpotInstanceRequestsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54961,11 +56150,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSpotInstanceRequestsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSpotInstanceRequestsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -54977,20 +56174,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSpotInstanceRequestsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSpotInstanceRequestsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSpotInstanceRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSpotInstanceRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the Spot price history. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances-history.html\">Spot Instance Pricing History</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>When you specify a start and end time, this operation returns the prices of the instance types within the time range that you specified and the time when the price changed. The price is valid within the time period that you specified; the response merely indicates the last time that the price changed.</p>"]
-                fn describe_spot_price_history(&self, input: &DescribeSpotPriceHistoryRequest) -> Result<DescribeSpotPriceHistoryResult, DescribeSpotPriceHistoryError> {
+                fn describe_spot_price_history(&self, input: &DescribeSpotPriceHistoryRequest) -> Box<Future<Item = DescribeSpotPriceHistoryResult, Error = DescribeSpotPriceHistoryError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -54999,11 +56197,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSpotPriceHistoryRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSpotPriceHistoryError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSpotPriceHistoryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55015,20 +56221,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSpotPriceHistoryResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSpotPriceHistoryResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSpotPriceHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSpotPriceHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>[EC2-VPC only] Describes the stale security group rules for security groups in a specified VPC. Rules are stale when they reference a deleted security group in a peer VPC, or a security group in a peer VPC for which the VPC peering connection has been deleted.</p>"]
-                fn describe_stale_security_groups(&self, input: &DescribeStaleSecurityGroupsRequest) -> Result<DescribeStaleSecurityGroupsResult, DescribeStaleSecurityGroupsError> {
+                fn describe_stale_security_groups(&self, input: &DescribeStaleSecurityGroupsRequest) -> Box<Future<Item = DescribeStaleSecurityGroupsResult, Error = DescribeStaleSecurityGroupsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55037,11 +56244,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeStaleSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeStaleSecurityGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeStaleSecurityGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55053,20 +56268,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeStaleSecurityGroupsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeStaleSecurityGroupsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeStaleSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeStaleSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your subnets.</p> <p>For more information about subnets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_subnets(&self, input: &DescribeSubnetsRequest) -> Result<DescribeSubnetsResult, DescribeSubnetsError> {
+                fn describe_subnets(&self, input: &DescribeSubnetsRequest) -> Box<Future<Item = DescribeSubnetsResult, Error = DescribeSubnetsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55075,11 +56291,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeSubnetsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSubnetsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSubnetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55091,20 +56315,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeSubnetsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeSubnetsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of the tags for your EC2 resources.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsRequest) -> Result<DescribeTagsResult, DescribeTagsError> {
+                fn describe_tags(&self, input: &DescribeTagsRequest) -> Box<Future<Item = DescribeTagsResult, Error = DescribeTagsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55113,11 +56338,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeTagsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55129,20 +56362,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified attribute of the specified volume. You can specify only one attribute at a time.</p> <p>For more information about EBS volumes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html\">Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_volume_attribute(&self, input: &DescribeVolumeAttributeRequest) -> Result<DescribeVolumeAttributeResult, DescribeVolumeAttributeError> {
+                fn describe_volume_attribute(&self, input: &DescribeVolumeAttributeRequest) -> Box<Future<Item = DescribeVolumeAttributeResult, Error = DescribeVolumeAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55151,11 +56385,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVolumeAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVolumeAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55167,20 +56409,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVolumeAttributeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVolumeAttributeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVolumeAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVolumeAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the status of the specified volumes. Volume status provides the result of the checks performed on your volumes to determine events that can impair the performance of your volumes. The performance of a volume can be affected if an issue occurs on the volume's underlying host. If the volume's underlying host experiences a power outage or system issue, after the system is restored, there could be data inconsistencies on the volume. Volume events notify you if this occurs. Volume actions notify you if any action needs to be taken in response to the event.</p> <p>The <code>DescribeVolumeStatus</code> operation provides the following information about the specified volumes:</p> <p> <i>Status</i>: Reflects the current status of the volume. The possible values are <code>ok</code>, <code>impaired</code> , <code>warning</code>, or <code>insufficient-data</code>. If all checks pass, the overall status of the volume is <code>ok</code>. If the check fails, the overall status is <code>impaired</code>. If the status is <code>insufficient-data</code>, then the checks may still be taking place on your volume at the time. We recommend that you retry the request. For more information on volume status, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-volume-status.html\">Monitoring the Status of Your Volumes</a>.</p> <p> <i>Events</i>: Reflect the cause of a volume status and may require you to take action. For example, if your volume returns an <code>impaired</code> status, then the volume event might be <code>potential-data-inconsistency</code>. This means that your volume has been affected by an issue with the underlying host, has all I/O operations disabled, and may have inconsistent data.</p> <p> <i>Actions</i>: Reflect the actions you may have to take in response to an event. For example, if the status of the volume is <code>impaired</code> and the volume event shows <code>potential-data-inconsistency</code>, then the action shows <code>enable-volume-io</code>. This means that you may want to enable the I/O operations for the volume by calling the <a>EnableVolumeIO</a> action and then check the volume for data consistency.</p> <note> <p>Volume status is based on the volume status checks, and does not reflect the volume state. Therefore, volume status does not indicate volumes in the <code>error</code> state (for example, when a volume is incapable of accepting I/O.)</p> </note>"]
-                fn describe_volume_status(&self, input: &DescribeVolumeStatusRequest) -> Result<DescribeVolumeStatusResult, DescribeVolumeStatusError> {
+                fn describe_volume_status(&self, input: &DescribeVolumeStatusRequest) -> Box<Future<Item = DescribeVolumeStatusResult, Error = DescribeVolumeStatusError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55189,11 +56432,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVolumeStatusRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVolumeStatusError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVolumeStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55205,20 +56456,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVolumeStatusResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVolumeStatusResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVolumeStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVolumeStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified EBS volumes.</p> <p>If you are describing a long list of volumes, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeVolumes</code> request to retrieve the remaining results.</p> <p>For more information about EBS volumes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html\">Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn describe_volumes(&self, input: &DescribeVolumesRequest) -> Result<DescribeVolumesResult, DescribeVolumesError> {
+                fn describe_volumes(&self, input: &DescribeVolumesRequest) -> Box<Future<Item = DescribeVolumesResult, Error = DescribeVolumesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55227,11 +56479,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVolumesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVolumesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVolumesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55243,20 +56503,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVolumesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVolumesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified attribute of the specified VPC. You can specify only one attribute at a time.</p>"]
-                fn describe_vpc_attribute(&self, input: &DescribeVpcAttributeRequest) -> Result<DescribeVpcAttributeResult, DescribeVpcAttributeError> {
+                fn describe_vpc_attribute(&self, input: &DescribeVpcAttributeRequest) -> Box<Future<Item = DescribeVpcAttributeResult, Error = DescribeVpcAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55265,11 +56526,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVpcAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVpcAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55281,20 +56550,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVpcAttributeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVpcAttributeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVpcAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVpcAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the ClassicLink status of one or more VPCs.</p>"]
-                fn describe_vpc_classic_link(&self, input: &DescribeVpcClassicLinkRequest) -> Result<DescribeVpcClassicLinkResult, DescribeVpcClassicLinkError> {
+                fn describe_vpc_classic_link(&self, input: &DescribeVpcClassicLinkRequest) -> Box<Future<Item = DescribeVpcClassicLinkResult, Error = DescribeVpcClassicLinkError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55303,11 +56573,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVpcClassicLinkError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVpcClassicLinkError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55319,20 +56597,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVpcClassicLinkResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVpcClassicLinkResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVpcClassicLinkError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVpcClassicLinkError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the ClassicLink DNS support status of one or more VPCs. If enabled, the DNS hostname of a linked EC2-Classic instance resolves to its private IP address when addressed from an instance in the VPC to which it's linked. Similarly, the DNS hostname of an instance in a VPC resolves to its private IP address when addressed from a linked EC2-Classic instance. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn describe_vpc_classic_link_dns_support(&self, input: &DescribeVpcClassicLinkDnsSupportRequest) -> Result<DescribeVpcClassicLinkDnsSupportResult, DescribeVpcClassicLinkDnsSupportError> {
+                fn describe_vpc_classic_link_dns_support(&self, input: &DescribeVpcClassicLinkDnsSupportRequest) -> Box<Future<Item = DescribeVpcClassicLinkDnsSupportResult, Error = DescribeVpcClassicLinkDnsSupportError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55341,11 +56620,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVpcClassicLinkDnsSupportError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVpcClassicLinkDnsSupportError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55357,20 +56644,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVpcClassicLinkDnsSupportResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVpcClassicLinkDnsSupportResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes all supported AWS services that can be specified when creating a VPC endpoint.</p>"]
-                fn describe_vpc_endpoint_services(&self, input: &DescribeVpcEndpointServicesRequest) -> Result<DescribeVpcEndpointServicesResult, DescribeVpcEndpointServicesError> {
+                fn describe_vpc_endpoint_services(&self, input: &DescribeVpcEndpointServicesRequest) -> Box<Future<Item = DescribeVpcEndpointServicesResult, Error = DescribeVpcEndpointServicesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55379,11 +56667,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVpcEndpointServicesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVpcEndpointServicesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVpcEndpointServicesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55395,20 +56691,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVpcEndpointServicesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVpcEndpointServicesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVpcEndpointServicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVpcEndpointServicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your VPC endpoints.</p>"]
-                fn describe_vpc_endpoints(&self, input: &DescribeVpcEndpointsRequest) -> Result<DescribeVpcEndpointsResult, DescribeVpcEndpointsError> {
+                fn describe_vpc_endpoints(&self, input: &DescribeVpcEndpointsRequest) -> Box<Future<Item = DescribeVpcEndpointsResult, Error = DescribeVpcEndpointsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55417,11 +56714,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVpcEndpointsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVpcEndpointsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55433,20 +56738,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVpcEndpointsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVpcEndpointsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVpcEndpointsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVpcEndpointsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your VPC peering connections.</p>"]
-                fn describe_vpc_peering_connections(&self, input: &DescribeVpcPeeringConnectionsRequest) -> Result<DescribeVpcPeeringConnectionsResult, DescribeVpcPeeringConnectionsError> {
+                fn describe_vpc_peering_connections(&self, input: &DescribeVpcPeeringConnectionsRequest) -> Box<Future<Item = DescribeVpcPeeringConnectionsResult, Error = DescribeVpcPeeringConnectionsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55455,11 +56761,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVpcPeeringConnectionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVpcPeeringConnectionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVpcPeeringConnectionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55471,20 +56785,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVpcPeeringConnectionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVpcPeeringConnectionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVpcPeeringConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVpcPeeringConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your VPCs.</p>"]
-                fn describe_vpcs(&self, input: &DescribeVpcsRequest) -> Result<DescribeVpcsResult, DescribeVpcsError> {
+                fn describe_vpcs(&self, input: &DescribeVpcsRequest) -> Box<Future<Item = DescribeVpcsResult, Error = DescribeVpcsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55493,11 +56808,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVpcsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVpcsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVpcsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55509,20 +56832,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVpcsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVpcsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVpcsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVpcsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your VPN connections.</p> <p>For more information about VPN connections, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_vpn_connections(&self, input: &DescribeVpnConnectionsRequest) -> Result<DescribeVpnConnectionsResult, DescribeVpnConnectionsError> {
+                fn describe_vpn_connections(&self, input: &DescribeVpnConnectionsRequest) -> Box<Future<Item = DescribeVpnConnectionsResult, Error = DescribeVpnConnectionsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55531,11 +56855,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVpnConnectionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVpnConnectionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVpnConnectionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55547,20 +56879,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVpnConnectionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVpnConnectionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVpnConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVpnConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more of your virtual private gateways.</p> <p>For more information about virtual private gateways, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding an IPsec Hardware VPN to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn describe_vpn_gateways(&self, input: &DescribeVpnGatewaysRequest) -> Result<DescribeVpnGatewaysResult, DescribeVpnGatewaysError> {
+                fn describe_vpn_gateways(&self, input: &DescribeVpnGatewaysRequest) -> Box<Future<Item = DescribeVpnGatewaysResult, Error = DescribeVpnGatewaysError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55569,11 +56902,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DescribeVpnGatewaysRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVpnGatewaysError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVpnGatewaysError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55585,20 +56926,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DescribeVpnGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DescribeVpnGatewaysResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeVpnGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeVpnGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Unlinks (detaches) a linked EC2-Classic instance from a VPC. After the instance has been unlinked, the VPC security groups are no longer associated with it. An instance is automatically unlinked from a VPC when it's stopped.</p>"]
-                fn detach_classic_link_vpc(&self, input: &DetachClassicLinkVpcRequest) -> Result<DetachClassicLinkVpcResult, DetachClassicLinkVpcError> {
+                fn detach_classic_link_vpc(&self, input: &DetachClassicLinkVpcRequest) -> Box<Future<Item = DetachClassicLinkVpcResult, Error = DetachClassicLinkVpcError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55607,11 +56949,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DetachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachClassicLinkVpcError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachClassicLinkVpcError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55623,20 +56973,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DetachClassicLinkVpcResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DetachClassicLinkVpcResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachClassicLinkVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachClassicLinkVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Detaches an Internet gateway from a VPC, disabling connectivity between the Internet and the VPC. The VPC must not contain any running instances with Elastic IP addresses.</p>"]
-                fn detach_internet_gateway(&self, input: &DetachInternetGatewayRequest) -> Result<(), DetachInternetGatewayError> {
+                fn detach_internet_gateway(&self, input: &DetachInternetGatewayRequest) -> Box<Future<Item = (), Error = DetachInternetGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55645,22 +56996,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DetachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachInternetGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachInternetGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Detaches a network interface from an instance.</p>"]
-                fn detach_network_interface(&self, input: &DetachNetworkInterfaceRequest) -> Result<(), DetachNetworkInterfaceError> {
+                fn detach_network_interface(&self, input: &DetachNetworkInterfaceRequest) -> Box<Future<Item = (), Error = DetachNetworkInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55669,22 +57029,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DetachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachNetworkInterfaceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachNetworkInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Detaches an EBS volume from an instance. Make sure to unmount any file systems on the device within your operating system before detaching the volume. Failure to do so can result in the volume becoming stuck in the <code>busy</code> state while detaching. If this happens, detachment can be delayed indefinitely until you unmount the volume, force detachment, reboot the instance, or all three. If an EBS volume is the root device of an instance, it can't be detached while the instance is running. To detach the root volume, stop the instance first.</p> <p>When a volume with an AWS Marketplace product code is detached from an instance, the product code is no longer associated with the instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-detaching-volume.html\">Detaching an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn detach_volume(&self, input: &DetachVolumeRequest) -> Result<VolumeAttachment, DetachVolumeError> {
+                fn detach_volume(&self, input: &DetachVolumeRequest) -> Box<Future<Item = VolumeAttachment, Error = DetachVolumeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55693,11 +57062,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DetachVolumeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachVolumeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachVolumeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55709,20 +57086,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(VolumeAttachmentDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(VolumeAttachmentDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Detaches a virtual private gateway from a VPC. You do this if you're planning to turn off the VPC and not use it anymore. You can confirm a virtual private gateway has been completely detached from a VPC by describing the virtual private gateway (any attachments to the virtual private gateway are also described).</p> <p>You must wait for the attachment's state to switch to <code>detached</code> before you can delete the VPC or attach a different VPC to the virtual private gateway.</p>"]
-                fn detach_vpn_gateway(&self, input: &DetachVpnGatewayRequest) -> Result<(), DetachVpnGatewayError> {
+                fn detach_vpn_gateway(&self, input: &DetachVpnGatewayRequest) -> Box<Future<Item = (), Error = DetachVpnGatewayError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55731,22 +57109,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DetachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachVpnGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachVpnGatewayError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachVpnGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachVpnGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables a virtual private gateway (VGW) from propagating routes to a specified route table of a VPC.</p>"]
-                fn disable_vgw_route_propagation(&self, input: &DisableVgwRoutePropagationRequest) -> Result<(), DisableVgwRoutePropagationError> {
+                fn disable_vgw_route_propagation(&self, input: &DisableVgwRoutePropagationRequest) -> Box<Future<Item = (), Error = DisableVgwRoutePropagationError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55755,22 +57142,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DisableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisableVgwRoutePropagationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableVgwRoutePropagationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableVgwRoutePropagationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisableVgwRoutePropagationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables ClassicLink for a VPC. You cannot disable ClassicLink for a VPC that has EC2-Classic instances linked to it.</p>"]
-                fn disable_vpc_classic_link(&self, input: &DisableVpcClassicLinkRequest) -> Result<DisableVpcClassicLinkResult, DisableVpcClassicLinkError> {
+                fn disable_vpc_classic_link(&self, input: &DisableVpcClassicLinkRequest) -> Box<Future<Item = DisableVpcClassicLinkResult, Error = DisableVpcClassicLinkError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55779,11 +57175,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DisableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableVpcClassicLinkError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableVpcClassicLinkError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55795,20 +57199,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DisableVpcClassicLinkResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DisableVpcClassicLinkResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisableVpcClassicLinkError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisableVpcClassicLinkError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables ClassicLink DNS support for a VPC. If disabled, DNS hostnames resolve to public IP addresses when addressed between a linked EC2-Classic instance and instances in the VPC to which it's linked. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn disable_vpc_classic_link_dns_support(&self, input: &DisableVpcClassicLinkDnsSupportRequest) -> Result<DisableVpcClassicLinkDnsSupportResult, DisableVpcClassicLinkDnsSupportError> {
+                fn disable_vpc_classic_link_dns_support(&self, input: &DisableVpcClassicLinkDnsSupportRequest) -> Box<Future<Item = DisableVpcClassicLinkDnsSupportResult, Error = DisableVpcClassicLinkDnsSupportError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55817,11 +57222,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DisableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableVpcClassicLinkDnsSupportError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableVpcClassicLinkDnsSupportError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55833,20 +57246,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DisableVpcClassicLinkDnsSupportResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DisableVpcClassicLinkDnsSupportResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisableVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisableVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disassociates an Elastic IP address from the instance or network interface it's associated with.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p>"]
-                fn disassociate_address(&self, input: &DisassociateAddressRequest) -> Result<(), DisassociateAddressError> {
+                fn disassociate_address(&self, input: &DisassociateAddressRequest) -> Box<Future<Item = (), Error = DisassociateAddressError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55855,22 +57269,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DisassociateAddressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisassociateAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisassociateAddressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisassociateAddressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisassociateAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disassociates a subnet from a route table.</p> <p>After you perform this action, the subnet no longer uses the routes in the route table. Instead, it uses the routes in the VPC's main route table. For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn disassociate_route_table(&self, input: &DisassociateRouteTableRequest) -> Result<(), DisassociateRouteTableError> {
+                fn disassociate_route_table(&self, input: &DisassociateRouteTableRequest) -> Box<Future<Item = (), Error = DisassociateRouteTableError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55879,22 +57302,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DisassociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisassociateRouteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisassociateRouteTableError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisassociateRouteTableError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisassociateRouteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disassociates a CIDR block from a subnet. Currently, you can disassociate an IPv6 CIDR block only. You must detach or delete all gateways and resources that are associated with the CIDR block before you can disassociate it. </p>"]
-                fn disassociate_subnet_cidr_block(&self, input: &DisassociateSubnetCidrBlockRequest) -> Result<DisassociateSubnetCidrBlockResult, DisassociateSubnetCidrBlockError> {
+                fn disassociate_subnet_cidr_block(&self, input: &DisassociateSubnetCidrBlockRequest) -> Box<Future<Item = DisassociateSubnetCidrBlockResult, Error = DisassociateSubnetCidrBlockError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55903,11 +57335,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DisassociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisassociateSubnetCidrBlockError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisassociateSubnetCidrBlockError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55919,20 +57359,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DisassociateSubnetCidrBlockResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DisassociateSubnetCidrBlockResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisassociateSubnetCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisassociateSubnetCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disassociates a CIDR block from a VPC. Currently, you can disassociate an IPv6 CIDR block only. You must detach or delete all gateways and resources that are associated with the CIDR block before you can disassociate it. </p>"]
-                fn disassociate_vpc_cidr_block(&self, input: &DisassociateVpcCidrBlockRequest) -> Result<DisassociateVpcCidrBlockResult, DisassociateVpcCidrBlockError> {
+                fn disassociate_vpc_cidr_block(&self, input: &DisassociateVpcCidrBlockRequest) -> Box<Future<Item = DisassociateVpcCidrBlockResult, Error = DisassociateVpcCidrBlockError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55941,11 +57382,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     DisassociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisassociateVpcCidrBlockError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisassociateVpcCidrBlockError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -55957,20 +57406,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DisassociateVpcCidrBlockResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DisassociateVpcCidrBlockResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisassociateVpcCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisassociateVpcCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables a virtual private gateway (VGW) to propagate routes to the specified route table of a VPC.</p>"]
-                fn enable_vgw_route_propagation(&self, input: &EnableVgwRoutePropagationRequest) -> Result<(), EnableVgwRoutePropagationError> {
+                fn enable_vgw_route_propagation(&self, input: &EnableVgwRoutePropagationRequest) -> Box<Future<Item = (), Error = EnableVgwRoutePropagationError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -55979,22 +57429,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     EnableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnableVgwRoutePropagationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableVgwRoutePropagationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableVgwRoutePropagationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnableVgwRoutePropagationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables I/O operations for a volume that had I/O operations disabled because the data on the volume was potentially inconsistent.</p>"]
-                fn enable_volume_io(&self, input: &EnableVolumeIORequest) -> Result<(), EnableVolumeIOError> {
+                fn enable_volume_io(&self, input: &EnableVolumeIORequest) -> Box<Future<Item = (), Error = EnableVolumeIOError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56003,22 +57462,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     EnableVolumeIORequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnableVolumeIOError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableVolumeIOError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableVolumeIOError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnableVolumeIOError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables a VPC for ClassicLink. You can then link EC2-Classic instances to your ClassicLink-enabled VPC to allow communication over private IP addresses. You cannot enable your VPC for ClassicLink if any of your VPC's route tables have existing routes for address ranges within the <code>10.0.0.0/8</code> IP address range, excluding local routes for VPCs in the <code>10.0.0.0/16</code> and <code>10.1.0.0/16</code> IP address ranges. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn enable_vpc_classic_link(&self, input: &EnableVpcClassicLinkRequest) -> Result<EnableVpcClassicLinkResult, EnableVpcClassicLinkError> {
+                fn enable_vpc_classic_link(&self, input: &EnableVpcClassicLinkRequest) -> Box<Future<Item = EnableVpcClassicLinkResult, Error = EnableVpcClassicLinkError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56027,11 +57495,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     EnableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableVpcClassicLinkError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableVpcClassicLinkError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56043,20 +57519,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(EnableVpcClassicLinkResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(EnableVpcClassicLinkResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnableVpcClassicLinkError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnableVpcClassicLinkError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables a VPC to support DNS hostname resolution for ClassicLink. If enabled, the DNS hostname of a linked EC2-Classic instance resolves to its private IP address when addressed from an instance in the VPC to which it's linked. Similarly, the DNS hostname of an instance in a VPC resolves to its private IP address when addressed from a linked EC2-Classic instance. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn enable_vpc_classic_link_dns_support(&self, input: &EnableVpcClassicLinkDnsSupportRequest) -> Result<EnableVpcClassicLinkDnsSupportResult, EnableVpcClassicLinkDnsSupportError> {
+                fn enable_vpc_classic_link_dns_support(&self, input: &EnableVpcClassicLinkDnsSupportRequest) -> Box<Future<Item = EnableVpcClassicLinkDnsSupportResult, Error = EnableVpcClassicLinkDnsSupportError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56065,11 +57542,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     EnableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableVpcClassicLinkDnsSupportError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableVpcClassicLinkDnsSupportError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56081,20 +57566,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(EnableVpcClassicLinkDnsSupportResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(EnableVpcClassicLinkDnsSupportResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnableVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnableVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the console output for the specified instance.</p> <p>Instances do not have a physical monitor through which you can view their console output. They also lack physical controls that allow you to power up, reboot, or shut them down. To allow these actions, we provide them through the Amazon EC2 API and command line interface.</p> <p>Instance console output is buffered and posted shortly after instance boot, reboot, and termination. Amazon EC2 preserves the most recent 64 KB output which is available for at least one hour after the most recent post.</p> <p>For Linux instances, the instance console output displays the exact console output that would normally be displayed on a physical monitor attached to a computer. This output is buffered because the instance produces it and then posts it to a store where the instance's owner can retrieve it.</p> <p>For Windows instances, the instance console output includes output from the EC2Config service.</p>"]
-                fn get_console_output(&self, input: &GetConsoleOutputRequest) -> Result<GetConsoleOutputResult, GetConsoleOutputError> {
+                fn get_console_output(&self, input: &GetConsoleOutputRequest) -> Box<Future<Item = GetConsoleOutputResult, Error = GetConsoleOutputError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56103,11 +57589,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     GetConsoleOutputRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetConsoleOutputError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetConsoleOutputError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56119,20 +57613,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetConsoleOutputResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetConsoleOutputResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetConsoleOutputError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetConsoleOutputError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieve a JPG-format screenshot of a running instance to help with troubleshooting.</p> <p>The returned content is Base64-encoded.</p>"]
-                fn get_console_screenshot(&self, input: &GetConsoleScreenshotRequest) -> Result<GetConsoleScreenshotResult, GetConsoleScreenshotError> {
+                fn get_console_screenshot(&self, input: &GetConsoleScreenshotRequest) -> Box<Future<Item = GetConsoleScreenshotResult, Error = GetConsoleScreenshotError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56141,11 +57636,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     GetConsoleScreenshotRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetConsoleScreenshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetConsoleScreenshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56157,20 +57660,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetConsoleScreenshotResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetConsoleScreenshotResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetConsoleScreenshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetConsoleScreenshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Preview a reservation purchase with configurations that match those of your Dedicated Host. You must have active Dedicated Hosts in your account before you purchase a reservation.</p> <p>This is a preview of the <a>PurchaseHostReservation</a> action and does not result in the offering being purchased.</p>"]
-                fn get_host_reservation_purchase_preview(&self, input: &GetHostReservationPurchasePreviewRequest) -> Result<GetHostReservationPurchasePreviewResult, GetHostReservationPurchasePreviewError> {
+                fn get_host_reservation_purchase_preview(&self, input: &GetHostReservationPurchasePreviewRequest) -> Box<Future<Item = GetHostReservationPurchasePreviewResult, Error = GetHostReservationPurchasePreviewError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56179,11 +57683,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     GetHostReservationPurchasePreviewRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetHostReservationPurchasePreviewError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetHostReservationPurchasePreviewError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56195,20 +57707,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetHostReservationPurchasePreviewResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetHostReservationPurchasePreviewResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetHostReservationPurchasePreviewError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetHostReservationPurchasePreviewError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the encrypted administrator password for an instance running Windows.</p> <p>The Windows password is generated at boot if the <code>EC2Config</code> service plugin, <code>Ec2SetPassword</code>, is enabled. This usually only happens the first time an AMI is launched, and then <code>Ec2SetPassword</code> is automatically disabled. The password is not generated for rebundled AMIs unless <code>Ec2SetPassword</code> is enabled before bundling.</p> <p>The password is encrypted using the key pair that you specified when you launched the instance. You must provide the corresponding key pair file.</p> <p>Password generation and encryption takes a few moments. We recommend that you wait up to 15 minutes after launching an instance before trying to retrieve the generated password.</p>"]
-                fn get_password_data(&self, input: &GetPasswordDataRequest) -> Result<GetPasswordDataResult, GetPasswordDataError> {
+                fn get_password_data(&self, input: &GetPasswordDataRequest) -> Box<Future<Item = GetPasswordDataResult, Error = GetPasswordDataError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56217,11 +57730,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     GetPasswordDataRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPasswordDataError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPasswordDataError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56233,20 +57754,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetPasswordDataResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetPasswordDataResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetPasswordDataError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetPasswordDataError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns details about the values and term of your specified Convertible Reserved Instances. When a target configuration is specified, it returns information about whether the exchange is valid and can be performed.</p>"]
-                fn get_reserved_instances_exchange_quote(&self, input: &GetReservedInstancesExchangeQuoteRequest) -> Result<GetReservedInstancesExchangeQuoteResult, GetReservedInstancesExchangeQuoteError> {
+                fn get_reserved_instances_exchange_quote(&self, input: &GetReservedInstancesExchangeQuoteRequest) -> Box<Future<Item = GetReservedInstancesExchangeQuoteResult, Error = GetReservedInstancesExchangeQuoteError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56255,11 +57777,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     GetReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetReservedInstancesExchangeQuoteError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetReservedInstancesExchangeQuoteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56271,20 +57801,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetReservedInstancesExchangeQuoteResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetReservedInstancesExchangeQuoteResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetReservedInstancesExchangeQuoteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetReservedInstancesExchangeQuoteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Import single or multi-volume disk images or EBS snapshots into an Amazon Machine Image (AMI). For more information, see <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html\">Importing a VM as an Image Using VM Import/Export</a> in the <i>VM Import/Export User Guide</i>.</p>"]
-                fn import_image(&self, input: &ImportImageRequest) -> Result<ImportImageResult, ImportImageError> {
+                fn import_image(&self, input: &ImportImageRequest) -> Box<Future<Item = ImportImageResult, Error = ImportImageError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56293,11 +57824,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ImportImageRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ImportImageError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ImportImageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56309,20 +57848,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ImportImageResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ImportImageResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ImportImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ImportImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an import instance task using metadata from the specified disk image. <code>ImportInstance</code> only supports single-volume VMs. To import multi-volume VMs, use <a>ImportImage</a>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ec2-cli-vmimport-export.html\">Importing a Virtual Machine Using the Amazon EC2 CLI</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
-                fn import_instance(&self, input: &ImportInstanceRequest) -> Result<ImportInstanceResult, ImportInstanceError> {
+                fn import_instance(&self, input: &ImportInstanceRequest) -> Box<Future<Item = ImportInstanceResult, Error = ImportInstanceError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56331,11 +57871,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ImportInstanceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ImportInstanceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ImportInstanceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56347,20 +57895,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ImportInstanceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ImportInstanceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ImportInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ImportInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Imports the public key from an RSA key pair that you created with a third-party tool. Compare this with <a>CreateKeyPair</a>, in which AWS creates the key pair and gives the keys to you (AWS keeps a copy of the public key). With ImportKeyPair, you create the key pair and give AWS just the public key. The private key is never transferred between you and AWS.</p> <p>For more information about key pairs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn import_key_pair(&self, input: &ImportKeyPairRequest) -> Result<ImportKeyPairResult, ImportKeyPairError> {
+                fn import_key_pair(&self, input: &ImportKeyPairRequest) -> Box<Future<Item = ImportKeyPairResult, Error = ImportKeyPairError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56369,11 +57918,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ImportKeyPairRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ImportKeyPairError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ImportKeyPairError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56385,20 +57942,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ImportKeyPairResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ImportKeyPairResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ImportKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ImportKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Imports a disk into an EBS snapshot.</p>"]
-                fn import_snapshot(&self, input: &ImportSnapshotRequest) -> Result<ImportSnapshotResult, ImportSnapshotError> {
+                fn import_snapshot(&self, input: &ImportSnapshotRequest) -> Box<Future<Item = ImportSnapshotResult, Error = ImportSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56407,11 +57965,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ImportSnapshotRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ImportSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ImportSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56423,20 +57989,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ImportSnapshotResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ImportSnapshotResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ImportSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ImportSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an import volume task using metadata from the specified disk image.For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/importing-your-volumes-into-amazon-ebs.html\">Importing Disks to Amazon EBS</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
-                fn import_volume(&self, input: &ImportVolumeRequest) -> Result<ImportVolumeResult, ImportVolumeError> {
+                fn import_volume(&self, input: &ImportVolumeRequest) -> Box<Future<Item = ImportVolumeResult, Error = ImportVolumeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56445,11 +58012,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ImportVolumeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ImportVolumeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ImportVolumeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56461,20 +58036,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ImportVolumeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ImportVolumeResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ImportVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ImportVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modify the auto-placement setting of a Dedicated Host. When auto-placement is enabled, AWS will place instances that you launch with a tenancy of <code>host</code>, but without targeting a specific host ID, onto any available Dedicated Host in your account which has auto-placement enabled. When auto-placement is disabled, you need to provide a host ID if you want the instance to launch onto a specific host. If no host ID is provided, the instance will be launched onto a suitable host which has auto-placement enabled.</p>"]
-                fn modify_hosts(&self, input: &ModifyHostsRequest) -> Result<ModifyHostsResult, ModifyHostsError> {
+                fn modify_hosts(&self, input: &ModifyHostsRequest) -> Box<Future<Item = ModifyHostsResult, Error = ModifyHostsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56483,11 +58059,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyHostsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyHostsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyHostsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56499,20 +58083,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ModifyHostsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ModifyHostsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the ID format for the specified resource on a per-region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created. The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html\">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>"]
-                fn modify_id_format(&self, input: &ModifyIdFormatRequest) -> Result<(), ModifyIdFormatError> {
+                fn modify_id_format(&self, input: &ModifyIdFormatRequest) -> Box<Future<Item = (), Error = ModifyIdFormatError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56521,22 +58106,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyIdFormatRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyIdFormatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyIdFormatError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyIdFormatError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyIdFormatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the ID format of a resource for a specified IAM user, IAM role, or the root user for an account; or all IAM users, IAM roles, and the root user for an account. You can specify that resources should receive longer IDs (17-character IDs) when they are created. </p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html\">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>This setting applies to the principal specified in the request; it does not apply to the principal that makes the request. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>"]
-                fn modify_identity_id_format(&self, input: &ModifyIdentityIdFormatRequest) -> Result<(), ModifyIdentityIdFormatError> {
+                fn modify_identity_id_format(&self, input: &ModifyIdentityIdFormatRequest) -> Box<Future<Item = (), Error = ModifyIdentityIdFormatError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56545,22 +58139,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyIdentityIdFormatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyIdentityIdFormatError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyIdentityIdFormatError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyIdentityIdFormatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified attribute of the specified AMI. You can specify only one attribute at a time.</p> <note> <p>AWS Marketplace product codes cannot be modified. Images with an AWS Marketplace product code cannot be made public.</p> </note> <note> <p>The SriovNetSupport enhanced networking attribute cannot be changed using this command. Instead, enable SriovNetSupport on an instance and create an AMI from the instance. This will result in an image with SriovNetSupport enabled.</p> </note>"]
-                fn modify_image_attribute(&self, input: &ModifyImageAttributeRequest) -> Result<(), ModifyImageAttributeError> {
+                fn modify_image_attribute(&self, input: &ModifyImageAttributeRequest) -> Box<Future<Item = (), Error = ModifyImageAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56569,22 +58172,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyImageAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyImageAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyImageAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyImageAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyImageAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified attribute of the specified instance. You can specify only one attribute at a time.</p> <p>To modify some attributes, the instance must be stopped. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_ChangingAttributesWhileInstanceStopped.html\">Modifying Attributes of a Stopped Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn modify_instance_attribute(&self, input: &ModifyInstanceAttributeRequest) -> Result<(), ModifyInstanceAttributeError> {
+                fn modify_instance_attribute(&self, input: &ModifyInstanceAttributeRequest) -> Box<Future<Item = (), Error = ModifyInstanceAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56593,22 +58205,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyInstanceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyInstanceAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyInstanceAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyInstanceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Set the instance affinity value for a specific stopped instance and modify the instance tenancy setting.</p> <p>Instance affinity is disabled by default. When instance affinity is <code>host</code> and it is not associated with a specific Dedicated Host, the next time it is launched it will automatically be associated with the host it lands on. This relationship will persist if the instance is stopped/started, or rebooted.</p> <p>You can modify the host ID associated with a stopped instance. If a stopped instance has a new host ID association, the instance will target that host when restarted.</p> <p>You can modify the tenancy of a stopped instance with a tenancy of <code>host</code> or <code>dedicated</code>.</p> <p>Affinity, hostID, and tenancy are not required parameters, but at least one of them must be specified in the request. Affinity and tenancy can be modified in the same request, but tenancy can only be modified on instances that are stopped.</p>"]
-                fn modify_instance_placement(&self, input: &ModifyInstancePlacementRequest) -> Result<ModifyInstancePlacementResult, ModifyInstancePlacementError> {
+                fn modify_instance_placement(&self, input: &ModifyInstancePlacementRequest) -> Box<Future<Item = ModifyInstancePlacementResult, Error = ModifyInstancePlacementError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56617,11 +58238,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyInstancePlacementRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyInstancePlacementError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyInstancePlacementError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56633,20 +58262,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ModifyInstancePlacementResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ModifyInstancePlacementResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyInstancePlacementError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyInstancePlacementError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified network interface attribute. You can specify only one attribute at a time.</p>"]
-                fn modify_network_interface_attribute(&self, input: &ModifyNetworkInterfaceAttributeRequest) -> Result<(), ModifyNetworkInterfaceAttributeError> {
+                fn modify_network_interface_attribute(&self, input: &ModifyNetworkInterfaceAttributeRequest) -> Box<Future<Item = (), Error = ModifyNetworkInterfaceAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56655,22 +58285,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyNetworkInterfaceAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyNetworkInterfaceAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the Availability Zone, instance count, instance type, or network platform (EC2-Classic or EC2-VPC) of your Standard Reserved Instances. The Reserved Instances to be modified must be identical, except for Availability Zone, network platform, and instance type.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html\">Modifying Reserved Instances</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
-                fn modify_reserved_instances(&self, input: &ModifyReservedInstancesRequest) -> Result<ModifyReservedInstancesResult, ModifyReservedInstancesError> {
+                fn modify_reserved_instances(&self, input: &ModifyReservedInstancesRequest) -> Box<Future<Item = ModifyReservedInstancesResult, Error = ModifyReservedInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56679,11 +58318,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyReservedInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyReservedInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56695,20 +58342,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ModifyReservedInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ModifyReservedInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyReservedInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyReservedInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds or removes permission settings for the specified snapshot. You may add or remove specified AWS account IDs from a snapshot's list of create volume permissions, but you cannot do both in a single API call. If you need to both add and remove account IDs for a snapshot, you must use multiple API calls.</p> <note> <p>Encrypted snapshots and snapshots with AWS Marketplace product codes cannot be made public. Snapshots encrypted with your default CMK cannot be shared with other accounts.</p> </note> <p>For more information on modifying snapshot permissions, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html\">Sharing Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn modify_snapshot_attribute(&self, input: &ModifySnapshotAttributeRequest) -> Result<(), ModifySnapshotAttributeError> {
+                fn modify_snapshot_attribute(&self, input: &ModifySnapshotAttributeRequest) -> Box<Future<Item = (), Error = ModifySnapshotAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56717,22 +58365,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifySnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifySnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifySnapshotAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifySnapshotAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifySnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified Spot fleet request.</p> <p>While the Spot fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot fleet, increase its target capacity. The Spot fleet launches the additional Spot instances according to the allocation strategy for the Spot fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot fleet, decrease its target capacity. First, the Spot fleet cancels any open bids that exceed the new target capacity. You can request that the Spot fleet terminate Spot instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot fleet keep the fleet at its current size, but not replace any Spot instances that are interrupted or that you terminate manually.</p>"]
-                fn modify_spot_fleet_request(&self, input: &ModifySpotFleetRequestRequest) -> Result<ModifySpotFleetRequestResponse, ModifySpotFleetRequestError> {
+                fn modify_spot_fleet_request(&self, input: &ModifySpotFleetRequestRequest) -> Box<Future<Item = ModifySpotFleetRequestResponse, Error = ModifySpotFleetRequestError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56741,11 +58398,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifySpotFleetRequestRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifySpotFleetRequestError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifySpotFleetRequestError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56757,20 +58422,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ModifySpotFleetRequestResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ModifySpotFleetRequestResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifySpotFleetRequestError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifySpotFleetRequestError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies a subnet attribute. You can only modify one attribute at a time.</p>"]
-                fn modify_subnet_attribute(&self, input: &ModifySubnetAttributeRequest) -> Result<(), ModifySubnetAttributeError> {
+                fn modify_subnet_attribute(&self, input: &ModifySubnetAttributeRequest) -> Box<Future<Item = (), Error = ModifySubnetAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56779,22 +58445,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifySubnetAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifySubnetAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifySubnetAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifySubnetAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifySubnetAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies a volume attribute.</p> <p>By default, all I/O operations for the volume are suspended when the data on the volume is determined to be potentially inconsistent, to prevent undetectable, latent data corruption. The I/O access to the volume can be resumed by first enabling I/O access and then checking the data consistency on your volume.</p> <p>You can change the default behavior to resume I/O operations. We recommend that you change this only for boot volumes or for volumes that are stateless or disposable.</p>"]
-                fn modify_volume_attribute(&self, input: &ModifyVolumeAttributeRequest) -> Result<(), ModifyVolumeAttributeError> {
+                fn modify_volume_attribute(&self, input: &ModifyVolumeAttributeRequest) -> Box<Future<Item = (), Error = ModifyVolumeAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56803,22 +58478,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyVolumeAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyVolumeAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyVolumeAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyVolumeAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified attribute of the specified VPC.</p>"]
-                fn modify_vpc_attribute(&self, input: &ModifyVpcAttributeRequest) -> Result<(), ModifyVpcAttributeError> {
+                fn modify_vpc_attribute(&self, input: &ModifyVpcAttributeRequest) -> Box<Future<Item = (), Error = ModifyVpcAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56827,22 +58511,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyVpcAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyVpcAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyVpcAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyVpcAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies attributes of a specified VPC endpoint. You can modify the policy associated with the endpoint, and you can add and remove route tables associated with the endpoint.</p>"]
-                fn modify_vpc_endpoint(&self, input: &ModifyVpcEndpointRequest) -> Result<ModifyVpcEndpointResult, ModifyVpcEndpointError> {
+                fn modify_vpc_endpoint(&self, input: &ModifyVpcEndpointRequest) -> Box<Future<Item = ModifyVpcEndpointResult, Error = ModifyVpcEndpointError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56851,11 +58544,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyVpcEndpointError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyVpcEndpointError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56867,20 +58568,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ModifyVpcEndpointResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ModifyVpcEndpointResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyVpcEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyVpcEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in different accounts, each owner must initiate a separate request to modify the peering connection options, depending on whether their VPC was the requester or accepter for the VPC peering connection. If the peered VPCs are in the same account, you can modify the requester and accepter options in the same request. To confirm which VPC is the accepter and requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>"]
-                fn modify_vpc_peering_connection_options(&self, input: &ModifyVpcPeeringConnectionOptionsRequest) -> Result<ModifyVpcPeeringConnectionOptionsResult, ModifyVpcPeeringConnectionOptionsError> {
+                fn modify_vpc_peering_connection_options(&self, input: &ModifyVpcPeeringConnectionOptionsRequest) -> Box<Future<Item = ModifyVpcPeeringConnectionOptionsResult, Error = ModifyVpcPeeringConnectionOptionsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56889,11 +58591,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ModifyVpcPeeringConnectionOptionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyVpcPeeringConnectionOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyVpcPeeringConnectionOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56905,20 +58615,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ModifyVpcPeeringConnectionOptionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ModifyVpcPeeringConnectionOptionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyVpcPeeringConnectionOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyVpcPeeringConnectionOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables detailed monitoring for a running instance. Otherwise, basic monitoring is enabled. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html\">Monitoring Your Instances and Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>To disable detailed monitoring, see .</p>"]
-                fn monitor_instances(&self, input: &MonitorInstancesRequest) -> Result<MonitorInstancesResult, MonitorInstancesError> {
+                fn monitor_instances(&self, input: &MonitorInstancesRequest) -> Box<Future<Item = MonitorInstancesResult, Error = MonitorInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56927,11 +58638,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     MonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(MonitorInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| MonitorInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56943,20 +58662,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(MonitorInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(MonitorInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(MonitorInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(MonitorInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Moves an Elastic IP address from the EC2-Classic platform to the EC2-VPC platform. The Elastic IP address must be allocated to your account for more than 24 hours, and it must not be associated with an instance. After the Elastic IP address is moved, it is no longer available for use in the EC2-Classic platform, unless you move it back using the <a>RestoreAddressToClassic</a> request. You cannot move an Elastic IP address that was originally allocated for use in the EC2-VPC platform to the EC2-Classic platform. </p>"]
-                fn move_address_to_vpc(&self, input: &MoveAddressToVpcRequest) -> Result<MoveAddressToVpcResult, MoveAddressToVpcError> {
+                fn move_address_to_vpc(&self, input: &MoveAddressToVpcRequest) -> Box<Future<Item = MoveAddressToVpcResult, Error = MoveAddressToVpcError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -56965,11 +58685,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     MoveAddressToVpcRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(MoveAddressToVpcError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| MoveAddressToVpcError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -56981,20 +58709,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(MoveAddressToVpcResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(MoveAddressToVpcResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(MoveAddressToVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(MoveAddressToVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Purchase a reservation with configurations that match those of your Dedicated Host. You must have active Dedicated Hosts in your account before you purchase a reservation. This action results in the specified reservation being purchased and charged to your account.</p>"]
-                fn purchase_host_reservation(&self, input: &PurchaseHostReservationRequest) -> Result<PurchaseHostReservationResult, PurchaseHostReservationError> {
+                fn purchase_host_reservation(&self, input: &PurchaseHostReservationRequest) -> Box<Future<Item = PurchaseHostReservationResult, Error = PurchaseHostReservationError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57003,11 +58732,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     PurchaseHostReservationRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PurchaseHostReservationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PurchaseHostReservationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57019,20 +58756,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(PurchaseHostReservationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(PurchaseHostReservationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PurchaseHostReservationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PurchaseHostReservationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Purchases a Reserved Instance for use with your account. With Reserved Instances, you pay a lower hourly rate compared to On-Demand instance pricing.</p> <p>Use <a>DescribeReservedInstancesOfferings</a> to get a list of Reserved Instance offerings that match your specifications. After you've purchased a Reserved Instance, you can check for your new Reserved Instance with <a>DescribeReservedInstances</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html\">Reserved Instances</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn purchase_reserved_instances_offering(&self, input: &PurchaseReservedInstancesOfferingRequest) -> Result<PurchaseReservedInstancesOfferingResult, PurchaseReservedInstancesOfferingError> {
+                fn purchase_reserved_instances_offering(&self, input: &PurchaseReservedInstancesOfferingRequest) -> Box<Future<Item = PurchaseReservedInstancesOfferingResult, Error = PurchaseReservedInstancesOfferingError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57041,11 +58779,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     PurchaseReservedInstancesOfferingRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PurchaseReservedInstancesOfferingError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PurchaseReservedInstancesOfferingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57057,20 +58803,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(PurchaseReservedInstancesOfferingResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(PurchaseReservedInstancesOfferingResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PurchaseReservedInstancesOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PurchaseReservedInstancesOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Purchases one or more Scheduled Instances with the specified schedule.</p> <p>Scheduled Instances enable you to purchase Amazon EC2 compute capacity by the hour for a one-year term. Before you can purchase a Scheduled Instance, you must call <a>DescribeScheduledInstanceAvailability</a> to check for available schedules and obtain a purchase token. After you purchase a Scheduled Instance, you must call <a>RunScheduledInstances</a> during each scheduled time period.</p> <p>After you purchase a Scheduled Instance, you can't cancel, modify, or resell your purchase.</p>"]
-                fn purchase_scheduled_instances(&self, input: &PurchaseScheduledInstancesRequest) -> Result<PurchaseScheduledInstancesResult, PurchaseScheduledInstancesError> {
+                fn purchase_scheduled_instances(&self, input: &PurchaseScheduledInstancesRequest) -> Box<Future<Item = PurchaseScheduledInstancesResult, Error = PurchaseScheduledInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57079,11 +58826,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     PurchaseScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PurchaseScheduledInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PurchaseScheduledInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57095,20 +58850,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(PurchaseScheduledInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(PurchaseScheduledInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PurchaseScheduledInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PurchaseScheduledInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Requests a reboot of one or more instances. This operation is asynchronous; it only queues a request to reboot the specified instances. The operation succeeds if the instances are valid and belong to you. Requests to reboot terminated instances are ignored.</p> <p>If an instance does not cleanly shut down within four minutes, Amazon EC2 performs a hard reboot.</p> <p>For more information about troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html\">Getting Console Output and Rebooting Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn reboot_instances(&self, input: &RebootInstancesRequest) -> Result<(), RebootInstancesError> {
+                fn reboot_instances(&self, input: &RebootInstancesRequest) -> Box<Future<Item = (), Error = RebootInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57117,22 +58873,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RebootInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RebootInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RebootInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RebootInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RebootInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html\">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_LaunchingInstanceFromSnapshot.html\">Launching an Instance from a Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 <code>billingProduct</code> code associated with an AMI to verify subscription status for package updates. Creating an AMI from an EBS snapshot does not maintain this billing code, and subsequent instances launched from such an AMI will not be able to connect to package update infrastructure.</p> <p>Similarly, although you can create a Windows AMI from a snapshot, you can't successfully launch an instance from the AMI.</p> <p>To create Windows AMIs or to create AMIs for Linux operating systems that must retain AMI billing codes to work properly, see <a>CreateImage</a>.</p> </important> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p> <note> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> </note>"]
-                fn register_image(&self, input: &RegisterImageRequest) -> Result<RegisterImageResult, RegisterImageError> {
+                fn register_image(&self, input: &RegisterImageRequest) -> Box<Future<Item = RegisterImageResult, Error = RegisterImageError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57141,11 +58906,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RegisterImageRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterImageError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterImageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57157,20 +58930,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(RegisterImageResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(RegisterImageResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RegisterImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RegisterImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Rejects a VPC peering connection request. The VPC peering connection must be in the <code>pending-acceptance</code> state. Use the <a>DescribeVpcPeeringConnections</a> request to view your outstanding VPC peering connection requests. To delete an active VPC peering connection, or to delete a VPC peering connection request that you initiated, use <a>DeleteVpcPeeringConnection</a>.</p>"]
-                fn reject_vpc_peering_connection(&self, input: &RejectVpcPeeringConnectionRequest) -> Result<RejectVpcPeeringConnectionResult, RejectVpcPeeringConnectionError> {
+                fn reject_vpc_peering_connection(&self, input: &RejectVpcPeeringConnectionRequest) -> Box<Future<Item = RejectVpcPeeringConnectionResult, Error = RejectVpcPeeringConnectionError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57179,11 +58953,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RejectVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RejectVpcPeeringConnectionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RejectVpcPeeringConnectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57195,20 +58977,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(RejectVpcPeeringConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(RejectVpcPeeringConnectionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RejectVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RejectVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Releases the specified Elastic IP address.</p> <p>After releasing an Elastic IP address, it is released to the IP address pool and might be unavailable to you. Be sure to update your DNS records and any servers or devices that communicate with the address. If you attempt to release an Elastic IP address that you already released, you'll get an <code>AuthFailure</code> error if the address is already allocated to another AWS account.</p> <p>[EC2-Classic, default VPC] Releasing an Elastic IP address automatically disassociates it from any instance that it's associated with. To disassociate an Elastic IP address without releasing it, use <a>DisassociateAddress</a>.</p> <p>[Nondefault VPC] You must use <a>DisassociateAddress</a> to disassociate the Elastic IP address before you try to release it. Otherwise, Amazon EC2 returns an error (<code>InvalidIPAddress.InUse</code>).</p>"]
-                fn release_address(&self, input: &ReleaseAddressRequest) -> Result<(), ReleaseAddressError> {
+                fn release_address(&self, input: &ReleaseAddressRequest) -> Box<Future<Item = (), Error = ReleaseAddressError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57217,22 +59000,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ReleaseAddressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ReleaseAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReleaseAddressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReleaseAddressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ReleaseAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>When you no longer want to use an On-Demand Dedicated Host it can be released. On-Demand billing is stopped and the host goes into <code>released</code> state. The host ID of Dedicated Hosts that have been released can no longer be specified in another request, e.g., ModifyHosts. You must stop or terminate all instances on a host before it can be released.</p> <p>When Dedicated Hosts are released, it make take some time for them to stop counting toward your limit and you may receive capacity errors when trying to allocate new Dedicated hosts. Try waiting a few minutes, and then try again.</p> <p>Released hosts will still appear in a <a>DescribeHosts</a> response.</p>"]
-                fn release_hosts(&self, input: &ReleaseHostsRequest) -> Result<ReleaseHostsResult, ReleaseHostsError> {
+                fn release_hosts(&self, input: &ReleaseHostsRequest) -> Box<Future<Item = ReleaseHostsResult, Error = ReleaseHostsError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57241,11 +59033,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ReleaseHostsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReleaseHostsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReleaseHostsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57257,20 +59057,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ReleaseHostsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ReleaseHostsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ReleaseHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ReleaseHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn replace_network_acl_association(&self, input: &ReplaceNetworkAclAssociationRequest) -> Result<ReplaceNetworkAclAssociationResult, ReplaceNetworkAclAssociationError> {
+                fn replace_network_acl_association(&self, input: &ReplaceNetworkAclAssociationRequest) -> Box<Future<Item = ReplaceNetworkAclAssociationResult, Error = ReplaceNetworkAclAssociationError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57279,11 +59080,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ReplaceNetworkAclAssociationRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReplaceNetworkAclAssociationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReplaceNetworkAclAssociationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57295,20 +59104,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ReplaceNetworkAclAssociationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ReplaceNetworkAclAssociationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ReplaceNetworkAclAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ReplaceNetworkAclAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Replaces an entry (rule) in a network ACL. For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn replace_network_acl_entry(&self, input: &ReplaceNetworkAclEntryRequest) -> Result<(), ReplaceNetworkAclEntryError> {
+                fn replace_network_acl_entry(&self, input: &ReplaceNetworkAclEntryRequest) -> Box<Future<Item = (), Error = ReplaceNetworkAclEntryError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57317,22 +59127,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ReplaceNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ReplaceNetworkAclEntryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReplaceNetworkAclEntryError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReplaceNetworkAclEntryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ReplaceNetworkAclEntryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Replaces an existing route within a route table in a VPC. You must provide only one of the following: Internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only Internet gateway.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn replace_route(&self, input: &ReplaceRouteRequest) -> Result<(), ReplaceRouteError> {
+                fn replace_route(&self, input: &ReplaceRouteRequest) -> Box<Future<Item = (), Error = ReplaceRouteError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57341,22 +59160,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ReplaceRouteRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ReplaceRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReplaceRouteError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReplaceRouteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ReplaceRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Changes the route table associated with a given subnet in a VPC. After the operation completes, the subnet uses the routes in the new route table it's associated with. For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can also use ReplaceRouteTableAssociation to change which table is the main route table in the VPC. You just specify the main route table's association ID and the route table to be the new main route table.</p>"]
-                fn replace_route_table_association(&self, input: &ReplaceRouteTableAssociationRequest) -> Result<ReplaceRouteTableAssociationResult, ReplaceRouteTableAssociationError> {
+                fn replace_route_table_association(&self, input: &ReplaceRouteTableAssociationRequest) -> Box<Future<Item = ReplaceRouteTableAssociationResult, Error = ReplaceRouteTableAssociationError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57365,11 +59193,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ReplaceRouteTableAssociationRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReplaceRouteTableAssociationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReplaceRouteTableAssociationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57381,20 +59217,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ReplaceRouteTableAssociationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ReplaceRouteTableAssociationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ReplaceRouteTableAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ReplaceRouteTableAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Submits feedback about the status of an instance. The instance must be in the <code>running</code> state. If your experience with the instance differs from the instance status returned by <a>DescribeInstanceStatus</a>, use <a>ReportInstanceStatus</a> to report your experience with the instance. Amazon EC2 collects this information to improve the accuracy of status checks.</p> <p>Use of this action does not change the value returned by <a>DescribeInstanceStatus</a>.</p>"]
-                fn report_instance_status(&self, input: &ReportInstanceStatusRequest) -> Result<(), ReportInstanceStatusError> {
+                fn report_instance_status(&self, input: &ReportInstanceStatusRequest) -> Box<Future<Item = (), Error = ReportInstanceStatusError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57403,22 +59240,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ReportInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ReportInstanceStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReportInstanceStatusError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReportInstanceStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ReportInstanceStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a Spot fleet request.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot fleet requests Spot instances in the Spot pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot instances in your Spot fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html\">Spot Fleet Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn request_spot_fleet(&self, input: &RequestSpotFleetRequest) -> Result<RequestSpotFleetResponse, RequestSpotFleetError> {
+                fn request_spot_fleet(&self, input: &RequestSpotFleetRequest) -> Box<Future<Item = RequestSpotFleetResponse, Error = RequestSpotFleetError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57427,11 +59273,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RequestSpotFleetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RequestSpotFleetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RequestSpotFleetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57443,20 +59297,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(RequestSpotFleetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(RequestSpotFleetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RequestSpotFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RequestSpotFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a Spot instance request. Spot instances are instances that Amazon EC2 launches when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot Instance capacity and current Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html\">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn request_spot_instances(&self, input: &RequestSpotInstancesRequest) -> Result<RequestSpotInstancesResult, RequestSpotInstancesError> {
+                fn request_spot_instances(&self, input: &RequestSpotInstancesRequest) -> Box<Future<Item = RequestSpotInstancesResult, Error = RequestSpotInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57465,11 +59320,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RequestSpotInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RequestSpotInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RequestSpotInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57481,20 +59344,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(RequestSpotInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(RequestSpotInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RequestSpotInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RequestSpotInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Resets an attribute of an AMI to its default value.</p> <note> <p>The productCodes attribute can't be reset.</p> </note>"]
-                fn reset_image_attribute(&self, input: &ResetImageAttributeRequest) -> Result<(), ResetImageAttributeError> {
+                fn reset_image_attribute(&self, input: &ResetImageAttributeRequest) -> Box<Future<Item = (), Error = ResetImageAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57503,22 +59367,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ResetImageAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResetImageAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetImageAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetImageAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResetImageAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Resets an attribute of an instance to its default value. To reset the <code>kernel</code> or <code>ramdisk</code>, the instance must be in a stopped state. To reset the <code>sourceDestCheck</code>, the instance can be either running or stopped.</p> <p>The <code>sourceDestCheck</code> attribute controls whether source/destination checking is enabled. The default value is <code>true</code>, which means checking is enabled. This value must be <code>false</code> for a NAT instance to perform NAT. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html\">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-                fn reset_instance_attribute(&self, input: &ResetInstanceAttributeRequest) -> Result<(), ResetInstanceAttributeError> {
+                fn reset_instance_attribute(&self, input: &ResetInstanceAttributeRequest) -> Box<Future<Item = (), Error = ResetInstanceAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57527,22 +59400,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ResetInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResetInstanceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetInstanceAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetInstanceAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResetInstanceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Resets a network interface attribute. You can specify only one attribute at a time.</p>"]
-                fn reset_network_interface_attribute(&self, input: &ResetNetworkInterfaceAttributeRequest) -> Result<(), ResetNetworkInterfaceAttributeError> {
+                fn reset_network_interface_attribute(&self, input: &ResetNetworkInterfaceAttributeRequest) -> Box<Future<Item = (), Error = ResetNetworkInterfaceAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57551,22 +59433,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ResetNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResetNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetNetworkInterfaceAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetNetworkInterfaceAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResetNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Resets permission settings for the specified snapshot.</p> <p>For more information on modifying snapshot permissions, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html\">Sharing Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn reset_snapshot_attribute(&self, input: &ResetSnapshotAttributeRequest) -> Result<(), ResetSnapshotAttributeError> {
+                fn reset_snapshot_attribute(&self, input: &ResetSnapshotAttributeRequest) -> Box<Future<Item = (), Error = ResetSnapshotAttributeError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57575,22 +59466,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     ResetSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResetSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetSnapshotAttributeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetSnapshotAttributeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResetSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Restores an Elastic IP address that was previously moved to the EC2-VPC platform back to the EC2-Classic platform. You cannot move an Elastic IP address that was originally allocated for use in EC2-VPC. The Elastic IP address must not be associated with an instance or network interface.</p>"]
-                fn restore_address_to_classic(&self, input: &RestoreAddressToClassicRequest) -> Result<RestoreAddressToClassicResult, RestoreAddressToClassicError> {
+                fn restore_address_to_classic(&self, input: &RestoreAddressToClassicRequest) -> Box<Future<Item = RestoreAddressToClassicResult, Error = RestoreAddressToClassicError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57599,11 +59499,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RestoreAddressToClassicRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreAddressToClassicError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreAddressToClassicError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57615,20 +59523,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(RestoreAddressToClassicResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(RestoreAddressToClassicResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RestoreAddressToClassicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RestoreAddressToClassicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>[EC2-VPC only] Removes one or more egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be revoked.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>"]
-                fn revoke_security_group_egress(&self, input: &RevokeSecurityGroupEgressRequest) -> Result<(), RevokeSecurityGroupEgressError> {
+                fn revoke_security_group_egress(&self, input: &RevokeSecurityGroupEgressRequest) -> Box<Future<Item = (), Error = RevokeSecurityGroupEgressError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57637,22 +59546,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RevokeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RevokeSecurityGroupEgressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RevokeSecurityGroupEgressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RevokeSecurityGroupEgressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RevokeSecurityGroupEgressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes one or more ingress rules from a security group. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be removed.</p> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>"]
-                fn revoke_security_group_ingress(&self, input: &RevokeSecurityGroupIngressRequest) -> Result<(), RevokeSecurityGroupIngressError> {
+                fn revoke_security_group_ingress(&self, input: &RevokeSecurityGroupIngressRequest) -> Box<Future<Item = (), Error = RevokeSecurityGroupIngressError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57661,22 +59579,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RevokeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RevokeSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RevokeSecurityGroupIngressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RevokeSecurityGroupIngressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(RevokeSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types\">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create 5 separate launch requests for 100 instances each instead of 1 launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. After launch, you can apply tags to your running instance (requires a resource ID). For more information, see <a>CreateTags</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html\">What To Do If An Instance Immediately Terminates</a>, and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html\">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn run_instances(&self, input: &RunInstancesRequest) -> Result<Reservation, RunInstancesError> {
+                fn run_instances(&self, input: &RunInstancesRequest) -> Box<Future<Item = Reservation, Error = RunInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57685,11 +59612,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RunInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RunInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RunInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57701,20 +59636,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ReservationDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ReservationDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RunInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RunInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Launches the specified Scheduled Instances.</p> <p>Before you can launch a Scheduled Instance, you must purchase it and obtain an identifier using <a>PurchaseScheduledInstances</a>.</p> <p>You must launch a Scheduled Instance during its scheduled time period. You can't stop or reboot a Scheduled Instance, but you can terminate it as needed. If you terminate a Scheduled Instance before the current scheduled time period ends, you can launch it again after a few minutes. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-scheduled-instances.html\">Scheduled Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn run_scheduled_instances(&self, input: &RunScheduledInstancesRequest) -> Result<RunScheduledInstancesResult, RunScheduledInstancesError> {
+                fn run_scheduled_instances(&self, input: &RunScheduledInstancesRequest) -> Box<Future<Item = RunScheduledInstancesResult, Error = RunScheduledInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57723,11 +59659,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     RunScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RunScheduledInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RunScheduledInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57739,20 +59683,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(RunScheduledInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(RunScheduledInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RunScheduledInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RunScheduledInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Starts an Amazon EBS-backed AMI that you've previously stopped.</p> <p>Instances that use Amazon EBS volumes as their root devices can be quickly stopped and started. When an instance is stopped, the compute resources are released and you are not billed for hourly instance usage. However, your root partition Amazon EBS volume remains, continues to persist your data, and you are charged for Amazon EBS volume usage. You can restart your instance at any time. Each time you transition an instance from stopped to started, Amazon EC2 charges a full instance hour, even if transitions happen multiple times within a single hour.</p> <p>Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Performing this operation on an instance that uses an instance store as its root device returns an error.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html\">Stopping Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn start_instances(&self, input: &StartInstancesRequest) -> Result<StartInstancesResult, StartInstancesError> {
+                fn start_instances(&self, input: &StartInstancesRequest) -> Box<Future<Item = StartInstancesResult, Error = StartInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57761,11 +59706,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     StartInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StartInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StartInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57777,20 +59730,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(StartInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(StartInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(StartInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(StartInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Stops an Amazon EBS-backed instance.</p> <p>We don't charge hourly usage for a stopped instance, or data transfer fees; however, your root partition Amazon EBS volume remains, continues to persist your data, and you are charged for Amazon EBS volume usage. Each time you transition an instance from stopped to started, Amazon EC2 charges a full instance hour, even if transitions happen multiple times within a single hour.</p> <p>You can't start or stop Spot instances, and you can't stop instance store-backed instances.</p> <p>When you stop an instance, we shut it down. You can restart your instance at any time. Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Stopping an instance is different to rebooting or terminating it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, the root device and any other devices attached during the instance launch are automatically deleted. For more information about the differences between rebooting, stopping, and terminating instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>When you stop an instance, we attempt to shut it down forcibly after a short while. If your instance appears stuck in the stopping state after a period of time, there may be an issue with the underlying host computer. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesStopping.html\">Troubleshooting Stopping Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn stop_instances(&self, input: &StopInstancesRequest) -> Result<StopInstancesResult, StopInstancesError> {
+                fn stop_instances(&self, input: &StopInstancesRequest) -> Box<Future<Item = StopInstancesResult, Error = StopInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57799,11 +59753,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     StopInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StopInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StopInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57815,20 +59777,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(StopInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(StopInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(StopInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(StopInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Shuts down one or more instances. This operation is idempotent; if you terminate an instance more than once, each call succeeds. </p> <p>If you specify multiple instances and the request fails (for example, because of a single incorrect instance ID), none of the instances are terminated.</p> <p>Terminated instances remain visible after termination (for approximately one hour).</p> <p>By default, Amazon EC2 deletes all EBS volumes that were attached when the instance launched. Volumes attached after instance launch continue running.</p> <p>You can stop, start, and terminate EBS-backed instances. You can only terminate instance store-backed instances. What happens to an instance differs if you stop it or terminate it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, any attached EBS volumes with the <code>DeleteOnTermination</code> block device mapping parameter set to <code>true</code> are automatically deleted. For more information about the differences between stopping and terminating instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information about troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesShuttingDown.html\">Troubleshooting Terminating Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn terminate_instances(&self, input: &TerminateInstancesRequest) -> Result<TerminateInstancesResult, TerminateInstancesError> {
+                fn terminate_instances(&self, input: &TerminateInstancesRequest) -> Box<Future<Item = TerminateInstancesResult, Error = TerminateInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57837,11 +59800,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     TerminateInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TerminateInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TerminateInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57853,20 +59824,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(TerminateInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(TerminateInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(TerminateInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(TerminateInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Unassigns one or more IPv6 addresses from a network interface.</p>"]
-                fn unassign_ipv_6_addresses(&self, input: &UnassignIpv6AddressesRequest) -> Result<UnassignIpv6AddressesResult, UnassignIpv6AddressesError> {
+                fn unassign_ipv_6_addresses(&self, input: &UnassignIpv6AddressesRequest) -> Box<Future<Item = UnassignIpv6AddressesResult, Error = UnassignIpv6AddressesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57875,11 +59847,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     UnassignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UnassignIpv6AddressesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UnassignIpv6AddressesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57891,20 +59871,21 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UnassignIpv6AddressesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UnassignIpv6AddressesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UnassignIpv6AddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UnassignIpv6AddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Unassigns one or more secondary private IP addresses from a network interface.</p>"]
-                fn unassign_private_ip_addresses(&self, input: &UnassignPrivateIpAddressesRequest) -> Result<(), UnassignPrivateIpAddressesError> {
+                fn unassign_private_ip_addresses(&self, input: &UnassignPrivateIpAddressesRequest) -> Box<Future<Item = (), Error = UnassignPrivateIpAddressesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57913,22 +59894,31 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     UnassignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UnassignPrivateIpAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UnassignPrivateIpAddressesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UnassignPrivateIpAddressesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UnassignPrivateIpAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables detailed monitoring for a running instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html\">Monitoring Your Instances and Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-                fn unmonitor_instances(&self, input: &UnmonitorInstancesRequest) -> Result<UnmonitorInstancesResult, UnmonitorInstancesError> {
+                fn unmonitor_instances(&self, input: &UnmonitorInstancesRequest) -> Box<Future<Item = UnmonitorInstancesResult, Error = UnmonitorInstancesError>> {
                     let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
                     let mut params = Params::new();
 
@@ -57937,11 +59927,19 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
                     UnmonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UnmonitorInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UnmonitorInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -57953,15 +59951,16 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UnmonitorInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UnmonitorInstancesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UnmonitorInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UnmonitorInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -57987,12 +59986,12 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
         }
             
         #[test]
-        fn test_parse_valid_ec_2_allocate_address() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-allocate-address.xml");
+        fn test_parse_valid_ec_2_associate_address() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-associate-address.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = AllocateAddressRequest::default();
-            let result = client.allocate_address(&request);
+            let request = AssociateAddressRequest::default();
+            let result = client.associate_address(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -58009,276 +60008,12 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ec_2_associate_address() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-associate-address.xml");
+        fn test_parse_valid_ec_2_describe_instance_status() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-instance-status.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = AssociateAddressRequest::default();
-            let result = client.associate_address(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_associate_route_table() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-associate-route-table.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = AssociateRouteTableRequest::default();
-            let result = client.associate_route_table(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_attach_volume() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-attach-volume.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = AttachVolumeRequest::default();
-            let result = client.attach_volume(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_attach_vpn_gateway() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-attach-vpn-gateway.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = AttachVpnGatewayRequest::default();
-            let result = client.attach_vpn_gateway(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_bundle_instance() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-bundle-instance.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = BundleInstanceRequest::default();
-            let result = client.bundle_instance(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_cancel_bundle_task() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-cancel-bundle-task.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CancelBundleTaskRequest::default();
-            let result = client.cancel_bundle_task(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_cancel_reserved_instances_listing() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-cancel-reserved-instances-listing.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CancelReservedInstancesListingRequest::default();
-            let result = client.cancel_reserved_instances_listing(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_cancel_spot_instance_requests() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-cancel-spot-instance-requests.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CancelSpotInstanceRequestsRequest::default();
-            let result = client.cancel_spot_instance_requests(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_confirm_product_instance() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-confirm-product-instance.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ConfirmProductInstanceRequest::default();
-            let result = client.confirm_product_instance(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_copy_snapshot() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-copy-snapshot.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CopySnapshotRequest::default();
-            let result = client.copy_snapshot(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_customer_gateway() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-customer-gateway.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateCustomerGatewayRequest::default();
-            let result = client.create_customer_gateway(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_dhcp_options() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-dhcp-options.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateDhcpOptionsRequest::default();
-            let result = client.create_dhcp_options(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_instance_export_task() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-instance-export-task.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateInstanceExportTaskRequest::default();
-            let result = client.create_instance_export_task(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_key_pair() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-key-pair.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateKeyPairRequest::default();
-            let result = client.create_key_pair(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_network_acl() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-network-acl.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateNetworkAclRequest::default();
-            let result = client.create_network_acl(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_network_interface() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-network-interface.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateNetworkInterfaceRequest::default();
-            let result = client.create_network_interface(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_reserved_instances_listing() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-reserved-instances-listing.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateReservedInstancesListingRequest::default();
-            let result = client.create_reserved_instances_listing(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_route_table() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-route-table.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateRouteTableRequest::default();
-            let result = client.create_route_table(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_snapshot() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-snapshot.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateSnapshotRequest::default();
-            let result = client.create_snapshot(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_spot_datafeed_subscription() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-spot-datafeed-subscription.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateSpotDatafeedSubscriptionRequest::default();
-            let result = client.create_spot_datafeed_subscription(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_subnet() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-subnet.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateSubnetRequest::default();
-            let result = client.create_subnet(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_volume() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-volume.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateVolumeRequest::default();
-            let result = client.create_volume(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_vpc() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-vpc.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateVpcRequest::default();
-            let result = client.create_vpc(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_create_vpn_gateway() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-vpn-gateway.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateVpnGatewayRequest::default();
-            let result = client.create_vpn_gateway(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_delete_internet_gateway() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-delete-internet-gateway.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DeleteInternetGatewayRequest::default();
-            let result = client.delete_internet_gateway(&request);
+            let request = DescribeInstanceStatusRequest::default();
+            let result = client.describe_instance_status(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -58295,111 +60030,67 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_addresses() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-addresses.xml");
+        fn test_parse_valid_ec_2_replace_network_acl_association() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-replace-network-acl-association.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeAddressesRequest::default();
-            let result = client.describe_addresses(&request);
+            let request = ReplaceNetworkAclAssociationRequest::default();
+            let result = client.replace_network_acl_association(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_availability_zones() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-availability-zones.xml");
+        fn test_parse_valid_ec_2_describe_security_groups() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-security-groups.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeAvailabilityZonesRequest::default();
-            let result = client.describe_availability_zones(&request);
+            let request = DescribeSecurityGroupsRequest::default();
+            let result = client.describe_security_groups(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_bundle_tasks() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-bundle-tasks.xml");
+        fn test_parse_valid_ec_2_describe_spot_price_history() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-spot-price-history.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeBundleTasksRequest::default();
-            let result = client.describe_bundle_tasks(&request);
+            let request = DescribeSpotPriceHistoryRequest::default();
+            let result = client.describe_spot_price_history(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_customer_gateways() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-customer-gateways.xml");
+        fn test_parse_valid_ec_2_create_spot_datafeed_subscription() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-spot-datafeed-subscription.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeCustomerGatewaysRequest::default();
-            let result = client.describe_customer_gateways(&request);
+            let request = CreateSpotDatafeedSubscriptionRequest::default();
+            let result = client.create_spot_datafeed_subscription(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_dhcp_options() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-dhcp-options.xml");
+        fn test_parse_valid_ec_2_delete_internet_gateway() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-delete-internet-gateway.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeDhcpOptionsRequest::default();
-            let result = client.describe_dhcp_options(&request);
+            let request = DeleteInternetGatewayRequest::default();
+            let result = client.delete_internet_gateway(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_export_tasks() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-export-tasks.xml");
+        fn test_parse_valid_ec_2_describe_spot_instance_requests() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-spot-instance-requests.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeExportTasksRequest::default();
-            let result = client.describe_export_tasks(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_instance_attribute() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-instance-attribute.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeInstanceAttributeRequest::default();
-            let result = client.describe_instance_attribute(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_instance_status() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-instance-status.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeInstanceStatusRequest::default();
-            let result = client.describe_instance_status(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_instances() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-instances.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeInstancesRequest::default();
-            let result = client.describe_instances(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_internet_gateways() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-internet-gateways.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeInternetGatewaysRequest::default();
-            let result = client.describe_internet_gateways(&request);
+            let request = DescribeSpotInstanceRequestsRequest::default();
+            let result = client.describe_spot_instance_requests(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -58416,12 +60107,56 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_network_acls() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-network-acls.xml");
+        fn test_parse_valid_ec_2_create_route_table() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-route-table.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeNetworkAclsRequest::default();
-            let result = client.describe_network_acls(&request);
+            let request = CreateRouteTableRequest::default();
+            let result = client.create_route_table(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_export_tasks() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-export-tasks.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeExportTasksRequest::default();
+            let result = client.describe_export_tasks(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_import_instance() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-import-instance.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ImportInstanceRequest::default();
+            let result = client.import_instance(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_detach_volume() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-detach-volume.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DetachVolumeRequest::default();
+            let result = client.detach_volume(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_create_key_pair() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-key-pair.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateKeyPairRequest::default();
+            let result = client.create_key_pair(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -58438,34 +60173,56 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_placement_groups() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-placement-groups.xml");
+        fn test_parse_valid_ec_2_unmonitor_instances() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-unmonitor-instances.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribePlacementGroupsRequest::default();
-            let result = client.describe_placement_groups(&request);
+            let request = UnmonitorInstancesRequest::default();
+            let result = client.unmonitor_instances(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_regions() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-regions.xml");
+        fn test_parse_valid_ec_2_cancel_reserved_instances_listing() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-cancel-reserved-instances-listing.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeRegionsRequest::default();
-            let result = client.describe_regions(&request);
+            let request = CancelReservedInstancesListingRequest::default();
+            let result = client.cancel_reserved_instances_listing(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_reserved_instances_offerings() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-reserved-instances-offerings.xml");
+        fn test_parse_valid_ec_2_request_spot_instances() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-request-spot-instances.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeReservedInstancesOfferingsRequest::default();
-            let result = client.describe_reserved_instances_offerings(&request);
+            let request = RequestSpotInstancesRequest::default();
+            let result = client.request_spot_instances(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_availability_zones() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-availability-zones.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeAvailabilityZonesRequest::default();
+            let result = client.describe_availability_zones(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_attach_volume() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-attach-volume.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = AttachVolumeRequest::default();
+            let result = client.attach_volume(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -58493,12 +60250,23 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_security_groups() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-security-groups.xml");
+        fn test_parse_valid_ec_2_create_reserved_instances_listing() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-reserved-instances-listing.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeSecurityGroupsRequest::default();
-            let result = client.describe_security_groups(&request);
+            let request = CreateReservedInstancesListingRequest::default();
+            let result = client.create_reserved_instances_listing(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_cancel_spot_instance_requests() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-cancel-spot-instance-requests.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CancelSpotInstanceRequestsRequest::default();
+            let result = client.cancel_spot_instance_requests(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -58515,177 +60283,12 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ec_2_describe_spot_instance_requests() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-spot-instance-requests.xml");
+        fn test_parse_valid_ec_2_create_instance_export_task() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-instance-export-task.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeSpotInstanceRequestsRequest::default();
-            let result = client.describe_spot_instance_requests(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_spot_price_history() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-spot-price-history.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeSpotPriceHistoryRequest::default();
-            let result = client.describe_spot_price_history(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_subnets() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-subnets.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeSubnetsRequest::default();
-            let result = client.describe_subnets(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_tags() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-tags.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeTagsRequest::default();
-            let result = client.describe_tags(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_volume_status() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-volume-status.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeVolumeStatusRequest::default();
-            let result = client.describe_volume_status(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_volumes() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-volumes.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeVolumesRequest::default();
-            let result = client.describe_volumes(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_vpcs() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-vpcs.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeVpcsRequest::default();
-            let result = client.describe_vpcs(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_vpn_connections() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-vpn-connections.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeVpnConnectionsRequest::default();
-            let result = client.describe_vpn_connections(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_describe_vpn_gateways() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-vpn-gateways.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeVpnGatewaysRequest::default();
-            let result = client.describe_vpn_gateways(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_detach_network_interface() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-detach-network-interface.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DetachNetworkInterfaceRequest::default();
-            let result = client.detach_network_interface(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_detach_volume() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-detach-volume.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DetachVolumeRequest::default();
-            let result = client.detach_volume(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_get_password_data() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-get-password-data.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetPasswordDataRequest::default();
-            let result = client.get_password_data(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_import_instance() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-import-instance.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ImportInstanceRequest::default();
-            let result = client.import_instance(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_import_key_pair() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-import-key-pair.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ImportKeyPairRequest::default();
-            let result = client.import_key_pair(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_import_volume() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-import-volume.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ImportVolumeRequest::default();
-            let result = client.import_volume(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_modify_snapshot_attribute() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-modify-snapshot-attribute.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ModifySnapshotAttributeRequest::default();
-            let result = client.modify_snapshot_attribute(&request);
+            let request = CreateInstanceExportTaskRequest::default();
+            let result = client.create_instance_export_task(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -58702,56 +60305,12 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ec_2_register_image() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-register-image.xml");
+        fn test_parse_valid_ec_2_import_volume() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-import-volume.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = RegisterImageRequest::default();
-            let result = client.register_image(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_replace_network_acl_association() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-replace-network-acl-association.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ReplaceNetworkAclAssociationRequest::default();
-            let result = client.replace_network_acl_association(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_request_spot_instances() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-request-spot-instances.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = RequestSpotInstancesRequest::default();
-            let result = client.request_spot_instances(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_run_instances() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-run-instances.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = RunInstancesRequest::default();
-            let result = client.run_instances(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ec_2_start_instances() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-start-instances.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = StartInstancesRequest::default();
-            let result = client.start_instances(&request);
+            let request = ImportVolumeRequest::default();
+            let result = client.import_volume(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -58768,12 +60327,452 @@ UnmonitorInstancesError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ec_2_unmonitor_instances() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-unmonitor-instances.xml");
+        fn test_parse_valid_ec_2_create_dhcp_options() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-dhcp-options.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = UnmonitorInstancesRequest::default();
-            let result = client.unmonitor_instances(&request);
+            let request = CreateDhcpOptionsRequest::default();
+            let result = client.create_dhcp_options(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_instances() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-instances.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeInstancesRequest::default();
+            let result = client.describe_instances(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_instance_attribute() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-instance-attribute.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeInstanceAttributeRequest::default();
+            let result = client.describe_instance_attribute(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_reserved_instances_offerings() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-reserved-instances-offerings.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeReservedInstancesOfferingsRequest::default();
+            let result = client.describe_reserved_instances_offerings(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_modify_snapshot_attribute() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-modify-snapshot-attribute.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ModifySnapshotAttributeRequest::default();
+            let result = client.modify_snapshot_attribute(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_import_key_pair() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-import-key-pair.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ImportKeyPairRequest::default();
+            let result = client.import_key_pair(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_cancel_bundle_task() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-cancel-bundle-task.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CancelBundleTaskRequest::default();
+            let result = client.cancel_bundle_task(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_create_volume() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-volume.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateVolumeRequest::default();
+            let result = client.create_volume(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_vpn_gateways() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-vpn-gateways.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeVpnGatewaysRequest::default();
+            let result = client.describe_vpn_gateways(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_subnets() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-subnets.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeSubnetsRequest::default();
+            let result = client.describe_subnets(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_create_network_interface() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-network-interface.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateNetworkInterfaceRequest::default();
+            let result = client.create_network_interface(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_detach_network_interface() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-detach-network-interface.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DetachNetworkInterfaceRequest::default();
+            let result = client.detach_network_interface(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_bundle_instance() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-bundle-instance.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = BundleInstanceRequest::default();
+            let result = client.bundle_instance(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_confirm_product_instance() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-confirm-product-instance.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ConfirmProductInstanceRequest::default();
+            let result = client.confirm_product_instance(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_create_vpc() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-vpc.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateVpcRequest::default();
+            let result = client.create_vpc(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_volume_status() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-volume-status.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeVolumeStatusRequest::default();
+            let result = client.describe_volume_status(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_start_instances() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-start-instances.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = StartInstancesRequest::default();
+            let result = client.start_instances(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_attach_vpn_gateway() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-attach-vpn-gateway.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = AttachVpnGatewayRequest::default();
+            let result = client.attach_vpn_gateway(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_create_customer_gateway() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-customer-gateway.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateCustomerGatewayRequest::default();
+            let result = client.create_customer_gateway(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_customer_gateways() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-customer-gateways.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeCustomerGatewaysRequest::default();
+            let result = client.describe_customer_gateways(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_vpn_connections() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-vpn-connections.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeVpnConnectionsRequest::default();
+            let result = client.describe_vpn_connections(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_volumes() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-volumes.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeVolumesRequest::default();
+            let result = client.describe_volumes(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_addresses() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-addresses.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeAddressesRequest::default();
+            let result = client.describe_addresses(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_create_snapshot() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-snapshot.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateSnapshotRequest::default();
+            let result = client.create_snapshot(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_copy_snapshot() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-copy-snapshot.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CopySnapshotRequest::default();
+            let result = client.copy_snapshot(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_allocate_address() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-allocate-address.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = AllocateAddressRequest::default();
+            let result = client.allocate_address(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_network_acls() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-network-acls.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeNetworkAclsRequest::default();
+            let result = client.describe_network_acls(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_regions() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-regions.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeRegionsRequest::default();
+            let result = client.describe_regions(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_dhcp_options() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-dhcp-options.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeDhcpOptionsRequest::default();
+            let result = client.describe_dhcp_options(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_create_vpn_gateway() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-vpn-gateway.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateVpnGatewayRequest::default();
+            let result = client.create_vpn_gateway(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_register_image() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-register-image.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = RegisterImageRequest::default();
+            let result = client.register_image(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_tags() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-tags.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeTagsRequest::default();
+            let result = client.describe_tags(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_vpcs() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-vpcs.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeVpcsRequest::default();
+            let result = client.describe_vpcs(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_placement_groups() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-placement-groups.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribePlacementGroupsRequest::default();
+            let result = client.describe_placement_groups(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_get_password_data() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-get-password-data.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = GetPasswordDataRequest::default();
+            let result = client.get_password_data(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_run_instances() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-run-instances.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = RunInstancesRequest::default();
+            let result = client.run_instances(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_create_subnet() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-subnet.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateSubnetRequest::default();
+            let result = client.create_subnet(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_create_network_acl() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-create-network-acl.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateNetworkAclRequest::default();
+            let result = client.create_network_acl(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_associate_route_table() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-associate-route-table.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = AssociateRouteTableRequest::default();
+            let result = client.associate_route_table(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_bundle_tasks() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-bundle-tasks.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeBundleTasksRequest::default();
+            let result = client.describe_bundle_tasks(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ec_2_describe_internet_gateways() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ec2-describe-internet-gateways.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = Ec2Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeInternetGatewaysRequest::default();
+            let result = client.describe_internet_gateways(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

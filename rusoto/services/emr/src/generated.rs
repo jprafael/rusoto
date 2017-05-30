@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type ActionOnFailure = String;
 #[doc="<p>Input to an AddInstanceGroups call.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -3329,99 +3330,99 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds one or more instance groups to a running cluster.</p>"]
-                fn add_instance_groups(&self, input: &AddInstanceGroupsInput)  -> Result<AddInstanceGroupsOutput, AddInstanceGroupsError>;
+                fn add_instance_groups(&self, input: &AddInstanceGroupsInput)  -> Box<Future<Item = AddInstanceGroupsOutput, Error = AddInstanceGroupsError>>;
                 
 
                 #[doc="<p>AddJobFlowSteps adds new steps to a running job flow. A maximum of 256 steps are allowed in each job flow.</p> <p>If your job flow is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/AddMoreThan256Steps.html\">Add More than 256 Steps to a Job Flow</a> in the <i>Amazon EMR Developer's Guide</i>.</p> <p>A step specifies the location of a JAR file stored either on the master node of the job flow or in Amazon S3. Each step is performed by the main function of the main class of the JAR file. The main class can be specified either in the manifest of the JAR or by using the MainFunction parameter of the step.</p> <p>Amazon EMR executes each step in the order listed. For a step to be considered complete, the main function must exit with a zero exit code and all Hadoop jobs started while the step was running must have completed and run successfully.</p> <p>You can only add steps to a job flow that is in one of the following states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>"]
-                fn add_job_flow_steps(&self, input: &AddJobFlowStepsInput)  -> Result<AddJobFlowStepsOutput, AddJobFlowStepsError>;
+                fn add_job_flow_steps(&self, input: &AddJobFlowStepsInput)  -> Box<Future<Item = AddJobFlowStepsOutput, Error = AddJobFlowStepsError>>;
                 
 
                 #[doc="<p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p>"]
-                fn add_tags(&self, input: &AddTagsInput)  -> Result<AddTagsOutput, AddTagsError>;
+                fn add_tags(&self, input: &AddTagsInput)  -> Box<Future<Item = AddTagsOutput, Error = AddTagsError>>;
                 
 
                 #[doc="<p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>"]
-                fn cancel_steps(&self, input: &CancelStepsInput)  -> Result<CancelStepsOutput, CancelStepsError>;
+                fn cancel_steps(&self, input: &CancelStepsInput)  -> Box<Future<Item = CancelStepsOutput, Error = CancelStepsError>>;
                 
 
                 #[doc="<p>Creates a security configuration, which is stored in the service and can be specified when a cluster is created.</p>"]
-                fn create_security_configuration(&self, input: &CreateSecurityConfigurationInput)  -> Result<CreateSecurityConfigurationOutput, CreateSecurityConfigurationError>;
+                fn create_security_configuration(&self, input: &CreateSecurityConfigurationInput)  -> Box<Future<Item = CreateSecurityConfigurationOutput, Error = CreateSecurityConfigurationError>>;
                 
 
                 #[doc="<p>Deletes a security configuration.</p>"]
-                fn delete_security_configuration(&self, input: &DeleteSecurityConfigurationInput)  -> Result<DeleteSecurityConfigurationOutput, DeleteSecurityConfigurationError>;
+                fn delete_security_configuration(&self, input: &DeleteSecurityConfigurationInput)  -> Box<Future<Item = DeleteSecurityConfigurationOutput, Error = DeleteSecurityConfigurationError>>;
                 
 
                 #[doc="<p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. For information about the cluster steps, see <a>ListSteps</a>.</p>"]
-                fn describe_cluster(&self, input: &DescribeClusterInput)  -> Result<DescribeClusterOutput, DescribeClusterError>;
+                fn describe_cluster(&self, input: &DescribeClusterInput)  -> Box<Future<Item = DescribeClusterOutput, Error = DescribeClusterError>>;
                 
 
                 #[doc="<p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>"]
-                fn describe_job_flows(&self, input: &DescribeJobFlowsInput)  -> Result<DescribeJobFlowsOutput, DescribeJobFlowsError>;
+                fn describe_job_flows(&self, input: &DescribeJobFlowsInput)  -> Box<Future<Item = DescribeJobFlowsOutput, Error = DescribeJobFlowsError>>;
                 
 
                 #[doc="<p>Provides the details of a security configuration by returning the configuration JSON.</p>"]
-                fn describe_security_configuration(&self, input: &DescribeSecurityConfigurationInput)  -> Result<DescribeSecurityConfigurationOutput, DescribeSecurityConfigurationError>;
+                fn describe_security_configuration(&self, input: &DescribeSecurityConfigurationInput)  -> Box<Future<Item = DescribeSecurityConfigurationOutput, Error = DescribeSecurityConfigurationError>>;
                 
 
                 #[doc="<p>Provides more detail about the cluster step.</p>"]
-                fn describe_step(&self, input: &DescribeStepInput)  -> Result<DescribeStepOutput, DescribeStepError>;
+                fn describe_step(&self, input: &DescribeStepInput)  -> Box<Future<Item = DescribeStepOutput, Error = DescribeStepError>>;
                 
 
                 #[doc="<p>Provides information about the bootstrap actions associated with a cluster.</p>"]
-                fn list_bootstrap_actions(&self, input: &ListBootstrapActionsInput)  -> Result<ListBootstrapActionsOutput, ListBootstrapActionsError>;
+                fn list_bootstrap_actions(&self, input: &ListBootstrapActionsInput)  -> Box<Future<Item = ListBootstrapActionsOutput, Error = ListBootstrapActionsError>>;
                 
 
                 #[doc="<p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>"]
-                fn list_clusters(&self, input: &ListClustersInput)  -> Result<ListClustersOutput, ListClustersError>;
+                fn list_clusters(&self, input: &ListClustersInput)  -> Box<Future<Item = ListClustersOutput, Error = ListClustersError>>;
                 
 
                 #[doc="<p>Provides all available details about the instance groups in a cluster.</p>"]
-                fn list_instance_groups(&self, input: &ListInstanceGroupsInput)  -> Result<ListInstanceGroupsOutput, ListInstanceGroupsError>;
+                fn list_instance_groups(&self, input: &ListInstanceGroupsInput)  -> Box<Future<Item = ListInstanceGroupsOutput, Error = ListInstanceGroupsError>>;
                 
 
                 #[doc="<p>Provides information about the cluster instances that Amazon EMR provisions on behalf of a user when it creates the cluster. For example, this operation indicates when the EC2 instances reach the Ready state, when instances become available to Amazon EMR to use for jobs, and the IP addresses for cluster instances, etc.</p>"]
-                fn list_instances(&self, input: &ListInstancesInput)  -> Result<ListInstancesOutput, ListInstancesError>;
+                fn list_instances(&self, input: &ListInstancesInput)  -> Box<Future<Item = ListInstancesOutput, Error = ListInstancesError>>;
                 
 
                 #[doc="<p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>"]
-                fn list_security_configurations(&self, input: &ListSecurityConfigurationsInput)  -> Result<ListSecurityConfigurationsOutput, ListSecurityConfigurationsError>;
+                fn list_security_configurations(&self, input: &ListSecurityConfigurationsInput)  -> Box<Future<Item = ListSecurityConfigurationsOutput, Error = ListSecurityConfigurationsError>>;
                 
 
                 #[doc="<p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>"]
-                fn list_steps(&self, input: &ListStepsInput)  -> Result<ListStepsOutput, ListStepsError>;
+                fn list_steps(&self, input: &ListStepsInput)  -> Box<Future<Item = ListStepsOutput, Error = ListStepsError>>;
                 
 
                 #[doc="<p>ModifyInstanceGroups modifies the number of nodes and configuration settings of an instance group. The input parameters include the new target instance count for the group and the instance group ID. The call will either succeed or fail atomically.</p>"]
-                fn modify_instance_groups(&self, input: &ModifyInstanceGroupsInput)  -> Result<(), ModifyInstanceGroupsError>;
+                fn modify_instance_groups(&self, input: &ModifyInstanceGroupsInput)  -> Box<Future<Item = (), Error = ModifyInstanceGroupsError>>;
                 
 
                 #[doc="<p>Creates or updates an automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric.</p>"]
-                fn put_auto_scaling_policy(&self, input: &PutAutoScalingPolicyInput)  -> Result<PutAutoScalingPolicyOutput, PutAutoScalingPolicyError>;
+                fn put_auto_scaling_policy(&self, input: &PutAutoScalingPolicyInput)  -> Box<Future<Item = PutAutoScalingPolicyOutput, Error = PutAutoScalingPolicyError>>;
                 
 
                 #[doc="<p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>"]
-                fn remove_auto_scaling_policy(&self, input: &RemoveAutoScalingPolicyInput)  -> Result<RemoveAutoScalingPolicyOutput, RemoveAutoScalingPolicyError>;
+                fn remove_auto_scaling_policy(&self, input: &RemoveAutoScalingPolicyInput)  -> Box<Future<Item = RemoveAutoScalingPolicyOutput, Error = RemoveAutoScalingPolicyError>>;
                 
 
                 #[doc="<p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>"]
-                fn remove_tags(&self, input: &RemoveTagsInput)  -> Result<RemoveTagsOutput, RemoveTagsError>;
+                fn remove_tags(&self, input: &RemoveTagsInput)  -> Box<Future<Item = RemoveTagsOutput, Error = RemoveTagsError>>;
                 
 
                 #[doc="<p>RunJobFlow creates and starts running a new job flow. The job flow will run the steps specified. After the job flow completes, the cluster is stopped and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the job flow will transition to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the job flow and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your job flow is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/Management/Guide/AddMoreThan256Steps.html\">Add More than 256 Steps to a Job Flow</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running job flows, we recommend that you periodically store your results.</p>"]
-                fn run_job_flow(&self, input: &RunJobFlowInput)  -> Result<RunJobFlowOutput, RunJobFlowError>;
+                fn run_job_flow(&self, input: &RunJobFlowInput)  -> Box<Future<Item = RunJobFlowOutput, Error = RunJobFlowError>>;
                 
 
                 #[doc="<p>SetTerminationProtection locks a job flow so the EC2 instances in the cluster cannot be terminated by user intervention, an API call, or in the event of a job-flow error. The cluster still terminates upon successful completion of the job flow. Calling SetTerminationProtection on a job flow is analogous to calling the Amazon EC2 DisableAPITermination API on all of the EC2 instances in a cluster.</p> <p>SetTerminationProtection is used to prevent accidental termination of a job flow and to ensure that in the event of an error, the instances will persist so you can recover any data stored in their ephemeral instance storage.</p> <p> To terminate a job flow that has been locked by setting SetTerminationProtection to <code>true</code>, you must first unlock the job flow by a subsequent call to SetTerminationProtection in which you set the value to <code>false</code>. </p> <p> For more information, see<a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/UsingEMR_TerminationProtection.html\">Protecting a Job Flow from Termination</a> in the <i>Amazon EMR Guide.</i> </p>"]
-                fn set_termination_protection(&self, input: &SetTerminationProtectionInput)  -> Result<(), SetTerminationProtectionError>;
+                fn set_termination_protection(&self, input: &SetTerminationProtectionInput)  -> Box<Future<Item = (), Error = SetTerminationProtectionError>>;
                 
 
                 #[doc="<p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified job flows. This action works on running job flows. You can also set the visibility of a job flow when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the job flow or the AWS account that owns the job flow.</p>"]
-                fn set_visible_to_all_users(&self, input: &SetVisibleToAllUsersInput)  -> Result<(), SetVisibleToAllUsersError>;
+                fn set_visible_to_all_users(&self, input: &SetVisibleToAllUsersInput)  -> Box<Future<Item = (), Error = SetVisibleToAllUsersError>>;
                 
 
                 #[doc="<p>TerminateJobFlows shuts a list of job flows down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the job flow is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the job flow was created.</p> <p>The maximum number of JobFlows allowed is 10. The call to TerminateJobFlows is asynchronous. Depending on the configuration of the job flow, it may take up to 1-5 minutes for the job flow to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>"]
-                fn terminate_job_flows(&self, input: &TerminateJobFlowsInput)  -> Result<(), TerminateJobFlowsError>;
+                fn terminate_job_flows(&self, input: &TerminateJobFlowsInput)  -> Box<Future<Item = (), Error = TerminateJobFlowsError>>;
                 
 }
 /// A client for the Amazon EMR API.
@@ -3445,7 +3446,7 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds one or more instance groups to a running cluster.</p>"]
-                fn add_instance_groups(&self, input: &AddInstanceGroupsInput)  -> Result<AddInstanceGroupsOutput, AddInstanceGroupsError> {
+                fn add_instance_groups(&self, input: &AddInstanceGroupsInput)  -> Box<Future<Item = AddInstanceGroupsOutput, Error = AddInstanceGroupsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3453,21 +3454,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddInstanceGroupsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddInstanceGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>AddJobFlowSteps adds new steps to a running job flow. A maximum of 256 steps are allowed in each job flow.</p> <p>If your job flow is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/AddMoreThan256Steps.html\">Add More than 256 Steps to a Job Flow</a> in the <i>Amazon EMR Developer's Guide</i>.</p> <p>A step specifies the location of a JAR file stored either on the master node of the job flow or in Amazon S3. Each step is performed by the main function of the main class of the JAR file. The main class can be specified either in the manifest of the JAR or by using the MainFunction parameter of the step.</p> <p>Amazon EMR executes each step in the order listed. For a step to be considered complete, the main function must exit with a zero exit code and all Hadoop jobs started while the step was running must have completed and run successfully.</p> <p>You can only add steps to a job flow that is in one of the following states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>"]
-                fn add_job_flow_steps(&self, input: &AddJobFlowStepsInput)  -> Result<AddJobFlowStepsOutput, AddJobFlowStepsError> {
+                fn add_job_flow_steps(&self, input: &AddJobFlowStepsInput)  -> Box<Future<Item = AddJobFlowStepsOutput, Error = AddJobFlowStepsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3475,21 +3486,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddJobFlowStepsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddJobFlowStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddJobFlowStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddJobFlowStepsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddJobFlowStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddJobFlowStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p>"]
-                fn add_tags(&self, input: &AddTagsInput)  -> Result<AddTagsOutput, AddTagsError> {
+                fn add_tags(&self, input: &AddTagsInput)  -> Box<Future<Item = AddTagsOutput, Error = AddTagsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3497,21 +3518,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddTagsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>"]
-                fn cancel_steps(&self, input: &CancelStepsInput)  -> Result<CancelStepsOutput, CancelStepsError> {
+                fn cancel_steps(&self, input: &CancelStepsInput)  -> Box<Future<Item = CancelStepsOutput, Error = CancelStepsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3519,21 +3550,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelStepsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CancelStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelStepsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CancelStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CancelStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a security configuration, which is stored in the service and can be specified when a cluster is created.</p>"]
-                fn create_security_configuration(&self, input: &CreateSecurityConfigurationInput)  -> Result<CreateSecurityConfigurationOutput, CreateSecurityConfigurationError> {
+                fn create_security_configuration(&self, input: &CreateSecurityConfigurationInput)  -> Box<Future<Item = CreateSecurityConfigurationOutput, Error = CreateSecurityConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3541,21 +3582,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSecurityConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSecurityConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a security configuration.</p>"]
-                fn delete_security_configuration(&self, input: &DeleteSecurityConfigurationInput)  -> Result<DeleteSecurityConfigurationOutput, DeleteSecurityConfigurationError> {
+                fn delete_security_configuration(&self, input: &DeleteSecurityConfigurationInput)  -> Box<Future<Item = DeleteSecurityConfigurationOutput, Error = DeleteSecurityConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3563,21 +3614,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSecurityConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSecurityConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. For information about the cluster steps, see <a>ListSteps</a>.</p>"]
-                fn describe_cluster(&self, input: &DescribeClusterInput)  -> Result<DescribeClusterOutput, DescribeClusterError> {
+                fn describe_cluster(&self, input: &DescribeClusterInput)  -> Box<Future<Item = DescribeClusterOutput, Error = DescribeClusterError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3585,21 +3646,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeClusterError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeClusterOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeClusterOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>"]
-                fn describe_job_flows(&self, input: &DescribeJobFlowsInput)  -> Result<DescribeJobFlowsOutput, DescribeJobFlowsError> {
+                fn describe_job_flows(&self, input: &DescribeJobFlowsInput)  -> Box<Future<Item = DescribeJobFlowsOutput, Error = DescribeJobFlowsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3607,21 +3678,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeJobFlowsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeJobFlowsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeJobFlowsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeJobFlowsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeJobFlowsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeJobFlowsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides the details of a security configuration by returning the configuration JSON.</p>"]
-                fn describe_security_configuration(&self, input: &DescribeSecurityConfigurationInput)  -> Result<DescribeSecurityConfigurationOutput, DescribeSecurityConfigurationError> {
+                fn describe_security_configuration(&self, input: &DescribeSecurityConfigurationInput)  -> Box<Future<Item = DescribeSecurityConfigurationOutput, Error = DescribeSecurityConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3629,21 +3710,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSecurityConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSecurityConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides more detail about the cluster step.</p>"]
-                fn describe_step(&self, input: &DescribeStepInput)  -> Result<DescribeStepOutput, DescribeStepError> {
+                fn describe_step(&self, input: &DescribeStepInput)  -> Box<Future<Item = DescribeStepOutput, Error = DescribeStepError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3651,21 +3742,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeStepError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStepOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeStepError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeStepError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeStepOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeStepError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides information about the bootstrap actions associated with a cluster.</p>"]
-                fn list_bootstrap_actions(&self, input: &ListBootstrapActionsInput)  -> Result<ListBootstrapActionsOutput, ListBootstrapActionsError> {
+                fn list_bootstrap_actions(&self, input: &ListBootstrapActionsInput)  -> Box<Future<Item = ListBootstrapActionsOutput, Error = ListBootstrapActionsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3673,21 +3774,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListBootstrapActionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBootstrapActionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListBootstrapActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListBootstrapActionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListBootstrapActionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListBootstrapActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>"]
-                fn list_clusters(&self, input: &ListClustersInput)  -> Result<ListClustersOutput, ListClustersError> {
+                fn list_clusters(&self, input: &ListClustersInput)  -> Box<Future<Item = ListClustersOutput, Error = ListClustersError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3695,21 +3806,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListClustersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListClustersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListClustersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListClustersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides all available details about the instance groups in a cluster.</p>"]
-                fn list_instance_groups(&self, input: &ListInstanceGroupsInput)  -> Result<ListInstanceGroupsOutput, ListInstanceGroupsError> {
+                fn list_instance_groups(&self, input: &ListInstanceGroupsInput)  -> Box<Future<Item = ListInstanceGroupsOutput, Error = ListInstanceGroupsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3717,21 +3838,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListInstanceGroupsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListInstanceGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides information about the cluster instances that Amazon EMR provisions on behalf of a user when it creates the cluster. For example, this operation indicates when the EC2 instances reach the Ready state, when instances become available to Amazon EMR to use for jobs, and the IP addresses for cluster instances, etc.</p>"]
-                fn list_instances(&self, input: &ListInstancesInput)  -> Result<ListInstancesOutput, ListInstancesError> {
+                fn list_instances(&self, input: &ListInstancesInput)  -> Box<Future<Item = ListInstancesOutput, Error = ListInstancesError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3739,21 +3870,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListInstancesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>"]
-                fn list_security_configurations(&self, input: &ListSecurityConfigurationsInput)  -> Result<ListSecurityConfigurationsOutput, ListSecurityConfigurationsError> {
+                fn list_security_configurations(&self, input: &ListSecurityConfigurationsInput)  -> Box<Future<Item = ListSecurityConfigurationsOutput, Error = ListSecurityConfigurationsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3761,21 +3902,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListSecurityConfigurationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSecurityConfigurationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListSecurityConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListSecurityConfigurationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListSecurityConfigurationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListSecurityConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>"]
-                fn list_steps(&self, input: &ListStepsInput)  -> Result<ListStepsOutput, ListStepsError> {
+                fn list_steps(&self, input: &ListStepsInput)  -> Box<Future<Item = ListStepsOutput, Error = ListStepsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3783,21 +3934,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListStepsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListStepsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>ModifyInstanceGroups modifies the number of nodes and configuration settings of an instance group. The input parameters include the new target instance count for the group and the instance group ID. The call will either succeed or fail atomically.</p>"]
-                fn modify_instance_groups(&self, input: &ModifyInstanceGroupsInput)  -> Result<(), ModifyInstanceGroupsError> {
+                fn modify_instance_groups(&self, input: &ModifyInstanceGroupsInput)  -> Box<Future<Item = (), Error = ModifyInstanceGroupsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3805,21 +3966,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyInstanceGroupsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(ModifyInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyInstanceGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(ModifyInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates an automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric.</p>"]
-                fn put_auto_scaling_policy(&self, input: &PutAutoScalingPolicyInput)  -> Result<PutAutoScalingPolicyOutput, PutAutoScalingPolicyError> {
+                fn put_auto_scaling_policy(&self, input: &PutAutoScalingPolicyInput)  -> Box<Future<Item = PutAutoScalingPolicyOutput, Error = PutAutoScalingPolicyError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3827,21 +3998,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutAutoScalingPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutAutoScalingPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>"]
-                fn remove_auto_scaling_policy(&self, input: &RemoveAutoScalingPolicyInput)  -> Result<RemoveAutoScalingPolicyOutput, RemoveAutoScalingPolicyError> {
+                fn remove_auto_scaling_policy(&self, input: &RemoveAutoScalingPolicyInput)  -> Box<Future<Item = RemoveAutoScalingPolicyOutput, Error = RemoveAutoScalingPolicyError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3849,21 +4030,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveAutoScalingPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RemoveAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveAutoScalingPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RemoveAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RemoveAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>"]
-                fn remove_tags(&self, input: &RemoveTagsInput)  -> Result<RemoveTagsOutput, RemoveTagsError> {
+                fn remove_tags(&self, input: &RemoveTagsInput)  -> Box<Future<Item = RemoveTagsOutput, Error = RemoveTagsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3871,21 +4062,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveTagsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>RunJobFlow creates and starts running a new job flow. The job flow will run the steps specified. After the job flow completes, the cluster is stopped and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the job flow will transition to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the job flow and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your job flow is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/Management/Guide/AddMoreThan256Steps.html\">Add More than 256 Steps to a Job Flow</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running job flows, we recommend that you periodically store your results.</p>"]
-                fn run_job_flow(&self, input: &RunJobFlowInput)  -> Result<RunJobFlowOutput, RunJobFlowError> {
+                fn run_job_flow(&self, input: &RunJobFlowInput)  -> Box<Future<Item = RunJobFlowOutput, Error = RunJobFlowError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3893,21 +4094,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RunJobFlowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RunJobFlowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RunJobFlowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RunJobFlowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RunJobFlowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RunJobFlowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>SetTerminationProtection locks a job flow so the EC2 instances in the cluster cannot be terminated by user intervention, an API call, or in the event of a job-flow error. The cluster still terminates upon successful completion of the job flow. Calling SetTerminationProtection on a job flow is analogous to calling the Amazon EC2 DisableAPITermination API on all of the EC2 instances in a cluster.</p> <p>SetTerminationProtection is used to prevent accidental termination of a job flow and to ensure that in the event of an error, the instances will persist so you can recover any data stored in their ephemeral instance storage.</p> <p> To terminate a job flow that has been locked by setting SetTerminationProtection to <code>true</code>, you must first unlock the job flow by a subsequent call to SetTerminationProtection in which you set the value to <code>false</code>. </p> <p> For more information, see<a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/UsingEMR_TerminationProtection.html\">Protecting a Job Flow from Termination</a> in the <i>Amazon EMR Guide.</i> </p>"]
-                fn set_termination_protection(&self, input: &SetTerminationProtectionInput)  -> Result<(), SetTerminationProtectionError> {
+                fn set_termination_protection(&self, input: &SetTerminationProtectionInput)  -> Box<Future<Item = (), Error = SetTerminationProtectionError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3915,21 +4126,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetTerminationProtectionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(SetTerminationProtectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetTerminationProtectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(SetTerminationProtectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified job flows. This action works on running job flows. You can also set the visibility of a job flow when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the job flow or the AWS account that owns the job flow.</p>"]
-                fn set_visible_to_all_users(&self, input: &SetVisibleToAllUsersInput)  -> Result<(), SetVisibleToAllUsersError> {
+                fn set_visible_to_all_users(&self, input: &SetVisibleToAllUsersInput)  -> Box<Future<Item = (), Error = SetVisibleToAllUsersError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3937,21 +4158,31 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetVisibleToAllUsersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(SetVisibleToAllUsersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetVisibleToAllUsersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(SetVisibleToAllUsersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>TerminateJobFlows shuts a list of job flows down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the job flow is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the job flow was created.</p> <p>The maximum number of JobFlows allowed is 10. The call to TerminateJobFlows is asynchronous. Depending on the configuration of the job flow, it may take up to 1-5 minutes for the job flow to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>"]
-                fn terminate_job_flows(&self, input: &TerminateJobFlowsInput)  -> Result<(), TerminateJobFlowsError> {
+                fn terminate_job_flows(&self, input: &TerminateJobFlowsInput)  -> Box<Future<Item = (), Error = TerminateJobFlowsError>> {
                     let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3959,16 +4190,26 @@ TerminateJobFlowsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TerminateJobFlowsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(TerminateJobFlowsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TerminateJobFlowsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(TerminateJobFlowsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

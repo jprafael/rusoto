@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type AWSAccountNumber = String;
 #[doc="<p>A container for account-level settings within AWS Device Farm.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -4910,175 +4911,175 @@ UpdateProjectError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Creates a device pool.</p>"]
-                fn create_device_pool(&self, input: &CreateDevicePoolRequest)  -> Result<CreateDevicePoolResult, CreateDevicePoolError>;
+                fn create_device_pool(&self, input: &CreateDevicePoolRequest)  -> Box<Future<Item = CreateDevicePoolResult, Error = CreateDevicePoolError>>;
                 
 
                 #[doc="<p>Creates a new project.</p>"]
-                fn create_project(&self, input: &CreateProjectRequest)  -> Result<CreateProjectResult, CreateProjectError>;
+                fn create_project(&self, input: &CreateProjectRequest)  -> Box<Future<Item = CreateProjectResult, Error = CreateProjectError>>;
                 
 
                 #[doc="<p>Specifies and starts a remote access session.</p>"]
-                fn create_remote_access_session(&self, input: &CreateRemoteAccessSessionRequest)  -> Result<CreateRemoteAccessSessionResult, CreateRemoteAccessSessionError>;
+                fn create_remote_access_session(&self, input: &CreateRemoteAccessSessionRequest)  -> Box<Future<Item = CreateRemoteAccessSessionResult, Error = CreateRemoteAccessSessionError>>;
                 
 
                 #[doc="<p>Uploads an app or test scripts.</p>"]
-                fn create_upload(&self, input: &CreateUploadRequest)  -> Result<CreateUploadResult, CreateUploadError>;
+                fn create_upload(&self, input: &CreateUploadRequest)  -> Box<Future<Item = CreateUploadResult, Error = CreateUploadError>>;
                 
 
                 #[doc="<p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>"]
-                fn delete_device_pool(&self, input: &DeleteDevicePoolRequest)  -> Result<DeleteDevicePoolResult, DeleteDevicePoolError>;
+                fn delete_device_pool(&self, input: &DeleteDevicePoolRequest)  -> Box<Future<Item = DeleteDevicePoolResult, Error = DeleteDevicePoolError>>;
                 
 
                 #[doc="<p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
-                fn delete_project(&self, input: &DeleteProjectRequest)  -> Result<DeleteProjectResult, DeleteProjectError>;
+                fn delete_project(&self, input: &DeleteProjectRequest)  -> Box<Future<Item = DeleteProjectResult, Error = DeleteProjectError>>;
                 
 
                 #[doc="<p>Deletes a completed remote access session and its results.</p>"]
-                fn delete_remote_access_session(&self, input: &DeleteRemoteAccessSessionRequest)  -> Result<DeleteRemoteAccessSessionResult, DeleteRemoteAccessSessionError>;
+                fn delete_remote_access_session(&self, input: &DeleteRemoteAccessSessionRequest)  -> Box<Future<Item = DeleteRemoteAccessSessionResult, Error = DeleteRemoteAccessSessionError>>;
                 
 
                 #[doc="<p>Deletes the run, given the run ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
-                fn delete_run(&self, input: &DeleteRunRequest)  -> Result<DeleteRunResult, DeleteRunError>;
+                fn delete_run(&self, input: &DeleteRunRequest)  -> Box<Future<Item = DeleteRunResult, Error = DeleteRunError>>;
                 
 
                 #[doc="<p>Deletes an upload given the upload ARN.</p>"]
-                fn delete_upload(&self, input: &DeleteUploadRequest)  -> Result<DeleteUploadResult, DeleteUploadError>;
+                fn delete_upload(&self, input: &DeleteUploadRequest)  -> Box<Future<Item = DeleteUploadResult, Error = DeleteUploadError>>;
                 
 
                 #[doc="<p>Returns the number of unmetered iOS and/or unmetered Android devices that have been purchased by the account.</p>"]
-                fn get_account_settings(&self, input: &GetAccountSettingsRequest)  -> Result<GetAccountSettingsResult, GetAccountSettingsError>;
+                fn get_account_settings(&self, input: &GetAccountSettingsRequest)  -> Box<Future<Item = GetAccountSettingsResult, Error = GetAccountSettingsError>>;
                 
 
                 #[doc="<p>Gets information about a unique device type.</p>"]
-                fn get_device(&self, input: &GetDeviceRequest)  -> Result<GetDeviceResult, GetDeviceError>;
+                fn get_device(&self, input: &GetDeviceRequest)  -> Box<Future<Item = GetDeviceResult, Error = GetDeviceError>>;
                 
 
                 #[doc="<p>Gets information about a device pool.</p>"]
-                fn get_device_pool(&self, input: &GetDevicePoolRequest)  -> Result<GetDevicePoolResult, GetDevicePoolError>;
+                fn get_device_pool(&self, input: &GetDevicePoolRequest)  -> Box<Future<Item = GetDevicePoolResult, Error = GetDevicePoolError>>;
                 
 
                 #[doc="<p>Gets information about compatibility with a device pool.</p>"]
-                fn get_device_pool_compatibility(&self, input: &GetDevicePoolCompatibilityRequest)  -> Result<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError>;
+                fn get_device_pool_compatibility(&self, input: &GetDevicePoolCompatibilityRequest)  -> Box<Future<Item = GetDevicePoolCompatibilityResult, Error = GetDevicePoolCompatibilityError>>;
                 
 
                 #[doc="<p>Gets information about a job.</p>"]
-                fn get_job(&self, input: &GetJobRequest)  -> Result<GetJobResult, GetJobError>;
+                fn get_job(&self, input: &GetJobRequest)  -> Box<Future<Item = GetJobResult, Error = GetJobError>>;
                 
 
                 #[doc="<p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn get_offering_status(&self, input: &GetOfferingStatusRequest)  -> Result<GetOfferingStatusResult, GetOfferingStatusError>;
+                fn get_offering_status(&self, input: &GetOfferingStatusRequest)  -> Box<Future<Item = GetOfferingStatusResult, Error = GetOfferingStatusError>>;
                 
 
                 #[doc="<p>Gets information about a project.</p>"]
-                fn get_project(&self, input: &GetProjectRequest)  -> Result<GetProjectResult, GetProjectError>;
+                fn get_project(&self, input: &GetProjectRequest)  -> Box<Future<Item = GetProjectResult, Error = GetProjectError>>;
                 
 
                 #[doc="<p>Returns a link to a currently running remote access session.</p>"]
-                fn get_remote_access_session(&self, input: &GetRemoteAccessSessionRequest)  -> Result<GetRemoteAccessSessionResult, GetRemoteAccessSessionError>;
+                fn get_remote_access_session(&self, input: &GetRemoteAccessSessionRequest)  -> Box<Future<Item = GetRemoteAccessSessionResult, Error = GetRemoteAccessSessionError>>;
                 
 
                 #[doc="<p>Gets information about a run.</p>"]
-                fn get_run(&self, input: &GetRunRequest)  -> Result<GetRunResult, GetRunError>;
+                fn get_run(&self, input: &GetRunRequest)  -> Box<Future<Item = GetRunResult, Error = GetRunError>>;
                 
 
                 #[doc="<p>Gets information about a suite.</p>"]
-                fn get_suite(&self, input: &GetSuiteRequest)  -> Result<GetSuiteResult, GetSuiteError>;
+                fn get_suite(&self, input: &GetSuiteRequest)  -> Box<Future<Item = GetSuiteResult, Error = GetSuiteError>>;
                 
 
                 #[doc="<p>Gets information about a test.</p>"]
-                fn get_test(&self, input: &GetTestRequest)  -> Result<GetTestResult, GetTestError>;
+                fn get_test(&self, input: &GetTestRequest)  -> Box<Future<Item = GetTestResult, Error = GetTestError>>;
                 
 
                 #[doc="<p>Gets information about an upload.</p>"]
-                fn get_upload(&self, input: &GetUploadRequest)  -> Result<GetUploadResult, GetUploadError>;
+                fn get_upload(&self, input: &GetUploadRequest)  -> Box<Future<Item = GetUploadResult, Error = GetUploadError>>;
                 
 
                 #[doc="<p>Installs an application to the device in a remote access session. For Android applications, the file must be in .apk format. For iOS applications, the file must be in .ipa format.</p>"]
-                fn install_to_remote_access_session(&self, input: &InstallToRemoteAccessSessionRequest)  -> Result<InstallToRemoteAccessSessionResult, InstallToRemoteAccessSessionError>;
+                fn install_to_remote_access_session(&self, input: &InstallToRemoteAccessSessionRequest)  -> Box<Future<Item = InstallToRemoteAccessSessionResult, Error = InstallToRemoteAccessSessionError>>;
                 
 
                 #[doc="<p>Gets information about artifacts.</p>"]
-                fn list_artifacts(&self, input: &ListArtifactsRequest)  -> Result<ListArtifactsResult, ListArtifactsError>;
+                fn list_artifacts(&self, input: &ListArtifactsRequest)  -> Box<Future<Item = ListArtifactsResult, Error = ListArtifactsError>>;
                 
 
                 #[doc="<p>Gets information about device pools.</p>"]
-                fn list_device_pools(&self, input: &ListDevicePoolsRequest)  -> Result<ListDevicePoolsResult, ListDevicePoolsError>;
+                fn list_device_pools(&self, input: &ListDevicePoolsRequest)  -> Box<Future<Item = ListDevicePoolsResult, Error = ListDevicePoolsError>>;
                 
 
                 #[doc="<p>Gets information about unique device types.</p>"]
-                fn list_devices(&self, input: &ListDevicesRequest)  -> Result<ListDevicesResult, ListDevicesError>;
+                fn list_devices(&self, input: &ListDevicesRequest)  -> Box<Future<Item = ListDevicesResult, Error = ListDevicesError>>;
                 
 
                 #[doc="<p>Gets information about jobs.</p>"]
-                fn list_jobs(&self, input: &ListJobsRequest)  -> Result<ListJobsResult, ListJobsError>;
+                fn list_jobs(&self, input: &ListJobsRequest)  -> Box<Future<Item = ListJobsResult, Error = ListJobsError>>;
                 
 
                 #[doc="<p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn list_offering_transactions(&self, input: &ListOfferingTransactionsRequest)  -> Result<ListOfferingTransactionsResult, ListOfferingTransactionsError>;
+                fn list_offering_transactions(&self, input: &ListOfferingTransactionsRequest)  -> Box<Future<Item = ListOfferingTransactionsResult, Error = ListOfferingTransactionsError>>;
                 
 
                 #[doc="<p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn list_offerings(&self, input: &ListOfferingsRequest)  -> Result<ListOfferingsResult, ListOfferingsError>;
+                fn list_offerings(&self, input: &ListOfferingsRequest)  -> Box<Future<Item = ListOfferingsResult, Error = ListOfferingsError>>;
                 
 
                 #[doc="<p>Gets information about projects.</p>"]
-                fn list_projects(&self, input: &ListProjectsRequest)  -> Result<ListProjectsResult, ListProjectsError>;
+                fn list_projects(&self, input: &ListProjectsRequest)  -> Box<Future<Item = ListProjectsResult, Error = ListProjectsError>>;
                 
 
                 #[doc="<p>Returns a list of all currently running remote access sessions.</p>"]
-                fn list_remote_access_sessions(&self, input: &ListRemoteAccessSessionsRequest)  -> Result<ListRemoteAccessSessionsResult, ListRemoteAccessSessionsError>;
+                fn list_remote_access_sessions(&self, input: &ListRemoteAccessSessionsRequest)  -> Box<Future<Item = ListRemoteAccessSessionsResult, Error = ListRemoteAccessSessionsError>>;
                 
 
                 #[doc="<p>Gets information about runs, given an AWS Device Farm project ARN.</p>"]
-                fn list_runs(&self, input: &ListRunsRequest)  -> Result<ListRunsResult, ListRunsError>;
+                fn list_runs(&self, input: &ListRunsRequest)  -> Box<Future<Item = ListRunsResult, Error = ListRunsError>>;
                 
 
                 #[doc="<p>Gets information about samples, given an AWS Device Farm project ARN</p>"]
-                fn list_samples(&self, input: &ListSamplesRequest)  -> Result<ListSamplesResult, ListSamplesError>;
+                fn list_samples(&self, input: &ListSamplesRequest)  -> Box<Future<Item = ListSamplesResult, Error = ListSamplesError>>;
                 
 
                 #[doc="<p>Gets information about suites.</p>"]
-                fn list_suites(&self, input: &ListSuitesRequest)  -> Result<ListSuitesResult, ListSuitesError>;
+                fn list_suites(&self, input: &ListSuitesRequest)  -> Box<Future<Item = ListSuitesResult, Error = ListSuitesError>>;
                 
 
                 #[doc="<p>Gets information about tests.</p>"]
-                fn list_tests(&self, input: &ListTestsRequest)  -> Result<ListTestsResult, ListTestsError>;
+                fn list_tests(&self, input: &ListTestsRequest)  -> Box<Future<Item = ListTestsResult, Error = ListTestsError>>;
                 
 
                 #[doc="<p>Gets information about unique problems.</p>"]
-                fn list_unique_problems(&self, input: &ListUniqueProblemsRequest)  -> Result<ListUniqueProblemsResult, ListUniqueProblemsError>;
+                fn list_unique_problems(&self, input: &ListUniqueProblemsRequest)  -> Box<Future<Item = ListUniqueProblemsResult, Error = ListUniqueProblemsError>>;
                 
 
                 #[doc="<p>Gets information about uploads, given an AWS Device Farm project ARN.</p>"]
-                fn list_uploads(&self, input: &ListUploadsRequest)  -> Result<ListUploadsResult, ListUploadsError>;
+                fn list_uploads(&self, input: &ListUploadsRequest)  -> Box<Future<Item = ListUploadsResult, Error = ListUploadsError>>;
                 
 
                 #[doc="<p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn purchase_offering(&self, input: &PurchaseOfferingRequest)  -> Result<PurchaseOfferingResult, PurchaseOfferingError>;
+                fn purchase_offering(&self, input: &PurchaseOfferingRequest)  -> Box<Future<Item = PurchaseOfferingResult, Error = PurchaseOfferingError>>;
                 
 
                 #[doc="<p>Explicitly sets the quantity of devices to renew for an offering, starting from the <code>effectiveDate</code> of the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn renew_offering(&self, input: &RenewOfferingRequest)  -> Result<RenewOfferingResult, RenewOfferingError>;
+                fn renew_offering(&self, input: &RenewOfferingRequest)  -> Box<Future<Item = RenewOfferingResult, Error = RenewOfferingError>>;
                 
 
                 #[doc="<p>Schedules a run.</p>"]
-                fn schedule_run(&self, input: &ScheduleRunRequest)  -> Result<ScheduleRunResult, ScheduleRunError>;
+                fn schedule_run(&self, input: &ScheduleRunRequest)  -> Box<Future<Item = ScheduleRunResult, Error = ScheduleRunError>>;
                 
 
                 #[doc="<p>Ends a specified remote access session.</p>"]
-                fn stop_remote_access_session(&self, input: &StopRemoteAccessSessionRequest)  -> Result<StopRemoteAccessSessionResult, StopRemoteAccessSessionError>;
+                fn stop_remote_access_session(&self, input: &StopRemoteAccessSessionRequest)  -> Box<Future<Item = StopRemoteAccessSessionResult, Error = StopRemoteAccessSessionError>>;
                 
 
                 #[doc="<p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>"]
-                fn stop_run(&self, input: &StopRunRequest)  -> Result<StopRunResult, StopRunError>;
+                fn stop_run(&self, input: &StopRunRequest)  -> Box<Future<Item = StopRunResult, Error = StopRunError>>;
                 
 
                 #[doc="<p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>"]
-                fn update_device_pool(&self, input: &UpdateDevicePoolRequest)  -> Result<UpdateDevicePoolResult, UpdateDevicePoolError>;
+                fn update_device_pool(&self, input: &UpdateDevicePoolRequest)  -> Box<Future<Item = UpdateDevicePoolResult, Error = UpdateDevicePoolError>>;
                 
 
                 #[doc="<p>Modifies the specified project name, given the project ARN and a new name.</p>"]
-                fn update_project(&self, input: &UpdateProjectRequest)  -> Result<UpdateProjectResult, UpdateProjectError>;
+                fn update_project(&self, input: &UpdateProjectRequest)  -> Box<Future<Item = UpdateProjectResult, Error = UpdateProjectError>>;
                 
 }
 /// A client for the AWS Device Farm API.
@@ -5102,7 +5103,7 @@ UpdateProjectError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Creates a device pool.</p>"]
-                fn create_device_pool(&self, input: &CreateDevicePoolRequest)  -> Result<CreateDevicePoolResult, CreateDevicePoolError> {
+                fn create_device_pool(&self, input: &CreateDevicePoolRequest)  -> Box<Future<Item = CreateDevicePoolResult, Error = CreateDevicePoolError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5110,21 +5111,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDevicePoolError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDevicePoolError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new project.</p>"]
-                fn create_project(&self, input: &CreateProjectRequest)  -> Result<CreateProjectResult, CreateProjectError> {
+                fn create_project(&self, input: &CreateProjectRequest)  -> Box<Future<Item = CreateProjectResult, Error = CreateProjectError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5132,21 +5143,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateProjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateProjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Specifies and starts a remote access session.</p>"]
-                fn create_remote_access_session(&self, input: &CreateRemoteAccessSessionRequest)  -> Result<CreateRemoteAccessSessionResult, CreateRemoteAccessSessionError> {
+                fn create_remote_access_session(&self, input: &CreateRemoteAccessSessionRequest)  -> Box<Future<Item = CreateRemoteAccessSessionResult, Error = CreateRemoteAccessSessionError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5154,21 +5175,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateRemoteAccessSessionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateRemoteAccessSessionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Uploads an app or test scripts.</p>"]
-                fn create_upload(&self, input: &CreateUploadRequest)  -> Result<CreateUploadResult, CreateUploadError> {
+                fn create_upload(&self, input: &CreateUploadRequest)  -> Box<Future<Item = CreateUploadResult, Error = CreateUploadError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5176,21 +5207,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateUploadError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateUploadError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>"]
-                fn delete_device_pool(&self, input: &DeleteDevicePoolRequest)  -> Result<DeleteDevicePoolResult, DeleteDevicePoolError> {
+                fn delete_device_pool(&self, input: &DeleteDevicePoolRequest)  -> Box<Future<Item = DeleteDevicePoolResult, Error = DeleteDevicePoolError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5198,21 +5239,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDevicePoolError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDevicePoolError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
-                fn delete_project(&self, input: &DeleteProjectRequest)  -> Result<DeleteProjectResult, DeleteProjectError> {
+                fn delete_project(&self, input: &DeleteProjectRequest)  -> Box<Future<Item = DeleteProjectResult, Error = DeleteProjectError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5220,21 +5271,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteProjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteProjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a completed remote access session and its results.</p>"]
-                fn delete_remote_access_session(&self, input: &DeleteRemoteAccessSessionRequest)  -> Result<DeleteRemoteAccessSessionResult, DeleteRemoteAccessSessionError> {
+                fn delete_remote_access_session(&self, input: &DeleteRemoteAccessSessionRequest)  -> Box<Future<Item = DeleteRemoteAccessSessionResult, Error = DeleteRemoteAccessSessionError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5242,21 +5303,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRemoteAccessSessionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRemoteAccessSessionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the run, given the run ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
-                fn delete_run(&self, input: &DeleteRunRequest)  -> Result<DeleteRunResult, DeleteRunError> {
+                fn delete_run(&self, input: &DeleteRunRequest)  -> Box<Future<Item = DeleteRunResult, Error = DeleteRunError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5264,21 +5335,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRunError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRunError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an upload given the upload ARN.</p>"]
-                fn delete_upload(&self, input: &DeleteUploadRequest)  -> Result<DeleteUploadResult, DeleteUploadError> {
+                fn delete_upload(&self, input: &DeleteUploadRequest)  -> Box<Future<Item = DeleteUploadResult, Error = DeleteUploadError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5286,21 +5367,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteUploadError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteUploadError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the number of unmetered iOS and/or unmetered Android devices that have been purchased by the account.</p>"]
-                fn get_account_settings(&self, input: &GetAccountSettingsRequest)  -> Result<GetAccountSettingsResult, GetAccountSettingsError> {
+                fn get_account_settings(&self, input: &GetAccountSettingsRequest)  -> Box<Future<Item = GetAccountSettingsResult, Error = GetAccountSettingsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5308,21 +5399,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetAccountSettingsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAccountSettingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetAccountSettingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetAccountSettingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a unique device type.</p>"]
-                fn get_device(&self, input: &GetDeviceRequest)  -> Result<GetDeviceResult, GetDeviceError> {
+                fn get_device(&self, input: &GetDeviceRequest)  -> Box<Future<Item = GetDeviceResult, Error = GetDeviceError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5330,21 +5431,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDeviceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeviceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDeviceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDeviceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a device pool.</p>"]
-                fn get_device_pool(&self, input: &GetDevicePoolRequest)  -> Result<GetDevicePoolResult, GetDevicePoolError> {
+                fn get_device_pool(&self, input: &GetDevicePoolRequest)  -> Box<Future<Item = GetDevicePoolResult, Error = GetDevicePoolError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5352,21 +5463,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDevicePoolError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDevicePoolError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about compatibility with a device pool.</p>"]
-                fn get_device_pool_compatibility(&self, input: &GetDevicePoolCompatibilityRequest)  -> Result<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError> {
+                fn get_device_pool_compatibility(&self, input: &GetDevicePoolCompatibilityRequest)  -> Box<Future<Item = GetDevicePoolCompatibilityResult, Error = GetDevicePoolCompatibilityError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5374,21 +5495,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDevicePoolCompatibilityError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDevicePoolCompatibilityResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetDevicePoolCompatibilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDevicePoolCompatibilityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetDevicePoolCompatibilityResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetDevicePoolCompatibilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a job.</p>"]
-                fn get_job(&self, input: &GetJobRequest)  -> Result<GetJobResult, GetJobError> {
+                fn get_job(&self, input: &GetJobRequest)  -> Box<Future<Item = GetJobResult, Error = GetJobError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5396,21 +5527,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetJobError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetJobResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetJobError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetJobResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn get_offering_status(&self, input: &GetOfferingStatusRequest)  -> Result<GetOfferingStatusResult, GetOfferingStatusError> {
+                fn get_offering_status(&self, input: &GetOfferingStatusRequest)  -> Box<Future<Item = GetOfferingStatusResult, Error = GetOfferingStatusError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5418,21 +5559,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetOfferingStatusError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOfferingStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetOfferingStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetOfferingStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetOfferingStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetOfferingStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a project.</p>"]
-                fn get_project(&self, input: &GetProjectRequest)  -> Result<GetProjectResult, GetProjectError> {
+                fn get_project(&self, input: &GetProjectRequest)  -> Box<Future<Item = GetProjectResult, Error = GetProjectError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5440,21 +5591,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetProjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetProjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a link to a currently running remote access session.</p>"]
-                fn get_remote_access_session(&self, input: &GetRemoteAccessSessionRequest)  -> Result<GetRemoteAccessSessionResult, GetRemoteAccessSessionError> {
+                fn get_remote_access_session(&self, input: &GetRemoteAccessSessionRequest)  -> Box<Future<Item = GetRemoteAccessSessionResult, Error = GetRemoteAccessSessionError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5462,21 +5623,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetRemoteAccessSessionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetRemoteAccessSessionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a run.</p>"]
-                fn get_run(&self, input: &GetRunRequest)  -> Result<GetRunResult, GetRunError> {
+                fn get_run(&self, input: &GetRunRequest)  -> Box<Future<Item = GetRunResult, Error = GetRunError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5484,21 +5655,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetRunError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetRunError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a suite.</p>"]
-                fn get_suite(&self, input: &GetSuiteRequest)  -> Result<GetSuiteResult, GetSuiteError> {
+                fn get_suite(&self, input: &GetSuiteRequest)  -> Box<Future<Item = GetSuiteResult, Error = GetSuiteError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5506,21 +5687,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetSuiteError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSuiteResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetSuiteError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetSuiteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetSuiteResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetSuiteError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about a test.</p>"]
-                fn get_test(&self, input: &GetTestRequest)  -> Result<GetTestResult, GetTestError> {
+                fn get_test(&self, input: &GetTestRequest)  -> Box<Future<Item = GetTestResult, Error = GetTestError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5528,21 +5719,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetTestError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetTestResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetTestError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetTestError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetTestResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetTestError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about an upload.</p>"]
-                fn get_upload(&self, input: &GetUploadRequest)  -> Result<GetUploadResult, GetUploadError> {
+                fn get_upload(&self, input: &GetUploadRequest)  -> Box<Future<Item = GetUploadResult, Error = GetUploadError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5550,21 +5751,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetUploadError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetUploadError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Installs an application to the device in a remote access session. For Android applications, the file must be in .apk format. For iOS applications, the file must be in .ipa format.</p>"]
-                fn install_to_remote_access_session(&self, input: &InstallToRemoteAccessSessionRequest)  -> Result<InstallToRemoteAccessSessionResult, InstallToRemoteAccessSessionError> {
+                fn install_to_remote_access_session(&self, input: &InstallToRemoteAccessSessionRequest)  -> Box<Future<Item = InstallToRemoteAccessSessionResult, Error = InstallToRemoteAccessSessionError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5572,21 +5783,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(InstallToRemoteAccessSessionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<InstallToRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(InstallToRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| InstallToRemoteAccessSessionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<InstallToRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(InstallToRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about artifacts.</p>"]
-                fn list_artifacts(&self, input: &ListArtifactsRequest)  -> Result<ListArtifactsResult, ListArtifactsError> {
+                fn list_artifacts(&self, input: &ListArtifactsRequest)  -> Box<Future<Item = ListArtifactsResult, Error = ListArtifactsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5594,21 +5815,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListArtifactsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListArtifactsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListArtifactsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListArtifactsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListArtifactsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListArtifactsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about device pools.</p>"]
-                fn list_device_pools(&self, input: &ListDevicePoolsRequest)  -> Result<ListDevicePoolsResult, ListDevicePoolsError> {
+                fn list_device_pools(&self, input: &ListDevicePoolsRequest)  -> Box<Future<Item = ListDevicePoolsResult, Error = ListDevicePoolsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5616,21 +5847,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDevicePoolsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDevicePoolsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDevicePoolsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDevicePoolsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDevicePoolsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDevicePoolsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about unique device types.</p>"]
-                fn list_devices(&self, input: &ListDevicesRequest)  -> Result<ListDevicesResult, ListDevicesError> {
+                fn list_devices(&self, input: &ListDevicesRequest)  -> Box<Future<Item = ListDevicesResult, Error = ListDevicesError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5638,21 +5879,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDevicesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDevicesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListDevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDevicesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListDevicesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListDevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about jobs.</p>"]
-                fn list_jobs(&self, input: &ListJobsRequest)  -> Result<ListJobsResult, ListJobsError> {
+                fn list_jobs(&self, input: &ListJobsRequest)  -> Box<Future<Item = ListJobsResult, Error = ListJobsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5660,21 +5911,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListJobsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListJobsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn list_offering_transactions(&self, input: &ListOfferingTransactionsRequest)  -> Result<ListOfferingTransactionsResult, ListOfferingTransactionsError> {
+                fn list_offering_transactions(&self, input: &ListOfferingTransactionsRequest)  -> Box<Future<Item = ListOfferingTransactionsResult, Error = ListOfferingTransactionsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5682,21 +5943,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListOfferingTransactionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOfferingTransactionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListOfferingTransactionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListOfferingTransactionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListOfferingTransactionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListOfferingTransactionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn list_offerings(&self, input: &ListOfferingsRequest)  -> Result<ListOfferingsResult, ListOfferingsError> {
+                fn list_offerings(&self, input: &ListOfferingsRequest)  -> Box<Future<Item = ListOfferingsResult, Error = ListOfferingsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5704,21 +5975,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListOfferingsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOfferingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListOfferingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListOfferingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about projects.</p>"]
-                fn list_projects(&self, input: &ListProjectsRequest)  -> Result<ListProjectsResult, ListProjectsError> {
+                fn list_projects(&self, input: &ListProjectsRequest)  -> Box<Future<Item = ListProjectsResult, Error = ListProjectsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5726,21 +6007,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListProjectsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListProjectsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListProjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListProjectsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListProjectsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListProjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of all currently running remote access sessions.</p>"]
-                fn list_remote_access_sessions(&self, input: &ListRemoteAccessSessionsRequest)  -> Result<ListRemoteAccessSessionsResult, ListRemoteAccessSessionsError> {
+                fn list_remote_access_sessions(&self, input: &ListRemoteAccessSessionsRequest)  -> Box<Future<Item = ListRemoteAccessSessionsResult, Error = ListRemoteAccessSessionsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5748,21 +6039,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListRemoteAccessSessionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRemoteAccessSessionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListRemoteAccessSessionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListRemoteAccessSessionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListRemoteAccessSessionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListRemoteAccessSessionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about runs, given an AWS Device Farm project ARN.</p>"]
-                fn list_runs(&self, input: &ListRunsRequest)  -> Result<ListRunsResult, ListRunsError> {
+                fn list_runs(&self, input: &ListRunsRequest)  -> Box<Future<Item = ListRunsResult, Error = ListRunsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5770,21 +6071,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListRunsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRunsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListRunsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListRunsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListRunsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListRunsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about samples, given an AWS Device Farm project ARN</p>"]
-                fn list_samples(&self, input: &ListSamplesRequest)  -> Result<ListSamplesResult, ListSamplesError> {
+                fn list_samples(&self, input: &ListSamplesRequest)  -> Box<Future<Item = ListSamplesResult, Error = ListSamplesError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5792,21 +6103,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListSamplesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSamplesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListSamplesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListSamplesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListSamplesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListSamplesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about suites.</p>"]
-                fn list_suites(&self, input: &ListSuitesRequest)  -> Result<ListSuitesResult, ListSuitesError> {
+                fn list_suites(&self, input: &ListSuitesRequest)  -> Box<Future<Item = ListSuitesResult, Error = ListSuitesError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5814,21 +6135,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListSuitesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSuitesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListSuitesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListSuitesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListSuitesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListSuitesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about tests.</p>"]
-                fn list_tests(&self, input: &ListTestsRequest)  -> Result<ListTestsResult, ListTestsError> {
+                fn list_tests(&self, input: &ListTestsRequest)  -> Box<Future<Item = ListTestsResult, Error = ListTestsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5836,21 +6167,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTestsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTestsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListTestsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTestsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListTestsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListTestsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about unique problems.</p>"]
-                fn list_unique_problems(&self, input: &ListUniqueProblemsRequest)  -> Result<ListUniqueProblemsResult, ListUniqueProblemsError> {
+                fn list_unique_problems(&self, input: &ListUniqueProblemsRequest)  -> Box<Future<Item = ListUniqueProblemsResult, Error = ListUniqueProblemsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5858,21 +6199,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListUniqueProblemsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListUniqueProblemsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListUniqueProblemsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListUniqueProblemsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListUniqueProblemsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListUniqueProblemsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about uploads, given an AWS Device Farm project ARN.</p>"]
-                fn list_uploads(&self, input: &ListUploadsRequest)  -> Result<ListUploadsResult, ListUploadsError> {
+                fn list_uploads(&self, input: &ListUploadsRequest)  -> Box<Future<Item = ListUploadsResult, Error = ListUploadsError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5880,21 +6231,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListUploadsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListUploadsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListUploadsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListUploadsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListUploadsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListUploadsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn purchase_offering(&self, input: &PurchaseOfferingRequest)  -> Result<PurchaseOfferingResult, PurchaseOfferingError> {
+                fn purchase_offering(&self, input: &PurchaseOfferingRequest)  -> Box<Future<Item = PurchaseOfferingResult, Error = PurchaseOfferingError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5902,21 +6263,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PurchaseOfferingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PurchaseOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PurchaseOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PurchaseOfferingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PurchaseOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PurchaseOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Explicitly sets the quantity of devices to renew for an offering, starting from the <code>effectiveDate</code> of the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-                fn renew_offering(&self, input: &RenewOfferingRequest)  -> Result<RenewOfferingResult, RenewOfferingError> {
+                fn renew_offering(&self, input: &RenewOfferingRequest)  -> Box<Future<Item = RenewOfferingResult, Error = RenewOfferingError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5924,21 +6295,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RenewOfferingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RenewOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RenewOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RenewOfferingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RenewOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RenewOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Schedules a run.</p>"]
-                fn schedule_run(&self, input: &ScheduleRunRequest)  -> Result<ScheduleRunResult, ScheduleRunError> {
+                fn schedule_run(&self, input: &ScheduleRunRequest)  -> Box<Future<Item = ScheduleRunResult, Error = ScheduleRunError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5946,21 +6327,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ScheduleRunError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ScheduleRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ScheduleRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ScheduleRunError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ScheduleRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ScheduleRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Ends a specified remote access session.</p>"]
-                fn stop_remote_access_session(&self, input: &StopRemoteAccessSessionRequest)  -> Result<StopRemoteAccessSessionResult, StopRemoteAccessSessionError> {
+                fn stop_remote_access_session(&self, input: &StopRemoteAccessSessionRequest)  -> Box<Future<Item = StopRemoteAccessSessionResult, Error = StopRemoteAccessSessionError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5968,21 +6359,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StopRemoteAccessSessionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StopRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StopRemoteAccessSessionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StopRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StopRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>"]
-                fn stop_run(&self, input: &StopRunRequest)  -> Result<StopRunResult, StopRunError> {
+                fn stop_run(&self, input: &StopRunRequest)  -> Box<Future<Item = StopRunResult, Error = StopRunError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5990,21 +6391,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StopRunError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StopRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StopRunError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StopRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StopRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>"]
-                fn update_device_pool(&self, input: &UpdateDevicePoolRequest)  -> Result<UpdateDevicePoolResult, UpdateDevicePoolError> {
+                fn update_device_pool(&self, input: &UpdateDevicePoolRequest)  -> Box<Future<Item = UpdateDevicePoolResult, Error = UpdateDevicePoolError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6012,21 +6423,31 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateDevicePoolError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateDevicePoolError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the specified project name, given the project ARN and a new name.</p>"]
-                fn update_project(&self, input: &UpdateProjectRequest)  -> Result<UpdateProjectResult, UpdateProjectError> {
+                fn update_project(&self, input: &UpdateProjectRequest)  -> Box<Future<Item = UpdateProjectResult, Error = UpdateProjectError>> {
                     let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6034,16 +6455,26 @@ UpdateProjectError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateProjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateProjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

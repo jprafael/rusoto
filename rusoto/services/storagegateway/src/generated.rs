@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 #[doc="<p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>ActivateGatewayInput$ActivationKey</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayName</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayRegion</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayTimezone</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$TapeDriveType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$MediumChangerType</a> </p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Serialize)]
             pub struct ActivateGatewayInput {
@@ -5996,247 +5997,247 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Activates the gateway you previously deployed on your host. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStartedActivateGateway-common.html\"> Activate the AWS Storage Gateway</a>. In the activation process, you specify information such as the you want to use for storing snapshots, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note>"]
-                fn activate_gateway(&self, input: &ActivateGatewayInput)  -> Result<ActivateGatewayOutput, ActivateGatewayError>;
+                fn activate_gateway(&self, input: &ActivateGatewayInput)  -> Box<Future<Item = ActivateGatewayOutput, Error = ActivateGatewayError>>;
                 
 
                 #[doc="<p>Configures one or more gateway local disks as cache for a cached-volume gateway. This operation is supported only for the gateway-cached volume architecture (see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html\">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>"]
-                fn add_cache(&self, input: &AddCacheInput)  -> Result<AddCacheOutput, AddCacheError>;
+                fn add_cache(&self, input: &AddCacheInput)  -> Box<Future<Item = AddCacheOutput, Error = AddCacheError>>;
                 
 
                 #[doc="<p>Adds one or more tags to the specified resource. You use tags to add metadata to resources, which you can use to categorize these resources. For example, you can categorize resources by purpose, owner, environment, or team. Each tag consists of a key and a value, which you define. You can add tags to the following AWS Storage Gateway resources:</p> <ul> <li> <p>Storage gateways of all types</p> </li> </ul> <ul> <li> <p>Storage Volumes</p> </li> </ul> <ul> <li> <p>Virtual Tapes</p> </li> </ul> <p>You can create a maximum of 10 tags for each resource. Virtual tapes and storage volumes that are recovered to a new gateway maintain their tags.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceInput)  -> Result<AddTagsToResourceOutput, AddTagsToResourceError>;
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceInput)  -> Box<Future<Item = AddTagsToResourceOutput, Error = AddTagsToResourceError>>;
                 
 
                 #[doc="<p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for both the gateway-stored and gateway-cached volume architectures.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>"]
-                fn add_upload_buffer(&self, input: &AddUploadBufferInput)  -> Result<AddUploadBufferOutput, AddUploadBufferError>;
+                fn add_upload_buffer(&self, input: &AddUploadBufferInput)  -> Box<Future<Item = AddUploadBufferOutput, Error = AddUploadBufferError>>;
                 
 
                 #[doc="<p>Configures one or more gateway local disks as working storage for a gateway. This operation is supported only for the gateway-stored volume architecture. This operation is deprecated in cached-volumes API version 20120630. Use <a>AddUploadBuffer</a> instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the <a>AddUploadBuffer</a> operation to add upload buffer to a stored-volume gateway.</p> </note> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add working storage, and one or more disk IDs that you want to configure as working storage.</p>"]
-                fn add_working_storage(&self, input: &AddWorkingStorageInput)  -> Result<AddWorkingStorageOutput, AddWorkingStorageError>;
+                fn add_working_storage(&self, input: &AddWorkingStorageInput)  -> Box<Future<Item = AddWorkingStorageOutput, Error = AddWorkingStorageError>>;
                 
 
                 #[doc="<p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated.</p>"]
-                fn cancel_archival(&self, input: &CancelArchivalInput)  -> Result<CancelArchivalOutput, CancelArchivalError>;
+                fn cancel_archival(&self, input: &CancelArchivalInput)  -> Box<Future<Item = CancelArchivalOutput, Error = CancelArchivalError>>;
                 
 
                 #[doc="<p>Cancels retrieval of a virtual tape from the virtual tape shelf (VTS) to a gateway after the retrieval process is initiated. The virtual tape is returned to the VTS.</p>"]
-                fn cancel_retrieval(&self, input: &CancelRetrievalInput)  -> Result<CancelRetrievalOutput, CancelRetrievalError>;
+                fn cancel_retrieval(&self, input: &CancelRetrievalInput)  -> Box<Future<Item = CancelRetrievalOutput, Error = CancelRetrievalError>>;
                 
 
                 #[doc="<p>Creates a cached volume on a specified cached gateway. This operation is supported only for the gateway-cached volume architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a cached volume. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note> <p>In the request, you must specify the gateway, size of the volume in bytes, the iSCSI target name, an IP address on which to expose the target, and a unique client token. In response, AWS Storage Gateway creates the volume and returns information about it. This information includes the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p> <p>Optionally, you can provide the ARN for an existing volume as the <code>SourceVolumeARN</code> for this cached volume, which creates an exact copy of the existing volume’s latest recovery point. The <code>VolumeSizeInBytes</code> value must be equal to or larger than the size of the copied volume, in bytes.</p>"]
-                fn create_cachedi_scsi_volume(&self, input: &CreateCachediSCSIVolumeInput)  -> Result<CreateCachediSCSIVolumeOutput, CreateCachediSCSIVolumeError>;
+                fn create_cachedi_scsi_volume(&self, input: &CreateCachediSCSIVolumeInput)  -> Box<Future<Item = CreateCachediSCSIVolumeOutput, Error = CreateCachediSCSIVolumeError>>;
                 
 
                 #[doc="<p>Creates a file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a Network File System (NFS) interface.</p>"]
-                fn create_nfs_file_share(&self, input: &CreateNFSFileShareInput)  -> Result<CreateNFSFileShareOutput, CreateNFSFileShareError>;
+                fn create_nfs_file_share(&self, input: &CreateNFSFileShareInput)  -> Box<Future<Item = CreateNFSFileShareOutput, Error = CreateNFSFileShareError>>;
                 
 
                 #[doc="<p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad-hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/WorkingWithSnapshots.html\">Working With Snapshots in the AWS Storage Gateway Console</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see DescribeSnapshots or DeleteSnapshot in the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html\">EC2 API reference</a>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href=\"http://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html\">Welcome</a> page.</p> </important>"]
-                fn create_snapshot(&self, input: &CreateSnapshotInput)  -> Result<CreateSnapshotOutput, CreateSnapshotError>;
+                fn create_snapshot(&self, input: &CreateSnapshotInput)  -> Box<Future<Item = CreateSnapshotOutput, Error = CreateSnapshotError>>;
                 
 
                 #[doc="<p>Initiates a snapshot of a gateway from a volume recovery point. This operation is supported only for the gateway-cached volume architecture.</p> <p>A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To get a list of volume recovery point for gateway-cached volumes, use <a>ListVolumeRecoveryPoints</a>.</p> <p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide a description for the snapshot. When AWS Storage Gateway takes a snapshot of the specified volume, the snapshot and its description appear in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note>"]
-                fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromVolumeRecoveryPointInput)  -> Result<CreateSnapshotFromVolumeRecoveryPointOutput, CreateSnapshotFromVolumeRecoveryPointError>;
+                fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromVolumeRecoveryPointInput)  -> Box<Future<Item = CreateSnapshotFromVolumeRecoveryPointOutput, Error = CreateSnapshotFromVolumeRecoveryPointError>>;
                 
 
                 #[doc="<p>Creates a volume on a specified gateway. This operation is supported only for the gateway-stored volume architecture.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, AWS Storage Gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>"]
-                fn create_storedi_scsi_volume(&self, input: &CreateStorediSCSIVolumeInput)  -> Result<CreateStorediSCSIVolumeOutput, CreateStorediSCSIVolumeError>;
+                fn create_storedi_scsi_volume(&self, input: &CreateStorediSCSIVolumeInput)  -> Box<Future<Item = CreateStorediSCSIVolumeOutput, Error = CreateStorediSCSIVolumeError>>;
                 
 
                 #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
-                fn create_tape_with_barcode(&self, input: &CreateTapeWithBarcodeInput)  -> Result<CreateTapeWithBarcodeOutput, CreateTapeWithBarcodeError>;
+                fn create_tape_with_barcode(&self, input: &CreateTapeWithBarcodeInput)  -> Box<Future<Item = CreateTapeWithBarcodeOutput, Error = CreateTapeWithBarcodeError>>;
                 
 
                 #[doc="<p>Creates one or more virtual tapes. You write data to the virtual tapes and then archive the tapes.</p> <note> <p>Cache storage must be allocated to the gateway before you can create virtual tapes. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note>"]
-                fn create_tapes(&self, input: &CreateTapesInput)  -> Result<CreateTapesOutput, CreateTapesError>;
+                fn create_tapes(&self, input: &CreateTapesInput)  -> Box<Future<Item = CreateTapesOutput, Error = CreateTapesError>>;
                 
 
                 #[doc="<p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn delete_bandwidth_rate_limit(&self, input: &DeleteBandwidthRateLimitInput)  -> Result<DeleteBandwidthRateLimitOutput, DeleteBandwidthRateLimitError>;
+                fn delete_bandwidth_rate_limit(&self, input: &DeleteBandwidthRateLimitInput)  -> Box<Future<Item = DeleteBandwidthRateLimitOutput, Error = DeleteBandwidthRateLimitError>>;
                 
 
                 #[doc="<p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair.</p>"]
-                fn delete_chap_credentials(&self, input: &DeleteChapCredentialsInput)  -> Result<DeleteChapCredentialsOutput, DeleteChapCredentialsError>;
+                fn delete_chap_credentials(&self, input: &DeleteChapCredentialsInput)  -> Box<Future<Item = DeleteChapCredentialsOutput, Error = DeleteChapCredentialsError>>;
                 
 
                 #[doc="<p>Deletes a file share from a file gateway.</p>"]
-                fn delete_file_share(&self, input: &DeleteFileShareInput)  -> Result<DeleteFileShareOutput, DeleteFileShareError>;
+                fn delete_file_share(&self, input: &DeleteFileShareInput)  -> Box<Future<Item = DeleteFileShareOutput, Error = DeleteFileShareError>>;
                 
 
                 #[doc="<p>Deletes a gateway. To specify which gateway to delete, use the Amazon Resource Name (ARN) of the gateway in your request. The operation deletes the gateway; however, it does not delete the gateway virtual machine (VM) from your host computer.</p> <p>After you delete a gateway, you cannot reactivate it. Completed snapshots of the gateway volumes are not deleted upon deleting the gateway, however, pending snapshots will not complete. After you delete a gateway, your next step is to remove it from your environment.</p> <important> <p>You no longer pay software charges after the gateway is deleted; however, your existing Amazon EBS snapshots persist and you will continue to be billed for these snapshots. You can choose to remove all remaining Amazon EBS snapshots by canceling your Amazon EC2 subscription.  If you prefer not to cancel your Amazon EC2 subscription, you can delete your snapshots using the Amazon EC2 console. For more information, see the <a href=\"http://aws.amazon.com/storagegateway\"> AWS Storage Gateway Detail Page</a>. </p> </important>"]
-                fn delete_gateway(&self, input: &DeleteGatewayInput)  -> Result<DeleteGatewayOutput, DeleteGatewayError>;
+                fn delete_gateway(&self, input: &DeleteGatewayInput)  -> Box<Future<Item = DeleteGatewayOutput, Error = DeleteGatewayError>>;
                 
 
                 #[doc="<p>Deletes a snapshot of a volume.</p> <p>You can take snapshots of your gateway volumes on a scheduled or ad hoc basis. This API action enables you to delete a snapshot schedule for a volume. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/WorkingWithSnapshots.html\">Working with Snapshots</a>. In the <code>DeleteSnapshotSchedule</code> request, you identify the volume by providing its Amazon Resource Name (ARN). </p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note>"]
-                fn delete_snapshot_schedule(&self, input: &DeleteSnapshotScheduleInput)  -> Result<DeleteSnapshotScheduleOutput, DeleteSnapshotScheduleError>;
+                fn delete_snapshot_schedule(&self, input: &DeleteSnapshotScheduleInput)  -> Box<Future<Item = DeleteSnapshotScheduleOutput, Error = DeleteSnapshotScheduleError>>;
                 
 
                 #[doc="<p>Deletes the specified virtual tape.</p>"]
-                fn delete_tape(&self, input: &DeleteTapeInput)  -> Result<DeleteTapeOutput, DeleteTapeError>;
+                fn delete_tape(&self, input: &DeleteTapeInput)  -> Box<Future<Item = DeleteTapeOutput, Error = DeleteTapeError>>;
                 
 
                 #[doc="<p>Deletes the specified virtual tape from the virtual tape shelf (VTS).</p>"]
-                fn delete_tape_archive(&self, input: &DeleteTapeArchiveInput)  -> Result<DeleteTapeArchiveOutput, DeleteTapeArchiveError>;
+                fn delete_tape_archive(&self, input: &DeleteTapeArchiveInput)  -> Box<Future<Item = DeleteTapeArchiveOutput, Error = DeleteTapeArchiveError>>;
                 
 
                 #[doc="<p>Deletes the specified gateway volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. For gateway-stored volumes, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume. </p> <p>Before you delete a gateway volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html\">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>"]
-                fn delete_volume(&self, input: &DeleteVolumeInput)  -> Result<DeleteVolumeOutput, DeleteVolumeError>;
+                fn delete_volume(&self, input: &DeleteVolumeInput)  -> Box<Future<Item = DeleteVolumeOutput, Error = DeleteVolumeError>>;
                 
 
                 #[doc="<p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn describe_bandwidth_rate_limit(&self, input: &DescribeBandwidthRateLimitInput)  -> Result<DescribeBandwidthRateLimitOutput, DescribeBandwidthRateLimitError>;
+                fn describe_bandwidth_rate_limit(&self, input: &DescribeBandwidthRateLimitInput)  -> Box<Future<Item = DescribeBandwidthRateLimitOutput, Error = DescribeBandwidthRateLimitError>>;
                 
 
                 #[doc="<p>Returns information about the cache of a gateway. This operation is supported only for the gateway-cached volume architecture.</p> <p>The response includes disk IDs that are configured as cache, and it includes the amount of cache allocated and used.</p>"]
-                fn describe_cache(&self, input: &DescribeCacheInput)  -> Result<DescribeCacheOutput, DescribeCacheError>;
+                fn describe_cache(&self, input: &DescribeCacheInput)  -> Box<Future<Item = DescribeCacheOutput, Error = DescribeCacheError>>;
                 
 
                 #[doc="<p>Returns a description of the gateway volumes specified in the request. This operation is supported only for the gateway-cached volume architecture.</p> <p>The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume Amazon Resource Name (ARN).</p>"]
-                fn describe_cachedi_scsi_volumes(&self, input: &DescribeCachediSCSIVolumesInput)  -> Result<DescribeCachediSCSIVolumesOutput, DescribeCachediSCSIVolumesError>;
+                fn describe_cachedi_scsi_volumes(&self, input: &DescribeCachediSCSIVolumesInput)  -> Box<Future<Item = DescribeCachediSCSIVolumesOutput, Error = DescribeCachediSCSIVolumesError>>;
                 
 
                 #[doc="<p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair.</p>"]
-                fn describe_chap_credentials(&self, input: &DescribeChapCredentialsInput)  -> Result<DescribeChapCredentialsOutput, DescribeChapCredentialsError>;
+                fn describe_chap_credentials(&self, input: &DescribeChapCredentialsInput)  -> Box<Future<Item = DescribeChapCredentialsOutput, Error = DescribeChapCredentialsError>>;
                 
 
                 #[doc="<p>Returns metadata about a gateway such as its name, network interfaces, configured time zone, and the state (whether the gateway is running or not). To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn describe_gateway_information(&self, input: &DescribeGatewayInformationInput)  -> Result<DescribeGatewayInformationOutput, DescribeGatewayInformationError>;
+                fn describe_gateway_information(&self, input: &DescribeGatewayInformationInput)  -> Box<Future<Item = DescribeGatewayInformationOutput, Error = DescribeGatewayInformationError>>;
                 
 
                 #[doc="<p>Returns your gateway's weekly maintenance start time including the day and time of the week. Note that values are in terms of the gateway's time zone.</p>"]
-                fn describe_maintenance_start_time(&self, input: &DescribeMaintenanceStartTimeInput)  -> Result<DescribeMaintenanceStartTimeOutput, DescribeMaintenanceStartTimeError>;
+                fn describe_maintenance_start_time(&self, input: &DescribeMaintenanceStartTimeInput)  -> Box<Future<Item = DescribeMaintenanceStartTimeOutput, Error = DescribeMaintenanceStartTimeError>>;
                 
 
                 #[doc="<p>Gets a description for one or more file shares from a file gateway.</p>"]
-                fn describe_nfs_file_shares(&self, input: &DescribeNFSFileSharesInput)  -> Result<DescribeNFSFileSharesOutput, DescribeNFSFileSharesError>;
+                fn describe_nfs_file_shares(&self, input: &DescribeNFSFileSharesInput)  -> Box<Future<Item = DescribeNFSFileSharesOutput, Error = DescribeNFSFileSharesError>>;
                 
 
                 #[doc="<p>Describes the snapshot schedule for the specified gateway volume. The snapshot schedule information includes intervals at which snapshots are automatically initiated on the volume.</p>"]
-                fn describe_snapshot_schedule(&self, input: &DescribeSnapshotScheduleInput)  -> Result<DescribeSnapshotScheduleOutput, DescribeSnapshotScheduleError>;
+                fn describe_snapshot_schedule(&self, input: &DescribeSnapshotScheduleInput)  -> Box<Future<Item = DescribeSnapshotScheduleOutput, Error = DescribeSnapshotScheduleError>>;
                 
 
                 #[doc="<p>Returns the description of the gateway volumes specified in the request. The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume ARNs.</p>"]
-                fn describe_storedi_scsi_volumes(&self, input: &DescribeStorediSCSIVolumesInput)  -> Result<DescribeStorediSCSIVolumesOutput, DescribeStorediSCSIVolumesError>;
+                fn describe_storedi_scsi_volumes(&self, input: &DescribeStorediSCSIVolumesInput)  -> Box<Future<Item = DescribeStorediSCSIVolumesOutput, Error = DescribeStorediSCSIVolumesError>>;
                 
 
                 #[doc="<p>Returns a description of specified virtual tapes in the virtual tape shelf (VTS).</p> <p>If a specific <code>TapeARN</code> is not specified, AWS Storage Gateway returns a description of all virtual tapes found in the VTS associated with your account.</p>"]
-                fn describe_tape_archives(&self, input: &DescribeTapeArchivesInput)  -> Result<DescribeTapeArchivesOutput, DescribeTapeArchivesError>;
+                fn describe_tape_archives(&self, input: &DescribeTapeArchivesInput)  -> Box<Future<Item = DescribeTapeArchivesOutput, Error = DescribeTapeArchivesError>>;
                 
 
                 #[doc="<p>Returns a list of virtual tape recovery points that are available for the specified gateway-VTL.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p>"]
-                fn describe_tape_recovery_points(&self, input: &DescribeTapeRecoveryPointsInput)  -> Result<DescribeTapeRecoveryPointsOutput, DescribeTapeRecoveryPointsError>;
+                fn describe_tape_recovery_points(&self, input: &DescribeTapeRecoveryPointsInput)  -> Box<Future<Item = DescribeTapeRecoveryPointsOutput, Error = DescribeTapeRecoveryPointsError>>;
                 
 
                 #[doc="<p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway.</p>"]
-                fn describe_tapes(&self, input: &DescribeTapesInput)  -> Result<DescribeTapesOutput, DescribeTapesError>;
+                fn describe_tapes(&self, input: &DescribeTapesInput)  -> Box<Future<Item = DescribeTapesOutput, Error = DescribeTapesError>>;
                 
 
                 #[doc="<p>Returns information about the upload buffer of a gateway. This operation is supported for both the gateway-stored and gateway-cached volume architectures.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>"]
-                fn describe_upload_buffer(&self, input: &DescribeUploadBufferInput)  -> Result<DescribeUploadBufferOutput, DescribeUploadBufferError>;
+                fn describe_upload_buffer(&self, input: &DescribeUploadBufferInput)  -> Box<Future<Item = DescribeUploadBufferOutput, Error = DescribeUploadBufferError>>;
                 
 
                 #[doc="<p>Returns a description of virtual tape library (VTL) devices for the specified gateway. In the response, AWS Storage Gateway returns VTL device information.</p> <p>The list of VTL devices must be from one gateway.</p>"]
-                fn describe_vtl_devices(&self, input: &DescribeVTLDevicesInput)  -> Result<DescribeVTLDevicesOutput, DescribeVTLDevicesError>;
+                fn describe_vtl_devices(&self, input: &DescribeVTLDevicesInput)  -> Box<Future<Item = DescribeVTLDevicesOutput, Error = DescribeVTLDevicesError>>;
                 
 
                 #[doc="<p>Returns information about the working storage of a gateway. This operation is supported only for the gateway-stored volume architecture. This operation is deprecated in cached-volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored-volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>"]
-                fn describe_working_storage(&self, input: &DescribeWorkingStorageInput)  -> Result<DescribeWorkingStorageOutput, DescribeWorkingStorageError>;
+                fn describe_working_storage(&self, input: &DescribeWorkingStorageInput)  -> Box<Future<Item = DescribeWorkingStorageOutput, Error = DescribeWorkingStorageError>>;
                 
 
                 #[doc="<p>Disables a gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a gateway-VTL that is not reachable or not functioning.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important>"]
-                fn disable_gateway(&self, input: &DisableGatewayInput)  -> Result<DisableGatewayOutput, DisableGatewayError>;
+                fn disable_gateway(&self, input: &DisableGatewayInput)  -> Box<Future<Item = DisableGatewayOutput, Error = DisableGatewayError>>;
                 
 
                 #[doc="<p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. </p>"]
-                fn list_file_shares(&self, input: &ListFileSharesInput)  -> Result<ListFileSharesOutput, ListFileSharesError>;
+                fn list_file_shares(&self, input: &ListFileSharesInput)  -> Box<Future<Item = ListFileSharesOutput, Error = ListFileSharesError>>;
                 
 
                 #[doc="<p>Lists gateways owned by an AWS account in a region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>"]
-                fn list_gateways(&self, input: &ListGatewaysInput)  -> Result<ListGatewaysOutput, ListGatewaysError>;
+                fn list_gateways(&self, input: &ListGatewaysInput)  -> Box<Future<Item = ListGatewaysOutput, Error = ListGatewaysError>>;
                 
 
                 #[doc="<p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted). </p>"]
-                fn list_local_disks(&self, input: &ListLocalDisksInput)  -> Result<ListLocalDisksOutput, ListLocalDisksError>;
+                fn list_local_disks(&self, input: &ListLocalDisksInput)  -> Box<Future<Item = ListLocalDisksOutput, Error = ListLocalDisksError>>;
                 
 
                 #[doc="<p>Lists the tags that have been added to the specified resource.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceInput)  -> Result<ListTagsForResourceOutput, ListTagsForResourceError>;
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceInput)  -> Box<Future<Item = ListTagsForResourceOutput, Error = ListTagsForResourceError>>;
                 
 
                 #[doc="<p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes.</p>"]
-                fn list_tapes(&self, input: &ListTapesInput)  -> Result<ListTapesOutput, ListTapesError>;
+                fn list_tapes(&self, input: &ListTapesInput)  -> Box<Future<Item = ListTapesOutput, Error = ListTapesError>>;
                 
 
                 #[doc="<p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not.</p>"]
-                fn list_volume_initiators(&self, input: &ListVolumeInitiatorsInput)  -> Result<ListVolumeInitiatorsOutput, ListVolumeInitiatorsError>;
+                fn list_volume_initiators(&self, input: &ListVolumeInitiatorsInput)  -> Box<Future<Item = ListVolumeInitiatorsOutput, Error = ListVolumeInitiatorsError>>;
                 
 
                 #[doc="<p>Lists the recovery points for a specified gateway. This operation is supported only for the gateway-cached volume architecture.</p> <p>Each gateway-cached volume has one recovery point. A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To create a snapshot from a volume recovery point use the <a>CreateSnapshotFromVolumeRecoveryPoint</a> operation.</p>"]
-                fn list_volume_recovery_points(&self, input: &ListVolumeRecoveryPointsInput)  -> Result<ListVolumeRecoveryPointsOutput, ListVolumeRecoveryPointsError>;
+                fn list_volume_recovery_points(&self, input: &ListVolumeRecoveryPointsInput)  -> Box<Future<Item = ListVolumeRecoveryPointsOutput, Error = ListVolumeRecoveryPointsError>>;
                 
 
                 #[doc="<p>Lists the iSCSI stored volumes of a gateway. Results are sorted by volume ARN. The response includes only the volume ARNs. If you want additional volume information, use the <a>DescribeStorediSCSIVolumes</a> or the <a>DescribeCachediSCSIVolumes</a> API.</p> <p>The operation supports pagination. By default, the operation returns a maximum of up to 100 volumes. You can optionally specify the <code>Limit</code> field in the body to limit the number of volumes in the response. If the number of volumes returned in the response is truncated, the response includes a Marker field. You can use this Marker value in your subsequent request to retrieve the next set of volumes.</p>"]
-                fn list_volumes(&self, input: &ListVolumesInput)  -> Result<ListVolumesOutput, ListVolumesError>;
+                fn list_volumes(&self, input: &ListVolumesInput)  -> Box<Future<Item = ListVolumesOutput, Error = ListVolumesError>>;
                 
 
                 #[doc="<p>Removes one or more tags from the specified resource.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceInput)  -> Result<RemoveTagsFromResourceOutput, RemoveTagsFromResourceError>;
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceInput)  -> Box<Future<Item = RemoveTagsFromResourceOutput, Error = RemoveTagsFromResourceError>>;
                 
 
                 #[doc="<p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important>"]
-                fn reset_cache(&self, input: &ResetCacheInput)  -> Result<ResetCacheOutput, ResetCacheError>;
+                fn reset_cache(&self, input: &ResetCacheInput)  -> Box<Future<Item = ResetCacheOutput, Error = ResetCacheError>>;
                 
 
                 #[doc="<p>Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a gateway-VTL. Virtual tapes archived in the VTS are not associated with any gateway. However after a tape is retrieved, it is associated with a gateway, even though it is also listed in the VTS.</p> <p>Once a tape is successfully retrieved to a gateway, it cannot be retrieved again to another gateway. You must archive the tape again before you can retrieve it to another gateway.</p>"]
-                fn retrieve_tape_archive(&self, input: &RetrieveTapeArchiveInput)  -> Result<RetrieveTapeArchiveOutput, RetrieveTapeArchiveError>;
+                fn retrieve_tape_archive(&self, input: &RetrieveTapeArchiveInput)  -> Box<Future<Item = RetrieveTapeArchiveOutput, Error = RetrieveTapeArchiveError>>;
                 
 
                 #[doc="<p>Retrieves the recovery point for the specified virtual tape.</p> <p>A recovery point is a point in time view of a virtual tape at which all the data on the tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p> <note> <p>The virtual tape can be retrieved to only one gateway. The retrieved tape is read-only. The virtual tape can be retrieved to only a gateway-VTL. There is no charge for retrieving recovery points.</p> </note>"]
-                fn retrieve_tape_recovery_point(&self, input: &RetrieveTapeRecoveryPointInput)  -> Result<RetrieveTapeRecoveryPointOutput, RetrieveTapeRecoveryPointError>;
+                fn retrieve_tape_recovery_point(&self, input: &RetrieveTapeRecoveryPointInput)  -> Box<Future<Item = RetrieveTapeRecoveryPointOutput, Error = RetrieveTapeRecoveryPointError>>;
                 
 
                 #[doc="<p>Sets the password for your VM local console. When you log in to the local console for the first time, you log in to the VM with the default credentials. We recommend that you set a new password. You don't need to know the default password to set a new password.</p>"]
-                fn set_local_console_password(&self, input: &SetLocalConsolePasswordInput)  -> Result<SetLocalConsolePasswordOutput, SetLocalConsolePasswordError>;
+                fn set_local_console_password(&self, input: &SetLocalConsolePasswordInput)  -> Box<Future<Item = SetLocalConsolePasswordOutput, Error = SetLocalConsolePasswordError>>;
                 
 
                 #[doc="<p>Shuts down a gateway. To specify which gateway to shut down, use the Amazon Resource Name (ARN) of the gateway in the body of your request.</p> <p>The operation shuts down the gateway service component running in the storage gateway's virtual machine (VM) and not the VM.</p> <note> <p>If you want to shut down the VM, it is recommended that you first shut down the gateway component in the VM to avoid unpredictable conditions.</p> </note> <p>After the gateway is shutdown, you cannot call any other API except <a>StartGateway</a>, <a>DescribeGatewayInformation</a>, and <a>ListGateways</a>. For more information, see <a>ActivateGateway</a>. Your applications cannot read from or write to the gateway's storage volumes, and there are no snapshots taken.</p> <note> <p>When you make a shutdown request, you will get a <code>200 OK</code> success response immediately. However, it might take some time for the gateway to shut down. You can call the <a>DescribeGatewayInformation</a> API to check the status. For more information, see <a>ActivateGateway</a>.</p> </note> <p>If do not intend to use the gateway again, you must delete the gateway (using <a>DeleteGateway</a>) to no longer pay software charges associated with the gateway.</p>"]
-                fn shutdown_gateway(&self, input: &ShutdownGatewayInput)  -> Result<ShutdownGatewayOutput, ShutdownGatewayError>;
+                fn shutdown_gateway(&self, input: &ShutdownGatewayInput)  -> Box<Future<Item = ShutdownGatewayOutput, Error = ShutdownGatewayError>>;
                 
 
                 #[doc="<p>Starts a gateway that you previously shut down (see <a>ShutdownGateway</a>). After the gateway starts, you can then make other API calls, your applications can read from or write to the gateway's storage volumes and you will be able to take snapshot backups.</p> <note> <p>When you make a request, you will get a 200 OK success response immediately. However, it might take some time for the gateway to be ready. You should call <a>DescribeGatewayInformation</a> and check the status before making any additional API calls. For more information, see <a>ActivateGateway</a>.</p> </note> <p>To specify which gateway to start, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn start_gateway(&self, input: &StartGatewayInput)  -> Result<StartGatewayOutput, StartGatewayError>;
+                fn start_gateway(&self, input: &StartGatewayInput)  -> Box<Future<Item = StartGatewayOutput, Error = StartGatewayError>>;
                 
 
                 #[doc="<p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains.</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn update_bandwidth_rate_limit(&self, input: &UpdateBandwidthRateLimitInput)  -> Result<UpdateBandwidthRateLimitOutput, UpdateBandwidthRateLimitError>;
+                fn update_bandwidth_rate_limit(&self, input: &UpdateBandwidthRateLimitInput)  -> Box<Future<Item = UpdateBandwidthRateLimitOutput, Error = UpdateBandwidthRateLimitError>>;
                 
 
                 #[doc="<p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important>"]
-                fn update_chap_credentials(&self, input: &UpdateChapCredentialsInput)  -> Result<UpdateChapCredentialsOutput, UpdateChapCredentialsError>;
+                fn update_chap_credentials(&self, input: &UpdateChapCredentialsInput)  -> Box<Future<Item = UpdateChapCredentialsOutput, Error = UpdateChapCredentialsError>>;
                 
 
                 #[doc="<p>Updates a gateway's metadata, which includes the gateway's name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For Gateways activated after September 2, 2015, the gateway's ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway's ARN.</p> </note>"]
-                fn update_gateway_information(&self, input: &UpdateGatewayInformationInput)  -> Result<UpdateGatewayInformationOutput, UpdateGatewayInformationError>;
+                fn update_gateway_information(&self, input: &UpdateGatewayInformationInput)  -> Box<Future<Item = UpdateGatewayInformationOutput, Error = UpdateGatewayInformationError>>;
                 
 
                 #[doc="<p>Updates the gateway virtual machine (VM) software. The request immediately triggers the software update.</p> <note> <p>When you make this request, you get a <code>200 OK</code> success response immediately. However, it might take some time for the update to complete. You can call <a>DescribeGatewayInformation</a> to verify the gateway is in the <code>STATE_RUNNING</code> state.</p> </note> <important> <p>A software update forces a system restart of your gateway. You can minimize the chance of any disruption to your applications by increasing your iSCSI Initiators' timeouts. For more information about increasing iSCSI Initiator timeouts for Windows and Linux, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/ConfiguringiSCSIClientInitiatorWindowsClient.html#CustomizeWindowsiSCSISettings\">Customizing Your Windows iSCSI Settings</a> and <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/ConfiguringiSCSIClientInitiatorRedHatClient.html#CustomizeLinuxiSCSISettings\">Customizing Your Linux iSCSI Settings</a>, respectively.</p> </important>"]
-                fn update_gateway_software_now(&self, input: &UpdateGatewaySoftwareNowInput)  -> Result<UpdateGatewaySoftwareNowOutput, UpdateGatewaySoftwareNowError>;
+                fn update_gateway_software_now(&self, input: &UpdateGatewaySoftwareNowInput)  -> Box<Future<Item = UpdateGatewaySoftwareNowOutput, Error = UpdateGatewaySoftwareNowError>>;
                 
 
                 #[doc="<p>Updates a gateway's weekly maintenance start time information, including day and time of the week. The maintenance time is the time in your gateway's time zone.</p>"]
-                fn update_maintenance_start_time(&self, input: &UpdateMaintenanceStartTimeInput)  -> Result<UpdateMaintenanceStartTimeOutput, UpdateMaintenanceStartTimeError>;
+                fn update_maintenance_start_time(&self, input: &UpdateMaintenanceStartTimeInput)  -> Box<Future<Item = UpdateMaintenanceStartTimeOutput, Error = UpdateMaintenanceStartTimeError>>;
                 
 
                 #[doc="<p>Updates a file share. </p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note>"]
-                fn update_nfs_file_share(&self, input: &UpdateNFSFileShareInput)  -> Result<UpdateNFSFileShareOutput, UpdateNFSFileShareError>;
+                fn update_nfs_file_share(&self, input: &UpdateNFSFileShareInput)  -> Box<Future<Item = UpdateNFSFileShareOutput, Error = UpdateNFSFileShareError>>;
                 
 
                 #[doc="<p>Updates a snapshot schedule configured for a gateway volume.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>"]
-                fn update_snapshot_schedule(&self, input: &UpdateSnapshotScheduleInput)  -> Result<UpdateSnapshotScheduleOutput, UpdateSnapshotScheduleError>;
+                fn update_snapshot_schedule(&self, input: &UpdateSnapshotScheduleInput)  -> Box<Future<Item = UpdateSnapshotScheduleOutput, Error = UpdateSnapshotScheduleError>>;
                 
 
                 #[doc="<p>Updates the type of medium changer in a gateway-VTL. When you activate a gateway-VTL, you select a medium changer type for the gateway-VTL. This operation enables you to select a different type of medium changer after a gateway-VTL is activated.</p>"]
-                fn update_vtl_device_type(&self, input: &UpdateVTLDeviceTypeInput)  -> Result<UpdateVTLDeviceTypeOutput, UpdateVTLDeviceTypeError>;
+                fn update_vtl_device_type(&self, input: &UpdateVTLDeviceTypeInput)  -> Box<Future<Item = UpdateVTLDeviceTypeOutput, Error = UpdateVTLDeviceTypeError>>;
                 
 }
 /// A client for the AWS Storage Gateway API.
@@ -6260,7 +6261,7 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Activates the gateway you previously deployed on your host. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStartedActivateGateway-common.html\"> Activate the AWS Storage Gateway</a>. In the activation process, you specify information such as the you want to use for storing snapshots, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note>"]
-                fn activate_gateway(&self, input: &ActivateGatewayInput)  -> Result<ActivateGatewayOutput, ActivateGatewayError> {
+                fn activate_gateway(&self, input: &ActivateGatewayInput)  -> Box<Future<Item = ActivateGatewayOutput, Error = ActivateGatewayError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6268,21 +6269,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ActivateGatewayError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivateGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ActivateGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ActivateGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ActivateGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ActivateGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures one or more gateway local disks as cache for a cached-volume gateway. This operation is supported only for the gateway-cached volume architecture (see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html\">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>"]
-                fn add_cache(&self, input: &AddCacheInput)  -> Result<AddCacheOutput, AddCacheError> {
+                fn add_cache(&self, input: &AddCacheInput)  -> Box<Future<Item = AddCacheOutput, Error = AddCacheError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6290,21 +6301,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddCacheError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddCacheError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds one or more tags to the specified resource. You use tags to add metadata to resources, which you can use to categorize these resources. For example, you can categorize resources by purpose, owner, environment, or team. Each tag consists of a key and a value, which you define. You can add tags to the following AWS Storage Gateway resources:</p> <ul> <li> <p>Storage gateways of all types</p> </li> </ul> <ul> <li> <p>Storage Volumes</p> </li> </ul> <ul> <li> <p>Virtual Tapes</p> </li> </ul> <p>You can create a maximum of 10 tags for each resource. Virtual tapes and storage volumes that are recovered to a new gateway maintain their tags.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceInput)  -> Result<AddTagsToResourceOutput, AddTagsToResourceError> {
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceInput)  -> Box<Future<Item = AddTagsToResourceOutput, Error = AddTagsToResourceError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6312,21 +6333,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddTagsToResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddTagsToResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddTagsToResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for both the gateway-stored and gateway-cached volume architectures.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>"]
-                fn add_upload_buffer(&self, input: &AddUploadBufferInput)  -> Result<AddUploadBufferOutput, AddUploadBufferError> {
+                fn add_upload_buffer(&self, input: &AddUploadBufferInput)  -> Box<Future<Item = AddUploadBufferOutput, Error = AddUploadBufferError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6334,21 +6365,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddUploadBufferError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddUploadBufferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddUploadBufferError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddUploadBufferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures one or more gateway local disks as working storage for a gateway. This operation is supported only for the gateway-stored volume architecture. This operation is deprecated in cached-volumes API version 20120630. Use <a>AddUploadBuffer</a> instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the <a>AddUploadBuffer</a> operation to add upload buffer to a stored-volume gateway.</p> </note> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add working storage, and one or more disk IDs that you want to configure as working storage.</p>"]
-                fn add_working_storage(&self, input: &AddWorkingStorageInput)  -> Result<AddWorkingStorageOutput, AddWorkingStorageError> {
+                fn add_working_storage(&self, input: &AddWorkingStorageInput)  -> Box<Future<Item = AddWorkingStorageOutput, Error = AddWorkingStorageError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6356,21 +6397,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddWorkingStorageError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddWorkingStorageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddWorkingStorageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddWorkingStorageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated.</p>"]
-                fn cancel_archival(&self, input: &CancelArchivalInput)  -> Result<CancelArchivalOutput, CancelArchivalError> {
+                fn cancel_archival(&self, input: &CancelArchivalInput)  -> Box<Future<Item = CancelArchivalOutput, Error = CancelArchivalError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6378,21 +6429,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelArchivalError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelArchivalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CancelArchivalError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelArchivalError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CancelArchivalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CancelArchivalError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels retrieval of a virtual tape from the virtual tape shelf (VTS) to a gateway after the retrieval process is initiated. The virtual tape is returned to the VTS.</p>"]
-                fn cancel_retrieval(&self, input: &CancelRetrievalInput)  -> Result<CancelRetrievalOutput, CancelRetrievalError> {
+                fn cancel_retrieval(&self, input: &CancelRetrievalInput)  -> Box<Future<Item = CancelRetrievalOutput, Error = CancelRetrievalError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6400,21 +6461,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelRetrievalError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelRetrievalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CancelRetrievalError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelRetrievalError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CancelRetrievalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CancelRetrievalError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a cached volume on a specified cached gateway. This operation is supported only for the gateway-cached volume architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a cached volume. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note> <p>In the request, you must specify the gateway, size of the volume in bytes, the iSCSI target name, an IP address on which to expose the target, and a unique client token. In response, AWS Storage Gateway creates the volume and returns information about it. This information includes the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p> <p>Optionally, you can provide the ARN for an existing volume as the <code>SourceVolumeARN</code> for this cached volume, which creates an exact copy of the existing volume’s latest recovery point. The <code>VolumeSizeInBytes</code> value must be equal to or larger than the size of the copied volume, in bytes.</p>"]
-                fn create_cachedi_scsi_volume(&self, input: &CreateCachediSCSIVolumeInput)  -> Result<CreateCachediSCSIVolumeOutput, CreateCachediSCSIVolumeError> {
+                fn create_cachedi_scsi_volume(&self, input: &CreateCachediSCSIVolumeInput)  -> Box<Future<Item = CreateCachediSCSIVolumeOutput, Error = CreateCachediSCSIVolumeError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6422,21 +6493,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateCachediSCSIVolumeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateCachediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateCachediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateCachediSCSIVolumeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateCachediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateCachediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a Network File System (NFS) interface.</p>"]
-                fn create_nfs_file_share(&self, input: &CreateNFSFileShareInput)  -> Result<CreateNFSFileShareOutput, CreateNFSFileShareError> {
+                fn create_nfs_file_share(&self, input: &CreateNFSFileShareInput)  -> Box<Future<Item = CreateNFSFileShareOutput, Error = CreateNFSFileShareError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6444,21 +6525,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateNFSFileShareError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateNFSFileShareError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad-hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/WorkingWithSnapshots.html\">Working With Snapshots in the AWS Storage Gateway Console</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see DescribeSnapshots or DeleteSnapshot in the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html\">EC2 API reference</a>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href=\"http://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html\">Welcome</a> page.</p> </important>"]
-                fn create_snapshot(&self, input: &CreateSnapshotInput)  -> Result<CreateSnapshotOutput, CreateSnapshotError> {
+                fn create_snapshot(&self, input: &CreateSnapshotInput)  -> Box<Future<Item = CreateSnapshotOutput, Error = CreateSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6466,21 +6557,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSnapshotError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSnapshotOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateSnapshotOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Initiates a snapshot of a gateway from a volume recovery point. This operation is supported only for the gateway-cached volume architecture.</p> <p>A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To get a list of volume recovery point for gateway-cached volumes, use <a>ListVolumeRecoveryPoints</a>.</p> <p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide a description for the snapshot. When AWS Storage Gateway takes a snapshot of the specified volume, the snapshot and its description appear in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note>"]
-                fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromVolumeRecoveryPointInput)  -> Result<CreateSnapshotFromVolumeRecoveryPointOutput, CreateSnapshotFromVolumeRecoveryPointError> {
+                fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromVolumeRecoveryPointInput)  -> Box<Future<Item = CreateSnapshotFromVolumeRecoveryPointOutput, Error = CreateSnapshotFromVolumeRecoveryPointError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6488,21 +6589,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSnapshotFromVolumeRecoveryPointError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSnapshotFromVolumeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateSnapshotFromVolumeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSnapshotFromVolumeRecoveryPointError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateSnapshotFromVolumeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateSnapshotFromVolumeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a volume on a specified gateway. This operation is supported only for the gateway-stored volume architecture.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, AWS Storage Gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>"]
-                fn create_storedi_scsi_volume(&self, input: &CreateStorediSCSIVolumeInput)  -> Result<CreateStorediSCSIVolumeOutput, CreateStorediSCSIVolumeError> {
+                fn create_storedi_scsi_volume(&self, input: &CreateStorediSCSIVolumeInput)  -> Box<Future<Item = CreateStorediSCSIVolumeOutput, Error = CreateStorediSCSIVolumeError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6510,21 +6621,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateStorediSCSIVolumeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateStorediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateStorediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateStorediSCSIVolumeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateStorediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateStorediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
-                fn create_tape_with_barcode(&self, input: &CreateTapeWithBarcodeInput)  -> Result<CreateTapeWithBarcodeOutput, CreateTapeWithBarcodeError> {
+                fn create_tape_with_barcode(&self, input: &CreateTapeWithBarcodeInput)  -> Box<Future<Item = CreateTapeWithBarcodeOutput, Error = CreateTapeWithBarcodeError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6532,21 +6653,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTapeWithBarcodeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTapeWithBarcodeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateTapeWithBarcodeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTapeWithBarcodeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateTapeWithBarcodeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateTapeWithBarcodeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates one or more virtual tapes. You write data to the virtual tapes and then archive the tapes.</p> <note> <p>Cache storage must be allocated to the gateway before you can create virtual tapes. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note>"]
-                fn create_tapes(&self, input: &CreateTapesInput)  -> Result<CreateTapesOutput, CreateTapesError> {
+                fn create_tapes(&self, input: &CreateTapesInput)  -> Box<Future<Item = CreateTapesOutput, Error = CreateTapesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6554,21 +6685,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTapesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTapesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn delete_bandwidth_rate_limit(&self, input: &DeleteBandwidthRateLimitInput)  -> Result<DeleteBandwidthRateLimitOutput, DeleteBandwidthRateLimitError> {
+                fn delete_bandwidth_rate_limit(&self, input: &DeleteBandwidthRateLimitInput)  -> Box<Future<Item = DeleteBandwidthRateLimitOutput, Error = DeleteBandwidthRateLimitError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6576,21 +6717,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBandwidthRateLimitError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBandwidthRateLimitError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair.</p>"]
-                fn delete_chap_credentials(&self, input: &DeleteChapCredentialsInput)  -> Result<DeleteChapCredentialsOutput, DeleteChapCredentialsError> {
+                fn delete_chap_credentials(&self, input: &DeleteChapCredentialsInput)  -> Box<Future<Item = DeleteChapCredentialsOutput, Error = DeleteChapCredentialsError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6598,21 +6749,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteChapCredentialsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteChapCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteChapCredentialsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteChapCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a file share from a file gateway.</p>"]
-                fn delete_file_share(&self, input: &DeleteFileShareInput)  -> Result<DeleteFileShareOutput, DeleteFileShareError> {
+                fn delete_file_share(&self, input: &DeleteFileShareInput)  -> Box<Future<Item = DeleteFileShareOutput, Error = DeleteFileShareError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6620,21 +6781,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteFileShareError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteFileShareError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteFileShareError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteFileShareError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a gateway. To specify which gateway to delete, use the Amazon Resource Name (ARN) of the gateway in your request. The operation deletes the gateway; however, it does not delete the gateway virtual machine (VM) from your host computer.</p> <p>After you delete a gateway, you cannot reactivate it. Completed snapshots of the gateway volumes are not deleted upon deleting the gateway, however, pending snapshots will not complete. After you delete a gateway, your next step is to remove it from your environment.</p> <important> <p>You no longer pay software charges after the gateway is deleted; however, your existing Amazon EBS snapshots persist and you will continue to be billed for these snapshots. You can choose to remove all remaining Amazon EBS snapshots by canceling your Amazon EC2 subscription.  If you prefer not to cancel your Amazon EC2 subscription, you can delete your snapshots using the Amazon EC2 console. For more information, see the <a href=\"http://aws.amazon.com/storagegateway\"> AWS Storage Gateway Detail Page</a>. </p> </important>"]
-                fn delete_gateway(&self, input: &DeleteGatewayInput)  -> Result<DeleteGatewayOutput, DeleteGatewayError> {
+                fn delete_gateway(&self, input: &DeleteGatewayInput)  -> Box<Future<Item = DeleteGatewayOutput, Error = DeleteGatewayError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6642,21 +6813,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteGatewayError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a snapshot of a volume.</p> <p>You can take snapshots of your gateway volumes on a scheduled or ad hoc basis. This API action enables you to delete a snapshot schedule for a volume. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/WorkingWithSnapshots.html\">Working with Snapshots</a>. In the <code>DeleteSnapshotSchedule</code> request, you identify the volume by providing its Amazon Resource Name (ARN). </p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note>"]
-                fn delete_snapshot_schedule(&self, input: &DeleteSnapshotScheduleInput)  -> Result<DeleteSnapshotScheduleOutput, DeleteSnapshotScheduleError> {
+                fn delete_snapshot_schedule(&self, input: &DeleteSnapshotScheduleInput)  -> Box<Future<Item = DeleteSnapshotScheduleOutput, Error = DeleteSnapshotScheduleError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6664,21 +6845,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSnapshotScheduleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSnapshotScheduleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified virtual tape.</p>"]
-                fn delete_tape(&self, input: &DeleteTapeInput)  -> Result<DeleteTapeOutput, DeleteTapeError> {
+                fn delete_tape(&self, input: &DeleteTapeInput)  -> Box<Future<Item = DeleteTapeOutput, Error = DeleteTapeError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6686,21 +6877,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTapeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTapeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteTapeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTapeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteTapeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteTapeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified virtual tape from the virtual tape shelf (VTS).</p>"]
-                fn delete_tape_archive(&self, input: &DeleteTapeArchiveInput)  -> Result<DeleteTapeArchiveOutput, DeleteTapeArchiveError> {
+                fn delete_tape_archive(&self, input: &DeleteTapeArchiveInput)  -> Box<Future<Item = DeleteTapeArchiveOutput, Error = DeleteTapeArchiveError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6708,21 +6909,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTapeArchiveError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteTapeArchiveError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTapeArchiveError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteTapeArchiveError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified gateway volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. For gateway-stored volumes, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume. </p> <p>Before you delete a gateway volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html\">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>"]
-                fn delete_volume(&self, input: &DeleteVolumeInput)  -> Result<DeleteVolumeOutput, DeleteVolumeError> {
+                fn delete_volume(&self, input: &DeleteVolumeInput)  -> Box<Future<Item = DeleteVolumeOutput, Error = DeleteVolumeError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6730,21 +6941,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVolumeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVolumeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn describe_bandwidth_rate_limit(&self, input: &DescribeBandwidthRateLimitInput)  -> Result<DescribeBandwidthRateLimitOutput, DescribeBandwidthRateLimitError> {
+                fn describe_bandwidth_rate_limit(&self, input: &DescribeBandwidthRateLimitInput)  -> Box<Future<Item = DescribeBandwidthRateLimitOutput, Error = DescribeBandwidthRateLimitError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6752,21 +6973,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeBandwidthRateLimitError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeBandwidthRateLimitError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the cache of a gateway. This operation is supported only for the gateway-cached volume architecture.</p> <p>The response includes disk IDs that are configured as cache, and it includes the amount of cache allocated and used.</p>"]
-                fn describe_cache(&self, input: &DescribeCacheInput)  -> Result<DescribeCacheOutput, DescribeCacheError> {
+                fn describe_cache(&self, input: &DescribeCacheInput)  -> Box<Future<Item = DescribeCacheOutput, Error = DescribeCacheError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6774,21 +7005,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCacheError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCacheError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a description of the gateway volumes specified in the request. This operation is supported only for the gateway-cached volume architecture.</p> <p>The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume Amazon Resource Name (ARN).</p>"]
-                fn describe_cachedi_scsi_volumes(&self, input: &DescribeCachediSCSIVolumesInput)  -> Result<DescribeCachediSCSIVolumesOutput, DescribeCachediSCSIVolumesError> {
+                fn describe_cachedi_scsi_volumes(&self, input: &DescribeCachediSCSIVolumesInput)  -> Box<Future<Item = DescribeCachediSCSIVolumesOutput, Error = DescribeCachediSCSIVolumesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6796,21 +7037,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCachediSCSIVolumesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCachediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeCachediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCachediSCSIVolumesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeCachediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeCachediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair.</p>"]
-                fn describe_chap_credentials(&self, input: &DescribeChapCredentialsInput)  -> Result<DescribeChapCredentialsOutput, DescribeChapCredentialsError> {
+                fn describe_chap_credentials(&self, input: &DescribeChapCredentialsInput)  -> Box<Future<Item = DescribeChapCredentialsOutput, Error = DescribeChapCredentialsError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6818,21 +7069,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeChapCredentialsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeChapCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeChapCredentialsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeChapCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns metadata about a gateway such as its name, network interfaces, configured time zone, and the state (whether the gateway is running or not). To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn describe_gateway_information(&self, input: &DescribeGatewayInformationInput)  -> Result<DescribeGatewayInformationOutput, DescribeGatewayInformationError> {
+                fn describe_gateway_information(&self, input: &DescribeGatewayInformationInput)  -> Box<Future<Item = DescribeGatewayInformationOutput, Error = DescribeGatewayInformationError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6840,21 +7101,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeGatewayInformationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeGatewayInformationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns your gateway's weekly maintenance start time including the day and time of the week. Note that values are in terms of the gateway's time zone.</p>"]
-                fn describe_maintenance_start_time(&self, input: &DescribeMaintenanceStartTimeInput)  -> Result<DescribeMaintenanceStartTimeOutput, DescribeMaintenanceStartTimeError> {
+                fn describe_maintenance_start_time(&self, input: &DescribeMaintenanceStartTimeInput)  -> Box<Future<Item = DescribeMaintenanceStartTimeOutput, Error = DescribeMaintenanceStartTimeError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6862,21 +7133,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMaintenanceStartTimeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMaintenanceStartTimeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets a description for one or more file shares from a file gateway.</p>"]
-                fn describe_nfs_file_shares(&self, input: &DescribeNFSFileSharesInput)  -> Result<DescribeNFSFileSharesOutput, DescribeNFSFileSharesError> {
+                fn describe_nfs_file_shares(&self, input: &DescribeNFSFileSharesInput)  -> Box<Future<Item = DescribeNFSFileSharesOutput, Error = DescribeNFSFileSharesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6884,21 +7165,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeNFSFileSharesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeNFSFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeNFSFileSharesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeNFSFileSharesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeNFSFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeNFSFileSharesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the snapshot schedule for the specified gateway volume. The snapshot schedule information includes intervals at which snapshots are automatically initiated on the volume.</p>"]
-                fn describe_snapshot_schedule(&self, input: &DescribeSnapshotScheduleInput)  -> Result<DescribeSnapshotScheduleOutput, DescribeSnapshotScheduleError> {
+                fn describe_snapshot_schedule(&self, input: &DescribeSnapshotScheduleInput)  -> Box<Future<Item = DescribeSnapshotScheduleOutput, Error = DescribeSnapshotScheduleError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6906,21 +7197,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSnapshotScheduleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSnapshotScheduleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the description of the gateway volumes specified in the request. The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume ARNs.</p>"]
-                fn describe_storedi_scsi_volumes(&self, input: &DescribeStorediSCSIVolumesInput)  -> Result<DescribeStorediSCSIVolumesOutput, DescribeStorediSCSIVolumesError> {
+                fn describe_storedi_scsi_volumes(&self, input: &DescribeStorediSCSIVolumesInput)  -> Box<Future<Item = DescribeStorediSCSIVolumesOutput, Error = DescribeStorediSCSIVolumesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6928,21 +7229,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeStorediSCSIVolumesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStorediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeStorediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeStorediSCSIVolumesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeStorediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeStorediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a description of specified virtual tapes in the virtual tape shelf (VTS).</p> <p>If a specific <code>TapeARN</code> is not specified, AWS Storage Gateway returns a description of all virtual tapes found in the VTS associated with your account.</p>"]
-                fn describe_tape_archives(&self, input: &DescribeTapeArchivesInput)  -> Result<DescribeTapeArchivesOutput, DescribeTapeArchivesError> {
+                fn describe_tape_archives(&self, input: &DescribeTapeArchivesInput)  -> Box<Future<Item = DescribeTapeArchivesOutput, Error = DescribeTapeArchivesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6950,21 +7261,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTapeArchivesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTapeArchivesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeTapeArchivesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTapeArchivesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeTapeArchivesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeTapeArchivesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of virtual tape recovery points that are available for the specified gateway-VTL.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p>"]
-                fn describe_tape_recovery_points(&self, input: &DescribeTapeRecoveryPointsInput)  -> Result<DescribeTapeRecoveryPointsOutput, DescribeTapeRecoveryPointsError> {
+                fn describe_tape_recovery_points(&self, input: &DescribeTapeRecoveryPointsInput)  -> Box<Future<Item = DescribeTapeRecoveryPointsOutput, Error = DescribeTapeRecoveryPointsError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6972,21 +7293,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTapeRecoveryPointsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTapeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeTapeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTapeRecoveryPointsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeTapeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeTapeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway.</p>"]
-                fn describe_tapes(&self, input: &DescribeTapesInput)  -> Result<DescribeTapesOutput, DescribeTapesError> {
+                fn describe_tapes(&self, input: &DescribeTapesInput)  -> Box<Future<Item = DescribeTapesOutput, Error = DescribeTapesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6994,21 +7325,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTapesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTapesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the upload buffer of a gateway. This operation is supported for both the gateway-stored and gateway-cached volume architectures.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>"]
-                fn describe_upload_buffer(&self, input: &DescribeUploadBufferInput)  -> Result<DescribeUploadBufferOutput, DescribeUploadBufferError> {
+                fn describe_upload_buffer(&self, input: &DescribeUploadBufferInput)  -> Box<Future<Item = DescribeUploadBufferOutput, Error = DescribeUploadBufferError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7016,21 +7357,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeUploadBufferError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeUploadBufferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeUploadBufferError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeUploadBufferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a description of virtual tape library (VTL) devices for the specified gateway. In the response, AWS Storage Gateway returns VTL device information.</p> <p>The list of VTL devices must be from one gateway.</p>"]
-                fn describe_vtl_devices(&self, input: &DescribeVTLDevicesInput)  -> Result<DescribeVTLDevicesOutput, DescribeVTLDevicesError> {
+                fn describe_vtl_devices(&self, input: &DescribeVTLDevicesInput)  -> Box<Future<Item = DescribeVTLDevicesOutput, Error = DescribeVTLDevicesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7038,21 +7389,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVTLDevicesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeVTLDevicesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeVTLDevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVTLDevicesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeVTLDevicesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeVTLDevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the working storage of a gateway. This operation is supported only for the gateway-stored volume architecture. This operation is deprecated in cached-volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored-volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>"]
-                fn describe_working_storage(&self, input: &DescribeWorkingStorageInput)  -> Result<DescribeWorkingStorageOutput, DescribeWorkingStorageError> {
+                fn describe_working_storage(&self, input: &DescribeWorkingStorageInput)  -> Box<Future<Item = DescribeWorkingStorageOutput, Error = DescribeWorkingStorageError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7060,21 +7421,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeWorkingStorageError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeWorkingStorageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeWorkingStorageError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeWorkingStorageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables a gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a gateway-VTL that is not reachable or not functioning.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important>"]
-                fn disable_gateway(&self, input: &DisableGatewayInput)  -> Result<DisableGatewayOutput, DisableGatewayError> {
+                fn disable_gateway(&self, input: &DisableGatewayInput)  -> Box<Future<Item = DisableGatewayOutput, Error = DisableGatewayError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7082,21 +7453,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableGatewayError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DisableGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DisableGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DisableGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. </p>"]
-                fn list_file_shares(&self, input: &ListFileSharesInput)  -> Result<ListFileSharesOutput, ListFileSharesError> {
+                fn list_file_shares(&self, input: &ListFileSharesInput)  -> Box<Future<Item = ListFileSharesOutput, Error = ListFileSharesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7104,21 +7485,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListFileSharesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListFileSharesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListFileSharesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListFileSharesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists gateways owned by an AWS account in a region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>"]
-                fn list_gateways(&self, input: &ListGatewaysInput)  -> Result<ListGatewaysOutput, ListGatewaysError> {
+                fn list_gateways(&self, input: &ListGatewaysInput)  -> Box<Future<Item = ListGatewaysOutput, Error = ListGatewaysError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7126,21 +7517,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListGatewaysError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListGatewaysOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListGatewaysError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListGatewaysOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted). </p>"]
-                fn list_local_disks(&self, input: &ListLocalDisksInput)  -> Result<ListLocalDisksOutput, ListLocalDisksError> {
+                fn list_local_disks(&self, input: &ListLocalDisksInput)  -> Box<Future<Item = ListLocalDisksOutput, Error = ListLocalDisksError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7148,21 +7549,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListLocalDisksError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListLocalDisksOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListLocalDisksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListLocalDisksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListLocalDisksOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListLocalDisksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the tags that have been added to the specified resource.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceInput)  -> Result<ListTagsForResourceOutput, ListTagsForResourceError> {
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceInput)  -> Box<Future<Item = ListTagsForResourceOutput, Error = ListTagsForResourceError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7170,21 +7581,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListTagsForResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes.</p>"]
-                fn list_tapes(&self, input: &ListTapesInput)  -> Result<ListTapesOutput, ListTapesError> {
+                fn list_tapes(&self, input: &ListTapesInput)  -> Box<Future<Item = ListTapesOutput, Error = ListTapesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7192,21 +7613,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTapesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTapesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not.</p>"]
-                fn list_volume_initiators(&self, input: &ListVolumeInitiatorsInput)  -> Result<ListVolumeInitiatorsOutput, ListVolumeInitiatorsError> {
+                fn list_volume_initiators(&self, input: &ListVolumeInitiatorsInput)  -> Box<Future<Item = ListVolumeInitiatorsOutput, Error = ListVolumeInitiatorsError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7214,21 +7645,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListVolumeInitiatorsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVolumeInitiatorsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListVolumeInitiatorsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListVolumeInitiatorsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListVolumeInitiatorsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListVolumeInitiatorsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the recovery points for a specified gateway. This operation is supported only for the gateway-cached volume architecture.</p> <p>Each gateway-cached volume has one recovery point. A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To create a snapshot from a volume recovery point use the <a>CreateSnapshotFromVolumeRecoveryPoint</a> operation.</p>"]
-                fn list_volume_recovery_points(&self, input: &ListVolumeRecoveryPointsInput)  -> Result<ListVolumeRecoveryPointsOutput, ListVolumeRecoveryPointsError> {
+                fn list_volume_recovery_points(&self, input: &ListVolumeRecoveryPointsInput)  -> Box<Future<Item = ListVolumeRecoveryPointsOutput, Error = ListVolumeRecoveryPointsError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7236,21 +7677,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListVolumeRecoveryPointsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVolumeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListVolumeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListVolumeRecoveryPointsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListVolumeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListVolumeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the iSCSI stored volumes of a gateway. Results are sorted by volume ARN. The response includes only the volume ARNs. If you want additional volume information, use the <a>DescribeStorediSCSIVolumes</a> or the <a>DescribeCachediSCSIVolumes</a> API.</p> <p>The operation supports pagination. By default, the operation returns a maximum of up to 100 volumes. You can optionally specify the <code>Limit</code> field in the body to limit the number of volumes in the response. If the number of volumes returned in the response is truncated, the response includes a Marker field. You can use this Marker value in your subsequent request to retrieve the next set of volumes.</p>"]
-                fn list_volumes(&self, input: &ListVolumesInput)  -> Result<ListVolumesOutput, ListVolumesError> {
+                fn list_volumes(&self, input: &ListVolumesInput)  -> Box<Future<Item = ListVolumesOutput, Error = ListVolumesError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7258,21 +7709,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListVolumesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListVolumesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes one or more tags from the specified resource.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceInput)  -> Result<RemoveTagsFromResourceOutput, RemoveTagsFromResourceError> {
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceInput)  -> Box<Future<Item = RemoveTagsFromResourceOutput, Error = RemoveTagsFromResourceError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7280,21 +7741,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveTagsFromResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveTagsFromResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RemoveTagsFromResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important>"]
-                fn reset_cache(&self, input: &ResetCacheInput)  -> Result<ResetCacheOutput, ResetCacheError> {
+                fn reset_cache(&self, input: &ResetCacheInput)  -> Box<Future<Item = ResetCacheOutput, Error = ResetCacheError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7302,21 +7773,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetCacheError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ResetCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ResetCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetCacheError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ResetCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ResetCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a gateway-VTL. Virtual tapes archived in the VTS are not associated with any gateway. However after a tape is retrieved, it is associated with a gateway, even though it is also listed in the VTS.</p> <p>Once a tape is successfully retrieved to a gateway, it cannot be retrieved again to another gateway. You must archive the tape again before you can retrieve it to another gateway.</p>"]
-                fn retrieve_tape_archive(&self, input: &RetrieveTapeArchiveInput)  -> Result<RetrieveTapeArchiveOutput, RetrieveTapeArchiveError> {
+                fn retrieve_tape_archive(&self, input: &RetrieveTapeArchiveInput)  -> Box<Future<Item = RetrieveTapeArchiveOutput, Error = RetrieveTapeArchiveError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7324,21 +7805,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RetrieveTapeArchiveError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetrieveTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RetrieveTapeArchiveError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RetrieveTapeArchiveError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RetrieveTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RetrieveTapeArchiveError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the recovery point for the specified virtual tape.</p> <p>A recovery point is a point in time view of a virtual tape at which all the data on the tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p> <note> <p>The virtual tape can be retrieved to only one gateway. The retrieved tape is read-only. The virtual tape can be retrieved to only a gateway-VTL. There is no charge for retrieving recovery points.</p> </note>"]
-                fn retrieve_tape_recovery_point(&self, input: &RetrieveTapeRecoveryPointInput)  -> Result<RetrieveTapeRecoveryPointOutput, RetrieveTapeRecoveryPointError> {
+                fn retrieve_tape_recovery_point(&self, input: &RetrieveTapeRecoveryPointInput)  -> Box<Future<Item = RetrieveTapeRecoveryPointOutput, Error = RetrieveTapeRecoveryPointError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7346,21 +7837,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RetrieveTapeRecoveryPointError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetrieveTapeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RetrieveTapeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RetrieveTapeRecoveryPointError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RetrieveTapeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RetrieveTapeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the password for your VM local console. When you log in to the local console for the first time, you log in to the VM with the default credentials. We recommend that you set a new password. You don't need to know the default password to set a new password.</p>"]
-                fn set_local_console_password(&self, input: &SetLocalConsolePasswordInput)  -> Result<SetLocalConsolePasswordOutput, SetLocalConsolePasswordError> {
+                fn set_local_console_password(&self, input: &SetLocalConsolePasswordInput)  -> Box<Future<Item = SetLocalConsolePasswordOutput, Error = SetLocalConsolePasswordError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7368,21 +7869,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetLocalConsolePasswordError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SetLocalConsolePasswordOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(SetLocalConsolePasswordError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetLocalConsolePasswordError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<SetLocalConsolePasswordOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(SetLocalConsolePasswordError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Shuts down a gateway. To specify which gateway to shut down, use the Amazon Resource Name (ARN) of the gateway in the body of your request.</p> <p>The operation shuts down the gateway service component running in the storage gateway's virtual machine (VM) and not the VM.</p> <note> <p>If you want to shut down the VM, it is recommended that you first shut down the gateway component in the VM to avoid unpredictable conditions.</p> </note> <p>After the gateway is shutdown, you cannot call any other API except <a>StartGateway</a>, <a>DescribeGatewayInformation</a>, and <a>ListGateways</a>. For more information, see <a>ActivateGateway</a>. Your applications cannot read from or write to the gateway's storage volumes, and there are no snapshots taken.</p> <note> <p>When you make a shutdown request, you will get a <code>200 OK</code> success response immediately. However, it might take some time for the gateway to shut down. You can call the <a>DescribeGatewayInformation</a> API to check the status. For more information, see <a>ActivateGateway</a>.</p> </note> <p>If do not intend to use the gateway again, you must delete the gateway (using <a>DeleteGateway</a>) to no longer pay software charges associated with the gateway.</p>"]
-                fn shutdown_gateway(&self, input: &ShutdownGatewayInput)  -> Result<ShutdownGatewayOutput, ShutdownGatewayError> {
+                fn shutdown_gateway(&self, input: &ShutdownGatewayInput)  -> Box<Future<Item = ShutdownGatewayOutput, Error = ShutdownGatewayError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7390,21 +7901,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ShutdownGatewayError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ShutdownGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ShutdownGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ShutdownGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ShutdownGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ShutdownGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Starts a gateway that you previously shut down (see <a>ShutdownGateway</a>). After the gateway starts, you can then make other API calls, your applications can read from or write to the gateway's storage volumes and you will be able to take snapshot backups.</p> <note> <p>When you make a request, you will get a 200 OK success response immediately. However, it might take some time for the gateway to be ready. You should call <a>DescribeGatewayInformation</a> and check the status before making any additional API calls. For more information, see <a>ActivateGateway</a>.</p> </note> <p>To specify which gateway to start, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn start_gateway(&self, input: &StartGatewayInput)  -> Result<StartGatewayOutput, StartGatewayError> {
+                fn start_gateway(&self, input: &StartGatewayInput)  -> Box<Future<Item = StartGatewayOutput, Error = StartGatewayError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7412,21 +7933,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StartGatewayError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StartGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StartGatewayError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StartGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StartGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains.</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>"]
-                fn update_bandwidth_rate_limit(&self, input: &UpdateBandwidthRateLimitInput)  -> Result<UpdateBandwidthRateLimitOutput, UpdateBandwidthRateLimitError> {
+                fn update_bandwidth_rate_limit(&self, input: &UpdateBandwidthRateLimitInput)  -> Box<Future<Item = UpdateBandwidthRateLimitOutput, Error = UpdateBandwidthRateLimitError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7434,21 +7965,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateBandwidthRateLimitError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateBandwidthRateLimitError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important>"]
-                fn update_chap_credentials(&self, input: &UpdateChapCredentialsInput)  -> Result<UpdateChapCredentialsOutput, UpdateChapCredentialsError> {
+                fn update_chap_credentials(&self, input: &UpdateChapCredentialsInput)  -> Box<Future<Item = UpdateChapCredentialsOutput, Error = UpdateChapCredentialsError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7456,21 +7997,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateChapCredentialsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateChapCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateChapCredentialsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateChapCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a gateway's metadata, which includes the gateway's name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For Gateways activated after September 2, 2015, the gateway's ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway's ARN.</p> </note>"]
-                fn update_gateway_information(&self, input: &UpdateGatewayInformationInput)  -> Result<UpdateGatewayInformationOutput, UpdateGatewayInformationError> {
+                fn update_gateway_information(&self, input: &UpdateGatewayInformationInput)  -> Box<Future<Item = UpdateGatewayInformationOutput, Error = UpdateGatewayInformationError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7478,21 +8029,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateGatewayInformationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateGatewayInformationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the gateway virtual machine (VM) software. The request immediately triggers the software update.</p> <note> <p>When you make this request, you get a <code>200 OK</code> success response immediately. However, it might take some time for the update to complete. You can call <a>DescribeGatewayInformation</a> to verify the gateway is in the <code>STATE_RUNNING</code> state.</p> </note> <important> <p>A software update forces a system restart of your gateway. You can minimize the chance of any disruption to your applications by increasing your iSCSI Initiators' timeouts. For more information about increasing iSCSI Initiator timeouts for Windows and Linux, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/ConfiguringiSCSIClientInitiatorWindowsClient.html#CustomizeWindowsiSCSISettings\">Customizing Your Windows iSCSI Settings</a> and <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/ConfiguringiSCSIClientInitiatorRedHatClient.html#CustomizeLinuxiSCSISettings\">Customizing Your Linux iSCSI Settings</a>, respectively.</p> </important>"]
-                fn update_gateway_software_now(&self, input: &UpdateGatewaySoftwareNowInput)  -> Result<UpdateGatewaySoftwareNowOutput, UpdateGatewaySoftwareNowError> {
+                fn update_gateway_software_now(&self, input: &UpdateGatewaySoftwareNowInput)  -> Box<Future<Item = UpdateGatewaySoftwareNowOutput, Error = UpdateGatewaySoftwareNowError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7500,21 +8061,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateGatewaySoftwareNowError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateGatewaySoftwareNowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateGatewaySoftwareNowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateGatewaySoftwareNowError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateGatewaySoftwareNowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateGatewaySoftwareNowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a gateway's weekly maintenance start time information, including day and time of the week. The maintenance time is the time in your gateway's time zone.</p>"]
-                fn update_maintenance_start_time(&self, input: &UpdateMaintenanceStartTimeInput)  -> Result<UpdateMaintenanceStartTimeOutput, UpdateMaintenanceStartTimeError> {
+                fn update_maintenance_start_time(&self, input: &UpdateMaintenanceStartTimeInput)  -> Box<Future<Item = UpdateMaintenanceStartTimeOutput, Error = UpdateMaintenanceStartTimeError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7522,21 +8093,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateMaintenanceStartTimeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateMaintenanceStartTimeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a file share. </p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note>"]
-                fn update_nfs_file_share(&self, input: &UpdateNFSFileShareInput)  -> Result<UpdateNFSFileShareOutput, UpdateNFSFileShareError> {
+                fn update_nfs_file_share(&self, input: &UpdateNFSFileShareInput)  -> Box<Future<Item = UpdateNFSFileShareOutput, Error = UpdateNFSFileShareError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7544,21 +8125,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateNFSFileShareError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateNFSFileShareError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a snapshot schedule configured for a gateway volume.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>"]
-                fn update_snapshot_schedule(&self, input: &UpdateSnapshotScheduleInput)  -> Result<UpdateSnapshotScheduleOutput, UpdateSnapshotScheduleError> {
+                fn update_snapshot_schedule(&self, input: &UpdateSnapshotScheduleInput)  -> Box<Future<Item = UpdateSnapshotScheduleOutput, Error = UpdateSnapshotScheduleError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7566,21 +8157,31 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateSnapshotScheduleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateSnapshotScheduleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the type of medium changer in a gateway-VTL. When you activate a gateway-VTL, you select a medium changer type for the gateway-VTL. This operation enables you to select a different type of medium changer after a gateway-VTL is activated.</p>"]
-                fn update_vtl_device_type(&self, input: &UpdateVTLDeviceTypeInput)  -> Result<UpdateVTLDeviceTypeOutput, UpdateVTLDeviceTypeError> {
+                fn update_vtl_device_type(&self, input: &UpdateVTLDeviceTypeInput)  -> Box<Future<Item = UpdateVTLDeviceTypeOutput, Error = UpdateVTLDeviceTypeError>> {
                     let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7588,16 +8189,26 @@ UpdateVTLDeviceTypeError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateVTLDeviceTypeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateVTLDeviceTypeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdateVTLDeviceTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateVTLDeviceTypeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateVTLDeviceTypeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdateVTLDeviceTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

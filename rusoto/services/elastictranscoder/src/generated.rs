@@ -14,6 +14,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::from_str;
         use serde_json::Value as SerdeJsonValue;
+        use futures::{Future, future};
 pub type AccessControl = String;
 pub type AccessControls = Vec<AccessControl>;
 #[doc="<p>The file to be used as album art. There can be multiple artworks associated with an audio file, to a maximum of 20.</p> <p>To remove artwork or leave the artwork empty, you can either set <code>Artwork</code> to null, or set the <code>Merge Policy</code> to \"Replace\" and use an empty <code>Artwork</code> array.</p> <p>To pass through existing artwork unchanged, set the <code>Merge Policy</code> to \"Prepend\", \"Append\", or \"Fallback\", and use an empty <code>Artwork</code> array.</p>"]
@@ -2565,71 +2566,71 @@ UpdatePipelineStatusError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you're getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note>"]
-                fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError>;
+                fn cancel_job(&self, input: &CancelJobRequest) -> Box<Future<Item = CancelJobResponse, Error = CancelJobError>>;
                 
 
                 #[doc="<p>When you create a job, Elastic Transcoder returns JSON data that includes the values that you specified plus information about the job that is created.</p> <p>If you have specified more than one output for your jobs (for example, one output for the Kindle Fire and another output for the Apple iPhone 4s), you currently must use the Elastic Transcoder API to list the jobs (as opposed to the AWS Console).</p>"]
-                fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError>;
+                fn create_job(&self, input: &CreateJobRequest) -> Box<Future<Item = CreateJobResponse, Error = CreateJobError>>;
                 
 
                 #[doc="<p>The CreatePipeline operation creates a pipeline with settings that you specify.</p>"]
-                fn create_pipeline(&self, input: &CreatePipelineRequest) -> Result<CreatePipelineResponse, CreatePipelineError>;
+                fn create_pipeline(&self, input: &CreatePipelineRequest) -> Box<Future<Item = CreatePipelineResponse, Error = CreatePipelineError>>;
                 
 
                 #[doc="<p>The CreatePreset operation creates a preset with settings that you specify.</p> <important> <p>Elastic Transcoder checks the CreatePreset settings to ensure that they meet Elastic Transcoder requirements and to determine whether they comply with H.264 standards. If your settings are not valid for Elastic Transcoder, Elastic Transcoder returns an HTTP 400 response (<code>ValidationException</code>) and does not create the preset. If the settings are valid for Elastic Transcoder but aren't strictly compliant with the H.264 standard, Elastic Transcoder creates the preset and returns a warning message in the response. This helps you determine whether your settings comply with the H.264 standard while giving you greater flexibility with respect to the video that Elastic Transcoder produces.</p> </important> <p>Elastic Transcoder uses the H.264 video-compression format. For more information, see the International Telecommunication Union publication <i>Recommendation ITU-T H.264: Advanced video coding for generic audiovisual services</i>.</p>"]
-                fn create_preset(&self, input: &CreatePresetRequest) -> Result<CreatePresetResponse, CreatePresetError>;
+                fn create_preset(&self, input: &CreatePresetRequest) -> Box<Future<Item = CreatePresetResponse, Error = CreatePresetError>>;
                 
 
                 #[doc="<p>The DeletePipeline operation removes a pipeline.</p> <p> You can only delete a pipeline that has never been used or that is not currently in use (doesn't contain any active jobs). If the pipeline is currently in use, <code>DeletePipeline</code> returns an error. </p>"]
-                fn delete_pipeline(&self, input: &DeletePipelineRequest) -> Result<DeletePipelineResponse, DeletePipelineError>;
+                fn delete_pipeline(&self, input: &DeletePipelineRequest) -> Box<Future<Item = DeletePipelineResponse, Error = DeletePipelineError>>;
                 
 
                 #[doc="<p>The DeletePreset operation removes a preset that you've added in an AWS region.</p> <note> <p>You can't delete the default presets that are included with Elastic Transcoder.</p> </note>"]
-                fn delete_preset(&self, input: &DeletePresetRequest) -> Result<DeletePresetResponse, DeletePresetError>;
+                fn delete_preset(&self, input: &DeletePresetRequest) -> Box<Future<Item = DeletePresetResponse, Error = DeletePresetError>>;
                 
 
                 #[doc="<p>The ListJobsByPipeline operation gets a list of the jobs currently in a pipeline.</p> <p>Elastic Transcoder returns all of the jobs currently in the specified pipeline. The response body contains one element for each job that satisfies the search criteria.</p>"]
-                fn list_jobs_by_pipeline(&self, input: &ListJobsByPipelineRequest) -> Result<ListJobsByPipelineResponse, ListJobsByPipelineError>;
+                fn list_jobs_by_pipeline(&self, input: &ListJobsByPipelineRequest) -> Box<Future<Item = ListJobsByPipelineResponse, Error = ListJobsByPipelineError>>;
                 
 
                 #[doc="<p>The ListJobsByStatus operation gets a list of jobs that have a specified status. The response body contains one element for each job that satisfies the search criteria.</p>"]
-                fn list_jobs_by_status(&self, input: &ListJobsByStatusRequest) -> Result<ListJobsByStatusResponse, ListJobsByStatusError>;
+                fn list_jobs_by_status(&self, input: &ListJobsByStatusRequest) -> Box<Future<Item = ListJobsByStatusResponse, Error = ListJobsByStatusError>>;
                 
 
                 #[doc="<p>The ListPipelines operation gets a list of the pipelines associated with the current AWS account.</p>"]
-                fn list_pipelines(&self, input: &ListPipelinesRequest) -> Result<ListPipelinesResponse, ListPipelinesError>;
+                fn list_pipelines(&self, input: &ListPipelinesRequest) -> Box<Future<Item = ListPipelinesResponse, Error = ListPipelinesError>>;
                 
 
                 #[doc="<p>The ListPresets operation gets a list of the default presets included with Elastic Transcoder and the presets that you've added in an AWS region.</p>"]
-                fn list_presets(&self, input: &ListPresetsRequest) -> Result<ListPresetsResponse, ListPresetsError>;
+                fn list_presets(&self, input: &ListPresetsRequest) -> Box<Future<Item = ListPresetsResponse, Error = ListPresetsError>>;
                 
 
                 #[doc="<p>The ReadJob operation returns detailed information about a job.</p>"]
-                fn read_job(&self, input: &ReadJobRequest) -> Result<ReadJobResponse, ReadJobError>;
+                fn read_job(&self, input: &ReadJobRequest) -> Box<Future<Item = ReadJobResponse, Error = ReadJobError>>;
                 
 
                 #[doc="<p>The ReadPipeline operation gets detailed information about a pipeline.</p>"]
-                fn read_pipeline(&self, input: &ReadPipelineRequest) -> Result<ReadPipelineResponse, ReadPipelineError>;
+                fn read_pipeline(&self, input: &ReadPipelineRequest) -> Box<Future<Item = ReadPipelineResponse, Error = ReadPipelineError>>;
                 
 
                 #[doc="<p>The ReadPreset operation gets detailed information about a preset.</p>"]
-                fn read_preset(&self, input: &ReadPresetRequest) -> Result<ReadPresetResponse, ReadPresetError>;
+                fn read_preset(&self, input: &ReadPresetRequest) -> Box<Future<Item = ReadPresetResponse, Error = ReadPresetError>>;
                 
 
                 #[doc="<p>The TestRole operation tests the IAM role used to create the pipeline.</p> <p>The <code>TestRole</code> action lets you determine whether the IAM role you are using has sufficient permissions to let Elastic Transcoder perform tasks associated with the transcoding process. The action attempts to assume the specified IAM role, checks read access to the input and output buckets, and tries to send a test notification to Amazon SNS topics that you specify.</p>"]
-                fn test_role(&self, input: &TestRoleRequest) -> Result<TestRoleResponse, TestRoleError>;
+                fn test_role(&self, input: &TestRoleRequest) -> Box<Future<Item = TestRoleResponse, Error = TestRoleError>>;
                 
 
                 #[doc="<p> Use the <code>UpdatePipeline</code> operation to update settings for a pipeline.</p> <important> <p>When you change pipeline settings, your changes take effect immediately. Jobs that you have already submitted and that Elastic Transcoder has not started to process are affected in addition to jobs that you submit after you change settings. </p> </important>"]
-                fn update_pipeline(&self, input: &UpdatePipelineRequest) -> Result<UpdatePipelineResponse, UpdatePipelineError>;
+                fn update_pipeline(&self, input: &UpdatePipelineRequest) -> Box<Future<Item = UpdatePipelineResponse, Error = UpdatePipelineError>>;
                 
 
                 #[doc="<p>With the UpdatePipelineNotifications operation, you can update Amazon Simple Notification Service (Amazon SNS) notifications for a pipeline.</p> <p>When you update notifications for a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>"]
-                fn update_pipeline_notifications(&self, input: &UpdatePipelineNotificationsRequest) -> Result<UpdatePipelineNotificationsResponse, UpdatePipelineNotificationsError>;
+                fn update_pipeline_notifications(&self, input: &UpdatePipelineNotificationsRequest) -> Box<Future<Item = UpdatePipelineNotificationsResponse, Error = UpdatePipelineNotificationsError>>;
                 
 
                 #[doc="<p>The UpdatePipelineStatus operation pauses or reactivates a pipeline, so that the pipeline stops or restarts the processing of jobs.</p> <p>Changing the pipeline status is useful if you want to cancel one or more jobs. You can't cancel jobs after Elastic Transcoder has started processing them; if you pause the pipeline to which you submitted the jobs, you have more time to get the job IDs for the jobs that you want to cancel, and to send a <a>CancelJob</a> request. </p>"]
-                fn update_pipeline_status(&self, input: &UpdatePipelineStatusRequest) -> Result<UpdatePipelineStatusResponse, UpdatePipelineStatusError>;
+                fn update_pipeline_status(&self, input: &UpdatePipelineStatusRequest) -> Box<Future<Item = UpdatePipelineStatusResponse, Error = UpdatePipelineStatusError>>;
                 
 }
 /// A client for the Amazon Elastic Transcoder API.
@@ -2653,7 +2654,7 @@ UpdatePipelineStatusError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you're getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note>"]
-                fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError> {
+                fn cancel_job(&self, input: &CancelJobRequest) -> Box<Future<Item = CancelJobResponse, Error = CancelJobError>> {
                     
 
                     let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
@@ -2664,32 +2665,42 @@ UpdatePipelineStatusError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelJobError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelJobError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<CancelJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Accepted => {
+                                    future::ok(serde_json::from_str::<CancelJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>When you create a job, Elastic Transcoder returns JSON data that includes the values that you specified plus information about the job that is created.</p> <p>If you have specified more than one output for your jobs (for example, one output for the Kindle Fire and another output for the Apple iPhone 4s), you currently must use the Elastic Transcoder API to list the jobs (as opposed to the AWS Console).</p>"]
-                fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError> {
+                fn create_job(&self, input: &CreateJobRequest) -> Box<Future<Item = CreateJobResponse, Error = CreateJobError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/2012-09-25/jobs";
@@ -2700,32 +2711,42 @@ UpdatePipelineStatusError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateJobError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateJobError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Created => {
-                            Ok(serde_json::from_str::<CreateJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Created => {
+                                    future::ok(serde_json::from_str::<CreateJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The CreatePipeline operation creates a pipeline with settings that you specify.</p>"]
-                fn create_pipeline(&self, input: &CreatePipelineRequest) -> Result<CreatePipelineResponse, CreatePipelineError> {
+                fn create_pipeline(&self, input: &CreatePipelineRequest) -> Box<Future<Item = CreatePipelineResponse, Error = CreatePipelineError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/2012-09-25/pipelines";
@@ -2736,32 +2757,42 @@ UpdatePipelineStatusError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePipelineError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePipelineError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Created => {
-                            Ok(serde_json::from_str::<CreatePipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Created => {
+                                    future::ok(serde_json::from_str::<CreatePipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The CreatePreset operation creates a preset with settings that you specify.</p> <important> <p>Elastic Transcoder checks the CreatePreset settings to ensure that they meet Elastic Transcoder requirements and to determine whether they comply with H.264 standards. If your settings are not valid for Elastic Transcoder, Elastic Transcoder returns an HTTP 400 response (<code>ValidationException</code>) and does not create the preset. If the settings are valid for Elastic Transcoder but aren't strictly compliant with the H.264 standard, Elastic Transcoder creates the preset and returns a warning message in the response. This helps you determine whether your settings comply with the H.264 standard while giving you greater flexibility with respect to the video that Elastic Transcoder produces.</p> </important> <p>Elastic Transcoder uses the H.264 video-compression format. For more information, see the International Telecommunication Union publication <i>Recommendation ITU-T H.264: Advanced video coding for generic audiovisual services</i>.</p>"]
-                fn create_preset(&self, input: &CreatePresetRequest) -> Result<CreatePresetResponse, CreatePresetError> {
+                fn create_preset(&self, input: &CreatePresetRequest) -> Box<Future<Item = CreatePresetResponse, Error = CreatePresetError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/2012-09-25/presets";
@@ -2772,32 +2803,42 @@ UpdatePipelineStatusError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePresetError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePresetError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Created => {
-                            Ok(serde_json::from_str::<CreatePresetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreatePresetError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Created => {
+                                    future::ok(serde_json::from_str::<CreatePresetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreatePresetError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The DeletePipeline operation removes a pipeline.</p> <p> You can only delete a pipeline that has never been used or that is not currently in use (doesn't contain any active jobs). If the pipeline is currently in use, <code>DeletePipeline</code> returns an error. </p>"]
-                fn delete_pipeline(&self, input: &DeletePipelineRequest) -> Result<DeletePipelineResponse, DeletePipelineError> {
+                fn delete_pipeline(&self, input: &DeletePipelineRequest) -> Box<Future<Item = DeletePipelineResponse, Error = DeletePipelineError>> {
                     
 
                     let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
@@ -2808,32 +2849,42 @@ UpdatePipelineStatusError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePipelineError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePipelineError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<DeletePipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DeletePipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Accepted => {
+                                    future::ok(serde_json::from_str::<DeletePipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DeletePipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The DeletePreset operation removes a preset that you've added in an AWS region.</p> <note> <p>You can't delete the default presets that are included with Elastic Transcoder.</p> </note>"]
-                fn delete_preset(&self, input: &DeletePresetRequest) -> Result<DeletePresetResponse, DeletePresetError> {
+                fn delete_preset(&self, input: &DeletePresetRequest) -> Box<Future<Item = DeletePresetResponse, Error = DeletePresetError>> {
                     
 
                     let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
@@ -2844,32 +2895,42 @@ UpdatePipelineStatusError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePresetError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePresetError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<DeletePresetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DeletePresetError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Accepted => {
+                                    future::ok(serde_json::from_str::<DeletePresetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DeletePresetError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The ListJobsByPipeline operation gets a list of the jobs currently in a pipeline.</p> <p>Elastic Transcoder returns all of the jobs currently in the specified pipeline. The response body contains one element for each job that satisfies the search criteria.</p>"]
-                fn list_jobs_by_pipeline(&self, input: &ListJobsByPipelineRequest) -> Result<ListJobsByPipelineResponse, ListJobsByPipelineError> {
+                fn list_jobs_by_pipeline(&self, input: &ListJobsByPipelineRequest) -> Box<Future<Item = ListJobsByPipelineResponse, Error = ListJobsByPipelineError>> {
                     
 
                     let request_uri = format!("/2012-09-25/jobsByPipeline/{pipeline_id}", pipeline_id = input.pipeline_id);
@@ -2889,32 +2950,42 @@ match input.page_token {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListJobsByPipelineError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListJobsByPipelineError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListJobsByPipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListJobsByPipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListJobsByPipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListJobsByPipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The ListJobsByStatus operation gets a list of jobs that have a specified status. The response body contains one element for each job that satisfies the search criteria.</p>"]
-                fn list_jobs_by_status(&self, input: &ListJobsByStatusRequest) -> Result<ListJobsByStatusResponse, ListJobsByStatusError> {
+                fn list_jobs_by_status(&self, input: &ListJobsByStatusRequest) -> Box<Future<Item = ListJobsByStatusResponse, Error = ListJobsByStatusError>> {
                     
 
                     let request_uri = format!("/2012-09-25/jobsByStatus/{status}", status = input.status);
@@ -2934,32 +3005,42 @@ match input.page_token {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListJobsByStatusError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListJobsByStatusError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListJobsByStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListJobsByStatusError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListJobsByStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListJobsByStatusError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The ListPipelines operation gets a list of the pipelines associated with the current AWS account.</p>"]
-                fn list_pipelines(&self, input: &ListPipelinesRequest) -> Result<ListPipelinesResponse, ListPipelinesError> {
+                fn list_pipelines(&self, input: &ListPipelinesRequest) -> Box<Future<Item = ListPipelinesResponse, Error = ListPipelinesError>> {
                     
 
                     let request_uri = "/2012-09-25/pipelines";
@@ -2979,32 +3060,42 @@ match input.page_token {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPipelinesError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPipelinesError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPipelinesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListPipelinesError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListPipelinesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListPipelinesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The ListPresets operation gets a list of the default presets included with Elastic Transcoder and the presets that you've added in an AWS region.</p>"]
-                fn list_presets(&self, input: &ListPresetsRequest) -> Result<ListPresetsResponse, ListPresetsError> {
+                fn list_presets(&self, input: &ListPresetsRequest) -> Box<Future<Item = ListPresetsResponse, Error = ListPresetsError>> {
                     
 
                     let request_uri = "/2012-09-25/presets";
@@ -3024,32 +3115,42 @@ match input.page_token {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPresetsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPresetsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPresetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListPresetsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListPresetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListPresetsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The ReadJob operation returns detailed information about a job.</p>"]
-                fn read_job(&self, input: &ReadJobRequest) -> Result<ReadJobResponse, ReadJobError> {
+                fn read_job(&self, input: &ReadJobRequest) -> Box<Future<Item = ReadJobResponse, Error = ReadJobError>> {
                     
 
                     let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
@@ -3060,32 +3161,42 @@ match input.page_token {
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReadJobError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReadJobError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ReadJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ReadJobError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ReadJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ReadJobError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The ReadPipeline operation gets detailed information about a pipeline.</p>"]
-                fn read_pipeline(&self, input: &ReadPipelineRequest) -> Result<ReadPipelineResponse, ReadPipelineError> {
+                fn read_pipeline(&self, input: &ReadPipelineRequest) -> Box<Future<Item = ReadPipelineResponse, Error = ReadPipelineError>> {
                     
 
                     let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
@@ -3096,32 +3207,42 @@ match input.page_token {
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReadPipelineError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReadPipelineError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ReadPipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ReadPipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ReadPipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ReadPipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The ReadPreset operation gets detailed information about a preset.</p>"]
-                fn read_preset(&self, input: &ReadPresetRequest) -> Result<ReadPresetResponse, ReadPresetError> {
+                fn read_preset(&self, input: &ReadPresetRequest) -> Box<Future<Item = ReadPresetResponse, Error = ReadPresetError>> {
                     
 
                     let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
@@ -3132,32 +3253,42 @@ match input.page_token {
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReadPresetError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReadPresetError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ReadPresetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ReadPresetError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ReadPresetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ReadPresetError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The TestRole operation tests the IAM role used to create the pipeline.</p> <p>The <code>TestRole</code> action lets you determine whether the IAM role you are using has sufficient permissions to let Elastic Transcoder perform tasks associated with the transcoding process. The action attempts to assume the specified IAM role, checks read access to the input and output buckets, and tries to send a test notification to Amazon SNS topics that you specify.</p>"]
-                fn test_role(&self, input: &TestRoleRequest) -> Result<TestRoleResponse, TestRoleError> {
+                fn test_role(&self, input: &TestRoleRequest) -> Box<Future<Item = TestRoleResponse, Error = TestRoleError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/2012-09-25/roleTests";
@@ -3168,32 +3299,42 @@ match input.page_token {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TestRoleError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TestRoleError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TestRoleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(TestRoleError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<TestRoleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(TestRoleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p> Use the <code>UpdatePipeline</code> operation to update settings for a pipeline.</p> <important> <p>When you change pipeline settings, your changes take effect immediately. Jobs that you have already submitted and that Elastic Transcoder has not started to process are affected in addition to jobs that you submit after you change settings. </p> </important>"]
-                fn update_pipeline(&self, input: &UpdatePipelineRequest) -> Result<UpdatePipelineResponse, UpdatePipelineError> {
+                fn update_pipeline(&self, input: &UpdatePipelineRequest) -> Box<Future<Item = UpdatePipelineResponse, Error = UpdatePipelineError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
@@ -3204,32 +3345,42 @@ match input.page_token {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdatePipelineError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdatePipelineError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdatePipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(UpdatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>With the UpdatePipelineNotifications operation, you can update Amazon Simple Notification Service (Amazon SNS) notifications for a pipeline.</p> <p>When you update notifications for a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>"]
-                fn update_pipeline_notifications(&self, input: &UpdatePipelineNotificationsRequest) -> Result<UpdatePipelineNotificationsResponse, UpdatePipelineNotificationsError> {
+                fn update_pipeline_notifications(&self, input: &UpdatePipelineNotificationsRequest) -> Box<Future<Item = UpdatePipelineNotificationsResponse, Error = UpdatePipelineNotificationsError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2012-09-25/pipelines/{id}/notifications", id = input.id);
@@ -3240,32 +3391,42 @@ match input.page_token {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdatePipelineNotificationsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdatePipelineNotificationsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePipelineNotificationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(UpdatePipelineNotificationsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdatePipelineNotificationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(UpdatePipelineNotificationsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>The UpdatePipelineStatus operation pauses or reactivates a pipeline, so that the pipeline stops or restarts the processing of jobs.</p> <p>Changing the pipeline status is useful if you want to cancel one or more jobs. You can't cancel jobs after Elastic Transcoder has started processing them; if you pause the pipeline to which you submitted the jobs, you have more time to get the job IDs for the jobs that you want to cancel, and to send a <a>CancelJob</a> request. </p>"]
-                fn update_pipeline_status(&self, input: &UpdatePipelineStatusRequest) -> Result<UpdatePipelineStatusResponse, UpdatePipelineStatusError> {
+                fn update_pipeline_status(&self, input: &UpdatePipelineStatusRequest) -> Box<Future<Item = UpdatePipelineStatusResponse, Error = UpdatePipelineStatusError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2012-09-25/pipelines/{id}/status", id = input.id);
@@ -3276,27 +3437,37 @@ match input.page_token {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdatePipelineStatusError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdatePipelineStatusError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePipelineStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(UpdatePipelineStatusError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdatePipelineStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(UpdatePipelineStatusError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 }

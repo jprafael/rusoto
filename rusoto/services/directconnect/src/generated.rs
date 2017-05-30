@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 #[doc="<p>Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>Example: 65000</p>"]
 pub type ASN = i64;
 #[doc="<p>Indicates the address family for the BGP peer.</p> <ul> <li> <p> <b>ipv4</b>: IPv4 address family</p> </li> <li> <p> <b>ipv6</b>: IPv6 address family</p> </li> </ul>"]
@@ -2533,107 +2534,107 @@ UntagResourceError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-                fn allocate_connection_on_interconnect(&self, input: &AllocateConnectionOnInterconnectRequest)  -> Result<Connection, AllocateConnectionOnInterconnectError>;
+                fn allocate_connection_on_interconnect(&self, input: &AllocateConnectionOnInterconnectRequest)  -> Box<Future<Item = Connection, Error = AllocateConnectionOnInterconnectError>>;
                 
 
                 #[doc="<p>Provisions a private virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a private virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPrivateVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
-                fn allocate_private_virtual_interface(&self, input: &AllocatePrivateVirtualInterfaceRequest)  -> Result<VirtualInterface, AllocatePrivateVirtualInterfaceError>;
+                fn allocate_private_virtual_interface(&self, input: &AllocatePrivateVirtualInterfaceRequest)  -> Box<Future<Item = VirtualInterface, Error = AllocatePrivateVirtualInterfaceError>>;
                 
 
                 #[doc="<p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
-                fn allocate_public_virtual_interface(&self, input: &AllocatePublicVirtualInterfaceRequest)  -> Result<VirtualInterface, AllocatePublicVirtualInterfaceError>;
+                fn allocate_public_virtual_interface(&self, input: &AllocatePublicVirtualInterfaceRequest)  -> Box<Future<Item = VirtualInterface, Error = AllocatePublicVirtualInterfaceError>>;
                 
 
                 #[doc="<p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>"]
-                fn confirm_connection(&self, input: &ConfirmConnectionRequest)  -> Result<ConfirmConnectionResponse, ConfirmConnectionError>;
+                fn confirm_connection(&self, input: &ConfirmConnectionRequest)  -> Box<Future<Item = ConfirmConnectionResponse, Error = ConfirmConnectionError>>;
                 
 
                 #[doc="<p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>"]
-                fn confirm_private_virtual_interface(&self, input: &ConfirmPrivateVirtualInterfaceRequest)  -> Result<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError>;
+                fn confirm_private_virtual_interface(&self, input: &ConfirmPrivateVirtualInterfaceRequest)  -> Box<Future<Item = ConfirmPrivateVirtualInterfaceResponse, Error = ConfirmPrivateVirtualInterfaceError>>;
                 
 
                 #[doc="<p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>"]
-                fn confirm_public_virtual_interface(&self, input: &ConfirmPublicVirtualInterfaceRequest)  -> Result<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError>;
+                fn confirm_public_virtual_interface(&self, input: &ConfirmPublicVirtualInterfaceRequest)  -> Box<Future<Item = ConfirmPublicVirtualInterfaceResponse, Error = ConfirmPublicVirtualInterfaceError>>;
                 
 
                 #[doc="<p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>"]
-                fn create_bgp_peer(&self, input: &CreateBGPPeerRequest)  -> Result<CreateBGPPeerResponse, CreateBGPPeerError>;
+                fn create_bgp_peer(&self, input: &CreateBGPPeerRequest)  -> Box<Future<Item = CreateBGPPeerResponse, Error = CreateBGPPeerError>>;
                 
 
                 #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p>"]
-                fn create_connection(&self, input: &CreateConnectionRequest)  -> Result<Connection, CreateConnectionError>;
+                fn create_connection(&self, input: &CreateConnectionRequest)  -> Box<Future<Item = Connection, Error = CreateConnectionError>>;
                 
 
                 #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-                fn create_interconnect(&self, input: &CreateInterconnectRequest)  -> Result<Interconnect, CreateInterconnectError>;
+                fn create_interconnect(&self, input: &CreateInterconnectRequest)  -> Box<Future<Item = Interconnect, Error = CreateInterconnectError>>;
                 
 
                 #[doc="<p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>"]
-                fn create_private_virtual_interface(&self, input: &CreatePrivateVirtualInterfaceRequest)  -> Result<VirtualInterface, CreatePrivateVirtualInterfaceError>;
+                fn create_private_virtual_interface(&self, input: &CreatePrivateVirtualInterfaceRequest)  -> Box<Future<Item = VirtualInterface, Error = CreatePrivateVirtualInterfaceError>>;
                 
 
                 #[doc="<p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
-                fn create_public_virtual_interface(&self, input: &CreatePublicVirtualInterfaceRequest)  -> Result<VirtualInterface, CreatePublicVirtualInterfaceError>;
+                fn create_public_virtual_interface(&self, input: &CreatePublicVirtualInterfaceRequest)  -> Box<Future<Item = VirtualInterface, Error = CreatePublicVirtualInterfaceError>>;
                 
 
                 #[doc="<p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>"]
-                fn delete_bgp_peer(&self, input: &DeleteBGPPeerRequest)  -> Result<DeleteBGPPeerResponse, DeleteBGPPeerError>;
+                fn delete_bgp_peer(&self, input: &DeleteBGPPeerRequest)  -> Box<Future<Item = DeleteBGPPeerResponse, Error = DeleteBGPPeerError>>;
                 
 
                 #[doc="<p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>"]
-                fn delete_connection(&self, input: &DeleteConnectionRequest)  -> Result<Connection, DeleteConnectionError>;
+                fn delete_connection(&self, input: &DeleteConnectionRequest)  -> Box<Future<Item = Connection, Error = DeleteConnectionError>>;
                 
 
                 #[doc="<p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-                fn delete_interconnect(&self, input: &DeleteInterconnectRequest)  -> Result<DeleteInterconnectResponse, DeleteInterconnectError>;
+                fn delete_interconnect(&self, input: &DeleteInterconnectRequest)  -> Box<Future<Item = DeleteInterconnectResponse, Error = DeleteInterconnectError>>;
                 
 
                 #[doc="<p>Deletes a virtual interface.</p>"]
-                fn delete_virtual_interface(&self, input: &DeleteVirtualInterfaceRequest)  -> Result<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError>;
+                fn delete_virtual_interface(&self, input: &DeleteVirtualInterfaceRequest)  -> Box<Future<Item = DeleteVirtualInterfaceResponse, Error = DeleteVirtualInterfaceError>>;
                 
 
                 #[doc="<p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
-                fn describe_connection_loa(&self, input: &DescribeConnectionLoaRequest)  -> Result<DescribeConnectionLoaResponse, DescribeConnectionLoaError>;
+                fn describe_connection_loa(&self, input: &DescribeConnectionLoaRequest)  -> Box<Future<Item = DescribeConnectionLoaResponse, Error = DescribeConnectionLoaError>>;
                 
 
                 #[doc="<p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>"]
-                fn describe_connections(&self, input: &DescribeConnectionsRequest)  -> Result<Connections, DescribeConnectionsError>;
+                fn describe_connections(&self, input: &DescribeConnectionsRequest)  -> Box<Future<Item = Connections, Error = DescribeConnectionsError>>;
                 
 
                 #[doc="<p>Return a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-                fn describe_connections_on_interconnect(&self, input: &DescribeConnectionsOnInterconnectRequest)  -> Result<Connections, DescribeConnectionsOnInterconnectError>;
+                fn describe_connections_on_interconnect(&self, input: &DescribeConnectionsOnInterconnectRequest)  -> Box<Future<Item = Connections, Error = DescribeConnectionsOnInterconnectError>>;
                 
 
                 #[doc="<p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
-                fn describe_interconnect_loa(&self, input: &DescribeInterconnectLoaRequest)  -> Result<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError>;
+                fn describe_interconnect_loa(&self, input: &DescribeInterconnectLoaRequest)  -> Box<Future<Item = DescribeInterconnectLoaResponse, Error = DescribeInterconnectLoaError>>;
                 
 
                 #[doc="<p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>"]
-                fn describe_interconnects(&self, input: &DescribeInterconnectsRequest)  -> Result<Interconnects, DescribeInterconnectsError>;
+                fn describe_interconnects(&self, input: &DescribeInterconnectsRequest)  -> Box<Future<Item = Interconnects, Error = DescribeInterconnectsError>>;
                 
 
                 #[doc="<p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>"]
-                fn describe_locations(&self)  -> Result<Locations, DescribeLocationsError>;
+                fn describe_locations(&self)  -> Box<Future<Item = Locations, Error = DescribeLocationsError>>;
                 
 
                 #[doc="<p>Describes the tags associated with the specified Direct Connect resources.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsRequest)  -> Result<DescribeTagsResponse, DescribeTagsError>;
+                fn describe_tags(&self, input: &DescribeTagsRequest)  -> Box<Future<Item = DescribeTagsResponse, Error = DescribeTagsError>>;
                 
 
                 #[doc="<p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">EC2 CreateVpnGateway</a> action.</p>"]
-                fn describe_virtual_gateways(&self)  -> Result<VirtualGateways, DescribeVirtualGatewaysError>;
+                fn describe_virtual_gateways(&self)  -> Box<Future<Item = VirtualGateways, Error = DescribeVirtualGatewaysError>>;
                 
 
                 #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before DescribeVirtualInterfaces is called are also returned. If a connection ID is included then only virtual interfaces associated with this connection will be returned. If a virtual interface ID is included then only a single virtual interface will be returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p> <p>If a connection ID is provided, only virtual interfaces provisioned on the specified connection will be returned. If a virtual interface ID is provided, only this particular virtual interface will be returned.</p>"]
-                fn describe_virtual_interfaces(&self, input: &DescribeVirtualInterfacesRequest)  -> Result<VirtualInterfaces, DescribeVirtualInterfacesError>;
+                fn describe_virtual_interfaces(&self, input: &DescribeVirtualInterfacesRequest)  -> Box<Future<Item = VirtualInterfaces, Error = DescribeVirtualInterfacesError>>;
                 
 
                 #[doc="<p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>"]
-                fn tag_resource(&self, input: &TagResourceRequest)  -> Result<TagResourceResponse, TagResourceError>;
+                fn tag_resource(&self, input: &TagResourceRequest)  -> Box<Future<Item = TagResourceResponse, Error = TagResourceError>>;
                 
 
                 #[doc="<p>Removes one or more tags from the specified Direct Connect resource.</p>"]
-                fn untag_resource(&self, input: &UntagResourceRequest)  -> Result<UntagResourceResponse, UntagResourceError>;
+                fn untag_resource(&self, input: &UntagResourceRequest)  -> Box<Future<Item = UntagResourceResponse, Error = UntagResourceError>>;
                 
 }
 /// A client for the AWS Direct Connect API.
@@ -2657,7 +2658,7 @@ UntagResourceError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-                fn allocate_connection_on_interconnect(&self, input: &AllocateConnectionOnInterconnectRequest)  -> Result<Connection, AllocateConnectionOnInterconnectError> {
+                fn allocate_connection_on_interconnect(&self, input: &AllocateConnectionOnInterconnectRequest)  -> Box<Future<Item = Connection, Error = AllocateConnectionOnInterconnectError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2665,21 +2666,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AllocateConnectionOnInterconnectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AllocateConnectionOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AllocateConnectionOnInterconnectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AllocateConnectionOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provisions a private virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a private virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPrivateVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
-                fn allocate_private_virtual_interface(&self, input: &AllocatePrivateVirtualInterfaceRequest)  -> Result<VirtualInterface, AllocatePrivateVirtualInterfaceError> {
+                fn allocate_private_virtual_interface(&self, input: &AllocatePrivateVirtualInterfaceRequest)  -> Box<Future<Item = VirtualInterface, Error = AllocatePrivateVirtualInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2687,21 +2698,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AllocatePrivateVirtualInterfaceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AllocatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AllocatePrivateVirtualInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AllocatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
-                fn allocate_public_virtual_interface(&self, input: &AllocatePublicVirtualInterfaceRequest)  -> Result<VirtualInterface, AllocatePublicVirtualInterfaceError> {
+                fn allocate_public_virtual_interface(&self, input: &AllocatePublicVirtualInterfaceRequest)  -> Box<Future<Item = VirtualInterface, Error = AllocatePublicVirtualInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2709,21 +2730,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AllocatePublicVirtualInterfaceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AllocatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AllocatePublicVirtualInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AllocatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>"]
-                fn confirm_connection(&self, input: &ConfirmConnectionRequest)  -> Result<ConfirmConnectionResponse, ConfirmConnectionError> {
+                fn confirm_connection(&self, input: &ConfirmConnectionRequest)  -> Box<Future<Item = ConfirmConnectionResponse, Error = ConfirmConnectionError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2731,21 +2762,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ConfirmConnectionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConfirmConnectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ConfirmConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ConfirmConnectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ConfirmConnectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ConfirmConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>"]
-                fn confirm_private_virtual_interface(&self, input: &ConfirmPrivateVirtualInterfaceRequest)  -> Result<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError> {
+                fn confirm_private_virtual_interface(&self, input: &ConfirmPrivateVirtualInterfaceRequest)  -> Box<Future<Item = ConfirmPrivateVirtualInterfaceResponse, Error = ConfirmPrivateVirtualInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2753,21 +2794,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ConfirmPrivateVirtualInterfaceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ConfirmPrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ConfirmPrivateVirtualInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ConfirmPrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>"]
-                fn confirm_public_virtual_interface(&self, input: &ConfirmPublicVirtualInterfaceRequest)  -> Result<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError> {
+                fn confirm_public_virtual_interface(&self, input: &ConfirmPublicVirtualInterfaceRequest)  -> Box<Future<Item = ConfirmPublicVirtualInterfaceResponse, Error = ConfirmPublicVirtualInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2775,21 +2826,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ConfirmPublicVirtualInterfaceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ConfirmPublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ConfirmPublicVirtualInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ConfirmPublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>"]
-                fn create_bgp_peer(&self, input: &CreateBGPPeerRequest)  -> Result<CreateBGPPeerResponse, CreateBGPPeerError> {
+                fn create_bgp_peer(&self, input: &CreateBGPPeerRequest)  -> Box<Future<Item = CreateBGPPeerResponse, Error = CreateBGPPeerError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2797,21 +2858,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateBGPPeerError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateBGPPeerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p>"]
-                fn create_connection(&self, input: &CreateConnectionRequest)  -> Result<Connection, CreateConnectionError> {
+                fn create_connection(&self, input: &CreateConnectionRequest)  -> Box<Future<Item = Connection, Error = CreateConnectionError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2819,21 +2890,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateConnectionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateConnectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-                fn create_interconnect(&self, input: &CreateInterconnectRequest)  -> Result<Interconnect, CreateInterconnectError> {
+                fn create_interconnect(&self, input: &CreateInterconnectRequest)  -> Box<Future<Item = Interconnect, Error = CreateInterconnectError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2841,21 +2922,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateInterconnectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<Interconnect>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateInterconnectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<Interconnect>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>"]
-                fn create_private_virtual_interface(&self, input: &CreatePrivateVirtualInterfaceRequest)  -> Result<VirtualInterface, CreatePrivateVirtualInterfaceError> {
+                fn create_private_virtual_interface(&self, input: &CreatePrivateVirtualInterfaceRequest)  -> Box<Future<Item = VirtualInterface, Error = CreatePrivateVirtualInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2863,21 +2954,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePrivateVirtualInterfaceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePrivateVirtualInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
-                fn create_public_virtual_interface(&self, input: &CreatePublicVirtualInterfaceRequest)  -> Result<VirtualInterface, CreatePublicVirtualInterfaceError> {
+                fn create_public_virtual_interface(&self, input: &CreatePublicVirtualInterfaceRequest)  -> Box<Future<Item = VirtualInterface, Error = CreatePublicVirtualInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2885,21 +2986,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePublicVirtualInterfaceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePublicVirtualInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>"]
-                fn delete_bgp_peer(&self, input: &DeleteBGPPeerRequest)  -> Result<DeleteBGPPeerResponse, DeleteBGPPeerError> {
+                fn delete_bgp_peer(&self, input: &DeleteBGPPeerRequest)  -> Box<Future<Item = DeleteBGPPeerResponse, Error = DeleteBGPPeerError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2907,21 +3018,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBGPPeerError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBGPPeerError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>"]
-                fn delete_connection(&self, input: &DeleteConnectionRequest)  -> Result<Connection, DeleteConnectionError> {
+                fn delete_connection(&self, input: &DeleteConnectionRequest)  -> Box<Future<Item = Connection, Error = DeleteConnectionError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2929,21 +3050,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteConnectionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteConnectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-                fn delete_interconnect(&self, input: &DeleteInterconnectRequest)  -> Result<DeleteInterconnectResponse, DeleteInterconnectError> {
+                fn delete_interconnect(&self, input: &DeleteInterconnectRequest)  -> Box<Future<Item = DeleteInterconnectResponse, Error = DeleteInterconnectError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2951,21 +3082,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteInterconnectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteInterconnectResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteInterconnectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteInterconnectResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a virtual interface.</p>"]
-                fn delete_virtual_interface(&self, input: &DeleteVirtualInterfaceRequest)  -> Result<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError> {
+                fn delete_virtual_interface(&self, input: &DeleteVirtualInterfaceRequest)  -> Box<Future<Item = DeleteVirtualInterfaceResponse, Error = DeleteVirtualInterfaceError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2973,21 +3114,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVirtualInterfaceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVirtualInterfaceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
-                fn describe_connection_loa(&self, input: &DescribeConnectionLoaRequest)  -> Result<DescribeConnectionLoaResponse, DescribeConnectionLoaError> {
+                fn describe_connection_loa(&self, input: &DescribeConnectionLoaRequest)  -> Box<Future<Item = DescribeConnectionLoaResponse, Error = DescribeConnectionLoaError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2995,21 +3146,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConnectionLoaError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConnectionLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeConnectionLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConnectionLoaError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeConnectionLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeConnectionLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>"]
-                fn describe_connections(&self, input: &DescribeConnectionsRequest)  -> Result<Connections, DescribeConnectionsError> {
+                fn describe_connections(&self, input: &DescribeConnectionsRequest)  -> Box<Future<Item = Connections, Error = DescribeConnectionsError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3017,21 +3178,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConnectionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConnectionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Return a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-                fn describe_connections_on_interconnect(&self, input: &DescribeConnectionsOnInterconnectRequest)  -> Result<Connections, DescribeConnectionsOnInterconnectError> {
+                fn describe_connections_on_interconnect(&self, input: &DescribeConnectionsOnInterconnectRequest)  -> Box<Future<Item = Connections, Error = DescribeConnectionsOnInterconnectError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3039,21 +3210,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConnectionsOnInterconnectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeConnectionsOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConnectionsOnInterconnectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeConnectionsOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
-                fn describe_interconnect_loa(&self, input: &DescribeInterconnectLoaRequest)  -> Result<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError> {
+                fn describe_interconnect_loa(&self, input: &DescribeInterconnectLoaRequest)  -> Box<Future<Item = DescribeInterconnectLoaResponse, Error = DescribeInterconnectLoaError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3061,21 +3242,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInterconnectLoaError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInterconnectLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeInterconnectLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInterconnectLoaError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeInterconnectLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeInterconnectLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>"]
-                fn describe_interconnects(&self, input: &DescribeInterconnectsRequest)  -> Result<Interconnects, DescribeInterconnectsError> {
+                fn describe_interconnects(&self, input: &DescribeInterconnectsRequest)  -> Box<Future<Item = Interconnects, Error = DescribeInterconnectsError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3083,41 +3274,61 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeInterconnectsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<Interconnects>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeInterconnectsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeInterconnectsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<Interconnects>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeInterconnectsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>"]
-                fn describe_locations(&self)  -> Result<Locations, DescribeLocationsError> {
+                fn describe_locations(&self)  -> Box<Future<Item = Locations, Error = DescribeLocationsError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
                     request.add_header("x-amz-target", "OvertureService.DescribeLocations");
                     
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLocationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<Locations>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeLocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLocationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<Locations>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeLocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the tags associated with the specified Direct Connect resources.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsRequest)  -> Result<DescribeTagsResponse, DescribeTagsError> {
+                fn describe_tags(&self, input: &DescribeTagsRequest)  -> Box<Future<Item = DescribeTagsResponse, Error = DescribeTagsError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3125,41 +3336,61 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTagsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">EC2 CreateVpnGateway</a> action.</p>"]
-                fn describe_virtual_gateways(&self)  -> Result<VirtualGateways, DescribeVirtualGatewaysError> {
+                fn describe_virtual_gateways(&self)  -> Box<Future<Item = VirtualGateways, Error = DescribeVirtualGatewaysError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
                     request.add_header("x-amz-target", "OvertureService.DescribeVirtualGateways");
                     
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVirtualGatewaysError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualGateways>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeVirtualGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVirtualGatewaysError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<VirtualGateways>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeVirtualGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before DescribeVirtualInterfaces is called are also returned. If a connection ID is included then only virtual interfaces associated with this connection will be returned. If a virtual interface ID is included then only a single virtual interface will be returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p> <p>If a connection ID is provided, only virtual interfaces provisioned on the specified connection will be returned. If a virtual interface ID is provided, only this particular virtual interface will be returned.</p>"]
-                fn describe_virtual_interfaces(&self, input: &DescribeVirtualInterfacesRequest)  -> Result<VirtualInterfaces, DescribeVirtualInterfacesError> {
+                fn describe_virtual_interfaces(&self, input: &DescribeVirtualInterfacesRequest)  -> Box<Future<Item = VirtualInterfaces, Error = DescribeVirtualInterfacesError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3167,21 +3398,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeVirtualInterfacesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterfaces>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeVirtualInterfacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeVirtualInterfacesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<VirtualInterfaces>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeVirtualInterfacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>"]
-                fn tag_resource(&self, input: &TagResourceRequest)  -> Result<TagResourceResponse, TagResourceError> {
+                fn tag_resource(&self, input: &TagResourceRequest)  -> Box<Future<Item = TagResourceResponse, Error = TagResourceError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3189,21 +3430,31 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TagResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TagResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes one or more tags from the specified Direct Connect resource.</p>"]
-                fn untag_resource(&self, input: &UntagResourceRequest)  -> Result<UntagResourceResponse, UntagResourceError> {
+                fn untag_resource(&self, input: &UntagResourceRequest)  -> Box<Future<Item = UntagResourceResponse, Error = UntagResourceError>> {
                     let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3211,16 +3462,26 @@ UntagResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UntagResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UntagResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

@@ -14,6 +14,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::from_str;
         use serde_json::Value as SerdeJsonValue;
+        use futures::{Future, future};
 #[doc="<p>Provides limits of code size and concurrency associated with the current account and region.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
             pub struct AccountLimit {
@@ -2822,103 +2823,103 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>"]
-                fn add_permission(&self, input: &AddPermissionRequest) -> Result<AddPermissionResponse, AddPermissionError>;
+                fn add_permission(&self, input: &AddPermissionRequest) -> Box<Future<Item = AddPermissionResponse, Error = AddPermissionError>>;
                 
 
                 #[doc="<p>Creates an alias that points to the specified Lambda function version. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>Alias names are unique for a given function. This requires permission for the lambda:CreateAlias action.</p>"]
-                fn create_alias(&self, input: &CreateAliasRequest) -> Result<AliasConfiguration, CreateAliasError>;
+                fn create_alias(&self, input: &CreateAliasRequest) -> Box<Future<Item = AliasConfiguration, Error = CreateAliasError>>;
                 
 
                 #[doc="<p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important><p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>"]
-                fn create_event_source_mapping(&self, input: &CreateEventSourceMappingRequest) -> Result<EventSourceMappingConfiguration, CreateEventSourceMappingError>;
+                fn create_event_source_mapping(&self, input: &CreateEventSourceMappingRequest) -> Box<Future<Item = EventSourceMappingConfiguration, Error = CreateEventSourceMappingError>>;
                 
 
                 #[doc="<p>Creates a new Lambda function. The function metadata is created from the request parameters, and the code for the function is provided by a .zip file in the request body. If the function name already exists, the operation will fail. Note that the function name is case-sensitive.</p> <p> If you are using versioning, you can also publish a version of the Lambda function you are creating using the <code>Publish</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateFunction</code> action.</p>"]
-                fn create_function(&self, input: &CreateFunctionRequest) -> Result<FunctionConfiguration, CreateFunctionError>;
+                fn create_function(&self, input: &CreateFunctionRequest) -> Box<Future<Item = FunctionConfiguration, Error = CreateFunctionError>>;
                 
 
                 #[doc="<p>Deletes the specified Lambda function alias. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:DeleteAlias action.</p>"]
-                fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError>;
+                fn delete_alias(&self, input: &DeleteAliasRequest) -> Box<Future<Item = (), Error = DeleteAliasError>>;
                 
 
                 #[doc="<p>Removes an event source mapping. This means AWS Lambda will no longer invoke the function for events in the associated source.</p> <p>This operation requires permission for the <code>lambda:DeleteEventSourceMapping</code> action.</p>"]
-                fn delete_event_source_mapping(&self, input: &DeleteEventSourceMappingRequest) -> Result<EventSourceMappingConfiguration, DeleteEventSourceMappingError>;
+                fn delete_event_source_mapping(&self, input: &DeleteEventSourceMappingRequest) -> Box<Future<Item = EventSourceMappingConfiguration, Error = DeleteEventSourceMappingError>>;
                 
 
                 #[doc="<p>Deletes the specified Lambda function code and configuration.</p> <p>If you are using the versioning feature and you don't specify a function version in your <code>DeleteFunction</code> request, AWS Lambda will delete the function, including all its versions, and any aliases pointing to the function versions. To delete a specific function version, you must provide the function version via the <code>Qualifier</code> parameter. For information about function versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>When you delete a function the associated resource policy is also deleted. You will need to delete the event source mappings explicitly.</p> <p>This operation requires permission for the <code>lambda:DeleteFunction</code> action.</p>"]
-                fn delete_function(&self, input: &DeleteFunctionRequest) -> Result<(), DeleteFunctionError>;
+                fn delete_function(&self, input: &DeleteFunctionRequest) -> Box<Future<Item = (), Error = DeleteFunctionError>>;
                 
 
                 #[doc="<p>Returns a customer's account settings.</p> <p>You can use this operation to retrieve Lambda limits information, such as code size and concurrency limits. For more information about limits, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/limits.html\">AWS Lambda Limits</a>. You can also retrieve resource usage statistics, such as code storage usage and function count.</p>"]
-                fn get_account_settings(&self) -> Result<GetAccountSettingsResponse, GetAccountSettingsError>;
+                fn get_account_settings(&self) -> Box<Future<Item = GetAccountSettingsResponse, Error = GetAccountSettingsError>>;
                 
 
                 #[doc="<p>Returns the specified alias information such as the alias ARN, description, and function version it is pointing to. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the <code>lambda:GetAlias</code> action.</p>"]
-                fn get_alias(&self, input: &GetAliasRequest) -> Result<AliasConfiguration, GetAliasError>;
+                fn get_alias(&self, input: &GetAliasRequest) -> Box<Future<Item = AliasConfiguration, Error = GetAliasError>>;
                 
 
                 #[doc="<p>Returns configuration information for the specified event source mapping (see <a>CreateEventSourceMapping</a>).</p> <p>This operation requires permission for the <code>lambda:GetEventSourceMapping</code> action.</p>"]
-                fn get_event_source_mapping(&self, input: &GetEventSourceMappingRequest) -> Result<EventSourceMappingConfiguration, GetEventSourceMappingError>;
+                fn get_event_source_mapping(&self, input: &GetEventSourceMappingRequest) -> Box<Future<Item = EventSourceMappingConfiguration, Error = GetEventSourceMappingError>>;
                 
 
                 #[doc="<p>Returns the configuration information of the Lambda function and a presigned URL link to the .zip file you uploaded with <a>CreateFunction</a> so you can download the .zip file. Note that the URL is valid for up to 10 minutes. The configuration information is the same information you provided as parameters when uploading the function.</p> <p>Using the optional <code>Qualifier</code> parameter, you can specify a specific function version for which you want this information. If you don't specify this parameter, the API uses unqualified function ARN which return information about the <code>$LATEST</code> version of the Lambda function. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunction</code> action.</p>"]
-                fn get_function(&self, input: &GetFunctionRequest) -> Result<GetFunctionResponse, GetFunctionError>;
+                fn get_function(&self, input: &GetFunctionRequest) -> Box<Future<Item = GetFunctionResponse, Error = GetFunctionError>>;
                 
 
                 #[doc="<p>Returns the configuration information of the Lambda function. This the same information you provided as parameters when uploading the function by using <a>CreateFunction</a>.</p> <p>If you are using the versioning feature, you can retrieve this information for a specific function version by using the optional <code>Qualifier</code> parameter and specifying the function version or alias that points to it. If you don't provide it, the API returns information about the $LATEST version of the function. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunctionConfiguration</code> operation.</p>"]
-                fn get_function_configuration(&self, input: &GetFunctionConfigurationRequest) -> Result<FunctionConfiguration, GetFunctionConfigurationError>;
+                fn get_function_configuration(&self, input: &GetFunctionConfigurationRequest) -> Box<Future<Item = FunctionConfiguration, Error = GetFunctionConfigurationError>>;
                 
 
                 #[doc="<p>Returns the resource policy associated with the specified Lambda function.</p> <p> If you are using the versioning feature, you can get the resource policy associated with the specific Lambda function version or alias by specifying the version or alias name using the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>For information about adding permissions, see <a>AddPermission</a>.</p> <p>You need permission for the <code>lambda:GetPolicy action.</code> </p>"]
-                fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
+                fn get_policy(&self, input: &GetPolicyRequest) -> Box<Future<Item = GetPolicyResponse, Error = GetPolicyError>>;
                 
 
                 #[doc="<p>Invokes a specific Lambda function. For an example, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually\">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>"]
-                fn invoke(&self, input: &InvocationRequest) -> Result<InvocationResponse, InvokeError>;
+                fn invoke(&self, input: &InvocationRequest) -> Box<Future<Item = InvocationResponse, Error = InvokeError>>;
                 
 
                 #[doc="<important><p>This API is deprecated. We recommend you use <code>Invoke</code> API (see <a>Invoke</a>).</p> </important> <p>Submits an invocation request to AWS Lambda. Upon receiving the request, Lambda executes the specified function asynchronously. To see the logs generated by the Lambda function execution, see the CloudWatch Logs console.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>"]
-                fn invoke_async(&self, input: &InvokeAsyncRequest) -> Result<InvokeAsyncResponse, InvokeAsyncError>;
+                fn invoke_async(&self, input: &InvokeAsyncRequest) -> Box<Future<Item = InvokeAsyncResponse, Error = InvokeAsyncError>>;
                 
 
                 #[doc="<p>Returns list of aliases created for a Lambda function. For each alias, the response includes information such as the alias ARN, description, alias name, and the function version to which it points. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:ListAliases action.</p>"]
-                fn list_aliases(&self, input: &ListAliasesRequest) -> Result<ListAliasesResponse, ListAliasesError>;
+                fn list_aliases(&self, input: &ListAliasesRequest) -> Box<Future<Item = ListAliasesResponse, Error = ListAliasesError>>;
                 
 
                 #[doc="<p>Returns a list of event source mappings you created using the <code>CreateEventSourceMapping</code> (see <a>CreateEventSourceMapping</a>). </p> <p>For each mapping, the API returns configuration information. You can optionally specify filters to retrieve specific event source mappings.</p> <p>If you are using the versioning feature, you can get list of event source mappings for a specific Lambda function version or an alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:ListEventSourceMappings</code> action.</p>"]
-                fn list_event_source_mappings(&self, input: &ListEventSourceMappingsRequest) -> Result<ListEventSourceMappingsResponse, ListEventSourceMappingsError>;
+                fn list_event_source_mappings(&self, input: &ListEventSourceMappingsRequest) -> Box<Future<Item = ListEventSourceMappingsResponse, Error = ListEventSourceMappingsError>>;
                 
 
                 #[doc="<p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using versioning feature, the response returns list of $LATEST versions of your functions. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
-                fn list_functions(&self, input: &ListFunctionsRequest) -> Result<ListFunctionsResponse, ListFunctionsError>;
+                fn list_functions(&self, input: &ListFunctionsRequest) -> Box<Future<Item = ListFunctionsResponse, Error = ListFunctionsError>>;
                 
 
                 #[doc="<p>List all versions of a function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
-                fn list_versions_by_function(&self, input: &ListVersionsByFunctionRequest) -> Result<ListVersionsByFunctionResponse, ListVersionsByFunctionError>;
+                fn list_versions_by_function(&self, input: &ListVersionsByFunctionRequest) -> Box<Future<Item = ListVersionsByFunctionResponse, Error = ListVersionsByFunctionError>>;
                 
 
                 #[doc="<p>Publishes a version of your function from the current snapshot of $LATEST. That is, AWS Lambda takes a snapshot of the function code and configuration information from $LATEST and publishes a new version. The code and configuration cannot be modified after publication. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
-                fn publish_version(&self, input: &PublishVersionRequest) -> Result<FunctionConfiguration, PublishVersionError>;
+                fn publish_version(&self, input: &PublishVersionRequest) -> Box<Future<Item = FunctionConfiguration, Error = PublishVersionError>>;
                 
 
                 #[doc="<p>You can remove individual permissions from an resource policy associated with a Lambda function by providing a statement ID that you provided when you added the permission.</p> <p>If you are using versioning, the permissions you remove are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>Note that removal of a permission will cause an active event source to lose permission to the function.</p> <p>You need permission for the <code>lambda:RemovePermission</code> action.</p>"]
-                fn remove_permission(&self, input: &RemovePermissionRequest) -> Result<(), RemovePermissionError>;
+                fn remove_permission(&self, input: &RemovePermissionRequest) -> Box<Future<Item = (), Error = RemovePermissionError>>;
                 
 
                 #[doc="<p>Using this API you can update the function version to which the alias points and the alias description. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:UpdateAlias action.</p>"]
-                fn update_alias(&self, input: &UpdateAliasRequest) -> Result<AliasConfiguration, UpdateAliasError>;
+                fn update_alias(&self, input: &UpdateAliasRequest) -> Box<Future<Item = AliasConfiguration, Error = UpdateAliasError>>;
                 
 
                 #[doc="<p>You can update an event source mapping. This is useful if you want to change the parameters of the existing mapping without losing your position in the stream. You can change which function will receive the stream records, but to change the stream itself, you must create a new mapping.</p> <p>If you are using the versioning feature, you can update the event source mapping to map to a specific Lambda function version or alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>If you disable the event source mapping, AWS Lambda stops polling. If you enable again, it will resume polling from the time it had stopped polling, so you don't lose processing of any records. However, if you delete event source mapping and create it again, it will reset.</p> <p>This operation requires permission for the <code>lambda:UpdateEventSourceMapping</code> action.</p>"]
-                fn update_event_source_mapping(&self, input: &UpdateEventSourceMappingRequest) -> Result<EventSourceMappingConfiguration, UpdateEventSourceMappingError>;
+                fn update_event_source_mapping(&self, input: &UpdateEventSourceMappingRequest) -> Box<Future<Item = EventSourceMappingConfiguration, Error = UpdateEventSourceMappingError>>;
                 
 
                 #[doc="<p>Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionCode</code> action.</p>"]
-                fn update_function_code(&self, input: &UpdateFunctionCodeRequest) -> Result<FunctionConfiguration, UpdateFunctionCodeError>;
+                fn update_function_code(&self, input: &UpdateFunctionCodeRequest) -> Box<Future<Item = FunctionConfiguration, Error = UpdateFunctionCodeError>>;
                 
 
                 #[doc="<p>Updates the configuration parameters for the specified Lambda function by using the values provided in the request. You provide only the parameters you want to change. This operation must only be used on an existing Lambda function and cannot be used to update the function's code.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionConfiguration</code> action.</p>"]
-                fn update_function_configuration(&self, input: &UpdateFunctionConfigurationRequest) -> Result<FunctionConfiguration, UpdateFunctionConfigurationError>;
+                fn update_function_configuration(&self, input: &UpdateFunctionConfigurationRequest) -> Box<Future<Item = FunctionConfiguration, Error = UpdateFunctionConfigurationError>>;
                 
 }
 /// A client for the AWS Lambda API.
@@ -2942,7 +2943,7 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>"]
-                fn add_permission(&self, input: &AddPermissionRequest) -> Result<AddPermissionResponse, AddPermissionError> {
+                fn add_permission(&self, input: &AddPermissionRequest) -> Box<Future<Item = AddPermissionResponse, Error = AddPermissionError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/policy", function_name = input.function_name);
@@ -2958,32 +2959,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddPermissionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddPermissionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Created => {
-                            Ok(serde_json::from_str::<AddPermissionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(AddPermissionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Created => {
+                                    future::ok(serde_json::from_str::<AddPermissionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(AddPermissionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an alias that points to the specified Lambda function version. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>Alias names are unique for a given function. This requires permission for the lambda:CreateAlias action.</p>"]
-                fn create_alias(&self, input: &CreateAliasRequest) -> Result<AliasConfiguration, CreateAliasError> {
+                fn create_alias(&self, input: &CreateAliasRequest) -> Box<Future<Item = AliasConfiguration, Error = CreateAliasError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/aliases", function_name = input.function_name);
@@ -2994,32 +3005,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateAliasError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateAliasError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Created => {
-                            Ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreateAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Created => {
+                                    future::ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreateAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important><p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>"]
-                fn create_event_source_mapping(&self, input: &CreateEventSourceMappingRequest) -> Result<EventSourceMappingConfiguration, CreateEventSourceMappingError> {
+                fn create_event_source_mapping(&self, input: &CreateEventSourceMappingRequest) -> Box<Future<Item = EventSourceMappingConfiguration, Error = CreateEventSourceMappingError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/2015-03-31/event-source-mappings/";
@@ -3030,32 +3051,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateEventSourceMappingError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateEventSourceMappingError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreateEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Accepted => {
+                                    future::ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreateEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new Lambda function. The function metadata is created from the request parameters, and the code for the function is provided by a .zip file in the request body. If the function name already exists, the operation will fail. Note that the function name is case-sensitive.</p> <p> If you are using versioning, you can also publish a version of the Lambda function you are creating using the <code>Publish</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateFunction</code> action.</p>"]
-                fn create_function(&self, input: &CreateFunctionRequest) -> Result<FunctionConfiguration, CreateFunctionError> {
+                fn create_function(&self, input: &CreateFunctionRequest) -> Box<Future<Item = FunctionConfiguration, Error = CreateFunctionError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/2015-03-31/functions";
@@ -3066,32 +3097,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateFunctionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateFunctionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Created => {
-                            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreateFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Created => {
+                                    future::ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreateFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified Lambda function alias. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:DeleteAlias action.</p>"]
-                fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError> {
+                fn delete_alias(&self, input: &DeleteAliasRequest) -> Box<Future<Item = (), Error = DeleteAliasError>> {
                     
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/aliases/{name}", function_name = input.function_name, name = input.name);
@@ -3102,32 +3143,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteAliasError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteAliasError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::NoContent => {
-                            Ok(())
-                        }
-                         _ => Err(DeleteAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::NoContent => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(DeleteAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes an event source mapping. This means AWS Lambda will no longer invoke the function for events in the associated source.</p> <p>This operation requires permission for the <code>lambda:DeleteEventSourceMapping</code> action.</p>"]
-                fn delete_event_source_mapping(&self, input: &DeleteEventSourceMappingRequest) -> Result<EventSourceMappingConfiguration, DeleteEventSourceMappingError> {
+                fn delete_event_source_mapping(&self, input: &DeleteEventSourceMappingRequest) -> Box<Future<Item = EventSourceMappingConfiguration, Error = DeleteEventSourceMappingError>> {
                     
 
                     let request_uri = format!("/2015-03-31/event-source-mappings/{uuid}", uuid = input.uuid);
@@ -3138,32 +3189,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteEventSourceMappingError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteEventSourceMappingError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DeleteEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Accepted => {
+                                    future::ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DeleteEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified Lambda function code and configuration.</p> <p>If you are using the versioning feature and you don't specify a function version in your <code>DeleteFunction</code> request, AWS Lambda will delete the function, including all its versions, and any aliases pointing to the function versions. To delete a specific function version, you must provide the function version via the <code>Qualifier</code> parameter. For information about function versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>When you delete a function the associated resource policy is also deleted. You will need to delete the event source mappings explicitly.</p> <p>This operation requires permission for the <code>lambda:DeleteFunction</code> action.</p>"]
-                fn delete_function(&self, input: &DeleteFunctionRequest) -> Result<(), DeleteFunctionError> {
+                fn delete_function(&self, input: &DeleteFunctionRequest) -> Box<Future<Item = (), Error = DeleteFunctionError>> {
                     
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}", function_name = input.function_name);
@@ -3179,32 +3240,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteFunctionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteFunctionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::NoContent => {
-                            Ok(())
-                        }
-                         _ => Err(DeleteFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::NoContent => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(DeleteFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a customer's account settings.</p> <p>You can use this operation to retrieve Lambda limits information, such as code size and concurrency limits. For more information about limits, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/limits.html\">AWS Lambda Limits</a>. You can also retrieve resource usage statistics, such as code storage usage and function count.</p>"]
-                fn get_account_settings(&self) -> Result<GetAccountSettingsResponse, GetAccountSettingsError> {
+                fn get_account_settings(&self) -> Box<Future<Item = GetAccountSettingsResponse, Error = GetAccountSettingsError>> {
                     
 
                     let request_uri = "/2016-08-19/account-settings/";
@@ -3215,32 +3286,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetAccountSettingsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetAccountSettingsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAccountSettingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetAccountSettingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the specified alias information such as the alias ARN, description, and function version it is pointing to. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the <code>lambda:GetAlias</code> action.</p>"]
-                fn get_alias(&self, input: &GetAliasRequest) -> Result<AliasConfiguration, GetAliasError> {
+                fn get_alias(&self, input: &GetAliasRequest) -> Box<Future<Item = AliasConfiguration, Error = GetAliasError>> {
                     
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/aliases/{name}", function_name = input.function_name, name = input.name);
@@ -3251,32 +3332,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetAliasError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetAliasError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns configuration information for the specified event source mapping (see <a>CreateEventSourceMapping</a>).</p> <p>This operation requires permission for the <code>lambda:GetEventSourceMapping</code> action.</p>"]
-                fn get_event_source_mapping(&self, input: &GetEventSourceMappingRequest) -> Result<EventSourceMappingConfiguration, GetEventSourceMappingError> {
+                fn get_event_source_mapping(&self, input: &GetEventSourceMappingRequest) -> Box<Future<Item = EventSourceMappingConfiguration, Error = GetEventSourceMappingError>> {
                     
 
                     let request_uri = format!("/2015-03-31/event-source-mappings/{uuid}", uuid = input.uuid);
@@ -3287,32 +3378,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetEventSourceMappingError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetEventSourceMappingError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the configuration information of the Lambda function and a presigned URL link to the .zip file you uploaded with <a>CreateFunction</a> so you can download the .zip file. Note that the URL is valid for up to 10 minutes. The configuration information is the same information you provided as parameters when uploading the function.</p> <p>Using the optional <code>Qualifier</code> parameter, you can specify a specific function version for which you want this information. If you don't specify this parameter, the API uses unqualified function ARN which return information about the <code>$LATEST</code> version of the Lambda function. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunction</code> action.</p>"]
-                fn get_function(&self, input: &GetFunctionRequest) -> Result<GetFunctionResponse, GetFunctionError> {
+                fn get_function(&self, input: &GetFunctionRequest) -> Box<Future<Item = GetFunctionResponse, Error = GetFunctionError>> {
                     
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}", function_name = input.function_name);
@@ -3328,32 +3429,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetFunctionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetFunctionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the configuration information of the Lambda function. This the same information you provided as parameters when uploading the function by using <a>CreateFunction</a>.</p> <p>If you are using the versioning feature, you can retrieve this information for a specific function version by using the optional <code>Qualifier</code> parameter and specifying the function version or alias that points to it. If you don't provide it, the API returns information about the $LATEST version of the function. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunctionConfiguration</code> operation.</p>"]
-                fn get_function_configuration(&self, input: &GetFunctionConfigurationRequest) -> Result<FunctionConfiguration, GetFunctionConfigurationError> {
+                fn get_function_configuration(&self, input: &GetFunctionConfigurationRequest) -> Box<Future<Item = FunctionConfiguration, Error = GetFunctionConfigurationError>> {
                     
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/configuration", function_name = input.function_name);
@@ -3369,32 +3480,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetFunctionConfigurationError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetFunctionConfigurationError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetFunctionConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetFunctionConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the resource policy associated with the specified Lambda function.</p> <p> If you are using the versioning feature, you can get the resource policy associated with the specific Lambda function version or alias by specifying the version or alias name using the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>For information about adding permissions, see <a>AddPermission</a>.</p> <p>You need permission for the <code>lambda:GetPolicy action.</code> </p>"]
-                fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
+                fn get_policy(&self, input: &GetPolicyRequest) -> Box<Future<Item = GetPolicyResponse, Error = GetPolicyError>> {
                     
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/policy", function_name = input.function_name);
@@ -3410,32 +3531,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPolicyError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPolicyError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Invokes a specific Lambda function. For an example, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually\">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>"]
-                fn invoke(&self, input: &InvocationRequest) -> Result<InvocationResponse, InvokeError> {
+                fn invoke(&self, input: &InvocationRequest) -> Box<Future<Item = InvocationResponse, Error = InvokeError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/invocations", function_name = input.function_name);
@@ -3451,32 +3582,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(InvokeError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| InvokeError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<InvocationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(InvokeError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<InvocationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(InvokeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<important><p>This API is deprecated. We recommend you use <code>Invoke</code> API (see <a>Invoke</a>).</p> </important> <p>Submits an invocation request to AWS Lambda. Upon receiving the request, Lambda executes the specified function asynchronously. To see the logs generated by the Lambda function execution, see the CloudWatch Logs console.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>"]
-                fn invoke_async(&self, input: &InvokeAsyncRequest) -> Result<InvokeAsyncResponse, InvokeAsyncError> {
+                fn invoke_async(&self, input: &InvokeAsyncRequest) -> Box<Future<Item = InvokeAsyncResponse, Error = InvokeAsyncError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2014-11-13/functions/{function_name}/invoke-async/", function_name = input.function_name);
@@ -3487,32 +3628,42 @@ UpdateFunctionConfigurationError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(InvokeAsyncError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| InvokeAsyncError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<InvokeAsyncResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(InvokeAsyncError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Accepted => {
+                                    future::ok(serde_json::from_str::<InvokeAsyncResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(InvokeAsyncError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns list of aliases created for a Lambda function. For each alias, the response includes information such as the alias ARN, description, alias name, and the function version to which it points. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:ListAliases action.</p>"]
-                fn list_aliases(&self, input: &ListAliasesRequest) -> Result<ListAliasesResponse, ListAliasesError> {
+                fn list_aliases(&self, input: &ListAliasesRequest) -> Box<Future<Item = ListAliasesResponse, Error = ListAliasesError>> {
                     
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/aliases", function_name = input.function_name);
@@ -3536,32 +3687,42 @@ match input.max_items {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAliasesError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAliasesError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAliasesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListAliasesError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListAliasesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListAliasesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of event source mappings you created using the <code>CreateEventSourceMapping</code> (see <a>CreateEventSourceMapping</a>). </p> <p>For each mapping, the API returns configuration information. You can optionally specify filters to retrieve specific event source mappings.</p> <p>If you are using the versioning feature, you can get list of event source mappings for a specific Lambda function version or an alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:ListEventSourceMappings</code> action.</p>"]
-                fn list_event_source_mappings(&self, input: &ListEventSourceMappingsRequest) -> Result<ListEventSourceMappingsResponse, ListEventSourceMappingsError> {
+                fn list_event_source_mappings(&self, input: &ListEventSourceMappingsRequest) -> Box<Future<Item = ListEventSourceMappingsResponse, Error = ListEventSourceMappingsError>> {
                     
 
                     let request_uri = "/2015-03-31/event-source-mappings/";
@@ -3589,32 +3750,42 @@ match input.max_items {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListEventSourceMappingsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListEventSourceMappingsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListEventSourceMappingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListEventSourceMappingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListEventSourceMappingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListEventSourceMappingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using versioning feature, the response returns list of $LATEST versions of your functions. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
-                fn list_functions(&self, input: &ListFunctionsRequest) -> Result<ListFunctionsResponse, ListFunctionsError> {
+                fn list_functions(&self, input: &ListFunctionsRequest) -> Box<Future<Item = ListFunctionsResponse, Error = ListFunctionsError>> {
                     
 
                     let request_uri = "/2015-03-31/functions/";
@@ -3634,32 +3805,42 @@ match input.max_items {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListFunctionsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListFunctionsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListFunctionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListFunctionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListFunctionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListFunctionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>List all versions of a function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
-                fn list_versions_by_function(&self, input: &ListVersionsByFunctionRequest) -> Result<ListVersionsByFunctionResponse, ListVersionsByFunctionError> {
+                fn list_versions_by_function(&self, input: &ListVersionsByFunctionRequest) -> Box<Future<Item = ListVersionsByFunctionResponse, Error = ListVersionsByFunctionError>> {
                     
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/versions", function_name = input.function_name);
@@ -3679,32 +3860,42 @@ match input.max_items {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListVersionsByFunctionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListVersionsByFunctionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVersionsByFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListVersionsByFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListVersionsByFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListVersionsByFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Publishes a version of your function from the current snapshot of $LATEST. That is, AWS Lambda takes a snapshot of the function code and configuration information from $LATEST and publishes a new version. The code and configuration cannot be modified after publication. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
-                fn publish_version(&self, input: &PublishVersionRequest) -> Result<FunctionConfiguration, PublishVersionError> {
+                fn publish_version(&self, input: &PublishVersionRequest) -> Box<Future<Item = FunctionConfiguration, Error = PublishVersionError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/versions", function_name = input.function_name);
@@ -3715,32 +3906,42 @@ match input.max_items {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PublishVersionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PublishVersionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Created => {
-                            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(PublishVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Created => {
+                                    future::ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(PublishVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>You can remove individual permissions from an resource policy associated with a Lambda function by providing a statement ID that you provided when you added the permission.</p> <p>If you are using versioning, the permissions you remove are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>Note that removal of a permission will cause an active event source to lose permission to the function.</p> <p>You need permission for the <code>lambda:RemovePermission</code> action.</p>"]
-                fn remove_permission(&self, input: &RemovePermissionRequest) -> Result<(), RemovePermissionError> {
+                fn remove_permission(&self, input: &RemovePermissionRequest) -> Box<Future<Item = (), Error = RemovePermissionError>> {
                     
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/policy/{statement_id}", function_name = input.function_name, statement_id = input.statement_id);
@@ -3756,32 +3957,42 @@ match input.max_items {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemovePermissionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemovePermissionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::NoContent => {
-                            Ok(())
-                        }
-                         _ => Err(RemovePermissionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::NoContent => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(RemovePermissionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Using this API you can update the function version to which the alias points and the alias description. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:UpdateAlias action.</p>"]
-                fn update_alias(&self, input: &UpdateAliasRequest) -> Result<AliasConfiguration, UpdateAliasError> {
+                fn update_alias(&self, input: &UpdateAliasRequest) -> Box<Future<Item = AliasConfiguration, Error = UpdateAliasError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/aliases/{name}", function_name = input.function_name, name = input.name);
@@ -3792,32 +4003,42 @@ match input.max_items {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateAliasError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateAliasError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(UpdateAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(UpdateAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>You can update an event source mapping. This is useful if you want to change the parameters of the existing mapping without losing your position in the stream. You can change which function will receive the stream records, but to change the stream itself, you must create a new mapping.</p> <p>If you are using the versioning feature, you can update the event source mapping to map to a specific Lambda function version or alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>If you disable the event source mapping, AWS Lambda stops polling. If you enable again, it will resume polling from the time it had stopped polling, so you don't lose processing of any records. However, if you delete event source mapping and create it again, it will reset.</p> <p>This operation requires permission for the <code>lambda:UpdateEventSourceMapping</code> action.</p>"]
-                fn update_event_source_mapping(&self, input: &UpdateEventSourceMappingRequest) -> Result<EventSourceMappingConfiguration, UpdateEventSourceMappingError> {
+                fn update_event_source_mapping(&self, input: &UpdateEventSourceMappingRequest) -> Box<Future<Item = EventSourceMappingConfiguration, Error = UpdateEventSourceMappingError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2015-03-31/event-source-mappings/{uuid}", uuid = input.uuid);
@@ -3828,32 +4049,42 @@ match input.max_items {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateEventSourceMappingError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateEventSourceMappingError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(UpdateEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Accepted => {
+                                    future::ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(UpdateEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionCode</code> action.</p>"]
-                fn update_function_code(&self, input: &UpdateFunctionCodeRequest) -> Result<FunctionConfiguration, UpdateFunctionCodeError> {
+                fn update_function_code(&self, input: &UpdateFunctionCodeRequest) -> Box<Future<Item = FunctionConfiguration, Error = UpdateFunctionCodeError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/code", function_name = input.function_name);
@@ -3864,32 +4095,42 @@ match input.max_items {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateFunctionCodeError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateFunctionCodeError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(UpdateFunctionCodeError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(UpdateFunctionCodeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the configuration parameters for the specified Lambda function by using the values provided in the request. You provide only the parameters you want to change. This operation must only be used on an existing Lambda function and cannot be used to update the function's code.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionConfiguration</code> action.</p>"]
-                fn update_function_configuration(&self, input: &UpdateFunctionConfigurationRequest) -> Result<FunctionConfiguration, UpdateFunctionConfigurationError> {
+                fn update_function_configuration(&self, input: &UpdateFunctionConfigurationRequest) -> Box<Future<Item = FunctionConfiguration, Error = UpdateFunctionConfigurationError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/2015-03-31/functions/{function_name}/configuration", function_name = input.function_name);
@@ -3900,27 +4141,37 @@ match input.max_items {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateFunctionConfigurationError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateFunctionConfigurationError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(UpdateFunctionConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(UpdateFunctionConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 }

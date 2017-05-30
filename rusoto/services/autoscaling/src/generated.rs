@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -10027,211 +10037,211 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic load balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-instance-asg.html\">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn attach_instances(&self, input: &AttachInstancesQuery) -> Result<(), AttachInstancesError>;
+                fn attach_instances(&self, input: &AttachInstancesQuery) -> Box<Future<Item = (), Error = AttachInstancesError>>;
                 
 
                 #[doc="<p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn attach_load_balancer_target_groups(&self, input: &AttachLoadBalancerTargetGroupsType) -> Result<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError>;
+                fn attach_load_balancer_target_groups(&self, input: &AttachLoadBalancerTargetGroupsType) -> Box<Future<Item = AttachLoadBalancerTargetGroupsResultType, Error = AttachLoadBalancerTargetGroupsError>>;
                 
 
                 #[doc="<p>Attaches one or more Classic load balancers to the specified Auto Scaling group.</p> <p>To attach an Application load balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn attach_load_balancers(&self, input: &AttachLoadBalancersType) -> Result<AttachLoadBalancersResultType, AttachLoadBalancersError>;
+                fn attach_load_balancers(&self, input: &AttachLoadBalancersType) -> Box<Future<Item = AttachLoadBalancersResultType, Error = AttachLoadBalancersError>>;
                 
 
                 #[doc="<p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn complete_lifecycle_action(&self, input: &CompleteLifecycleActionType) -> Result<CompleteLifecycleActionAnswer, CompleteLifecycleActionError>;
+                fn complete_lifecycle_action(&self, input: &CompleteLifecycleActionType) -> Box<Future<Item = CompleteLifecycleActionAnswer, Error = CompleteLifecycleActionError>>;
                 
 
                 #[doc="<p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html\">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn create_auto_scaling_group(&self, input: &CreateAutoScalingGroupType) -> Result<(), CreateAutoScalingGroupError>;
+                fn create_auto_scaling_group(&self, input: &CreateAutoScalingGroupType) -> Box<Future<Item = (), Error = CreateAutoScalingGroupError>>;
                 
 
                 #[doc="<p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html\">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn create_launch_configuration(&self, input: &CreateLaunchConfigurationType) -> Result<(), CreateLaunchConfigurationError>;
+                fn create_launch_configuration(&self, input: &CreateLaunchConfigurationType) -> Box<Future<Item = (), Error = CreateLaunchConfigurationError>>;
                 
 
                 #[doc="<p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html\">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn create_or_update_tags(&self, input: &CreateOrUpdateTagsType) -> Result<(), CreateOrUpdateTagsError>;
+                fn create_or_update_tags(&self, input: &CreateOrUpdateTagsType) -> Box<Future<Item = (), Error = CreateOrUpdateTagsError>>;
                 
 
                 #[doc="<p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity so that Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>"]
-                fn delete_auto_scaling_group(&self, input: &DeleteAutoScalingGroupType) -> Result<(), DeleteAutoScalingGroupError>;
+                fn delete_auto_scaling_group(&self, input: &DeleteAutoScalingGroupType) -> Box<Future<Item = (), Error = DeleteAutoScalingGroupError>>;
                 
 
                 #[doc="<p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>"]
-                fn delete_launch_configuration(&self, input: &LaunchConfigurationNameType) -> Result<(), DeleteLaunchConfigurationError>;
+                fn delete_launch_configuration(&self, input: &LaunchConfigurationNameType) -> Box<Future<Item = (), Error = DeleteLaunchConfigurationError>>;
                 
 
                 #[doc="<p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>"]
-                fn delete_lifecycle_hook(&self, input: &DeleteLifecycleHookType) -> Result<DeleteLifecycleHookAnswer, DeleteLifecycleHookError>;
+                fn delete_lifecycle_hook(&self, input: &DeleteLifecycleHookType) -> Box<Future<Item = DeleteLifecycleHookAnswer, Error = DeleteLifecycleHookError>>;
                 
 
                 #[doc="<p>Deletes the specified notification.</p>"]
-                fn delete_notification_configuration(&self, input: &DeleteNotificationConfigurationType) -> Result<(), DeleteNotificationConfigurationError>;
+                fn delete_notification_configuration(&self, input: &DeleteNotificationConfigurationType) -> Box<Future<Item = (), Error = DeleteNotificationConfigurationError>>;
                 
 
                 #[doc="<p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>"]
-                fn delete_policy(&self, input: &DeletePolicyType) -> Result<(), DeletePolicyError>;
+                fn delete_policy(&self, input: &DeletePolicyType) -> Box<Future<Item = (), Error = DeletePolicyError>>;
                 
 
                 #[doc="<p>Deletes the specified scheduled action.</p>"]
-                fn delete_scheduled_action(&self, input: &DeleteScheduledActionType) -> Result<(), DeleteScheduledActionError>;
+                fn delete_scheduled_action(&self, input: &DeleteScheduledActionType) -> Box<Future<Item = (), Error = DeleteScheduledActionError>>;
                 
 
                 #[doc="<p>Deletes the specified tags.</p>"]
-                fn delete_tags(&self, input: &DeleteTagsType) -> Result<(), DeleteTagsError>;
+                fn delete_tags(&self, input: &DeleteTagsType) -> Box<Future<Item = (), Error = DeleteTagsError>>;
                 
 
                 #[doc="<p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
-                fn describe_account_limits(&self) -> Result<DescribeAccountLimitsAnswer, DescribeAccountLimitsError>;
+                fn describe_account_limits(&self) -> Box<Future<Item = DescribeAccountLimitsAnswer, Error = DescribeAccountLimitsError>>;
                 
 
                 #[doc="<p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>"]
-                fn describe_adjustment_types(&self) -> Result<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError>;
+                fn describe_adjustment_types(&self) -> Box<Future<Item = DescribeAdjustmentTypesAnswer, Error = DescribeAdjustmentTypesError>>;
                 
 
                 #[doc="<p>Describes one or more Auto Scaling groups.</p>"]
-                fn describe_auto_scaling_groups(&self, input: &AutoScalingGroupNamesType) -> Result<AutoScalingGroupsType, DescribeAutoScalingGroupsError>;
+                fn describe_auto_scaling_groups(&self, input: &AutoScalingGroupNamesType) -> Box<Future<Item = AutoScalingGroupsType, Error = DescribeAutoScalingGroupsError>>;
                 
 
                 #[doc="<p>Describes one or more Auto Scaling instances.</p>"]
-                fn describe_auto_scaling_instances(&self, input: &DescribeAutoScalingInstancesType) -> Result<AutoScalingInstancesType, DescribeAutoScalingInstancesError>;
+                fn describe_auto_scaling_instances(&self, input: &DescribeAutoScalingInstancesType) -> Box<Future<Item = AutoScalingInstancesType, Error = DescribeAutoScalingInstancesError>>;
                 
 
                 #[doc="<p>Describes the notification types that are supported by Auto Scaling.</p>"]
-                fn describe_auto_scaling_notification_types(&self) -> Result<DescribeAutoScalingNotificationTypesAnswer, DescribeAutoScalingNotificationTypesError>;
+                fn describe_auto_scaling_notification_types(&self) -> Box<Future<Item = DescribeAutoScalingNotificationTypesAnswer, Error = DescribeAutoScalingNotificationTypesError>>;
                 
 
                 #[doc="<p>Describes one or more launch configurations.</p>"]
-                fn describe_launch_configurations(&self, input: &LaunchConfigurationNamesType) -> Result<LaunchConfigurationsType, DescribeLaunchConfigurationsError>;
+                fn describe_launch_configurations(&self, input: &LaunchConfigurationNamesType) -> Box<Future<Item = LaunchConfigurationsType, Error = DescribeLaunchConfigurationsError>>;
                 
 
                 #[doc="<p>Describes the available types of lifecycle hooks.</p>"]
-                fn describe_lifecycle_hook_types(&self) -> Result<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError>;
+                fn describe_lifecycle_hook_types(&self) -> Box<Future<Item = DescribeLifecycleHookTypesAnswer, Error = DescribeLifecycleHookTypesError>>;
                 
 
                 #[doc="<p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>"]
-                fn describe_lifecycle_hooks(&self, input: &DescribeLifecycleHooksType) -> Result<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError>;
+                fn describe_lifecycle_hooks(&self, input: &DescribeLifecycleHooksType) -> Box<Future<Item = DescribeLifecycleHooksAnswer, Error = DescribeLifecycleHooksError>>;
                 
 
                 #[doc="<p>Describes the target groups for the specified Auto Scaling group.</p>"]
-                fn describe_load_balancer_target_groups(&self, input: &DescribeLoadBalancerTargetGroupsRequest) -> Result<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError>;
+                fn describe_load_balancer_target_groups(&self, input: &DescribeLoadBalancerTargetGroupsRequest) -> Box<Future<Item = DescribeLoadBalancerTargetGroupsResponse, Error = DescribeLoadBalancerTargetGroupsError>>;
                 
 
                 #[doc="<p>Describes the load balancers for the specified Auto Scaling group.</p> <p>Note that this operation describes only Classic load balancers. If you have Application load balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>"]
-                fn describe_load_balancers(&self, input: &DescribeLoadBalancersRequest) -> Result<DescribeLoadBalancersResponse, DescribeLoadBalancersError>;
+                fn describe_load_balancers(&self, input: &DescribeLoadBalancersRequest) -> Box<Future<Item = DescribeLoadBalancersResponse, Error = DescribeLoadBalancersError>>;
                 
 
                 #[doc="<p>Describes the available CloudWatch metrics for Auto Scaling.</p> <p>Note that the <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>"]
-                fn describe_metric_collection_types(&self) -> Result<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError>;
+                fn describe_metric_collection_types(&self) -> Box<Future<Item = DescribeMetricCollectionTypesAnswer, Error = DescribeMetricCollectionTypesError>>;
                 
 
                 #[doc="<p>Describes the notification actions associated with the specified Auto Scaling group.</p>"]
-                fn describe_notification_configurations(&self, input: &DescribeNotificationConfigurationsType) -> Result<DescribeNotificationConfigurationsAnswer, DescribeNotificationConfigurationsError>;
+                fn describe_notification_configurations(&self, input: &DescribeNotificationConfigurationsType) -> Box<Future<Item = DescribeNotificationConfigurationsAnswer, Error = DescribeNotificationConfigurationsError>>;
                 
 
                 #[doc="<p>Describes the policies for the specified Auto Scaling group.</p>"]
-                fn describe_policies(&self, input: &DescribePoliciesType) -> Result<PoliciesType, DescribePoliciesError>;
+                fn describe_policies(&self, input: &DescribePoliciesType) -> Box<Future<Item = PoliciesType, Error = DescribePoliciesError>>;
                 
 
                 #[doc="<p>Describes one or more scaling activities for the specified Auto Scaling group.</p>"]
-                fn describe_scaling_activities(&self, input: &DescribeScalingActivitiesType) -> Result<ActivitiesType, DescribeScalingActivitiesError>;
+                fn describe_scaling_activities(&self, input: &DescribeScalingActivitiesType) -> Box<Future<Item = ActivitiesType, Error = DescribeScalingActivitiesError>>;
                 
 
                 #[doc="<p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>"]
-                fn describe_scaling_process_types(&self) -> Result<ProcessesType, DescribeScalingProcessTypesError>;
+                fn describe_scaling_process_types(&self) -> Box<Future<Item = ProcessesType, Error = DescribeScalingProcessTypesError>>;
                 
 
                 #[doc="<p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>"]
-                fn describe_scheduled_actions(&self, input: &DescribeScheduledActionsType) -> Result<ScheduledActionsType, DescribeScheduledActionsError>;
+                fn describe_scheduled_actions(&self, input: &DescribeScheduledActionsType) -> Box<Future<Item = ScheduledActionsType, Error = DescribeScheduledActionsError>>;
                 
 
                 #[doc="<p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsType) -> Result<TagsType, DescribeTagsError>;
+                fn describe_tags(&self, input: &DescribeTagsType) -> Box<Future<Item = TagsType, Error = DescribeTagsError>>;
                 
 
                 #[doc="<p>Describes the termination policies supported by Auto Scaling.</p>"]
-                fn describe_termination_policy_types(&self) -> Result<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>;
+                fn describe_termination_policy_types(&self) -> Box<Future<Item = DescribeTerminationPolicyTypesAnswer, Error = DescribeTerminationPolicyTypesError>>;
                 
 
                 #[doc="<p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independently from the rest of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic load balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/detach-instance-asg.html\">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn detach_instances(&self, input: &DetachInstancesQuery) -> Result<DetachInstancesAnswer, DetachInstancesError>;
+                fn detach_instances(&self, input: &DetachInstancesQuery) -> Box<Future<Item = DetachInstancesAnswer, Error = DetachInstancesError>>;
                 
 
                 #[doc="<p>Detaches one or more target groups from the specified Auto Scaling group.</p>"]
-                fn detach_load_balancer_target_groups(&self, input: &DetachLoadBalancerTargetGroupsType) -> Result<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError>;
+                fn detach_load_balancer_target_groups(&self, input: &DetachLoadBalancerTargetGroupsType) -> Box<Future<Item = DetachLoadBalancerTargetGroupsResultType, Error = DetachLoadBalancerTargetGroupsError>>;
                 
 
                 #[doc="<p>Detaches one or more Classic load balancers from the specified Auto Scaling group.</p> <p>Note that this operation detaches only Classic load balancers. If you have Application load balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. Note that the instances remain running.</p>"]
-                fn detach_load_balancers(&self, input: &DetachLoadBalancersType) -> Result<DetachLoadBalancersResultType, DetachLoadBalancersError>;
+                fn detach_load_balancers(&self, input: &DetachLoadBalancersType) -> Box<Future<Item = DetachLoadBalancersResultType, Error = DetachLoadBalancersError>>;
                 
 
                 #[doc="<p>Disables group metrics for the specified Auto Scaling group.</p>"]
-                fn disable_metrics_collection(&self, input: &DisableMetricsCollectionQuery) -> Result<(), DisableMetricsCollectionError>;
+                fn disable_metrics_collection(&self, input: &DisableMetricsCollectionQuery) -> Box<Future<Item = (), Error = DisableMetricsCollectionError>>;
                 
 
                 #[doc="<p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html\">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn enable_metrics_collection(&self, input: &EnableMetricsCollectionQuery) -> Result<(), EnableMetricsCollectionError>;
+                fn enable_metrics_collection(&self, input: &EnableMetricsCollectionQuery) -> Box<Future<Item = (), Error = EnableMetricsCollectionError>>;
                 
 
                 #[doc="<p>Moves the specified instances into <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn enter_standby(&self, input: &EnterStandbyQuery) -> Result<EnterStandbyAnswer, EnterStandbyError>;
+                fn enter_standby(&self, input: &EnterStandbyQuery) -> Box<Future<Item = EnterStandbyAnswer, Error = EnterStandbyError>>;
                 
 
                 #[doc="<p>Executes the specified policy.</p>"]
-                fn execute_policy(&self, input: &ExecutePolicyType) -> Result<(), ExecutePolicyError>;
+                fn execute_policy(&self, input: &ExecutePolicyType) -> Box<Future<Item = (), Error = ExecutePolicyError>>;
                 
 
                 #[doc="<p>Moves the specified instances out of <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn exit_standby(&self, input: &ExitStandbyQuery) -> Result<ExitStandbyAnswer, ExitStandbyError>;
+                fn exit_standby(&self, input: &ExitStandbyQuery) -> Box<Future<Item = ExitStandbyAnswer, Error = ExitStandbyError>>;
                 
 
                 #[doc="<p>Creates or updates a lifecycle hook for the specified Auto Scaling Group.</p> <p>A lifecycle hook tells Auto Scaling that you want to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/lifecycle-hooks.html\">Auto Scaling Lifecycle Hooks</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
-                fn put_lifecycle_hook(&self, input: &PutLifecycleHookType) -> Result<PutLifecycleHookAnswer, PutLifecycleHookError>;
+                fn put_lifecycle_hook(&self, input: &PutLifecycleHookType) -> Box<Future<Item = PutLifecycleHookAnswer, Error = PutLifecycleHookError>>;
                 
 
                 #[doc="<p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/ASGettingNotifications.html\">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn put_notification_configuration(&self, input: &PutNotificationConfigurationType) -> Result<(), PutNotificationConfigurationError>;
+                fn put_notification_configuration(&self, input: &PutNotificationConfigurationType) -> Box<Future<Item = (), Error = PutNotificationConfigurationError>>;
                 
 
                 #[doc="<p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters you want to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
-                fn put_scaling_policy(&self, input: &PutScalingPolicyType) -> Result<PolicyARNType, PutScalingPolicyError>;
+                fn put_scaling_policy(&self, input: &PutScalingPolicyType) -> Box<Future<Item = PolicyARNType, Error = PutScalingPolicyError>>;
                 
 
                 #[doc="<p>Creates or updates a scheduled scaling action for an Auto Scaling group. When updating a scheduled scaling action, if you leave a parameter unspecified, the corresponding value remains unchanged.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/schedule_time.html\">Scheduled Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn put_scheduled_update_group_action(&self, input: &PutScheduledUpdateGroupActionType) -> Result<(), PutScheduledUpdateGroupActionError>;
+                fn put_scheduled_update_group_action(&self, input: &PutScheduledUpdateGroupActionType) -> Box<Future<Item = (), Error = PutScheduledUpdateGroupActionError>>;
                 
 
                 #[doc="<p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn record_lifecycle_action_heartbeat(&self, input: &RecordLifecycleActionHeartbeatType) -> Result<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError>;
+                fn record_lifecycle_action_heartbeat(&self, input: &RecordLifecycleActionHeartbeatType) -> Box<Future<Item = RecordLifecycleActionHeartbeatAnswer, Error = RecordLifecycleActionHeartbeatError>>;
                 
 
                 #[doc="<p>Resumes the specified suspended Auto Scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn resume_processes(&self, input: &ScalingProcessQuery) -> Result<(), ResumeProcessesError>;
+                fn resume_processes(&self, input: &ScalingProcessQuery) -> Box<Future<Item = (), Error = ResumeProcessesError>>;
                 
 
                 #[doc="<p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html\">What Is Auto Scaling?</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn set_desired_capacity(&self, input: &SetDesiredCapacityType) -> Result<(), SetDesiredCapacityError>;
+                fn set_desired_capacity(&self, input: &SetDesiredCapacityType) -> Box<Future<Item = (), Error = SetDesiredCapacityError>>;
                 
 
                 #[doc="<p>Sets the health status of the specified instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn set_instance_health(&self, input: &SetInstanceHealthQuery) -> Result<(), SetInstanceHealthError>;
+                fn set_instance_health(&self, input: &SetInstanceHealthQuery) -> Box<Future<Item = (), Error = SetInstanceHealthError>>;
                 
 
                 #[doc="<p>Updates the instance protection settings of the specified instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html#instance-protection\">Instance Protection</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn set_instance_protection(&self, input: &SetInstanceProtectionQuery) -> Result<SetInstanceProtectionAnswer, SetInstanceProtectionError>;
+                fn set_instance_protection(&self, input: &SetInstanceProtectionQuery) -> Box<Future<Item = SetInstanceProtectionAnswer, Error = SetInstanceProtectionError>>;
                 
 
                 #[doc="<p>Suspends the specified Auto Scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>Note that if you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn suspend_processes(&self, input: &ScalingProcessQuery) -> Result<(), SuspendProcessesError>;
+                fn suspend_processes(&self, input: &ScalingProcessQuery) -> Box<Future<Item = (), Error = SuspendProcessesError>>;
                 
 
                 #[doc="<p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>"]
-                fn terminate_instance_in_auto_scaling_group(&self, input: &TerminateInstanceInAutoScalingGroupType) -> Result<ActivityType, TerminateInstanceInAutoScalingGroupError>;
+                fn terminate_instance_in_auto_scaling_group(&self, input: &TerminateInstanceInAutoScalingGroupType) -> Box<Future<Item = ActivityType, Error = TerminateInstanceInAutoScalingGroupError>>;
                 
 
                 #[doc="<p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>False</code>, you must first disable the collection of group metrics. Otherwise, you will get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>The new settings are registered upon the completion of this call. Any launch configuration settings take effect on any triggers after this call returns. Scaling activities that are currently in progress aren't affected.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul>"]
-                fn update_auto_scaling_group(&self, input: &UpdateAutoScalingGroupType) -> Result<(), UpdateAutoScalingGroupError>;
+                fn update_auto_scaling_group(&self, input: &UpdateAutoScalingGroupType) -> Box<Future<Item = (), Error = UpdateAutoScalingGroupError>>;
                 
 }
 /// A client for the Auto Scaling API.
@@ -10255,7 +10265,7 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic load balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-instance-asg.html\">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn attach_instances(&self, input: &AttachInstancesQuery) -> Result<(), AttachInstancesError> {
+                fn attach_instances(&self, input: &AttachInstancesQuery) -> Box<Future<Item = (), Error = AttachInstancesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10264,22 +10274,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     AttachInstancesQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn attach_load_balancer_target_groups(&self, input: &AttachLoadBalancerTargetGroupsType) -> Result<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError> {
+                fn attach_load_balancer_target_groups(&self, input: &AttachLoadBalancerTargetGroupsType) -> Box<Future<Item = AttachLoadBalancerTargetGroupsResultType, Error = AttachLoadBalancerTargetGroupsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10288,11 +10307,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     AttachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachLoadBalancerTargetGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachLoadBalancerTargetGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10304,23 +10331,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AttachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize("AttachLoadBalancerTargetGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AttachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize("AttachLoadBalancerTargetGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches one or more Classic load balancers to the specified Auto Scaling group.</p> <p>To attach an Application load balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn attach_load_balancers(&self, input: &AttachLoadBalancersType) -> Result<AttachLoadBalancersResultType, AttachLoadBalancersError> {
+                fn attach_load_balancers(&self, input: &AttachLoadBalancersType) -> Box<Future<Item = AttachLoadBalancersResultType, Error = AttachLoadBalancersError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10329,11 +10357,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     AttachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachLoadBalancersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachLoadBalancersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10345,23 +10381,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AttachLoadBalancersResultTypeDeserializer::deserialize("AttachLoadBalancersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AttachLoadBalancersResultTypeDeserializer::deserialize("AttachLoadBalancersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AttachLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AttachLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn complete_lifecycle_action(&self, input: &CompleteLifecycleActionType) -> Result<CompleteLifecycleActionAnswer, CompleteLifecycleActionError> {
+                fn complete_lifecycle_action(&self, input: &CompleteLifecycleActionType) -> Box<Future<Item = CompleteLifecycleActionAnswer, Error = CompleteLifecycleActionError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10370,11 +10407,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     CompleteLifecycleActionTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CompleteLifecycleActionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CompleteLifecycleActionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10386,23 +10431,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CompleteLifecycleActionAnswerDeserializer::deserialize("CompleteLifecycleActionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CompleteLifecycleActionAnswerDeserializer::deserialize("CompleteLifecycleActionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CompleteLifecycleActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CompleteLifecycleActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html\">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn create_auto_scaling_group(&self, input: &CreateAutoScalingGroupType) -> Result<(), CreateAutoScalingGroupError> {
+                fn create_auto_scaling_group(&self, input: &CreateAutoScalingGroupType) -> Box<Future<Item = (), Error = CreateAutoScalingGroupError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10411,22 +10457,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     CreateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateAutoScalingGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateAutoScalingGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html\">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn create_launch_configuration(&self, input: &CreateLaunchConfigurationType) -> Result<(), CreateLaunchConfigurationError> {
+                fn create_launch_configuration(&self, input: &CreateLaunchConfigurationType) -> Box<Future<Item = (), Error = CreateLaunchConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10435,22 +10490,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     CreateLaunchConfigurationTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateLaunchConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateLaunchConfigurationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateLaunchConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateLaunchConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html\">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn create_or_update_tags(&self, input: &CreateOrUpdateTagsType) -> Result<(), CreateOrUpdateTagsError> {
+                fn create_or_update_tags(&self, input: &CreateOrUpdateTagsType) -> Box<Future<Item = (), Error = CreateOrUpdateTagsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10459,22 +10523,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     CreateOrUpdateTagsTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateOrUpdateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateOrUpdateTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateOrUpdateTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateOrUpdateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity so that Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>"]
-                fn delete_auto_scaling_group(&self, input: &DeleteAutoScalingGroupType) -> Result<(), DeleteAutoScalingGroupError> {
+                fn delete_auto_scaling_group(&self, input: &DeleteAutoScalingGroupType) -> Box<Future<Item = (), Error = DeleteAutoScalingGroupError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10483,22 +10556,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DeleteAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteAutoScalingGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteAutoScalingGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>"]
-                fn delete_launch_configuration(&self, input: &LaunchConfigurationNameType) -> Result<(), DeleteLaunchConfigurationError> {
+                fn delete_launch_configuration(&self, input: &LaunchConfigurationNameType) -> Box<Future<Item = (), Error = DeleteLaunchConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10507,22 +10589,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     LaunchConfigurationNameTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteLaunchConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteLaunchConfigurationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteLaunchConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteLaunchConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>"]
-                fn delete_lifecycle_hook(&self, input: &DeleteLifecycleHookType) -> Result<DeleteLifecycleHookAnswer, DeleteLifecycleHookError> {
+                fn delete_lifecycle_hook(&self, input: &DeleteLifecycleHookType) -> Box<Future<Item = DeleteLifecycleHookAnswer, Error = DeleteLifecycleHookError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10531,11 +10622,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DeleteLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteLifecycleHookError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteLifecycleHookError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10547,23 +10646,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteLifecycleHookAnswerDeserializer::deserialize("DeleteLifecycleHookResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteLifecycleHookAnswerDeserializer::deserialize("DeleteLifecycleHookResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteLifecycleHookError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteLifecycleHookError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified notification.</p>"]
-                fn delete_notification_configuration(&self, input: &DeleteNotificationConfigurationType) -> Result<(), DeleteNotificationConfigurationError> {
+                fn delete_notification_configuration(&self, input: &DeleteNotificationConfigurationType) -> Box<Future<Item = (), Error = DeleteNotificationConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10572,22 +10672,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DeleteNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteNotificationConfigurationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteNotificationConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>"]
-                fn delete_policy(&self, input: &DeletePolicyType) -> Result<(), DeletePolicyError> {
+                fn delete_policy(&self, input: &DeletePolicyType) -> Box<Future<Item = (), Error = DeletePolicyError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10596,22 +10705,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DeletePolicyTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified scheduled action.</p>"]
-                fn delete_scheduled_action(&self, input: &DeleteScheduledActionType) -> Result<(), DeleteScheduledActionError> {
+                fn delete_scheduled_action(&self, input: &DeleteScheduledActionType) -> Box<Future<Item = (), Error = DeleteScheduledActionError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10620,22 +10738,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DeleteScheduledActionTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteScheduledActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteScheduledActionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteScheduledActionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteScheduledActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified tags.</p>"]
-                fn delete_tags(&self, input: &DeleteTagsType) -> Result<(), DeleteTagsError> {
+                fn delete_tags(&self, input: &DeleteTagsType) -> Box<Future<Item = (), Error = DeleteTagsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10644,22 +10771,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DeleteTagsTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
-                fn describe_account_limits(&self) -> Result<DescribeAccountLimitsAnswer, DescribeAccountLimitsError> {
+                fn describe_account_limits(&self) -> Box<Future<Item = DescribeAccountLimitsAnswer, Error = DescribeAccountLimitsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10668,11 +10804,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAccountLimitsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAccountLimitsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10684,23 +10828,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeAccountLimitsAnswerDeserializer::deserialize("DescribeAccountLimitsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeAccountLimitsAnswerDeserializer::deserialize("DescribeAccountLimitsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>"]
-                fn describe_adjustment_types(&self) -> Result<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError> {
+                fn describe_adjustment_types(&self) -> Box<Future<Item = DescribeAdjustmentTypesAnswer, Error = DescribeAdjustmentTypesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10709,11 +10854,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAdjustmentTypesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAdjustmentTypesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10725,23 +10878,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeAdjustmentTypesAnswerDeserializer::deserialize("DescribeAdjustmentTypesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeAdjustmentTypesAnswerDeserializer::deserialize("DescribeAdjustmentTypesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAdjustmentTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAdjustmentTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more Auto Scaling groups.</p>"]
-                fn describe_auto_scaling_groups(&self, input: &AutoScalingGroupNamesType) -> Result<AutoScalingGroupsType, DescribeAutoScalingGroupsError> {
+                fn describe_auto_scaling_groups(&self, input: &AutoScalingGroupNamesType) -> Box<Future<Item = AutoScalingGroupsType, Error = DescribeAutoScalingGroupsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10750,11 +10904,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     AutoScalingGroupNamesTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAutoScalingGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAutoScalingGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10766,23 +10928,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AutoScalingGroupsTypeDeserializer::deserialize("DescribeAutoScalingGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AutoScalingGroupsTypeDeserializer::deserialize("DescribeAutoScalingGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAutoScalingGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAutoScalingGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more Auto Scaling instances.</p>"]
-                fn describe_auto_scaling_instances(&self, input: &DescribeAutoScalingInstancesType) -> Result<AutoScalingInstancesType, DescribeAutoScalingInstancesError> {
+                fn describe_auto_scaling_instances(&self, input: &DescribeAutoScalingInstancesType) -> Box<Future<Item = AutoScalingInstancesType, Error = DescribeAutoScalingInstancesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10791,11 +10954,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DescribeAutoScalingInstancesTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAutoScalingInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAutoScalingInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10807,23 +10978,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AutoScalingInstancesTypeDeserializer::deserialize("DescribeAutoScalingInstancesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AutoScalingInstancesTypeDeserializer::deserialize("DescribeAutoScalingInstancesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAutoScalingInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAutoScalingInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the notification types that are supported by Auto Scaling.</p>"]
-                fn describe_auto_scaling_notification_types(&self) -> Result<DescribeAutoScalingNotificationTypesAnswer, DescribeAutoScalingNotificationTypesError> {
+                fn describe_auto_scaling_notification_types(&self) -> Box<Future<Item = DescribeAutoScalingNotificationTypesAnswer, Error = DescribeAutoScalingNotificationTypesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10832,11 +11004,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAutoScalingNotificationTypesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAutoScalingNotificationTypesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10848,23 +11028,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize("DescribeAutoScalingNotificationTypesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize("DescribeAutoScalingNotificationTypesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAutoScalingNotificationTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAutoScalingNotificationTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more launch configurations.</p>"]
-                fn describe_launch_configurations(&self, input: &LaunchConfigurationNamesType) -> Result<LaunchConfigurationsType, DescribeLaunchConfigurationsError> {
+                fn describe_launch_configurations(&self, input: &LaunchConfigurationNamesType) -> Box<Future<Item = LaunchConfigurationsType, Error = DescribeLaunchConfigurationsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10873,11 +11054,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     LaunchConfigurationNamesTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLaunchConfigurationsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLaunchConfigurationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10889,23 +11078,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(LaunchConfigurationsTypeDeserializer::deserialize("DescribeLaunchConfigurationsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(LaunchConfigurationsTypeDeserializer::deserialize("DescribeLaunchConfigurationsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeLaunchConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeLaunchConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the available types of lifecycle hooks.</p>"]
-                fn describe_lifecycle_hook_types(&self) -> Result<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError> {
+                fn describe_lifecycle_hook_types(&self) -> Box<Future<Item = DescribeLifecycleHookTypesAnswer, Error = DescribeLifecycleHookTypesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10914,11 +11104,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLifecycleHookTypesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLifecycleHookTypesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10930,23 +11128,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeLifecycleHookTypesAnswerDeserializer::deserialize("DescribeLifecycleHookTypesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeLifecycleHookTypesAnswerDeserializer::deserialize("DescribeLifecycleHookTypesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeLifecycleHookTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeLifecycleHookTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>"]
-                fn describe_lifecycle_hooks(&self, input: &DescribeLifecycleHooksType) -> Result<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError> {
+                fn describe_lifecycle_hooks(&self, input: &DescribeLifecycleHooksType) -> Box<Future<Item = DescribeLifecycleHooksAnswer, Error = DescribeLifecycleHooksError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10955,11 +11154,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DescribeLifecycleHooksTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLifecycleHooksError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLifecycleHooksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10971,23 +11178,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeLifecycleHooksAnswerDeserializer::deserialize("DescribeLifecycleHooksResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeLifecycleHooksAnswerDeserializer::deserialize("DescribeLifecycleHooksResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeLifecycleHooksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeLifecycleHooksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the target groups for the specified Auto Scaling group.</p>"]
-                fn describe_load_balancer_target_groups(&self, input: &DescribeLoadBalancerTargetGroupsRequest) -> Result<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError> {
+                fn describe_load_balancer_target_groups(&self, input: &DescribeLoadBalancerTargetGroupsRequest) -> Box<Future<Item = DescribeLoadBalancerTargetGroupsResponse, Error = DescribeLoadBalancerTargetGroupsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -10996,11 +11204,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DescribeLoadBalancerTargetGroupsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLoadBalancerTargetGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLoadBalancerTargetGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11012,23 +11228,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize("DescribeLoadBalancerTargetGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize("DescribeLoadBalancerTargetGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the load balancers for the specified Auto Scaling group.</p> <p>Note that this operation describes only Classic load balancers. If you have Application load balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>"]
-                fn describe_load_balancers(&self, input: &DescribeLoadBalancersRequest) -> Result<DescribeLoadBalancersResponse, DescribeLoadBalancersError> {
+                fn describe_load_balancers(&self, input: &DescribeLoadBalancersRequest) -> Box<Future<Item = DescribeLoadBalancersResponse, Error = DescribeLoadBalancersError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11037,11 +11254,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DescribeLoadBalancersRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLoadBalancersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLoadBalancersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11053,23 +11278,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeLoadBalancersResponseDeserializer::deserialize("DescribeLoadBalancersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeLoadBalancersResponseDeserializer::deserialize("DescribeLoadBalancersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the available CloudWatch metrics for Auto Scaling.</p> <p>Note that the <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>"]
-                fn describe_metric_collection_types(&self) -> Result<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError> {
+                fn describe_metric_collection_types(&self) -> Box<Future<Item = DescribeMetricCollectionTypesAnswer, Error = DescribeMetricCollectionTypesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11078,11 +11304,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMetricCollectionTypesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMetricCollectionTypesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11094,23 +11328,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeMetricCollectionTypesAnswerDeserializer::deserialize("DescribeMetricCollectionTypesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeMetricCollectionTypesAnswerDeserializer::deserialize("DescribeMetricCollectionTypesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeMetricCollectionTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeMetricCollectionTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the notification actions associated with the specified Auto Scaling group.</p>"]
-                fn describe_notification_configurations(&self, input: &DescribeNotificationConfigurationsType) -> Result<DescribeNotificationConfigurationsAnswer, DescribeNotificationConfigurationsError> {
+                fn describe_notification_configurations(&self, input: &DescribeNotificationConfigurationsType) -> Box<Future<Item = DescribeNotificationConfigurationsAnswer, Error = DescribeNotificationConfigurationsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11119,11 +11354,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DescribeNotificationConfigurationsTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeNotificationConfigurationsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeNotificationConfigurationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11135,23 +11378,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeNotificationConfigurationsAnswerDeserializer::deserialize("DescribeNotificationConfigurationsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeNotificationConfigurationsAnswerDeserializer::deserialize("DescribeNotificationConfigurationsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeNotificationConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeNotificationConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the policies for the specified Auto Scaling group.</p>"]
-                fn describe_policies(&self, input: &DescribePoliciesType) -> Result<PoliciesType, DescribePoliciesError> {
+                fn describe_policies(&self, input: &DescribePoliciesType) -> Box<Future<Item = PoliciesType, Error = DescribePoliciesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11160,11 +11404,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DescribePoliciesTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribePoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribePoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11176,23 +11428,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PoliciesTypeDeserializer::deserialize("DescribePoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PoliciesTypeDeserializer::deserialize("DescribePoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribePoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribePoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes one or more scaling activities for the specified Auto Scaling group.</p>"]
-                fn describe_scaling_activities(&self, input: &DescribeScalingActivitiesType) -> Result<ActivitiesType, DescribeScalingActivitiesError> {
+                fn describe_scaling_activities(&self, input: &DescribeScalingActivitiesType) -> Box<Future<Item = ActivitiesType, Error = DescribeScalingActivitiesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11201,11 +11454,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DescribeScalingActivitiesTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeScalingActivitiesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeScalingActivitiesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11217,23 +11478,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ActivitiesTypeDeserializer::deserialize("DescribeScalingActivitiesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ActivitiesTypeDeserializer::deserialize("DescribeScalingActivitiesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeScalingActivitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeScalingActivitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>"]
-                fn describe_scaling_process_types(&self) -> Result<ProcessesType, DescribeScalingProcessTypesError> {
+                fn describe_scaling_process_types(&self) -> Box<Future<Item = ProcessesType, Error = DescribeScalingProcessTypesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11242,11 +11504,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeScalingProcessTypesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeScalingProcessTypesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11258,23 +11528,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ProcessesTypeDeserializer::deserialize("DescribeScalingProcessTypesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ProcessesTypeDeserializer::deserialize("DescribeScalingProcessTypesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeScalingProcessTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeScalingProcessTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>"]
-                fn describe_scheduled_actions(&self, input: &DescribeScheduledActionsType) -> Result<ScheduledActionsType, DescribeScheduledActionsError> {
+                fn describe_scheduled_actions(&self, input: &DescribeScheduledActionsType) -> Box<Future<Item = ScheduledActionsType, Error = DescribeScheduledActionsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11283,11 +11554,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DescribeScheduledActionsTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeScheduledActionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeScheduledActionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11299,23 +11578,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ScheduledActionsTypeDeserializer::deserialize("DescribeScheduledActionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ScheduledActionsTypeDeserializer::deserialize("DescribeScheduledActionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeScheduledActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeScheduledActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsType) -> Result<TagsType, DescribeTagsError> {
+                fn describe_tags(&self, input: &DescribeTagsType) -> Box<Future<Item = TagsType, Error = DescribeTagsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11324,11 +11604,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DescribeTagsTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11340,23 +11628,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(TagsTypeDeserializer::deserialize("DescribeTagsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(TagsTypeDeserializer::deserialize("DescribeTagsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes the termination policies supported by Auto Scaling.</p>"]
-                fn describe_termination_policy_types(&self) -> Result<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError> {
+                fn describe_termination_policy_types(&self) -> Box<Future<Item = DescribeTerminationPolicyTypesAnswer, Error = DescribeTerminationPolicyTypesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11365,11 +11654,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTerminationPolicyTypesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTerminationPolicyTypesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11381,23 +11678,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeTerminationPolicyTypesAnswerDeserializer::deserialize("DescribeTerminationPolicyTypesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeTerminationPolicyTypesAnswerDeserializer::deserialize("DescribeTerminationPolicyTypesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeTerminationPolicyTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeTerminationPolicyTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independently from the rest of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic load balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/detach-instance-asg.html\">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn detach_instances(&self, input: &DetachInstancesQuery) -> Result<DetachInstancesAnswer, DetachInstancesError> {
+                fn detach_instances(&self, input: &DetachInstancesQuery) -> Box<Future<Item = DetachInstancesAnswer, Error = DetachInstancesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11406,11 +11704,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DetachInstancesQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachInstancesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachInstancesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11422,23 +11728,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DetachInstancesAnswerDeserializer::deserialize("DetachInstancesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DetachInstancesAnswerDeserializer::deserialize("DetachInstancesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Detaches one or more target groups from the specified Auto Scaling group.</p>"]
-                fn detach_load_balancer_target_groups(&self, input: &DetachLoadBalancerTargetGroupsType) -> Result<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError> {
+                fn detach_load_balancer_target_groups(&self, input: &DetachLoadBalancerTargetGroupsType) -> Box<Future<Item = DetachLoadBalancerTargetGroupsResultType, Error = DetachLoadBalancerTargetGroupsError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11447,11 +11754,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DetachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachLoadBalancerTargetGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachLoadBalancerTargetGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11463,23 +11778,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DetachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize("DetachLoadBalancerTargetGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DetachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize("DetachLoadBalancerTargetGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Detaches one or more Classic load balancers from the specified Auto Scaling group.</p> <p>Note that this operation detaches only Classic load balancers. If you have Application load balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. Note that the instances remain running.</p>"]
-                fn detach_load_balancers(&self, input: &DetachLoadBalancersType) -> Result<DetachLoadBalancersResultType, DetachLoadBalancersError> {
+                fn detach_load_balancers(&self, input: &DetachLoadBalancersType) -> Box<Future<Item = DetachLoadBalancersResultType, Error = DetachLoadBalancersError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11488,11 +11804,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DetachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachLoadBalancersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachLoadBalancersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11504,23 +11828,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DetachLoadBalancersResultTypeDeserializer::deserialize("DetachLoadBalancersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DetachLoadBalancersResultTypeDeserializer::deserialize("DetachLoadBalancersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DetachLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DetachLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables group metrics for the specified Auto Scaling group.</p>"]
-                fn disable_metrics_collection(&self, input: &DisableMetricsCollectionQuery) -> Result<(), DisableMetricsCollectionError> {
+                fn disable_metrics_collection(&self, input: &DisableMetricsCollectionQuery) -> Box<Future<Item = (), Error = DisableMetricsCollectionError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11529,22 +11854,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     DisableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisableMetricsCollectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableMetricsCollectionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableMetricsCollectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisableMetricsCollectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html\">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn enable_metrics_collection(&self, input: &EnableMetricsCollectionQuery) -> Result<(), EnableMetricsCollectionError> {
+                fn enable_metrics_collection(&self, input: &EnableMetricsCollectionQuery) -> Box<Future<Item = (), Error = EnableMetricsCollectionError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11553,22 +11887,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     EnableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnableMetricsCollectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableMetricsCollectionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableMetricsCollectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnableMetricsCollectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Moves the specified instances into <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn enter_standby(&self, input: &EnterStandbyQuery) -> Result<EnterStandbyAnswer, EnterStandbyError> {
+                fn enter_standby(&self, input: &EnterStandbyQuery) -> Box<Future<Item = EnterStandbyAnswer, Error = EnterStandbyError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11577,11 +11920,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     EnterStandbyQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnterStandbyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnterStandbyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11593,23 +11944,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EnterStandbyAnswerDeserializer::deserialize("EnterStandbyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EnterStandbyAnswerDeserializer::deserialize("EnterStandbyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnterStandbyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnterStandbyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Executes the specified policy.</p>"]
-                fn execute_policy(&self, input: &ExecutePolicyType) -> Result<(), ExecutePolicyError> {
+                fn execute_policy(&self, input: &ExecutePolicyType) -> Box<Future<Item = (), Error = ExecutePolicyError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11618,22 +11970,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     ExecutePolicyTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ExecutePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ExecutePolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ExecutePolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ExecutePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Moves the specified instances out of <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn exit_standby(&self, input: &ExitStandbyQuery) -> Result<ExitStandbyAnswer, ExitStandbyError> {
+                fn exit_standby(&self, input: &ExitStandbyQuery) -> Box<Future<Item = ExitStandbyAnswer, Error = ExitStandbyError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11642,11 +12003,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     ExitStandbyQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ExitStandbyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ExitStandbyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11658,23 +12027,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ExitStandbyAnswerDeserializer::deserialize("ExitStandbyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ExitStandbyAnswerDeserializer::deserialize("ExitStandbyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ExitStandbyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ExitStandbyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates a lifecycle hook for the specified Auto Scaling Group.</p> <p>A lifecycle hook tells Auto Scaling that you want to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/lifecycle-hooks.html\">Auto Scaling Lifecycle Hooks</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
-                fn put_lifecycle_hook(&self, input: &PutLifecycleHookType) -> Result<PutLifecycleHookAnswer, PutLifecycleHookError> {
+                fn put_lifecycle_hook(&self, input: &PutLifecycleHookType) -> Box<Future<Item = PutLifecycleHookAnswer, Error = PutLifecycleHookError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11683,11 +12053,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     PutLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutLifecycleHookError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutLifecycleHookError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11699,23 +12077,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PutLifecycleHookAnswerDeserializer::deserialize("PutLifecycleHookResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PutLifecycleHookAnswerDeserializer::deserialize("PutLifecycleHookResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutLifecycleHookError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutLifecycleHookError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/ASGettingNotifications.html\">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn put_notification_configuration(&self, input: &PutNotificationConfigurationType) -> Result<(), PutNotificationConfigurationError> {
+                fn put_notification_configuration(&self, input: &PutNotificationConfigurationType) -> Box<Future<Item = (), Error = PutNotificationConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11724,22 +12103,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     PutNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutNotificationConfigurationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutNotificationConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters you want to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
-                fn put_scaling_policy(&self, input: &PutScalingPolicyType) -> Result<PolicyARNType, PutScalingPolicyError> {
+                fn put_scaling_policy(&self, input: &PutScalingPolicyType) -> Box<Future<Item = PolicyARNType, Error = PutScalingPolicyError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11748,11 +12136,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     PutScalingPolicyTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutScalingPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutScalingPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11764,23 +12160,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PolicyARNTypeDeserializer::deserialize("PutScalingPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PolicyARNTypeDeserializer::deserialize("PutScalingPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutScalingPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates a scheduled scaling action for an Auto Scaling group. When updating a scheduled scaling action, if you leave a parameter unspecified, the corresponding value remains unchanged.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/schedule_time.html\">Scheduled Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn put_scheduled_update_group_action(&self, input: &PutScheduledUpdateGroupActionType) -> Result<(), PutScheduledUpdateGroupActionError> {
+                fn put_scheduled_update_group_action(&self, input: &PutScheduledUpdateGroupActionType) -> Box<Future<Item = (), Error = PutScheduledUpdateGroupActionError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11789,22 +12186,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     PutScheduledUpdateGroupActionTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutScheduledUpdateGroupActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutScheduledUpdateGroupActionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutScheduledUpdateGroupActionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutScheduledUpdateGroupActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn record_lifecycle_action_heartbeat(&self, input: &RecordLifecycleActionHeartbeatType) -> Result<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError> {
+                fn record_lifecycle_action_heartbeat(&self, input: &RecordLifecycleActionHeartbeatType) -> Box<Future<Item = RecordLifecycleActionHeartbeatAnswer, Error = RecordLifecycleActionHeartbeatError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11813,11 +12219,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     RecordLifecycleActionHeartbeatTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RecordLifecycleActionHeartbeatError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RecordLifecycleActionHeartbeatError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11829,23 +12243,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RecordLifecycleActionHeartbeatAnswerDeserializer::deserialize("RecordLifecycleActionHeartbeatResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RecordLifecycleActionHeartbeatAnswerDeserializer::deserialize("RecordLifecycleActionHeartbeatResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RecordLifecycleActionHeartbeatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RecordLifecycleActionHeartbeatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Resumes the specified suspended Auto Scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn resume_processes(&self, input: &ScalingProcessQuery) -> Result<(), ResumeProcessesError> {
+                fn resume_processes(&self, input: &ScalingProcessQuery) -> Box<Future<Item = (), Error = ResumeProcessesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11854,22 +12269,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResumeProcessesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResumeProcessesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResumeProcessesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResumeProcessesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html\">What Is Auto Scaling?</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn set_desired_capacity(&self, input: &SetDesiredCapacityType) -> Result<(), SetDesiredCapacityError> {
+                fn set_desired_capacity(&self, input: &SetDesiredCapacityType) -> Box<Future<Item = (), Error = SetDesiredCapacityError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11878,22 +12302,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     SetDesiredCapacityTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetDesiredCapacityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetDesiredCapacityError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetDesiredCapacityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetDesiredCapacityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the health status of the specified instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn set_instance_health(&self, input: &SetInstanceHealthQuery) -> Result<(), SetInstanceHealthError> {
+                fn set_instance_health(&self, input: &SetInstanceHealthQuery) -> Box<Future<Item = (), Error = SetInstanceHealthError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11902,22 +12335,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     SetInstanceHealthQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetInstanceHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetInstanceHealthError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetInstanceHealthError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetInstanceHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the instance protection settings of the specified instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html#instance-protection\">Instance Protection</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn set_instance_protection(&self, input: &SetInstanceProtectionQuery) -> Result<SetInstanceProtectionAnswer, SetInstanceProtectionError> {
+                fn set_instance_protection(&self, input: &SetInstanceProtectionQuery) -> Box<Future<Item = SetInstanceProtectionAnswer, Error = SetInstanceProtectionError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11926,11 +12368,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     SetInstanceProtectionQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetInstanceProtectionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetInstanceProtectionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11942,23 +12392,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetInstanceProtectionAnswerDeserializer::deserialize("SetInstanceProtectionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetInstanceProtectionAnswerDeserializer::deserialize("SetInstanceProtectionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetInstanceProtectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetInstanceProtectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Suspends the specified Auto Scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>Note that if you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-                fn suspend_processes(&self, input: &ScalingProcessQuery) -> Result<(), SuspendProcessesError> {
+                fn suspend_processes(&self, input: &ScalingProcessQuery) -> Box<Future<Item = (), Error = SuspendProcessesError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11967,22 +12418,31 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SuspendProcessesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SuspendProcessesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SuspendProcessesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SuspendProcessesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>"]
-                fn terminate_instance_in_auto_scaling_group(&self, input: &TerminateInstanceInAutoScalingGroupType) -> Result<ActivityType, TerminateInstanceInAutoScalingGroupError> {
+                fn terminate_instance_in_auto_scaling_group(&self, input: &TerminateInstanceInAutoScalingGroupType) -> Box<Future<Item = ActivityType, Error = TerminateInstanceInAutoScalingGroupError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -11991,11 +12451,19 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     TerminateInstanceInAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TerminateInstanceInAutoScalingGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TerminateInstanceInAutoScalingGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -12007,23 +12475,24 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ActivityTypeDeserializer::deserialize("TerminateInstanceInAutoScalingGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ActivityTypeDeserializer::deserialize("TerminateInstanceInAutoScalingGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(TerminateInstanceInAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(TerminateInstanceInAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>False</code>, you must first disable the collection of group metrics. Otherwise, you will get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>The new settings are registered upon the completion of this call. Any launch configuration settings take effect on any triggers after this call returns. Scaling activities that are currently in progress aren't affected.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul>"]
-                fn update_auto_scaling_group(&self, input: &UpdateAutoScalingGroupType) -> Result<(), UpdateAutoScalingGroupError> {
+                fn update_auto_scaling_group(&self, input: &UpdateAutoScalingGroupType) -> Box<Future<Item = (), Error = UpdateAutoScalingGroupError>> {
                     let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
                     let mut params = Params::new();
 
@@ -12032,17 +12501,26 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                     UpdateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateAutoScalingGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateAutoScalingGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -12068,28 +12546,6 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
         }
             
         #[test]
-        fn test_parse_valid_autoscaling_describe_adjustment_types() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-adjustment-types.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            
-            let result = client.describe_adjustment_types();
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_autoscaling_describe_auto_scaling_groups() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-auto-scaling-groups.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = AutoScalingGroupNamesType::default();
-            let result = client.describe_auto_scaling_groups(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
         fn test_parse_valid_autoscaling_describe_auto_scaling_instances() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-auto-scaling-instances.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
@@ -12101,23 +12557,23 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_autoscaling_describe_auto_scaling_notification_types() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-auto-scaling-notification-types.xml");
+        fn test_parse_valid_autoscaling_describe_scheduled_actions() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-scheduled-actions.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            
-            let result = client.describe_auto_scaling_notification_types();
+            let request = DescribeScheduledActionsType::default();
+            let result = client.describe_scheduled_actions(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_autoscaling_describe_launch_configurations() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-launch-configurations.xml");
+        fn test_parse_valid_autoscaling_describe_adjustment_types() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-adjustment-types.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = LaunchConfigurationNamesType::default();
-            let result = client.describe_launch_configurations(&request);
+            
+            let result = client.describe_adjustment_types();
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -12145,12 +12601,12 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_autoscaling_describe_policies() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-policies.xml");
+        fn test_parse_valid_autoscaling_describe_auto_scaling_notification_types() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-auto-scaling-notification-types.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribePoliciesType::default();
-            let result = client.describe_policies(&request);
+            
+            let result = client.describe_auto_scaling_notification_types();
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -12167,23 +12623,23 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_autoscaling_describe_scaling_process_types() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-scaling-process-types.xml");
+        fn test_parse_valid_autoscaling_describe_launch_configurations() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-launch-configurations.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            
-            let result = client.describe_scaling_process_types();
+            let request = LaunchConfigurationNamesType::default();
+            let result = client.describe_launch_configurations(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_autoscaling_describe_scheduled_actions() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-scheduled-actions.xml");
+        fn test_parse_valid_autoscaling_describe_termination_policy_types() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-termination-policy-types.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeScheduledActionsType::default();
-            let result = client.describe_scheduled_actions(&request);
+            
+            let result = client.describe_termination_policy_types();
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -12200,12 +12656,34 @@ UpdateAutoScalingGroupError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_autoscaling_describe_termination_policy_types() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-termination-policy-types.xml");
+        fn test_parse_valid_autoscaling_describe_scaling_process_types() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-scaling-process-types.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             
-            let result = client.describe_termination_policy_types();
+            let result = client.describe_scaling_process_types();
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_autoscaling_describe_auto_scaling_groups() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-auto-scaling-groups.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = AutoScalingGroupNamesType::default();
+            let result = client.describe_auto_scaling_groups(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_autoscaling_describe_policies() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "autoscaling-describe-policies.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribePoliciesType::default();
+            let result = client.describe_policies(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

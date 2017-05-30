@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -9315,155 +9325,155 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds up to 10 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html\">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceMessage) -> Result<TagListMessage, AddTagsToResourceError>;
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceMessage) -> Box<Future<Item = TagListMessage, Error = AddTagsToResourceError>>;
                 
 
                 #[doc="<p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note>"]
-                fn authorize_cache_security_group_ingress(&self, input: &AuthorizeCacheSecurityGroupIngressMessage) -> Result<AuthorizeCacheSecurityGroupIngressResult, AuthorizeCacheSecurityGroupIngressError>;
+                fn authorize_cache_security_group_ingress(&self, input: &AuthorizeCacheSecurityGroupIngressMessage) -> Box<Future<Item = AuthorizeCacheSecurityGroupIngressResult, Error = AuthorizeCacheSecurityGroupIngressError>>;
                 
 
                 #[doc="<p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html\">Exporting Snapshots</a> and <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/IAM.html\">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class=\"title\"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul>"]
-                fn copy_snapshot(&self, input: &CopySnapshotMessage) -> Result<CopySnapshotResult, CopySnapshotError>;
+                fn copy_snapshot(&self, input: &CopySnapshotMessage) -> Box<Future<Item = CopySnapshotResult, Error = CopySnapshotError>>;
                 
 
                 #[doc="<p>Creates a cache cluster. All nodes in the cache cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important>"]
-                fn create_cache_cluster(&self, input: &CreateCacheClusterMessage) -> Result<CreateCacheClusterResult, CreateCacheClusterError>;
+                fn create_cache_cluster(&self, input: &CreateCacheClusterMessage) -> Box<Future<Item = CreateCacheClusterResult, Error = CreateCacheClusterError>>;
                 
 
                 #[doc="<p>Creates a new cache parameter group. A cache parameter group is a collection of parameters that you apply to all of the nodes in a cache cluster.</p>"]
-                fn create_cache_parameter_group(&self, input: &CreateCacheParameterGroupMessage) -> Result<CreateCacheParameterGroupResult, CreateCacheParameterGroupError>;
+                fn create_cache_parameter_group(&self, input: &CreateCacheParameterGroupMessage) -> Box<Future<Item = CreateCacheParameterGroupResult, Error = CreateCacheParameterGroupError>>;
                 
 
                 #[doc="<p>Creates a new cache security group. Use a cache security group to control access to one or more cache clusters.</p> <p>Cache security groups are only used when you are creating a cache cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cache cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html\">CreateCacheSubnetGroup</a>.</p>"]
-                fn create_cache_security_group(&self, input: &CreateCacheSecurityGroupMessage) -> Result<CreateCacheSecurityGroupResult, CreateCacheSecurityGroupError>;
+                fn create_cache_security_group(&self, input: &CreateCacheSecurityGroupMessage) -> Box<Future<Item = CreateCacheSecurityGroupResult, Error = CreateCacheSecurityGroupError>>;
                 
 
                 #[doc="<p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
-                fn create_cache_subnet_group(&self, input: &CreateCacheSubnetGroupMessage) -> Result<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError>;
+                fn create_cache_subnet_group(&self, input: &CreateCacheSubnetGroupMessage) -> Box<Future<Item = CreateCacheSubnetGroupResult, Error = CreateCacheSubnetGroupError>>;
                 
 
                 #[doc="<p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn create_replication_group(&self, input: &CreateReplicationGroupMessage) -> Result<CreateReplicationGroupResult, CreateReplicationGroupError>;
+                fn create_replication_group(&self, input: &CreateReplicationGroupMessage) -> Box<Future<Item = CreateReplicationGroupResult, Error = CreateReplicationGroupError>>;
                 
 
                 #[doc="<p>Creates a copy of an entire cache cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn create_snapshot(&self, input: &CreateSnapshotMessage) -> Result<CreateSnapshotResult, CreateSnapshotError>;
+                fn create_snapshot(&self, input: &CreateSnapshotMessage) -> Box<Future<Item = CreateSnapshotResult, Error = CreateSnapshotError>>;
                 
 
                 #[doc="<p>Deletes a previously provisioned cache cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cache cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cache cluster; you cannot cancel or revert this operation.</p> <p>This operation cannot be used to delete a cache cluster that is the last read replica of a replication group or node group (shard) that has Multi-AZ mode enabled or a cache cluster from a Redis (cluster mode enabled) replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important>"]
-                fn delete_cache_cluster(&self, input: &DeleteCacheClusterMessage) -> Result<DeleteCacheClusterResult, DeleteCacheClusterError>;
+                fn delete_cache_cluster(&self, input: &DeleteCacheClusterMessage) -> Box<Future<Item = DeleteCacheClusterResult, Error = DeleteCacheClusterError>>;
                 
 
                 #[doc="<p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>"]
-                fn delete_cache_parameter_group(&self, input: &DeleteCacheParameterGroupMessage) -> Result<(), DeleteCacheParameterGroupError>;
+                fn delete_cache_parameter_group(&self, input: &DeleteCacheParameterGroupMessage) -> Box<Future<Item = (), Error = DeleteCacheParameterGroupError>>;
                 
 
                 #[doc="<p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any cache clusters.</p> </note>"]
-                fn delete_cache_security_group(&self, input: &DeleteCacheSecurityGroupMessage) -> Result<(), DeleteCacheSecurityGroupError>;
+                fn delete_cache_security_group(&self, input: &DeleteCacheSecurityGroupMessage) -> Box<Future<Item = (), Error = DeleteCacheSecurityGroupError>>;
                 
 
                 #[doc="<p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any cache clusters.</p> </note>"]
-                fn delete_cache_subnet_group(&self, input: &DeleteCacheSubnetGroupMessage) -> Result<(), DeleteCacheSubnetGroupError>;
+                fn delete_cache_subnet_group(&self, input: &DeleteCacheSubnetGroupMessage) -> Box<Future<Item = (), Error = DeleteCacheSubnetGroupError>>;
                 
 
                 #[doc="<p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn delete_replication_group(&self, input: &DeleteReplicationGroupMessage) -> Result<DeleteReplicationGroupResult, DeleteReplicationGroupError>;
+                fn delete_replication_group(&self, input: &DeleteReplicationGroupMessage) -> Box<Future<Item = DeleteReplicationGroupResult, Error = DeleteReplicationGroupError>>;
                 
 
                 #[doc="<p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn delete_snapshot(&self, input: &DeleteSnapshotMessage) -> Result<DeleteSnapshotResult, DeleteSnapshotError>;
+                fn delete_snapshot(&self, input: &DeleteSnapshotMessage) -> Box<Future<Item = DeleteSnapshotResult, Error = DeleteSnapshotError>>;
                 
 
                 #[doc="<p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters are returned. You can use the optional <code>ShowDetails</code> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the CREATING state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <code>available</code>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>"]
-                fn describe_cache_clusters(&self, input: &DescribeCacheClustersMessage) -> Result<CacheClusterMessage, DescribeCacheClustersError>;
+                fn describe_cache_clusters(&self, input: &DescribeCacheClustersMessage) -> Box<Future<Item = CacheClusterMessage, Error = DescribeCacheClustersError>>;
                 
 
                 #[doc="<p>Returns a list of the available cache engines and their versions.</p>"]
-                fn describe_cache_engine_versions(&self, input: &DescribeCacheEngineVersionsMessage) -> Result<CacheEngineVersionMessage, DescribeCacheEngineVersionsError>;
+                fn describe_cache_engine_versions(&self, input: &DescribeCacheEngineVersionsMessage) -> Box<Future<Item = CacheEngineVersionMessage, Error = DescribeCacheEngineVersionsError>>;
                 
 
                 #[doc="<p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>"]
-                fn describe_cache_parameter_groups(&self, input: &DescribeCacheParameterGroupsMessage) -> Result<CacheParameterGroupsMessage, DescribeCacheParameterGroupsError>;
+                fn describe_cache_parameter_groups(&self, input: &DescribeCacheParameterGroupsMessage) -> Box<Future<Item = CacheParameterGroupsMessage, Error = DescribeCacheParameterGroupsError>>;
                 
 
                 #[doc="<p>Returns the detailed parameter list for a particular cache parameter group.</p>"]
-                fn describe_cache_parameters(&self, input: &DescribeCacheParametersMessage) -> Result<CacheParameterGroupDetails, DescribeCacheParametersError>;
+                fn describe_cache_parameters(&self, input: &DescribeCacheParametersMessage) -> Box<Future<Item = CacheParameterGroupDetails, Error = DescribeCacheParametersError>>;
                 
 
                 #[doc="<p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group.</p>"]
-                fn describe_cache_security_groups(&self, input: &DescribeCacheSecurityGroupsMessage) -> Result<CacheSecurityGroupMessage, DescribeCacheSecurityGroupsError>;
+                fn describe_cache_security_groups(&self, input: &DescribeCacheSecurityGroupsMessage) -> Box<Future<Item = CacheSecurityGroupMessage, Error = DescribeCacheSecurityGroupsError>>;
                 
 
                 #[doc="<p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group.</p>"]
-                fn describe_cache_subnet_groups(&self, input: &DescribeCacheSubnetGroupsMessage) -> Result<CacheSubnetGroupMessage, DescribeCacheSubnetGroupsError>;
+                fn describe_cache_subnet_groups(&self, input: &DescribeCacheSubnetGroupsMessage) -> Box<Future<Item = CacheSubnetGroupMessage, Error = DescribeCacheSubnetGroupsError>>;
                 
 
                 #[doc="<p>Returns the default engine and system parameter information for the specified cache engine.</p>"]
-                fn describe_engine_default_parameters(&self, input: &DescribeEngineDefaultParametersMessage) -> Result<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>;
+                fn describe_engine_default_parameters(&self, input: &DescribeEngineDefaultParametersMessage) -> Box<Future<Item = DescribeEngineDefaultParametersResult, Error = DescribeEngineDefaultParametersError>>;
                 
 
                 #[doc="<p>Returns events related to cache clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cache cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>"]
-                fn describe_events(&self, input: &DescribeEventsMessage) -> Result<EventsMessage, DescribeEventsError>;
+                fn describe_events(&self, input: &DescribeEventsMessage) -> Box<Future<Item = EventsMessage, Error = DescribeEventsError>>;
                 
 
                 #[doc="<p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn describe_replication_groups(&self, input: &DescribeReplicationGroupsMessage) -> Result<ReplicationGroupMessage, DescribeReplicationGroupsError>;
+                fn describe_replication_groups(&self, input: &DescribeReplicationGroupsMessage) -> Box<Future<Item = ReplicationGroupMessage, Error = DescribeReplicationGroupsError>>;
                 
 
                 #[doc="<p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>"]
-                fn describe_reserved_cache_nodes(&self, input: &DescribeReservedCacheNodesMessage) -> Result<ReservedCacheNodeMessage, DescribeReservedCacheNodesError>;
+                fn describe_reserved_cache_nodes(&self, input: &DescribeReservedCacheNodesMessage) -> Box<Future<Item = ReservedCacheNodeMessage, Error = DescribeReservedCacheNodesError>>;
                 
 
                 #[doc="<p>Lists available reserved cache node offerings.</p>"]
-                fn describe_reserved_cache_nodes_offerings(&self, input: &DescribeReservedCacheNodesOfferingsMessage) -> Result<ReservedCacheNodesOfferingMessage, DescribeReservedCacheNodesOfferingsError>;
+                fn describe_reserved_cache_nodes_offerings(&self, input: &DescribeReservedCacheNodesOfferingsMessage) -> Box<Future<Item = ReservedCacheNodesOfferingMessage, Error = DescribeReservedCacheNodesOfferingsError>>;
                 
 
                 #[doc="<p>Returns information about cache cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn describe_snapshots(&self, input: &DescribeSnapshotsMessage) -> Result<DescribeSnapshotsListMessage, DescribeSnapshotsError>;
+                fn describe_snapshots(&self, input: &DescribeSnapshotsMessage) -> Box<Future<Item = DescribeSnapshotsListMessage, Error = DescribeSnapshotsError>>;
                 
 
                 #[doc="<p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>"]
-                fn list_allowed_node_type_modifications(&self, input: &ListAllowedNodeTypeModificationsMessage) -> Result<AllowedNodeTypeModificationsMessage, ListAllowedNodeTypeModificationsError>;
+                fn list_allowed_node_type_modifications(&self, input: &ListAllowedNodeTypeModificationsMessage) -> Box<Future<Item = AllowedNodeTypeModificationsMessage, Error = ListAllowedNodeTypeModificationsError>>;
                 
 
                 #[doc="<p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 10 cost allocation tags on an ElastiCache resource. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html\">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceMessage) -> Result<TagListMessage, ListTagsForResourceError>;
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceMessage) -> Box<Future<Item = TagListMessage, Error = ListTagsForResourceError>>;
                 
 
                 #[doc="<p>Modifies the settings for a cache cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>"]
-                fn modify_cache_cluster(&self, input: &ModifyCacheClusterMessage) -> Result<ModifyCacheClusterResult, ModifyCacheClusterError>;
+                fn modify_cache_cluster(&self, input: &ModifyCacheClusterMessage) -> Box<Future<Item = ModifyCacheClusterResult, Error = ModifyCacheClusterError>>;
                 
 
                 #[doc="<p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>"]
-                fn modify_cache_parameter_group(&self, input: &ModifyCacheParameterGroupMessage) -> Result<CacheParameterGroupNameMessage, ModifyCacheParameterGroupError>;
+                fn modify_cache_parameter_group(&self, input: &ModifyCacheParameterGroupMessage) -> Box<Future<Item = CacheParameterGroupNameMessage, Error = ModifyCacheParameterGroupError>>;
                 
 
                 #[doc="<p>Modifies an existing cache subnet group.</p>"]
-                fn modify_cache_subnet_group(&self, input: &ModifyCacheSubnetGroupMessage) -> Result<ModifyCacheSubnetGroupResult, ModifyCacheSubnetGroupError>;
+                fn modify_cache_subnet_group(&self, input: &ModifyCacheSubnetGroupMessage) -> Box<Future<Item = ModifyCacheSubnetGroupResult, Error = ModifyCacheSubnetGroupError>>;
                 
 
                 #[doc="<p>Modifies the settings for a replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn modify_replication_group(&self, input: &ModifyReplicationGroupMessage) -> Result<ModifyReplicationGroupResult, ModifyReplicationGroupError>;
+                fn modify_replication_group(&self, input: &ModifyReplicationGroupMessage) -> Box<Future<Item = ModifyReplicationGroupResult, Error = ModifyReplicationGroupError>>;
                 
 
                 #[doc="<p>Allows you to purchase a reserved cache node offering.</p>"]
-                fn purchase_reserved_cache_nodes_offering(&self, input: &PurchaseReservedCacheNodesOfferingMessage) -> Result<PurchaseReservedCacheNodesOfferingResult, PurchaseReservedCacheNodesOfferingError>;
+                fn purchase_reserved_cache_nodes_offering(&self, input: &PurchaseReservedCacheNodesOfferingMessage) -> Box<Future<Item = PurchaseReservedCacheNodesOfferingResult, Error = PurchaseReservedCacheNodesOfferingError>>;
                 
 
                 #[doc="<p>Reboots some, or all, of the cache nodes within a provisioned cache cluster. This operation applies any modified cache parameter groups to the cache cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cache cluster. During the reboot, the cache cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cache cluster event is created.</p>"]
-                fn reboot_cache_cluster(&self, input: &RebootCacheClusterMessage) -> Result<RebootCacheClusterResult, RebootCacheClusterError>;
+                fn reboot_cache_cluster(&self, input: &RebootCacheClusterMessage) -> Box<Future<Item = RebootCacheClusterResult, Error = RebootCacheClusterError>>;
                 
 
                 #[doc="<p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceMessage) -> Result<TagListMessage, RemoveTagsFromResourceError>;
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceMessage) -> Box<Future<Item = TagListMessage, Error = RemoveTagsFromResourceError>>;
                 
 
                 #[doc="<p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>"]
-                fn reset_cache_parameter_group(&self, input: &ResetCacheParameterGroupMessage) -> Result<CacheParameterGroupNameMessage, ResetCacheParameterGroupError>;
+                fn reset_cache_parameter_group(&self, input: &ResetCacheParameterGroupMessage) -> Box<Future<Item = CacheParameterGroupNameMessage, Error = ResetCacheParameterGroupError>>;
                 
 
                 #[doc="<p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>"]
-                fn revoke_cache_security_group_ingress(&self, input: &RevokeCacheSecurityGroupIngressMessage) -> Result<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError>;
+                fn revoke_cache_security_group_ingress(&self, input: &RevokeCacheSecurityGroupIngressMessage) -> Box<Future<Item = RevokeCacheSecurityGroupIngressResult, Error = RevokeCacheSecurityGroupIngressError>>;
                 
 }
 /// A client for the Amazon ElastiCache API.
@@ -9487,7 +9497,7 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds up to 10 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html\">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceMessage) -> Result<TagListMessage, AddTagsToResourceError> {
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceMessage) -> Box<Future<Item = TagListMessage, Error = AddTagsToResourceError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9496,11 +9506,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddTagsToResourceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddTagsToResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9512,23 +9530,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(TagListMessageDeserializer::deserialize("AddTagsToResourceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(TagListMessageDeserializer::deserialize("AddTagsToResourceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note>"]
-                fn authorize_cache_security_group_ingress(&self, input: &AuthorizeCacheSecurityGroupIngressMessage) -> Result<AuthorizeCacheSecurityGroupIngressResult, AuthorizeCacheSecurityGroupIngressError> {
+                fn authorize_cache_security_group_ingress(&self, input: &AuthorizeCacheSecurityGroupIngressMessage) -> Box<Future<Item = AuthorizeCacheSecurityGroupIngressResult, Error = AuthorizeCacheSecurityGroupIngressError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9537,11 +9556,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     AuthorizeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AuthorizeCacheSecurityGroupIngressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AuthorizeCacheSecurityGroupIngressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9553,23 +9580,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AuthorizeCacheSecurityGroupIngressResultDeserializer::deserialize("AuthorizeCacheSecurityGroupIngressResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AuthorizeCacheSecurityGroupIngressResultDeserializer::deserialize("AuthorizeCacheSecurityGroupIngressResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AuthorizeCacheSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AuthorizeCacheSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html\">Exporting Snapshots</a> and <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/IAM.html\">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class=\"title\"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul>"]
-                fn copy_snapshot(&self, input: &CopySnapshotMessage) -> Result<CopySnapshotResult, CopySnapshotError> {
+                fn copy_snapshot(&self, input: &CopySnapshotMessage) -> Box<Future<Item = CopySnapshotResult, Error = CopySnapshotError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9578,11 +9606,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     CopySnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopySnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopySnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9594,23 +9630,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CopySnapshotResultDeserializer::deserialize("CopySnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CopySnapshotResultDeserializer::deserialize("CopySnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CopySnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CopySnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a cache cluster. All nodes in the cache cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important>"]
-                fn create_cache_cluster(&self, input: &CreateCacheClusterMessage) -> Result<CreateCacheClusterResult, CreateCacheClusterError> {
+                fn create_cache_cluster(&self, input: &CreateCacheClusterMessage) -> Box<Future<Item = CreateCacheClusterResult, Error = CreateCacheClusterError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9619,11 +9656,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateCacheClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateCacheClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateCacheClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9635,23 +9680,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateCacheClusterResultDeserializer::deserialize("CreateCacheClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateCacheClusterResultDeserializer::deserialize("CreateCacheClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateCacheClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateCacheClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new cache parameter group. A cache parameter group is a collection of parameters that you apply to all of the nodes in a cache cluster.</p>"]
-                fn create_cache_parameter_group(&self, input: &CreateCacheParameterGroupMessage) -> Result<CreateCacheParameterGroupResult, CreateCacheParameterGroupError> {
+                fn create_cache_parameter_group(&self, input: &CreateCacheParameterGroupMessage) -> Box<Future<Item = CreateCacheParameterGroupResult, Error = CreateCacheParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9660,11 +9706,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateCacheParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateCacheParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9676,23 +9730,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateCacheParameterGroupResultDeserializer::deserialize("CreateCacheParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateCacheParameterGroupResultDeserializer::deserialize("CreateCacheParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new cache security group. Use a cache security group to control access to one or more cache clusters.</p> <p>Cache security groups are only used when you are creating a cache cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cache cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html\">CreateCacheSubnetGroup</a>.</p>"]
-                fn create_cache_security_group(&self, input: &CreateCacheSecurityGroupMessage) -> Result<CreateCacheSecurityGroupResult, CreateCacheSecurityGroupError> {
+                fn create_cache_security_group(&self, input: &CreateCacheSecurityGroupMessage) -> Box<Future<Item = CreateCacheSecurityGroupResult, Error = CreateCacheSecurityGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9701,11 +9756,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateCacheSecurityGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateCacheSecurityGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9717,23 +9780,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateCacheSecurityGroupResultDeserializer::deserialize("CreateCacheSecurityGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateCacheSecurityGroupResultDeserializer::deserialize("CreateCacheSecurityGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateCacheSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateCacheSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
-                fn create_cache_subnet_group(&self, input: &CreateCacheSubnetGroupMessage) -> Result<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError> {
+                fn create_cache_subnet_group(&self, input: &CreateCacheSubnetGroupMessage) -> Box<Future<Item = CreateCacheSubnetGroupResult, Error = CreateCacheSubnetGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9742,11 +9806,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateCacheSubnetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateCacheSubnetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9758,23 +9830,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateCacheSubnetGroupResultDeserializer::deserialize("CreateCacheSubnetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateCacheSubnetGroupResultDeserializer::deserialize("CreateCacheSubnetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateCacheSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateCacheSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn create_replication_group(&self, input: &CreateReplicationGroupMessage) -> Result<CreateReplicationGroupResult, CreateReplicationGroupError> {
+                fn create_replication_group(&self, input: &CreateReplicationGroupMessage) -> Box<Future<Item = CreateReplicationGroupResult, Error = CreateReplicationGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9783,11 +9856,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateReplicationGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateReplicationGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9799,23 +9880,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateReplicationGroupResultDeserializer::deserialize("CreateReplicationGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateReplicationGroupResultDeserializer::deserialize("CreateReplicationGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateReplicationGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateReplicationGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a copy of an entire cache cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn create_snapshot(&self, input: &CreateSnapshotMessage) -> Result<CreateSnapshotResult, CreateSnapshotError> {
+                fn create_snapshot(&self, input: &CreateSnapshotMessage) -> Box<Future<Item = CreateSnapshotResult, Error = CreateSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9824,11 +9906,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     CreateSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9840,23 +9930,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateSnapshotResultDeserializer::deserialize("CreateSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateSnapshotResultDeserializer::deserialize("CreateSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a previously provisioned cache cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cache cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cache cluster; you cannot cancel or revert this operation.</p> <p>This operation cannot be used to delete a cache cluster that is the last read replica of a replication group or node group (shard) that has Multi-AZ mode enabled or a cache cluster from a Redis (cluster mode enabled) replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important>"]
-                fn delete_cache_cluster(&self, input: &DeleteCacheClusterMessage) -> Result<DeleteCacheClusterResult, DeleteCacheClusterError> {
+                fn delete_cache_cluster(&self, input: &DeleteCacheClusterMessage) -> Box<Future<Item = DeleteCacheClusterResult, Error = DeleteCacheClusterError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9865,11 +9956,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteCacheClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteCacheClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteCacheClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9881,23 +9980,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteCacheClusterResultDeserializer::deserialize("DeleteCacheClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteCacheClusterResultDeserializer::deserialize("DeleteCacheClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteCacheClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteCacheClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>"]
-                fn delete_cache_parameter_group(&self, input: &DeleteCacheParameterGroupMessage) -> Result<(), DeleteCacheParameterGroupError> {
+                fn delete_cache_parameter_group(&self, input: &DeleteCacheParameterGroupMessage) -> Box<Future<Item = (), Error = DeleteCacheParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9906,22 +10006,31 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteCacheParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteCacheParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any cache clusters.</p> </note>"]
-                fn delete_cache_security_group(&self, input: &DeleteCacheSecurityGroupMessage) -> Result<(), DeleteCacheSecurityGroupError> {
+                fn delete_cache_security_group(&self, input: &DeleteCacheSecurityGroupMessage) -> Box<Future<Item = (), Error = DeleteCacheSecurityGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9930,22 +10039,31 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteCacheSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteCacheSecurityGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteCacheSecurityGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteCacheSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any cache clusters.</p> </note>"]
-                fn delete_cache_subnet_group(&self, input: &DeleteCacheSubnetGroupMessage) -> Result<(), DeleteCacheSubnetGroupError> {
+                fn delete_cache_subnet_group(&self, input: &DeleteCacheSubnetGroupMessage) -> Box<Future<Item = (), Error = DeleteCacheSubnetGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9954,22 +10072,31 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteCacheSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteCacheSubnetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteCacheSubnetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteCacheSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn delete_replication_group(&self, input: &DeleteReplicationGroupMessage) -> Result<DeleteReplicationGroupResult, DeleteReplicationGroupError> {
+                fn delete_replication_group(&self, input: &DeleteReplicationGroupMessage) -> Box<Future<Item = DeleteReplicationGroupResult, Error = DeleteReplicationGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -9978,11 +10105,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteReplicationGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteReplicationGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9994,23 +10129,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteReplicationGroupResultDeserializer::deserialize("DeleteReplicationGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteReplicationGroupResultDeserializer::deserialize("DeleteReplicationGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteReplicationGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteReplicationGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn delete_snapshot(&self, input: &DeleteSnapshotMessage) -> Result<DeleteSnapshotResult, DeleteSnapshotError> {
+                fn delete_snapshot(&self, input: &DeleteSnapshotMessage) -> Box<Future<Item = DeleteSnapshotResult, Error = DeleteSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10019,11 +10155,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DeleteSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10035,23 +10179,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteSnapshotResultDeserializer::deserialize("DeleteSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteSnapshotResultDeserializer::deserialize("DeleteSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters are returned. You can use the optional <code>ShowDetails</code> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the CREATING state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <code>available</code>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>"]
-                fn describe_cache_clusters(&self, input: &DescribeCacheClustersMessage) -> Result<CacheClusterMessage, DescribeCacheClustersError> {
+                fn describe_cache_clusters(&self, input: &DescribeCacheClustersMessage) -> Box<Future<Item = CacheClusterMessage, Error = DescribeCacheClustersError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10060,11 +10205,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeCacheClustersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCacheClustersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCacheClustersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10076,23 +10229,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CacheClusterMessageDeserializer::deserialize("DescribeCacheClustersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CacheClusterMessageDeserializer::deserialize("DescribeCacheClustersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeCacheClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeCacheClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the available cache engines and their versions.</p>"]
-                fn describe_cache_engine_versions(&self, input: &DescribeCacheEngineVersionsMessage) -> Result<CacheEngineVersionMessage, DescribeCacheEngineVersionsError> {
+                fn describe_cache_engine_versions(&self, input: &DescribeCacheEngineVersionsMessage) -> Box<Future<Item = CacheEngineVersionMessage, Error = DescribeCacheEngineVersionsError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10101,11 +10255,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeCacheEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCacheEngineVersionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCacheEngineVersionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10117,23 +10279,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CacheEngineVersionMessageDeserializer::deserialize("DescribeCacheEngineVersionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CacheEngineVersionMessageDeserializer::deserialize("DescribeCacheEngineVersionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeCacheEngineVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeCacheEngineVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>"]
-                fn describe_cache_parameter_groups(&self, input: &DescribeCacheParameterGroupsMessage) -> Result<CacheParameterGroupsMessage, DescribeCacheParameterGroupsError> {
+                fn describe_cache_parameter_groups(&self, input: &DescribeCacheParameterGroupsMessage) -> Box<Future<Item = CacheParameterGroupsMessage, Error = DescribeCacheParameterGroupsError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10142,11 +10305,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeCacheParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCacheParameterGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCacheParameterGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10158,23 +10329,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CacheParameterGroupsMessageDeserializer::deserialize("DescribeCacheParameterGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CacheParameterGroupsMessageDeserializer::deserialize("DescribeCacheParameterGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeCacheParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeCacheParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the detailed parameter list for a particular cache parameter group.</p>"]
-                fn describe_cache_parameters(&self, input: &DescribeCacheParametersMessage) -> Result<CacheParameterGroupDetails, DescribeCacheParametersError> {
+                fn describe_cache_parameters(&self, input: &DescribeCacheParametersMessage) -> Box<Future<Item = CacheParameterGroupDetails, Error = DescribeCacheParametersError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10183,11 +10355,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeCacheParametersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCacheParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCacheParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10199,23 +10379,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CacheParameterGroupDetailsDeserializer::deserialize("DescribeCacheParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CacheParameterGroupDetailsDeserializer::deserialize("DescribeCacheParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeCacheParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeCacheParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group.</p>"]
-                fn describe_cache_security_groups(&self, input: &DescribeCacheSecurityGroupsMessage) -> Result<CacheSecurityGroupMessage, DescribeCacheSecurityGroupsError> {
+                fn describe_cache_security_groups(&self, input: &DescribeCacheSecurityGroupsMessage) -> Box<Future<Item = CacheSecurityGroupMessage, Error = DescribeCacheSecurityGroupsError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10224,11 +10405,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeCacheSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCacheSecurityGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCacheSecurityGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10240,23 +10429,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CacheSecurityGroupMessageDeserializer::deserialize("DescribeCacheSecurityGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CacheSecurityGroupMessageDeserializer::deserialize("DescribeCacheSecurityGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeCacheSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeCacheSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group.</p>"]
-                fn describe_cache_subnet_groups(&self, input: &DescribeCacheSubnetGroupsMessage) -> Result<CacheSubnetGroupMessage, DescribeCacheSubnetGroupsError> {
+                fn describe_cache_subnet_groups(&self, input: &DescribeCacheSubnetGroupsMessage) -> Box<Future<Item = CacheSubnetGroupMessage, Error = DescribeCacheSubnetGroupsError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10265,11 +10455,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeCacheSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCacheSubnetGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCacheSubnetGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10281,23 +10479,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CacheSubnetGroupMessageDeserializer::deserialize("DescribeCacheSubnetGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CacheSubnetGroupMessageDeserializer::deserialize("DescribeCacheSubnetGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeCacheSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeCacheSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the default engine and system parameter information for the specified cache engine.</p>"]
-                fn describe_engine_default_parameters(&self, input: &DescribeEngineDefaultParametersMessage) -> Result<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError> {
+                fn describe_engine_default_parameters(&self, input: &DescribeEngineDefaultParametersMessage) -> Box<Future<Item = DescribeEngineDefaultParametersResult, Error = DescribeEngineDefaultParametersError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10306,11 +10505,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEngineDefaultParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEngineDefaultParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10322,23 +10529,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeEngineDefaultParametersResultDeserializer::deserialize("DescribeEngineDefaultParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeEngineDefaultParametersResultDeserializer::deserialize("DescribeEngineDefaultParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEngineDefaultParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEngineDefaultParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns events related to cache clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cache cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>"]
-                fn describe_events(&self, input: &DescribeEventsMessage) -> Result<EventsMessage, DescribeEventsError> {
+                fn describe_events(&self, input: &DescribeEventsMessage) -> Box<Future<Item = EventsMessage, Error = DescribeEventsError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10347,11 +10555,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEventsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEventsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10363,23 +10579,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn describe_replication_groups(&self, input: &DescribeReplicationGroupsMessage) -> Result<ReplicationGroupMessage, DescribeReplicationGroupsError> {
+                fn describe_replication_groups(&self, input: &DescribeReplicationGroupsMessage) -> Box<Future<Item = ReplicationGroupMessage, Error = DescribeReplicationGroupsError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10388,11 +10605,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeReplicationGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReplicationGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReplicationGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10404,23 +10629,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ReplicationGroupMessageDeserializer::deserialize("DescribeReplicationGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ReplicationGroupMessageDeserializer::deserialize("DescribeReplicationGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReplicationGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReplicationGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>"]
-                fn describe_reserved_cache_nodes(&self, input: &DescribeReservedCacheNodesMessage) -> Result<ReservedCacheNodeMessage, DescribeReservedCacheNodesError> {
+                fn describe_reserved_cache_nodes(&self, input: &DescribeReservedCacheNodesMessage) -> Box<Future<Item = ReservedCacheNodeMessage, Error = DescribeReservedCacheNodesError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10429,11 +10655,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeReservedCacheNodesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedCacheNodesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedCacheNodesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10445,23 +10679,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ReservedCacheNodeMessageDeserializer::deserialize("DescribeReservedCacheNodesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ReservedCacheNodeMessageDeserializer::deserialize("DescribeReservedCacheNodesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedCacheNodesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedCacheNodesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists available reserved cache node offerings.</p>"]
-                fn describe_reserved_cache_nodes_offerings(&self, input: &DescribeReservedCacheNodesOfferingsMessage) -> Result<ReservedCacheNodesOfferingMessage, DescribeReservedCacheNodesOfferingsError> {
+                fn describe_reserved_cache_nodes_offerings(&self, input: &DescribeReservedCacheNodesOfferingsMessage) -> Box<Future<Item = ReservedCacheNodesOfferingMessage, Error = DescribeReservedCacheNodesOfferingsError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10470,11 +10705,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeReservedCacheNodesOfferingsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedCacheNodesOfferingsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedCacheNodesOfferingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10486,23 +10729,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ReservedCacheNodesOfferingMessageDeserializer::deserialize("DescribeReservedCacheNodesOfferingsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ReservedCacheNodesOfferingMessageDeserializer::deserialize("DescribeReservedCacheNodesOfferingsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedCacheNodesOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedCacheNodesOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about cache cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn describe_snapshots(&self, input: &DescribeSnapshotsMessage) -> Result<DescribeSnapshotsListMessage, DescribeSnapshotsError> {
+                fn describe_snapshots(&self, input: &DescribeSnapshotsMessage) -> Box<Future<Item = DescribeSnapshotsListMessage, Error = DescribeSnapshotsError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10511,11 +10755,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     DescribeSnapshotsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSnapshotsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSnapshotsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10527,23 +10779,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeSnapshotsListMessageDeserializer::deserialize("DescribeSnapshotsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeSnapshotsListMessageDeserializer::deserialize("DescribeSnapshotsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>"]
-                fn list_allowed_node_type_modifications(&self, input: &ListAllowedNodeTypeModificationsMessage) -> Result<AllowedNodeTypeModificationsMessage, ListAllowedNodeTypeModificationsError> {
+                fn list_allowed_node_type_modifications(&self, input: &ListAllowedNodeTypeModificationsMessage) -> Box<Future<Item = AllowedNodeTypeModificationsMessage, Error = ListAllowedNodeTypeModificationsError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10552,11 +10805,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     ListAllowedNodeTypeModificationsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAllowedNodeTypeModificationsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAllowedNodeTypeModificationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10568,23 +10829,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AllowedNodeTypeModificationsMessageDeserializer::deserialize("ListAllowedNodeTypeModificationsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AllowedNodeTypeModificationsMessageDeserializer::deserialize("ListAllowedNodeTypeModificationsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListAllowedNodeTypeModificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListAllowedNodeTypeModificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 10 cost allocation tags on an ElastiCache resource. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html\">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceMessage) -> Result<TagListMessage, ListTagsForResourceError> {
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceMessage) -> Box<Future<Item = TagListMessage, Error = ListTagsForResourceError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10593,11 +10855,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForResourceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10609,23 +10879,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(TagListMessageDeserializer::deserialize("ListTagsForResourceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(TagListMessageDeserializer::deserialize("ListTagsForResourceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the settings for a cache cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>"]
-                fn modify_cache_cluster(&self, input: &ModifyCacheClusterMessage) -> Result<ModifyCacheClusterResult, ModifyCacheClusterError> {
+                fn modify_cache_cluster(&self, input: &ModifyCacheClusterMessage) -> Box<Future<Item = ModifyCacheClusterResult, Error = ModifyCacheClusterError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10634,11 +10905,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyCacheClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyCacheClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyCacheClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10650,23 +10929,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyCacheClusterResultDeserializer::deserialize("ModifyCacheClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyCacheClusterResultDeserializer::deserialize("ModifyCacheClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyCacheClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyCacheClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>"]
-                fn modify_cache_parameter_group(&self, input: &ModifyCacheParameterGroupMessage) -> Result<CacheParameterGroupNameMessage, ModifyCacheParameterGroupError> {
+                fn modify_cache_parameter_group(&self, input: &ModifyCacheParameterGroupMessage) -> Box<Future<Item = CacheParameterGroupNameMessage, Error = ModifyCacheParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10675,11 +10955,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyCacheParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyCacheParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10691,23 +10979,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CacheParameterGroupNameMessageDeserializer::deserialize("ModifyCacheParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CacheParameterGroupNameMessageDeserializer::deserialize("ModifyCacheParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies an existing cache subnet group.</p>"]
-                fn modify_cache_subnet_group(&self, input: &ModifyCacheSubnetGroupMessage) -> Result<ModifyCacheSubnetGroupResult, ModifyCacheSubnetGroupError> {
+                fn modify_cache_subnet_group(&self, input: &ModifyCacheSubnetGroupMessage) -> Box<Future<Item = ModifyCacheSubnetGroupResult, Error = ModifyCacheSubnetGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10716,11 +11005,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyCacheSubnetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyCacheSubnetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10732,23 +11029,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyCacheSubnetGroupResultDeserializer::deserialize("ModifyCacheSubnetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyCacheSubnetGroupResultDeserializer::deserialize("ModifyCacheSubnetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyCacheSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyCacheSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the settings for a replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <note> <p>This operation is valid for Redis only.</p> </note>"]
-                fn modify_replication_group(&self, input: &ModifyReplicationGroupMessage) -> Result<ModifyReplicationGroupResult, ModifyReplicationGroupError> {
+                fn modify_replication_group(&self, input: &ModifyReplicationGroupMessage) -> Box<Future<Item = ModifyReplicationGroupResult, Error = ModifyReplicationGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10757,11 +11055,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     ModifyReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyReplicationGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyReplicationGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10773,23 +11079,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyReplicationGroupResultDeserializer::deserialize("ModifyReplicationGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyReplicationGroupResultDeserializer::deserialize("ModifyReplicationGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyReplicationGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyReplicationGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Allows you to purchase a reserved cache node offering.</p>"]
-                fn purchase_reserved_cache_nodes_offering(&self, input: &PurchaseReservedCacheNodesOfferingMessage) -> Result<PurchaseReservedCacheNodesOfferingResult, PurchaseReservedCacheNodesOfferingError> {
+                fn purchase_reserved_cache_nodes_offering(&self, input: &PurchaseReservedCacheNodesOfferingMessage) -> Box<Future<Item = PurchaseReservedCacheNodesOfferingResult, Error = PurchaseReservedCacheNodesOfferingError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10798,11 +11105,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     PurchaseReservedCacheNodesOfferingMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PurchaseReservedCacheNodesOfferingError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PurchaseReservedCacheNodesOfferingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10814,23 +11129,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize("PurchaseReservedCacheNodesOfferingResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize("PurchaseReservedCacheNodesOfferingResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PurchaseReservedCacheNodesOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PurchaseReservedCacheNodesOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Reboots some, or all, of the cache nodes within a provisioned cache cluster. This operation applies any modified cache parameter groups to the cache cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cache cluster. During the reboot, the cache cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cache cluster event is created.</p>"]
-                fn reboot_cache_cluster(&self, input: &RebootCacheClusterMessage) -> Result<RebootCacheClusterResult, RebootCacheClusterError> {
+                fn reboot_cache_cluster(&self, input: &RebootCacheClusterMessage) -> Box<Future<Item = RebootCacheClusterResult, Error = RebootCacheClusterError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10839,11 +11155,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     RebootCacheClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RebootCacheClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RebootCacheClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10855,23 +11179,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RebootCacheClusterResultDeserializer::deserialize("RebootCacheClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RebootCacheClusterResultDeserializer::deserialize("RebootCacheClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RebootCacheClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RebootCacheClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceMessage) -> Result<TagListMessage, RemoveTagsFromResourceError> {
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceMessage) -> Box<Future<Item = TagListMessage, Error = RemoveTagsFromResourceError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10880,11 +11205,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveTagsFromResourceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveTagsFromResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10896,23 +11229,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(TagListMessageDeserializer::deserialize("RemoveTagsFromResourceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(TagListMessageDeserializer::deserialize("RemoveTagsFromResourceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>"]
-                fn reset_cache_parameter_group(&self, input: &ResetCacheParameterGroupMessage) -> Result<CacheParameterGroupNameMessage, ResetCacheParameterGroupError> {
+                fn reset_cache_parameter_group(&self, input: &ResetCacheParameterGroupMessage) -> Box<Future<Item = CacheParameterGroupNameMessage, Error = ResetCacheParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10921,11 +11255,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     ResetCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetCacheParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetCacheParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10937,23 +11279,24 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CacheParameterGroupNameMessageDeserializer::deserialize("ResetCacheParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CacheParameterGroupNameMessageDeserializer::deserialize("ResetCacheParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResetCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResetCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>"]
-                fn revoke_cache_security_group_ingress(&self, input: &RevokeCacheSecurityGroupIngressMessage) -> Result<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError> {
+                fn revoke_cache_security_group_ingress(&self, input: &RevokeCacheSecurityGroupIngressMessage) -> Box<Future<Item = RevokeCacheSecurityGroupIngressResult, Error = RevokeCacheSecurityGroupIngressError>> {
                     let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
                     let mut params = Params::new();
 
@@ -10962,11 +11305,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                     RevokeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RevokeCacheSecurityGroupIngressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RevokeCacheSecurityGroupIngressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10978,18 +11329,19 @@ RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RevokeCacheSecurityGroupIngressResultDeserializer::deserialize("RevokeCacheSecurityGroupIngressResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RevokeCacheSecurityGroupIngressResultDeserializer::deserialize("RevokeCacheSecurityGroupIngressResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RevokeCacheSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RevokeCacheSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

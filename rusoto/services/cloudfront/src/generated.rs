@@ -19,6 +19,17 @@
             use rusoto_core::xmlerror::*;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
+
             enum DeserializerNext {
                 Close,
                 Skip,
@@ -8526,111 +8537,111 @@ UpdateStreamingDistributionError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-                fn create_cloud_front_origin_access_identity(&self, input: &CreateCloudFrontOriginAccessIdentityRequest) -> Result<CreateCloudFrontOriginAccessIdentityResult, CreateCloudFrontOriginAccessIdentityError>;
+                fn create_cloud_front_origin_access_identity(&self, input: &CreateCloudFrontOriginAccessIdentityRequest) -> Box<Future<Item = CreateCloudFrontOriginAccessIdentityResult, Error = CreateCloudFrontOriginAccessIdentityError>>;
                 
 
                 #[doc="<p>Creates a new web distribution. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
-                fn create_distribution(&self, input: &CreateDistributionRequest) -> Result<CreateDistributionResult, CreateDistributionError>;
+                fn create_distribution(&self, input: &CreateDistributionRequest) -> Box<Future<Item = CreateDistributionResult, Error = CreateDistributionError>>;
                 
 
                 #[doc="<p>Create a new distribution with tags.</p>"]
-                fn create_distribution_with_tags(&self, input: &CreateDistributionWithTagsRequest) -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError>;
+                fn create_distribution_with_tags(&self, input: &CreateDistributionWithTagsRequest) -> Box<Future<Item = CreateDistributionWithTagsResult, Error = CreateDistributionWithTagsError>>;
                 
 
                 #[doc="<p>Create a new invalidation. </p>"]
-                fn create_invalidation(&self, input: &CreateInvalidationRequest) -> Result<CreateInvalidationResult, CreateInvalidationError>;
+                fn create_invalidation(&self, input: &CreateInvalidationRequest) -> Box<Future<Item = CreateInvalidationResult, Error = CreateInvalidationError>>;
                 
 
                 #[doc="<p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html\">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values specified.</p> </important>"]
-                fn create_streaming_distribution(&self, input: &CreateStreamingDistributionRequest) -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError>;
+                fn create_streaming_distribution(&self, input: &CreateStreamingDistributionRequest) -> Box<Future<Item = CreateStreamingDistributionResult, Error = CreateStreamingDistributionError>>;
                 
 
                 #[doc="<p>Create a new streaming distribution with tags.</p>"]
-                fn create_streaming_distribution_with_tags(&self, input: &CreateStreamingDistributionWithTagsRequest) -> Result<CreateStreamingDistributionWithTagsResult, CreateStreamingDistributionWithTagsError>;
+                fn create_streaming_distribution_with_tags(&self, input: &CreateStreamingDistributionWithTagsRequest) -> Box<Future<Item = CreateStreamingDistributionWithTagsResult, Error = CreateStreamingDistributionWithTagsError>>;
                 
 
                 #[doc="<p>Delete an origin access identity. </p>"]
-                fn delete_cloud_front_origin_access_identity(&self, input: &DeleteCloudFrontOriginAccessIdentityRequest) -> Result<(), DeleteCloudFrontOriginAccessIdentityError>;
+                fn delete_cloud_front_origin_access_identity(&self, input: &DeleteCloudFrontOriginAccessIdentityRequest) -> Box<Future<Item = (), Error = DeleteCloudFrontOriginAccessIdentityError>>;
                 
 
                 #[doc="<p>Delete a distribution. </p>"]
-                fn delete_distribution(&self, input: &DeleteDistributionRequest) -> Result<(), DeleteDistributionError>;
+                fn delete_distribution(&self, input: &DeleteDistributionRequest) -> Box<Future<Item = (), Error = DeleteDistributionError>>;
                 
 
                 #[doc="<p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-                fn delete_streaming_distribution(&self, input: &DeleteStreamingDistributionRequest) -> Result<(), DeleteStreamingDistributionError>;
+                fn delete_streaming_distribution(&self, input: &DeleteStreamingDistributionRequest) -> Box<Future<Item = (), Error = DeleteStreamingDistributionError>>;
                 
 
                 #[doc="<p>Get the information about an origin access identity. </p>"]
-                fn get_cloud_front_origin_access_identity(&self, input: &GetCloudFrontOriginAccessIdentityRequest) -> Result<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError>;
+                fn get_cloud_front_origin_access_identity(&self, input: &GetCloudFrontOriginAccessIdentityRequest) -> Box<Future<Item = GetCloudFrontOriginAccessIdentityResult, Error = GetCloudFrontOriginAccessIdentityError>>;
                 
 
                 #[doc="<p>Get the configuration information about an origin access identity. </p>"]
-                fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOriginAccessIdentityConfigRequest) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, GetCloudFrontOriginAccessIdentityConfigError>;
+                fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOriginAccessIdentityConfigRequest) -> Box<Future<Item = GetCloudFrontOriginAccessIdentityConfigResult, Error = GetCloudFrontOriginAccessIdentityConfigError>>;
                 
 
                 #[doc="<p>Get the information about a distribution. </p>"]
-                fn get_distribution(&self, input: &GetDistributionRequest) -> Result<GetDistributionResult, GetDistributionError>;
+                fn get_distribution(&self, input: &GetDistributionRequest) -> Box<Future<Item = GetDistributionResult, Error = GetDistributionError>>;
                 
 
                 #[doc="<p>Get the configuration information about a distribution. </p>"]
-                fn get_distribution_config(&self, input: &GetDistributionConfigRequest) -> Result<GetDistributionConfigResult, GetDistributionConfigError>;
+                fn get_distribution_config(&self, input: &GetDistributionConfigRequest) -> Box<Future<Item = GetDistributionConfigResult, Error = GetDistributionConfigError>>;
                 
 
                 #[doc="<p>Get the information about an invalidation. </p>"]
-                fn get_invalidation(&self, input: &GetInvalidationRequest) -> Result<GetInvalidationResult, GetInvalidationError>;
+                fn get_invalidation(&self, input: &GetInvalidationRequest) -> Box<Future<Item = GetInvalidationResult, Error = GetInvalidationError>>;
                 
 
                 #[doc="<p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>"]
-                fn get_streaming_distribution(&self, input: &GetStreamingDistributionRequest) -> Result<GetStreamingDistributionResult, GetStreamingDistributionError>;
+                fn get_streaming_distribution(&self, input: &GetStreamingDistributionRequest) -> Box<Future<Item = GetStreamingDistributionResult, Error = GetStreamingDistributionError>>;
                 
 
                 #[doc="<p>Get the configuration information about a streaming distribution. </p>"]
-                fn get_streaming_distribution_config(&self, input: &GetStreamingDistributionConfigRequest) -> Result<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError>;
+                fn get_streaming_distribution_config(&self, input: &GetStreamingDistributionConfigRequest) -> Box<Future<Item = GetStreamingDistributionConfigResult, Error = GetStreamingDistributionConfigError>>;
                 
 
                 #[doc="<p>Lists origin access identities.</p>"]
-                fn list_cloud_front_origin_access_identities(&self, input: &ListCloudFrontOriginAccessIdentitiesRequest) -> Result<ListCloudFrontOriginAccessIdentitiesResult, ListCloudFrontOriginAccessIdentitiesError>;
+                fn list_cloud_front_origin_access_identities(&self, input: &ListCloudFrontOriginAccessIdentitiesRequest) -> Box<Future<Item = ListCloudFrontOriginAccessIdentitiesResult, Error = ListCloudFrontOriginAccessIdentitiesError>>;
                 
 
                 #[doc="<p>List distributions. </p>"]
-                fn list_distributions(&self, input: &ListDistributionsRequest) -> Result<ListDistributionsResult, ListDistributionsError>;
+                fn list_distributions(&self, input: &ListDistributionsRequest) -> Box<Future<Item = ListDistributionsResult, Error = ListDistributionsError>>;
                 
 
                 #[doc="<p>List the distributions that are associated with a specified AWS WAF web ACL. </p>"]
-                fn list_distributions_by_web_acl_id(&self, input: &ListDistributionsByWebACLIdRequest) -> Result<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError>;
+                fn list_distributions_by_web_acl_id(&self, input: &ListDistributionsByWebACLIdRequest) -> Box<Future<Item = ListDistributionsByWebACLIdResult, Error = ListDistributionsByWebACLIdError>>;
                 
 
                 #[doc="<p>Lists invalidation batches. </p>"]
-                fn list_invalidations(&self, input: &ListInvalidationsRequest) -> Result<ListInvalidationsResult, ListInvalidationsError>;
+                fn list_invalidations(&self, input: &ListInvalidationsRequest) -> Box<Future<Item = ListInvalidationsResult, Error = ListInvalidationsError>>;
                 
 
                 #[doc="<p>List streaming distributions. </p>"]
-                fn list_streaming_distributions(&self, input: &ListStreamingDistributionsRequest) -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError>;
+                fn list_streaming_distributions(&self, input: &ListStreamingDistributionsRequest) -> Box<Future<Item = ListStreamingDistributionsResult, Error = ListStreamingDistributionsError>>;
                 
 
                 #[doc="<p>List tags for a CloudFront resource.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest) -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest) -> Box<Future<Item = ListTagsForResourceResult, Error = ListTagsForResourceError>>;
                 
 
                 #[doc="<p>Add tags to a CloudFront resource.</p>"]
-                fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
+                fn tag_resource(&self, input: &TagResourceRequest) -> Box<Future<Item = (), Error = TagResourceError>>;
                 
 
                 #[doc="<p>Remove tags from a CloudFront resource.</p>"]
-                fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
+                fn untag_resource(&self, input: &UntagResourceRequest) -> Box<Future<Item = (), Error = UntagResourceError>>;
                 
 
                 #[doc="<p>Update an origin access identity. </p>"]
-                fn update_cloud_front_origin_access_identity(&self, input: &UpdateCloudFrontOriginAccessIdentityRequest) -> Result<UpdateCloudFrontOriginAccessIdentityResult, UpdateCloudFrontOriginAccessIdentityError>;
+                fn update_cloud_front_origin_access_identity(&self, input: &UpdateCloudFrontOriginAccessIdentityRequest) -> Box<Future<Item = UpdateCloudFrontOriginAccessIdentityResult, Error = UpdateCloudFrontOriginAccessIdentityError>>;
                 
 
                 #[doc="<p>Update a distribution. </p>"]
-                fn update_distribution(&self, input: &UpdateDistributionRequest) -> Result<UpdateDistributionResult, UpdateDistributionError>;
+                fn update_distribution(&self, input: &UpdateDistributionRequest) -> Box<Future<Item = UpdateDistributionResult, Error = UpdateDistributionError>>;
                 
 
                 #[doc="<p>Update a streaming distribution. </p>"]
-                fn update_streaming_distribution(&self, input: &UpdateStreamingDistributionRequest) -> Result<UpdateStreamingDistributionResult, UpdateStreamingDistributionError>;
+                fn update_streaming_distribution(&self, input: &UpdateStreamingDistributionRequest) -> Box<Future<Item = UpdateStreamingDistributionResult, Error = UpdateStreamingDistributionError>>;
                 
 }
 /// A client for the CloudFront API.
@@ -8654,7 +8665,7 @@ UpdateStreamingDistributionError::Unknown(ref cause) => cause
         
 #[doc="<p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_cloud_front_origin_access_identity(&self, input: &CreateCloudFrontOriginAccessIdentityRequest) -> Result<CreateCloudFrontOriginAccessIdentityResult, CreateCloudFrontOriginAccessIdentityError> {
+                fn create_cloud_front_origin_access_identity(&self, input: &CreateCloudFrontOriginAccessIdentityRequest) -> Box<Future<Item = CreateCloudFrontOriginAccessIdentityResult, Error = CreateCloudFrontOriginAccessIdentityError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront".to_string();
 
@@ -8671,13 +8682,20 @@ payload = CloudFrontOriginAccessIdentityConfigSerializer::serialize("CloudFrontO
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateCloudFrontOriginAccessIdentityError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateCloudFrontOriginAccessIdentityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -8689,10 +8707,10 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
@@ -8700,15 +8718,18 @@ if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CreateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Creates a new web distribution. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_distribution(&self, input: &CreateDistributionRequest) -> Result<CreateDistributionResult, CreateDistributionError> {
+                fn create_distribution(&self, input: &CreateDistributionRequest) -> Box<Future<Item = CreateDistributionResult, Error = CreateDistributionError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution".to_string();
 
@@ -8725,13 +8746,20 @@ payload = DistributionConfigSerializer::serialize("DistributionConfig", &input.d
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDistributionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDistributionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -8743,10 +8771,10 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
@@ -8754,15 +8782,18 @@ if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CreateDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Create a new distribution with tags.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_distribution_with_tags(&self, input: &CreateDistributionWithTagsRequest) -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError> {
+                fn create_distribution_with_tags(&self, input: &CreateDistributionWithTagsRequest) -> Box<Future<Item = CreateDistributionWithTagsResult, Error = CreateDistributionWithTagsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution".to_string();
 
@@ -8779,13 +8810,20 @@ payload = DistributionConfigWithTagsSerializer::serialize("DistributionConfigWit
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDistributionWithTagsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDistributionWithTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -8797,10 +8835,10 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
@@ -8808,15 +8846,18 @@ if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CreateDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Create a new invalidation. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_invalidation(&self, input: &CreateInvalidationRequest) -> Result<CreateInvalidationResult, CreateInvalidationError> {
+                fn create_invalidation(&self, input: &CreateInvalidationRequest) -> Box<Future<Item = CreateInvalidationResult, Error = CreateInvalidationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution/{DistributionId}/invalidation".to_string();
 
@@ -8833,13 +8874,20 @@ payload = InvalidationBatchSerializer::serialize("InvalidationBatch", &input.inv
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateInvalidationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateInvalidationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -8851,22 +8899,25 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateInvalidationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateInvalidationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(location) = response.headers.get("Location") {
+                                    if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CreateInvalidationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateInvalidationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html\">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values specified.</p> </important>"]
                 #[allow(unused_variables, warnings)]
-                fn create_streaming_distribution(&self, input: &CreateStreamingDistributionRequest) -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError> {
+                fn create_streaming_distribution(&self, input: &CreateStreamingDistributionRequest) -> Box<Future<Item = CreateStreamingDistributionResult, Error = CreateStreamingDistributionError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/streaming-distribution".to_string();
 
@@ -8883,13 +8934,20 @@ payload = StreamingDistributionConfigSerializer::serialize("StreamingDistributio
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateStreamingDistributionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateStreamingDistributionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -8901,10 +8959,10 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
@@ -8912,15 +8970,18 @@ if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CreateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Create a new streaming distribution with tags.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_streaming_distribution_with_tags(&self, input: &CreateStreamingDistributionWithTagsRequest) -> Result<CreateStreamingDistributionWithTagsResult, CreateStreamingDistributionWithTagsError> {
+                fn create_streaming_distribution_with_tags(&self, input: &CreateStreamingDistributionWithTagsRequest) -> Box<Future<Item = CreateStreamingDistributionWithTagsResult, Error = CreateStreamingDistributionWithTagsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/streaming-distribution".to_string();
 
@@ -8937,13 +8998,20 @@ payload = StreamingDistributionConfigWithTagsSerializer::serialize("StreamingDis
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateStreamingDistributionWithTagsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateStreamingDistributionWithTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -8955,10 +9023,10 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateStreamingDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateStreamingDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
@@ -8966,15 +9034,18 @@ if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CreateStreamingDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateStreamingDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Delete an origin access identity. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn delete_cloud_front_origin_access_identity(&self, input: &DeleteCloudFrontOriginAccessIdentityRequest) -> Result<(), DeleteCloudFrontOriginAccessIdentityError> {
+                fn delete_cloud_front_origin_access_identity(&self, input: &DeleteCloudFrontOriginAccessIdentityRequest) -> Box<Future<Item = (), Error = DeleteCloudFrontOriginAccessIdentityError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront/{Id}".to_string();
 
@@ -8991,23 +9062,33 @@ if let Some(location) = response.headers.get("Location") {
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteCloudFrontOriginAccessIdentityError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteCloudFrontOriginAccessIdentityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Delete a distribution. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn delete_distribution(&self, input: &DeleteDistributionRequest) -> Result<(), DeleteDistributionError> {
+                fn delete_distribution(&self, input: &DeleteDistributionRequest) -> Box<Future<Item = (), Error = DeleteDistributionError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution/{Id}".to_string();
 
@@ -9024,23 +9105,33 @@ if let Some(location) = response.headers.get("Location") {
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDistributionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDistributionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn delete_streaming_distribution(&self, input: &DeleteStreamingDistributionRequest) -> Result<(), DeleteStreamingDistributionError> {
+                fn delete_streaming_distribution(&self, input: &DeleteStreamingDistributionRequest) -> Box<Future<Item = (), Error = DeleteStreamingDistributionError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/streaming-distribution/{Id}".to_string();
 
@@ -9057,23 +9148,33 @@ if let Some(location) = response.headers.get("Location") {
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteStreamingDistributionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteStreamingDistributionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Get the information about an origin access identity. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_cloud_front_origin_access_identity(&self, input: &GetCloudFrontOriginAccessIdentityRequest) -> Result<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError> {
+                fn get_cloud_front_origin_access_identity(&self, input: &GetCloudFrontOriginAccessIdentityRequest) -> Box<Future<Item = GetCloudFrontOriginAccessIdentityResult, Error = GetCloudFrontOriginAccessIdentityError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront/{Id}".to_string();
 
@@ -9087,13 +9188,20 @@ if let Some(location) = response.headers.get("Location") {
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetCloudFrontOriginAccessIdentityError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetCloudFrontOriginAccessIdentityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9105,22 +9213,25 @@ if let Some(location) = response.headers.get("Location") {
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Get the configuration information about an origin access identity. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOriginAccessIdentityConfigRequest) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, GetCloudFrontOriginAccessIdentityConfigError> {
+                fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOriginAccessIdentityConfigRequest) -> Box<Future<Item = GetCloudFrontOriginAccessIdentityConfigResult, Error = GetCloudFrontOriginAccessIdentityConfigError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront/{Id}/config".to_string();
 
@@ -9134,13 +9245,20 @@ if let Some(location) = response.headers.get("Location") {
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetCloudFrontOriginAccessIdentityConfigError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetCloudFrontOriginAccessIdentityConfigError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9152,22 +9270,25 @@ if let Some(location) = response.headers.get("Location") {
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetCloudFrontOriginAccessIdentityConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Get the information about a distribution. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_distribution(&self, input: &GetDistributionRequest) -> Result<GetDistributionResult, GetDistributionError> {
+                fn get_distribution(&self, input: &GetDistributionRequest) -> Box<Future<Item = GetDistributionResult, Error = GetDistributionError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution/{Id}".to_string();
 
@@ -9181,13 +9302,20 @@ if let Some(location) = response.headers.get("Location") {
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDistributionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDistributionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9199,22 +9327,25 @@ if let Some(location) = response.headers.get("Location") {
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Get the configuration information about a distribution. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_distribution_config(&self, input: &GetDistributionConfigRequest) -> Result<GetDistributionConfigResult, GetDistributionConfigError> {
+                fn get_distribution_config(&self, input: &GetDistributionConfigRequest) -> Box<Future<Item = GetDistributionConfigResult, Error = GetDistributionConfigError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution/{Id}/config".to_string();
 
@@ -9228,13 +9359,20 @@ if let Some(location) = response.headers.get("Location") {
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetDistributionConfigError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetDistributionConfigError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9246,22 +9384,25 @@ if let Some(location) = response.headers.get("Location") {
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetDistributionConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetDistributionConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Get the information about an invalidation. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_invalidation(&self, input: &GetInvalidationRequest) -> Result<GetInvalidationResult, GetInvalidationError> {
+                fn get_invalidation(&self, input: &GetInvalidationRequest) -> Box<Future<Item = GetInvalidationResult, Error = GetInvalidationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution/{DistributionId}/invalidation/{Id}".to_string();
 
@@ -9276,13 +9417,20 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetInvalidationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetInvalidationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9294,19 +9442,22 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetInvalidationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetInvalidationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetInvalidationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetInvalidationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_streaming_distribution(&self, input: &GetStreamingDistributionRequest) -> Result<GetStreamingDistributionResult, GetStreamingDistributionError> {
+                fn get_streaming_distribution(&self, input: &GetStreamingDistributionRequest) -> Box<Future<Item = GetStreamingDistributionResult, Error = GetStreamingDistributionError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/streaming-distribution/{Id}".to_string();
 
@@ -9320,13 +9471,20 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetStreamingDistributionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetStreamingDistributionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9338,22 +9496,25 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Get the configuration information about a streaming distribution. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn get_streaming_distribution_config(&self, input: &GetStreamingDistributionConfigRequest) -> Result<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError> {
+                fn get_streaming_distribution_config(&self, input: &GetStreamingDistributionConfigRequest) -> Box<Future<Item = GetStreamingDistributionConfigResult, Error = GetStreamingDistributionConfigError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/streaming-distribution/{Id}/config".to_string();
 
@@ -9367,13 +9528,20 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetStreamingDistributionConfigError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetStreamingDistributionConfigError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9385,22 +9553,25 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetStreamingDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetStreamingDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetStreamingDistributionConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetStreamingDistributionConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Lists origin access identities.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_cloud_front_origin_access_identities(&self, input: &ListCloudFrontOriginAccessIdentitiesRequest) -> Result<ListCloudFrontOriginAccessIdentitiesResult, ListCloudFrontOriginAccessIdentitiesError> {
+                fn list_cloud_front_origin_access_identities(&self, input: &ListCloudFrontOriginAccessIdentitiesRequest) -> Box<Future<Item = ListCloudFrontOriginAccessIdentitiesResult, Error = ListCloudFrontOriginAccessIdentitiesError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront".to_string();
 
@@ -9421,13 +9592,20 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListCloudFrontOriginAccessIdentitiesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListCloudFrontOriginAccessIdentitiesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9439,19 +9617,22 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListCloudFrontOriginAccessIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListCloudFrontOriginAccessIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>List distributions. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_distributions(&self, input: &ListDistributionsRequest) -> Result<ListDistributionsResult, ListDistributionsError> {
+                fn list_distributions(&self, input: &ListDistributionsRequest) -> Box<Future<Item = ListDistributionsResult, Error = ListDistributionsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution".to_string();
 
@@ -9472,13 +9653,20 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDistributionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDistributionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9490,19 +9678,22 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListDistributionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListDistributionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListDistributionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListDistributionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>List the distributions that are associated with a specified AWS WAF web ACL. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_distributions_by_web_acl_id(&self, input: &ListDistributionsByWebACLIdRequest) -> Result<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError> {
+                fn list_distributions_by_web_acl_id(&self, input: &ListDistributionsByWebACLIdRequest) -> Box<Future<Item = ListDistributionsByWebACLIdResult, Error = ListDistributionsByWebACLIdError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distributionsByWebACLId/{WebACLId}".to_string();
 
@@ -9523,13 +9714,20 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDistributionsByWebACLIdError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDistributionsByWebACLIdError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9541,19 +9739,22 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListDistributionsByWebACLIdResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListDistributionsByWebACLIdResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListDistributionsByWebACLIdError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListDistributionsByWebACLIdError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Lists invalidation batches. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_invalidations(&self, input: &ListInvalidationsRequest) -> Result<ListInvalidationsResult, ListInvalidationsError> {
+                fn list_invalidations(&self, input: &ListInvalidationsRequest) -> Box<Future<Item = ListInvalidationsResult, Error = ListInvalidationsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution/{DistributionId}/invalidation".to_string();
 
@@ -9574,13 +9775,20 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListInvalidationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListInvalidationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9592,19 +9800,22 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListInvalidationsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListInvalidationsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListInvalidationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListInvalidationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>List streaming distributions. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_streaming_distributions(&self, input: &ListStreamingDistributionsRequest) -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError> {
+                fn list_streaming_distributions(&self, input: &ListStreamingDistributionsRequest) -> Box<Future<Item = ListStreamingDistributionsResult, Error = ListStreamingDistributionsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/streaming-distribution".to_string();
 
@@ -9625,13 +9836,20 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListStreamingDistributionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListStreamingDistributionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9643,19 +9861,22 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListStreamingDistributionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListStreamingDistributionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListStreamingDistributionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListStreamingDistributionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>List tags for a CloudFront resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest) -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest) -> Box<Future<Item = ListTagsForResourceResult, Error = ListTagsForResourceError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/tagging".to_string();
 
@@ -9669,13 +9890,20 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9687,19 +9915,22 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListTagsForResourceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListTagsForResourceResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Add tags to a CloudFront resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
+                fn tag_resource(&self, input: &TagResourceRequest) -> Box<Future<Item = (), Error = TagResourceError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/tagging".to_string();
 
@@ -9716,23 +9947,33 @@ payload = TagsSerializer::serialize("Tags", &input.tags).into_bytes();
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TagResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TagResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Remove tags from a CloudFront resource.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
+                fn untag_resource(&self, input: &UntagResourceRequest) -> Box<Future<Item = (), Error = UntagResourceError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/tagging".to_string();
 
@@ -9749,23 +9990,33 @@ payload = TagKeysSerializer::serialize("TagKeys", &input.tag_keys).into_bytes();
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UntagResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UntagResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Update an origin access identity. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn update_cloud_front_origin_access_identity(&self, input: &UpdateCloudFrontOriginAccessIdentityRequest) -> Result<UpdateCloudFrontOriginAccessIdentityResult, UpdateCloudFrontOriginAccessIdentityError> {
+                fn update_cloud_front_origin_access_identity(&self, input: &UpdateCloudFrontOriginAccessIdentityRequest) -> Box<Future<Item = UpdateCloudFrontOriginAccessIdentityResult, Error = UpdateCloudFrontOriginAccessIdentityError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront/{Id}/config".to_string();
 
@@ -9785,13 +10036,20 @@ payload = CloudFrontOriginAccessIdentityConfigSerializer::serialize("CloudFrontO
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateCloudFrontOriginAccessIdentityError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateCloudFrontOriginAccessIdentityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9803,22 +10061,25 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(UpdateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(UpdateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Update a distribution. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn update_distribution(&self, input: &UpdateDistributionRequest) -> Result<UpdateDistributionResult, UpdateDistributionError> {
+                fn update_distribution(&self, input: &UpdateDistributionRequest) -> Box<Future<Item = UpdateDistributionResult, Error = UpdateDistributionError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/distribution/{Id}/config".to_string();
 
@@ -9838,13 +10099,20 @@ payload = DistributionConfigSerializer::serialize("DistributionConfig", &input.d
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateDistributionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateDistributionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9856,22 +10124,25 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UpdateDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UpdateDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(UpdateDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(UpdateDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Update a streaming distribution. </p>"]
                 #[allow(unused_variables, warnings)]
-                fn update_streaming_distribution(&self, input: &UpdateStreamingDistributionRequest) -> Result<UpdateStreamingDistributionResult, UpdateStreamingDistributionError> {
+                fn update_streaming_distribution(&self, input: &UpdateStreamingDistributionRequest) -> Box<Future<Item = UpdateStreamingDistributionResult, Error = UpdateStreamingDistributionError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/streaming-distribution/{Id}/config".to_string();
 
@@ -9891,13 +10162,20 @@ payload = StreamingDistributionConfigSerializer::serialize("StreamingDistributio
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateStreamingDistributionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateStreamingDistributionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -9909,17 +10187,20 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UpdateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UpdateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(UpdateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(UpdateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -9936,34 +10217,23 @@ request.set_payload(Some(payload));
             
             
         #[test]
-        fn test_parse_valid_cloudfront_get_cloud_front_origin_access_identity() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudfront-get-cloud-front-origin-access-identity.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetCloudFrontOriginAccessIdentityRequest::default();
-            let result = client.get_cloud_front_origin_access_identity(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_cloudfront_get_distribution() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudfront-get-distribution.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetDistributionRequest::default();
-            let result = client.get_distribution(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
         fn test_parse_valid_cloudfront_get_invalidation() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudfront-get-invalidation.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = GetInvalidationRequest::default();
             let result = client.get_invalidation(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_cloudfront_list_cloud_front_origin_access_identities() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudfront-list-cloud-front-origin-access-identities.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ListCloudFrontOriginAccessIdentitiesRequest::default();
+            let result = client.list_cloud_front_origin_access_identities(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -9980,12 +10250,12 @@ request.set_payload(Some(payload));
 
 
         #[test]
-        fn test_parse_valid_cloudfront_list_cloud_front_origin_access_identities() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudfront-list-cloud-front-origin-access-identities.xml");
+        fn test_parse_valid_cloudfront_get_cloud_front_origin_access_identity() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudfront-get-cloud-front-origin-access-identity.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListCloudFrontOriginAccessIdentitiesRequest::default();
-            let result = client.list_cloud_front_origin_access_identities(&request);
+            let request = GetCloudFrontOriginAccessIdentityRequest::default();
+            let result = client.get_cloud_front_origin_access_identity(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -10008,6 +10278,17 @@ request.set_payload(Some(payload));
             let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = ListInvalidationsRequest::default();
             let result = client.list_invalidations(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_cloudfront_get_distribution() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudfront-get-distribution.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = GetDistributionRequest::default();
+            let result = client.get_distribution(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 

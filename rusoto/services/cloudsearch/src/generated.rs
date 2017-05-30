@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -6351,99 +6361,99 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Indexes the search suggestions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters\">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn build_suggesters(&self, input: &BuildSuggestersRequest) -> Result<BuildSuggestersResponse, BuildSuggestersError>;
+                fn build_suggesters(&self, input: &BuildSuggestersRequest) -> Box<Future<Item = BuildSuggestersResponse, Error = BuildSuggestersError>>;
                 
 
                 #[doc="<p>Creates a new search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html\" target=\"_blank\">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn create_domain(&self, input: &CreateDomainRequest) -> Result<CreateDomainResponse, CreateDomainError>;
+                fn create_domain(&self, input: &CreateDomainRequest) -> Box<Future<Item = CreateDomainResponse, Error = CreateDomainError>>;
                 
 
                 #[doc="<p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn define_analysis_scheme(&self, input: &DefineAnalysisSchemeRequest) -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError>;
+                fn define_analysis_scheme(&self, input: &DefineAnalysisSchemeRequest) -> Box<Future<Item = DefineAnalysisSchemeResponse, Error = DefineAnalysisSchemeError>>;
                 
 
                 #[doc="<p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn define_expression(&self, input: &DefineExpressionRequest) -> Result<DefineExpressionResponse, DefineExpressionError>;
+                fn define_expression(&self, input: &DefineExpressionRequest) -> Box<Future<Item = DefineExpressionResponse, Error = DefineExpressionError>>;
                 
 
                 #[doc="<p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-                fn define_index_field(&self, input: &DefineIndexFieldRequest) -> Result<DefineIndexFieldResponse, DefineIndexFieldError>;
+                fn define_index_field(&self, input: &DefineIndexFieldRequest) -> Box<Future<Item = DefineIndexFieldResponse, Error = DefineIndexFieldError>>;
                 
 
                 #[doc="<p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn define_suggester(&self, input: &DefineSuggesterRequest) -> Result<DefineSuggesterResponse, DefineSuggesterError>;
+                fn define_suggester(&self, input: &DefineSuggesterRequest) -> Box<Future<Item = DefineSuggesterResponse, Error = DefineSuggesterError>>;
                 
 
                 #[doc="<p>Deletes an analysis scheme. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-                fn delete_analysis_scheme(&self, input: &DeleteAnalysisSchemeRequest) -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError>;
+                fn delete_analysis_scheme(&self, input: &DeleteAnalysisSchemeRequest) -> Box<Future<Item = DeleteAnalysisSchemeResponse, Error = DeleteAnalysisSchemeError>>;
                 
 
                 #[doc="<p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html\" target=\"_blank\">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-                fn delete_domain(&self, input: &DeleteDomainRequest) -> Result<DeleteDomainResponse, DeleteDomainError>;
+                fn delete_domain(&self, input: &DeleteDomainRequest) -> Box<Future<Item = DeleteDomainResponse, Error = DeleteDomainError>>;
                 
 
                 #[doc="<p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn delete_expression(&self, input: &DeleteExpressionRequest) -> Result<DeleteExpressionResponse, DeleteExpressionError>;
+                fn delete_expression(&self, input: &DeleteExpressionRequest) -> Box<Future<Item = DeleteExpressionResponse, Error = DeleteExpressionError>>;
                 
 
                 #[doc="<p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn delete_index_field(&self, input: &DeleteIndexFieldRequest) -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError>;
+                fn delete_index_field(&self, input: &DeleteIndexFieldRequest) -> Box<Future<Item = DeleteIndexFieldResponse, Error = DeleteIndexFieldError>>;
                 
 
                 #[doc="<p>Deletes a suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn delete_suggester(&self, input: &DeleteSuggesterRequest) -> Result<DeleteSuggesterResponse, DeleteSuggesterError>;
+                fn delete_suggester(&self, input: &DeleteSuggesterRequest) -> Box<Future<Item = DeleteSuggesterResponse, Error = DeleteSuggesterError>>;
                 
 
                 #[doc="<p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_analysis_schemes(&self, input: &DescribeAnalysisSchemesRequest) -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError>;
+                fn describe_analysis_schemes(&self, input: &DescribeAnalysisSchemesRequest) -> Box<Future<Item = DescribeAnalysisSchemesResponse, Error = DescribeAnalysisSchemesError>>;
                 
 
                 #[doc="<p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_availability_options(&self, input: &DescribeAvailabilityOptionsRequest) -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError>;
+                fn describe_availability_options(&self, input: &DescribeAvailabilityOptionsRequest) -> Box<Future<Item = DescribeAvailabilityOptionsResponse, Error = DescribeAvailabilityOptionsError>>;
                 
 
                 #[doc="<p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_domains(&self, input: &DescribeDomainsRequest) -> Result<DescribeDomainsResponse, DescribeDomainsError>;
+                fn describe_domains(&self, input: &DescribeDomainsRequest) -> Box<Future<Item = DescribeDomainsResponse, Error = DescribeDomainsError>>;
                 
 
                 #[doc="<p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_expressions(&self, input: &DescribeExpressionsRequest) -> Result<DescribeExpressionsResponse, DescribeExpressionsError>;
+                fn describe_expressions(&self, input: &DescribeExpressionsRequest) -> Box<Future<Item = DescribeExpressionsResponse, Error = DescribeExpressionsError>>;
                 
 
                 #[doc="<p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_index_fields(&self, input: &DescribeIndexFieldsRequest) -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError>;
+                fn describe_index_fields(&self, input: &DescribeIndexFieldsRequest) -> Box<Future<Item = DescribeIndexFieldsResponse, Error = DescribeIndexFieldsError>>;
                 
 
                 #[doc="<p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_scaling_parameters(&self, input: &DescribeScalingParametersRequest) -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError>;
+                fn describe_scaling_parameters(&self, input: &DescribeScalingParametersRequest) -> Box<Future<Item = DescribeScalingParametersResponse, Error = DescribeScalingParametersError>>;
                 
 
                 #[doc="<p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_service_access_policies(&self, input: &DescribeServiceAccessPoliciesRequest) -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError>;
+                fn describe_service_access_policies(&self, input: &DescribeServiceAccessPoliciesRequest) -> Box<Future<Item = DescribeServiceAccessPoliciesResponse, Error = DescribeServiceAccessPoliciesError>>;
                 
 
                 #[doc="<p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_suggesters(&self, input: &DescribeSuggestersRequest) -> Result<DescribeSuggestersResponse, DescribeSuggestersError>;
+                fn describe_suggesters(&self, input: &DescribeSuggestersRequest) -> Box<Future<Item = DescribeSuggestersResponse, Error = DescribeSuggestersError>>;
                 
 
                 #[doc="<p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>"]
-                fn index_documents(&self, input: &IndexDocumentsRequest) -> Result<IndexDocumentsResponse, IndexDocumentsError>;
+                fn index_documents(&self, input: &IndexDocumentsRequest) -> Box<Future<Item = IndexDocumentsResponse, Error = IndexDocumentsError>>;
                 
 
                 #[doc="<p>Lists all search domains owned by an account.</p>"]
-                fn list_domain_names(&self) -> Result<ListDomainNamesResponse, ListDomainNamesError>;
+                fn list_domain_names(&self) -> Box<Future<Item = ListDomainNamesResponse, Error = ListDomainNamesError>>;
                 
 
                 #[doc="<p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn update_availability_options(&self, input: &UpdateAvailabilityOptionsRequest) -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError>;
+                fn update_availability_options(&self, input: &UpdateAvailabilityOptionsRequest) -> Box<Future<Item = UpdateAvailabilityOptionsResponse, Error = UpdateAvailabilityOptionsError>>;
                 
 
                 #[doc="<p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-                fn update_scaling_parameters(&self, input: &UpdateScalingParametersRequest) -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError>;
+                fn update_scaling_parameters(&self, input: &UpdateScalingParametersRequest) -> Box<Future<Item = UpdateScalingParametersResponse, Error = UpdateScalingParametersError>>;
                 
 
                 #[doc="<p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>"]
-                fn update_service_access_policies(&self, input: &UpdateServiceAccessPoliciesRequest) -> Result<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError>;
+                fn update_service_access_policies(&self, input: &UpdateServiceAccessPoliciesRequest) -> Box<Future<Item = UpdateServiceAccessPoliciesResponse, Error = UpdateServiceAccessPoliciesError>>;
                 
 }
 /// A client for the Amazon CloudSearch API.
@@ -6467,7 +6477,7 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Indexes the search suggestions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters\">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn build_suggesters(&self, input: &BuildSuggestersRequest) -> Result<BuildSuggestersResponse, BuildSuggestersError> {
+                fn build_suggesters(&self, input: &BuildSuggestersRequest) -> Box<Future<Item = BuildSuggestersResponse, Error = BuildSuggestersError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6476,11 +6486,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     BuildSuggestersRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(BuildSuggestersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| BuildSuggestersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6492,23 +6510,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(BuildSuggestersResponseDeserializer::deserialize("BuildSuggestersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(BuildSuggestersResponseDeserializer::deserialize("BuildSuggestersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(BuildSuggestersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(BuildSuggestersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html\" target=\"_blank\">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn create_domain(&self, input: &CreateDomainRequest) -> Result<CreateDomainResponse, CreateDomainError> {
+                fn create_domain(&self, input: &CreateDomainRequest) -> Box<Future<Item = CreateDomainResponse, Error = CreateDomainError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6517,11 +6536,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     CreateDomainRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateDomainError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateDomainError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6533,23 +6560,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateDomainResponseDeserializer::deserialize("CreateDomainResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateDomainResponseDeserializer::deserialize("CreateDomainResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn define_analysis_scheme(&self, input: &DefineAnalysisSchemeRequest) -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError> {
+                fn define_analysis_scheme(&self, input: &DefineAnalysisSchemeRequest) -> Box<Future<Item = DefineAnalysisSchemeResponse, Error = DefineAnalysisSchemeError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6558,11 +6586,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DefineAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DefineAnalysisSchemeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DefineAnalysisSchemeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6574,23 +6610,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DefineAnalysisSchemeResponseDeserializer::deserialize("DefineAnalysisSchemeResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DefineAnalysisSchemeResponseDeserializer::deserialize("DefineAnalysisSchemeResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DefineAnalysisSchemeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DefineAnalysisSchemeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn define_expression(&self, input: &DefineExpressionRequest) -> Result<DefineExpressionResponse, DefineExpressionError> {
+                fn define_expression(&self, input: &DefineExpressionRequest) -> Box<Future<Item = DefineExpressionResponse, Error = DefineExpressionError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6599,11 +6636,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DefineExpressionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DefineExpressionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DefineExpressionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6615,23 +6660,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DefineExpressionResponseDeserializer::deserialize("DefineExpressionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DefineExpressionResponseDeserializer::deserialize("DefineExpressionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DefineExpressionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DefineExpressionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-                fn define_index_field(&self, input: &DefineIndexFieldRequest) -> Result<DefineIndexFieldResponse, DefineIndexFieldError> {
+                fn define_index_field(&self, input: &DefineIndexFieldRequest) -> Box<Future<Item = DefineIndexFieldResponse, Error = DefineIndexFieldError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6640,11 +6686,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DefineIndexFieldRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DefineIndexFieldError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DefineIndexFieldError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6656,23 +6710,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DefineIndexFieldResponseDeserializer::deserialize("DefineIndexFieldResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DefineIndexFieldResponseDeserializer::deserialize("DefineIndexFieldResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DefineIndexFieldError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DefineIndexFieldError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn define_suggester(&self, input: &DefineSuggesterRequest) -> Result<DefineSuggesterResponse, DefineSuggesterError> {
+                fn define_suggester(&self, input: &DefineSuggesterRequest) -> Box<Future<Item = DefineSuggesterResponse, Error = DefineSuggesterError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6681,11 +6736,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DefineSuggesterRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DefineSuggesterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DefineSuggesterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6697,23 +6760,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DefineSuggesterResponseDeserializer::deserialize("DefineSuggesterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DefineSuggesterResponseDeserializer::deserialize("DefineSuggesterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DefineSuggesterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DefineSuggesterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an analysis scheme. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-                fn delete_analysis_scheme(&self, input: &DeleteAnalysisSchemeRequest) -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError> {
+                fn delete_analysis_scheme(&self, input: &DeleteAnalysisSchemeRequest) -> Box<Future<Item = DeleteAnalysisSchemeResponse, Error = DeleteAnalysisSchemeError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6722,11 +6786,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DeleteAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteAnalysisSchemeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteAnalysisSchemeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6738,23 +6810,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteAnalysisSchemeResponseDeserializer::deserialize("DeleteAnalysisSchemeResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteAnalysisSchemeResponseDeserializer::deserialize("DeleteAnalysisSchemeResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteAnalysisSchemeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteAnalysisSchemeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html\" target=\"_blank\">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-                fn delete_domain(&self, input: &DeleteDomainRequest) -> Result<DeleteDomainResponse, DeleteDomainError> {
+                fn delete_domain(&self, input: &DeleteDomainRequest) -> Box<Future<Item = DeleteDomainResponse, Error = DeleteDomainError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6763,11 +6836,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDomainError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDomainError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6779,23 +6860,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteDomainResponseDeserializer::deserialize("DeleteDomainResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteDomainResponseDeserializer::deserialize("DeleteDomainResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn delete_expression(&self, input: &DeleteExpressionRequest) -> Result<DeleteExpressionResponse, DeleteExpressionError> {
+                fn delete_expression(&self, input: &DeleteExpressionRequest) -> Box<Future<Item = DeleteExpressionResponse, Error = DeleteExpressionError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6804,11 +6886,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DeleteExpressionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteExpressionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteExpressionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6820,23 +6910,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteExpressionResponseDeserializer::deserialize("DeleteExpressionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteExpressionResponseDeserializer::deserialize("DeleteExpressionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteExpressionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteExpressionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn delete_index_field(&self, input: &DeleteIndexFieldRequest) -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError> {
+                fn delete_index_field(&self, input: &DeleteIndexFieldRequest) -> Box<Future<Item = DeleteIndexFieldResponse, Error = DeleteIndexFieldError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6845,11 +6936,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DeleteIndexFieldRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteIndexFieldError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteIndexFieldError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6861,23 +6960,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteIndexFieldResponseDeserializer::deserialize("DeleteIndexFieldResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteIndexFieldResponseDeserializer::deserialize("DeleteIndexFieldResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteIndexFieldError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteIndexFieldError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn delete_suggester(&self, input: &DeleteSuggesterRequest) -> Result<DeleteSuggesterResponse, DeleteSuggesterError> {
+                fn delete_suggester(&self, input: &DeleteSuggesterRequest) -> Box<Future<Item = DeleteSuggesterResponse, Error = DeleteSuggesterError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6886,11 +6986,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DeleteSuggesterRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSuggesterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSuggesterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6902,23 +7010,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteSuggesterResponseDeserializer::deserialize("DeleteSuggesterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteSuggesterResponseDeserializer::deserialize("DeleteSuggesterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSuggesterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSuggesterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_analysis_schemes(&self, input: &DescribeAnalysisSchemesRequest) -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError> {
+                fn describe_analysis_schemes(&self, input: &DescribeAnalysisSchemesRequest) -> Box<Future<Item = DescribeAnalysisSchemesResponse, Error = DescribeAnalysisSchemesError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6927,11 +7036,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DescribeAnalysisSchemesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAnalysisSchemesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAnalysisSchemesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6943,23 +7060,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeAnalysisSchemesResponseDeserializer::deserialize("DescribeAnalysisSchemesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeAnalysisSchemesResponseDeserializer::deserialize("DescribeAnalysisSchemesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAnalysisSchemesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAnalysisSchemesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_availability_options(&self, input: &DescribeAvailabilityOptionsRequest) -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError> {
+                fn describe_availability_options(&self, input: &DescribeAvailabilityOptionsRequest) -> Box<Future<Item = DescribeAvailabilityOptionsResponse, Error = DescribeAvailabilityOptionsError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -6968,11 +7086,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DescribeAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAvailabilityOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAvailabilityOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6984,23 +7110,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeAvailabilityOptionsResponseDeserializer::deserialize("DescribeAvailabilityOptionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeAvailabilityOptionsResponseDeserializer::deserialize("DescribeAvailabilityOptionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAvailabilityOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAvailabilityOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_domains(&self, input: &DescribeDomainsRequest) -> Result<DescribeDomainsResponse, DescribeDomainsError> {
+                fn describe_domains(&self, input: &DescribeDomainsRequest) -> Box<Future<Item = DescribeDomainsResponse, Error = DescribeDomainsError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7009,11 +7136,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DescribeDomainsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDomainsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDomainsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7025,23 +7160,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeDomainsResponseDeserializer::deserialize("DescribeDomainsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeDomainsResponseDeserializer::deserialize("DescribeDomainsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_expressions(&self, input: &DescribeExpressionsRequest) -> Result<DescribeExpressionsResponse, DescribeExpressionsError> {
+                fn describe_expressions(&self, input: &DescribeExpressionsRequest) -> Box<Future<Item = DescribeExpressionsResponse, Error = DescribeExpressionsError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7050,11 +7186,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DescribeExpressionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeExpressionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeExpressionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7066,23 +7210,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeExpressionsResponseDeserializer::deserialize("DescribeExpressionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeExpressionsResponseDeserializer::deserialize("DescribeExpressionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeExpressionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeExpressionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_index_fields(&self, input: &DescribeIndexFieldsRequest) -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError> {
+                fn describe_index_fields(&self, input: &DescribeIndexFieldsRequest) -> Box<Future<Item = DescribeIndexFieldsResponse, Error = DescribeIndexFieldsError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7091,11 +7236,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DescribeIndexFieldsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeIndexFieldsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeIndexFieldsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7107,23 +7260,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeIndexFieldsResponseDeserializer::deserialize("DescribeIndexFieldsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeIndexFieldsResponseDeserializer::deserialize("DescribeIndexFieldsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeIndexFieldsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeIndexFieldsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_scaling_parameters(&self, input: &DescribeScalingParametersRequest) -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError> {
+                fn describe_scaling_parameters(&self, input: &DescribeScalingParametersRequest) -> Box<Future<Item = DescribeScalingParametersResponse, Error = DescribeScalingParametersError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7132,11 +7286,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DescribeScalingParametersRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeScalingParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeScalingParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7148,23 +7310,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeScalingParametersResponseDeserializer::deserialize("DescribeScalingParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeScalingParametersResponseDeserializer::deserialize("DescribeScalingParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeScalingParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeScalingParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_service_access_policies(&self, input: &DescribeServiceAccessPoliciesRequest) -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError> {
+                fn describe_service_access_policies(&self, input: &DescribeServiceAccessPoliciesRequest) -> Box<Future<Item = DescribeServiceAccessPoliciesResponse, Error = DescribeServiceAccessPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7173,11 +7336,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DescribeServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeServiceAccessPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeServiceAccessPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7189,23 +7360,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeServiceAccessPoliciesResponseDeserializer::deserialize("DescribeServiceAccessPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeServiceAccessPoliciesResponseDeserializer::deserialize("DescribeServiceAccessPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn describe_suggesters(&self, input: &DescribeSuggestersRequest) -> Result<DescribeSuggestersResponse, DescribeSuggestersError> {
+                fn describe_suggesters(&self, input: &DescribeSuggestersRequest) -> Box<Future<Item = DescribeSuggestersResponse, Error = DescribeSuggestersError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7214,11 +7386,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     DescribeSuggestersRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSuggestersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSuggestersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7230,23 +7410,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeSuggestersResponseDeserializer::deserialize("DescribeSuggestersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeSuggestersResponseDeserializer::deserialize("DescribeSuggestersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSuggestersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSuggestersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>"]
-                fn index_documents(&self, input: &IndexDocumentsRequest) -> Result<IndexDocumentsResponse, IndexDocumentsError> {
+                fn index_documents(&self, input: &IndexDocumentsRequest) -> Box<Future<Item = IndexDocumentsResponse, Error = IndexDocumentsError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7255,11 +7436,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     IndexDocumentsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(IndexDocumentsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| IndexDocumentsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7271,23 +7460,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(IndexDocumentsResponseDeserializer::deserialize("IndexDocumentsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(IndexDocumentsResponseDeserializer::deserialize("IndexDocumentsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(IndexDocumentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(IndexDocumentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all search domains owned by an account.</p>"]
-                fn list_domain_names(&self) -> Result<ListDomainNamesResponse, ListDomainNamesError> {
+                fn list_domain_names(&self) -> Box<Future<Item = ListDomainNamesResponse, Error = ListDomainNamesError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7296,11 +7486,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListDomainNamesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListDomainNamesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7312,23 +7510,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListDomainNamesResponseDeserializer::deserialize("ListDomainNamesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListDomainNamesResponseDeserializer::deserialize("ListDomainNamesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListDomainNamesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListDomainNamesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-                fn update_availability_options(&self, input: &UpdateAvailabilityOptionsRequest) -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError> {
+                fn update_availability_options(&self, input: &UpdateAvailabilityOptionsRequest) -> Box<Future<Item = UpdateAvailabilityOptionsResponse, Error = UpdateAvailabilityOptionsError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7337,11 +7536,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     UpdateAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateAvailabilityOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateAvailabilityOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7353,23 +7560,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UpdateAvailabilityOptionsResponseDeserializer::deserialize("UpdateAvailabilityOptionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UpdateAvailabilityOptionsResponseDeserializer::deserialize("UpdateAvailabilityOptionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateAvailabilityOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateAvailabilityOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-                fn update_scaling_parameters(&self, input: &UpdateScalingParametersRequest) -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError> {
+                fn update_scaling_parameters(&self, input: &UpdateScalingParametersRequest) -> Box<Future<Item = UpdateScalingParametersResponse, Error = UpdateScalingParametersError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7378,11 +7586,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     UpdateScalingParametersRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateScalingParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateScalingParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7394,23 +7610,24 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UpdateScalingParametersResponseDeserializer::deserialize("UpdateScalingParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UpdateScalingParametersResponseDeserializer::deserialize("UpdateScalingParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateScalingParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateScalingParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>"]
-                fn update_service_access_policies(&self, input: &UpdateServiceAccessPoliciesRequest) -> Result<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError> {
+                fn update_service_access_policies(&self, input: &UpdateServiceAccessPoliciesRequest) -> Box<Future<Item = UpdateServiceAccessPoliciesResponse, Error = UpdateServiceAccessPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
                     let mut params = Params::new();
 
@@ -7419,11 +7636,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                     UpdateServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateServiceAccessPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateServiceAccessPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7435,18 +7660,19 @@ UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UpdateServiceAccessPoliciesResponseDeserializer::deserialize("UpdateServiceAccessPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UpdateServiceAccessPoliciesResponseDeserializer::deserialize("UpdateServiceAccessPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

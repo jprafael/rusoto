@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -13571,251 +13581,251 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href=\"http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn authorize_cluster_security_group_ingress(&self, input: &AuthorizeClusterSecurityGroupIngressMessage) -> Result<AuthorizeClusterSecurityGroupIngressResult, AuthorizeClusterSecurityGroupIngressError>;
+                fn authorize_cluster_security_group_ingress(&self, input: &AuthorizeClusterSecurityGroupIngressMessage) -> Box<Future<Item = AuthorizeClusterSecurityGroupIngressResult, Error = AuthorizeClusterSecurityGroupIngressError>>;
                 
 
                 #[doc="<p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn authorize_snapshot_access(&self, input: &AuthorizeSnapshotAccessMessage) -> Result<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError>;
+                fn authorize_snapshot_access(&self, input: &AuthorizeSnapshotAccessMessage) -> Box<Future<Item = AuthorizeSnapshotAccessResult, Error = AuthorizeSnapshotAccessError>>;
                 
 
                 #[doc="<p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn copy_cluster_snapshot(&self, input: &CopyClusterSnapshotMessage) -> Result<CopyClusterSnapshotResult, CopyClusterSnapshotError>;
+                fn copy_cluster_snapshot(&self, input: &CopyClusterSnapshotMessage) -> Box<Future<Item = CopyClusterSnapshotResult, Error = CopyClusterSnapshotError>>;
                 
 
                 #[doc="<p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster(&self, input: &CreateClusterMessage) -> Result<CreateClusterResult, CreateClusterError>;
+                fn create_cluster(&self, input: &CreateClusterMessage) -> Box<Future<Item = CreateClusterResult, Error = CreateClusterError>>;
                 
 
                 #[doc="<p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster_parameter_group(&self, input: &CreateClusterParameterGroupMessage) -> Result<CreateClusterParameterGroupResult, CreateClusterParameterGroupError>;
+                fn create_cluster_parameter_group(&self, input: &CreateClusterParameterGroupMessage) -> Box<Future<Item = CreateClusterParameterGroupResult, Error = CreateClusterParameterGroupError>>;
                 
 
                 #[doc="<p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster_security_group(&self, input: &CreateClusterSecurityGroupMessage) -> Result<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError>;
+                fn create_cluster_security_group(&self, input: &CreateClusterSecurityGroupMessage) -> Box<Future<Item = CreateClusterSecurityGroupResult, Error = CreateClusterSecurityGroupError>>;
                 
 
                 #[doc="<p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster_snapshot(&self, input: &CreateClusterSnapshotMessage) -> Result<CreateClusterSnapshotResult, CreateClusterSnapshotError>;
+                fn create_cluster_snapshot(&self, input: &CreateClusterSnapshotMessage) -> Box<Future<Item = CreateClusterSnapshotResult, Error = CreateClusterSnapshotError>>;
                 
 
                 #[doc="<p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html\">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster_subnet_group(&self, input: &CreateClusterSubnetGroupMessage) -> Result<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError>;
+                fn create_cluster_subnet_group(&self, input: &CreateClusterSubnetGroupMessage) -> Box<Future<Item = CreateClusterSubnetGroupResult, Error = CreateClusterSubnetGroupError>>;
                 
 
                 #[doc="<p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>"]
-                fn create_event_subscription(&self, input: &CreateEventSubscriptionMessage) -> Result<CreateEventSubscriptionResult, CreateEventSubscriptionError>;
+                fn create_event_subscription(&self, input: &CreateEventSubscriptionMessage) -> Box<Future<Item = CreateEventSubscriptionResult, Error = CreateEventSubscriptionError>>;
                 
 
                 #[doc="<p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>"]
-                fn create_hsm_client_certificate(&self, input: &CreateHsmClientCertificateMessage) -> Result<CreateHsmClientCertificateResult, CreateHsmClientCertificateError>;
+                fn create_hsm_client_certificate(&self, input: &CreateHsmClientCertificateMessage) -> Box<Future<Item = CreateHsmClientCertificateResult, Error = CreateHsmClientCertificateError>>;
                 
 
                 #[doc="<p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>"]
-                fn create_hsm_configuration(&self, input: &CreateHsmConfigurationMessage) -> Result<CreateHsmConfigurationResult, CreateHsmConfigurationError>;
+                fn create_hsm_configuration(&self, input: &CreateHsmConfigurationMessage) -> Box<Future<Item = CreateHsmConfigurationResult, Error = CreateHsmConfigurationError>>;
                 
 
                 #[doc="<p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
-                fn create_snapshot_copy_grant(&self, input: &CreateSnapshotCopyGrantMessage) -> Result<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError>;
+                fn create_snapshot_copy_grant(&self, input: &CreateSnapshotCopyGrantMessage) -> Box<Future<Item = CreateSnapshotCopyGrantResult, Error = CreateSnapshotCopyGrantError>>;
                 
 
                 #[doc="<p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>"]
-                fn create_tags(&self, input: &CreateTagsMessage) -> Result<(), CreateTagsError>;
+                fn create_tags(&self, input: &CreateTagsMessage) -> Box<Future<Item = (), Error = CreateTagsError>>;
                 
 
                 #[doc="<p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be \"final-snapshot\" while the snapshot is being taken, then it's \"deleting\" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn delete_cluster(&self, input: &DeleteClusterMessage) -> Result<DeleteClusterResult, DeleteClusterError>;
+                fn delete_cluster(&self, input: &DeleteClusterMessage) -> Box<Future<Item = DeleteClusterResult, Error = DeleteClusterError>>;
                 
 
                 #[doc="<p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note>"]
-                fn delete_cluster_parameter_group(&self, input: &DeleteClusterParameterGroupMessage) -> Result<(), DeleteClusterParameterGroupError>;
+                fn delete_cluster_parameter_group(&self, input: &DeleteClusterParameterGroupMessage) -> Box<Future<Item = (), Error = DeleteClusterParameterGroupError>>;
                 
 
                 #[doc="<p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn delete_cluster_security_group(&self, input: &DeleteClusterSecurityGroupMessage) -> Result<(), DeleteClusterSecurityGroupError>;
+                fn delete_cluster_security_group(&self, input: &DeleteClusterSecurityGroupMessage) -> Box<Future<Item = (), Error = DeleteClusterSecurityGroupError>>;
                 
 
                 #[doc="<p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>"]
-                fn delete_cluster_snapshot(&self, input: &DeleteClusterSnapshotMessage) -> Result<DeleteClusterSnapshotResult, DeleteClusterSnapshotError>;
+                fn delete_cluster_snapshot(&self, input: &DeleteClusterSnapshotMessage) -> Box<Future<Item = DeleteClusterSnapshotResult, Error = DeleteClusterSnapshotError>>;
                 
 
                 #[doc="<p>Deletes the specified cluster subnet group.</p>"]
-                fn delete_cluster_subnet_group(&self, input: &DeleteClusterSubnetGroupMessage) -> Result<(), DeleteClusterSubnetGroupError>;
+                fn delete_cluster_subnet_group(&self, input: &DeleteClusterSubnetGroupMessage) -> Box<Future<Item = (), Error = DeleteClusterSubnetGroupError>>;
                 
 
                 #[doc="<p>Deletes an Amazon Redshift event notification subscription.</p>"]
-                fn delete_event_subscription(&self, input: &DeleteEventSubscriptionMessage) -> Result<(), DeleteEventSubscriptionError>;
+                fn delete_event_subscription(&self, input: &DeleteEventSubscriptionMessage) -> Box<Future<Item = (), Error = DeleteEventSubscriptionError>>;
                 
 
                 #[doc="<p>Deletes the specified HSM client certificate.</p>"]
-                fn delete_hsm_client_certificate(&self, input: &DeleteHsmClientCertificateMessage) -> Result<(), DeleteHsmClientCertificateError>;
+                fn delete_hsm_client_certificate(&self, input: &DeleteHsmClientCertificateMessage) -> Box<Future<Item = (), Error = DeleteHsmClientCertificateError>>;
                 
 
                 #[doc="<p>Deletes the specified Amazon Redshift HSM configuration.</p>"]
-                fn delete_hsm_configuration(&self, input: &DeleteHsmConfigurationMessage) -> Result<(), DeleteHsmConfigurationError>;
+                fn delete_hsm_configuration(&self, input: &DeleteHsmConfigurationMessage) -> Box<Future<Item = (), Error = DeleteHsmConfigurationError>>;
                 
 
                 #[doc="<p>Deletes the specified snapshot copy grant.</p>"]
-                fn delete_snapshot_copy_grant(&self, input: &DeleteSnapshotCopyGrantMessage) -> Result<(), DeleteSnapshotCopyGrantError>;
+                fn delete_snapshot_copy_grant(&self, input: &DeleteSnapshotCopyGrantMessage) -> Box<Future<Item = (), Error = DeleteSnapshotCopyGrantError>>;
                 
 
                 #[doc="<p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>"]
-                fn delete_tags(&self, input: &DeleteTagsMessage) -> Result<(), DeleteTagsError>;
+                fn delete_tags(&self, input: &DeleteTagsMessage) -> Box<Future<Item = (), Error = DeleteTagsError>>;
                 
 
                 #[doc="<p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_cluster_parameter_groups(&self, input: &DescribeClusterParameterGroupsMessage) -> Result<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError>;
+                fn describe_cluster_parameter_groups(&self, input: &DescribeClusterParameterGroupsMessage) -> Box<Future<Item = ClusterParameterGroupsMessage, Error = DescribeClusterParameterGroupsError>>;
                 
 
                 #[doc="<p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_cluster_parameters(&self, input: &DescribeClusterParametersMessage) -> Result<ClusterParameterGroupDetails, DescribeClusterParametersError>;
+                fn describe_cluster_parameters(&self, input: &DescribeClusterParametersMessage) -> Box<Future<Item = ClusterParameterGroupDetails, Error = DescribeClusterParametersError>>;
                 
 
                 #[doc="<p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_cluster_security_groups(&self, input: &DescribeClusterSecurityGroupsMessage) -> Result<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError>;
+                fn describe_cluster_security_groups(&self, input: &DescribeClusterSecurityGroupsMessage) -> Box<Future<Item = ClusterSecurityGroupMessage, Error = DescribeClusterSecurityGroupsError>>;
                 
 
                 #[doc="<p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_cluster_snapshots(&self, input: &DescribeClusterSnapshotsMessage) -> Result<SnapshotMessage, DescribeClusterSnapshotsError>;
+                fn describe_cluster_snapshots(&self, input: &DescribeClusterSnapshotsMessage) -> Box<Future<Item = SnapshotMessage, Error = DescribeClusterSnapshotsError>>;
                 
 
                 #[doc="<p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_cluster_subnet_groups(&self, input: &DescribeClusterSubnetGroupsMessage) -> Result<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError>;
+                fn describe_cluster_subnet_groups(&self, input: &DescribeClusterSubnetGroupsMessage) -> Box<Future<Item = ClusterSubnetGroupMessage, Error = DescribeClusterSubnetGroupsError>>;
                 
 
                 #[doc="<p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_cluster_versions(&self, input: &DescribeClusterVersionsMessage) -> Result<ClusterVersionsMessage, DescribeClusterVersionsError>;
+                fn describe_cluster_versions(&self, input: &DescribeClusterVersionsMessage) -> Box<Future<Item = ClusterVersionsMessage, Error = DescribeClusterVersionsError>>;
                 
 
                 #[doc="<p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_clusters(&self, input: &DescribeClustersMessage) -> Result<ClustersMessage, DescribeClustersError>;
+                fn describe_clusters(&self, input: &DescribeClustersMessage) -> Box<Future<Item = ClustersMessage, Error = DescribeClustersError>>;
                 
 
                 #[doc="<p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_default_cluster_parameters(&self, input: &DescribeDefaultClusterParametersMessage) -> Result<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError>;
+                fn describe_default_cluster_parameters(&self, input: &DescribeDefaultClusterParametersMessage) -> Box<Future<Item = DescribeDefaultClusterParametersResult, Error = DescribeDefaultClusterParametersError>>;
                 
 
                 #[doc="<p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html\">Amazon Redshift Event Notifications</a>.</p>"]
-                fn describe_event_categories(&self, input: &DescribeEventCategoriesMessage) -> Result<EventCategoriesMessage, DescribeEventCategoriesError>;
+                fn describe_event_categories(&self, input: &DescribeEventCategoriesMessage) -> Box<Future<Item = EventCategoriesMessage, Error = DescribeEventCategoriesError>>;
                 
 
                 #[doc="<p>Lists descriptions of all the Amazon Redshift event notifications subscription for a customer account. If you specify a subscription name, lists the description for that subscription.</p>"]
-                fn describe_event_subscriptions(&self, input: &DescribeEventSubscriptionsMessage) -> Result<EventSubscriptionsMessage, DescribeEventSubscriptionsError>;
+                fn describe_event_subscriptions(&self, input: &DescribeEventSubscriptionsMessage) -> Box<Future<Item = EventSubscriptionsMessage, Error = DescribeEventSubscriptionsError>>;
                 
 
                 #[doc="<p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>"]
-                fn describe_events(&self, input: &DescribeEventsMessage) -> Result<EventsMessage, DescribeEventsError>;
+                fn describe_events(&self, input: &DescribeEventsMessage) -> Box<Future<Item = EventsMessage, Error = DescribeEventsError>>;
                 
 
                 #[doc="<p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_hsm_client_certificates(&self, input: &DescribeHsmClientCertificatesMessage) -> Result<HsmClientCertificateMessage, DescribeHsmClientCertificatesError>;
+                fn describe_hsm_client_certificates(&self, input: &DescribeHsmClientCertificatesMessage) -> Box<Future<Item = HsmClientCertificateMessage, Error = DescribeHsmClientCertificatesError>>;
                 
 
                 #[doc="<p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_hsm_configurations(&self, input: &DescribeHsmConfigurationsMessage) -> Result<HsmConfigurationMessage, DescribeHsmConfigurationsError>;
+                fn describe_hsm_configurations(&self, input: &DescribeHsmConfigurationsMessage) -> Box<Future<Item = HsmConfigurationMessage, Error = DescribeHsmConfigurationsError>>;
                 
 
                 #[doc="<p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>"]
-                fn describe_logging_status(&self, input: &DescribeLoggingStatusMessage) -> Result<LoggingStatus, DescribeLoggingStatusError>;
+                fn describe_logging_status(&self, input: &DescribeLoggingStatusMessage) -> Box<Future<Item = LoggingStatus, Error = DescribeLoggingStatusError>>;
                 
 
                 #[doc="<p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_orderable_cluster_options(&self, input: &DescribeOrderableClusterOptionsMessage) -> Result<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError>;
+                fn describe_orderable_cluster_options(&self, input: &DescribeOrderableClusterOptionsMessage) -> Box<Future<Item = OrderableClusterOptionsMessage, Error = DescribeOrderableClusterOptionsError>>;
                 
 
                 #[doc="<p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html\">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_reserved_node_offerings(&self, input: &DescribeReservedNodeOfferingsMessage) -> Result<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError>;
+                fn describe_reserved_node_offerings(&self, input: &DescribeReservedNodeOfferingsMessage) -> Box<Future<Item = ReservedNodeOfferingsMessage, Error = DescribeReservedNodeOfferingsError>>;
                 
 
                 #[doc="<p>Returns the descriptions of the reserved nodes.</p>"]
-                fn describe_reserved_nodes(&self, input: &DescribeReservedNodesMessage) -> Result<ReservedNodesMessage, DescribeReservedNodesError>;
+                fn describe_reserved_nodes(&self, input: &DescribeReservedNodesMessage) -> Box<Future<Item = ReservedNodesMessage, Error = DescribeReservedNodesError>>;
                 
 
                 #[doc="<p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>"]
-                fn describe_resize(&self, input: &DescribeResizeMessage) -> Result<ResizeProgressMessage, DescribeResizeError>;
+                fn describe_resize(&self, input: &DescribeResizeMessage) -> Box<Future<Item = ResizeProgressMessage, Error = DescribeResizeError>>;
                 
 
                 #[doc="<p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
-                fn describe_snapshot_copy_grants(&self, input: &DescribeSnapshotCopyGrantsMessage) -> Result<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError>;
+                fn describe_snapshot_copy_grants(&self, input: &DescribeSnapshotCopyGrantsMessage) -> Box<Future<Item = SnapshotCopyGrantMessage, Error = DescribeSnapshotCopyGrantsError>>;
                 
 
                 #[doc="<p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>"]
-                fn describe_table_restore_status(&self, input: &DescribeTableRestoreStatusMessage) -> Result<TableRestoreStatusMessage, DescribeTableRestoreStatusError>;
+                fn describe_table_restore_status(&self, input: &DescribeTableRestoreStatusMessage) -> Box<Future<Item = TableRestoreStatusMessage, Error = DescribeTableRestoreStatusError>>;
                 
 
                 #[doc="<p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsMessage) -> Result<TaggedResourceListMessage, DescribeTagsError>;
+                fn describe_tags(&self, input: &DescribeTagsMessage) -> Box<Future<Item = TaggedResourceListMessage, Error = DescribeTagsError>>;
                 
 
                 #[doc="<p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>"]
-                fn disable_logging(&self, input: &DisableLoggingMessage) -> Result<LoggingStatus, DisableLoggingError>;
+                fn disable_logging(&self, input: &DisableLoggingMessage) -> Box<Future<Item = LoggingStatus, Error = DisableLoggingError>>;
                 
 
                 #[doc="<p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>"]
-                fn disable_snapshot_copy(&self, input: &DisableSnapshotCopyMessage) -> Result<DisableSnapshotCopyResult, DisableSnapshotCopyError>;
+                fn disable_snapshot_copy(&self, input: &DisableSnapshotCopyMessage) -> Box<Future<Item = DisableSnapshotCopyResult, Error = DisableSnapshotCopyError>>;
                 
 
                 #[doc="<p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>"]
-                fn enable_logging(&self, input: &EnableLoggingMessage) -> Result<LoggingStatus, EnableLoggingError>;
+                fn enable_logging(&self, input: &EnableLoggingMessage) -> Box<Future<Item = LoggingStatus, Error = EnableLoggingError>>;
                 
 
                 #[doc="<p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>"]
-                fn enable_snapshot_copy(&self, input: &EnableSnapshotCopyMessage) -> Result<EnableSnapshotCopyResult, EnableSnapshotCopyError>;
+                fn enable_snapshot_copy(&self, input: &EnableSnapshotCopyMessage) -> Box<Future<Item = EnableSnapshotCopyResult, Error = EnableSnapshotCopyError>>;
                 
 
                 #[doc="<p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>"]
-                fn modify_cluster(&self, input: &ModifyClusterMessage) -> Result<ModifyClusterResult, ModifyClusterError>;
+                fn modify_cluster(&self, input: &ModifyClusterMessage) -> Box<Future<Item = ModifyClusterResult, Error = ModifyClusterError>>;
                 
 
                 #[doc="<p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>"]
-                fn modify_cluster_iam_roles(&self, input: &ModifyClusterIamRolesMessage) -> Result<ModifyClusterIamRolesResult, ModifyClusterIamRolesError>;
+                fn modify_cluster_iam_roles(&self, input: &ModifyClusterIamRolesMessage) -> Box<Future<Item = ModifyClusterIamRolesResult, Error = ModifyClusterIamRolesError>>;
                 
 
                 #[doc="<p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn modify_cluster_parameter_group(&self, input: &ModifyClusterParameterGroupMessage) -> Result<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError>;
+                fn modify_cluster_parameter_group(&self, input: &ModifyClusterParameterGroupMessage) -> Box<Future<Item = ClusterParameterGroupNameMessage, Error = ModifyClusterParameterGroupError>>;
                 
 
                 #[doc="<p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>"]
-                fn modify_cluster_subnet_group(&self, input: &ModifyClusterSubnetGroupMessage) -> Result<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError>;
+                fn modify_cluster_subnet_group(&self, input: &ModifyClusterSubnetGroupMessage) -> Box<Future<Item = ModifyClusterSubnetGroupResult, Error = ModifyClusterSubnetGroupError>>;
                 
 
                 #[doc="<p>Modifies an existing Amazon Redshift event notification subscription.</p>"]
-                fn modify_event_subscription(&self, input: &ModifyEventSubscriptionMessage) -> Result<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
+                fn modify_event_subscription(&self, input: &ModifyEventSubscriptionMessage) -> Box<Future<Item = ModifyEventSubscriptionResult, Error = ModifyEventSubscriptionError>>;
                 
 
                 #[doc="<p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>"]
-                fn modify_snapshot_copy_retention_period(&self, input: &ModifySnapshotCopyRetentionPeriodMessage) -> Result<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError>;
+                fn modify_snapshot_copy_retention_period(&self, input: &ModifySnapshotCopyRetentionPeriodMessage) -> Box<Future<Item = ModifySnapshotCopyRetentionPeriodResult, Error = ModifySnapshotCopyRetentionPeriodError>>;
                 
 
                 #[doc="<p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html\">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn purchase_reserved_node_offering(&self, input: &PurchaseReservedNodeOfferingMessage) -> Result<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError>;
+                fn purchase_reserved_node_offering(&self, input: &PurchaseReservedNodeOfferingMessage) -> Box<Future<Item = PurchaseReservedNodeOfferingResult, Error = PurchaseReservedNodeOfferingError>>;
                 
 
                 #[doc="<p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
-                fn reboot_cluster(&self, input: &RebootClusterMessage) -> Result<RebootClusterResult, RebootClusterError>;
+                fn reboot_cluster(&self, input: &RebootClusterMessage) -> Box<Future<Item = RebootClusterResult, Error = RebootClusterError>>;
                 
 
                 #[doc="<p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to \"engine-default\". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>"]
-                fn reset_cluster_parameter_group(&self, input: &ResetClusterParameterGroupMessage) -> Result<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError>;
+                fn reset_cluster_parameter_group(&self, input: &ResetClusterParameterGroupMessage) -> Box<Future<Item = ClusterParameterGroupNameMessage, Error = ResetClusterParameterGroupError>>;
                 
 
                 #[doc="<p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn restore_from_cluster_snapshot(&self, input: &RestoreFromClusterSnapshotMessage) -> Result<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError>;
+                fn restore_from_cluster_snapshot(&self, input: &RestoreFromClusterSnapshotMessage) -> Box<Future<Item = RestoreFromClusterSnapshotResult, Error = RestoreFromClusterSnapshotError>>;
                 
 
                 #[doc="<p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>"]
-                fn restore_table_from_cluster_snapshot(&self, input: &RestoreTableFromClusterSnapshotMessage) -> Result<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError>;
+                fn restore_table_from_cluster_snapshot(&self, input: &RestoreTableFromClusterSnapshotMessage) -> Box<Future<Item = RestoreTableFromClusterSnapshotResult, Error = RestoreTableFromClusterSnapshotError>>;
                 
 
                 #[doc="<p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
-                fn revoke_cluster_security_group_ingress(&self, input: &RevokeClusterSecurityGroupIngressMessage) -> Result<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError>;
+                fn revoke_cluster_security_group_ingress(&self, input: &RevokeClusterSecurityGroupIngressMessage) -> Box<Future<Item = RevokeClusterSecurityGroupIngressResult, Error = RevokeClusterSecurityGroupIngressError>>;
                 
 
                 #[doc="<p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn revoke_snapshot_access(&self, input: &RevokeSnapshotAccessMessage) -> Result<RevokeSnapshotAccessResult, RevokeSnapshotAccessError>;
+                fn revoke_snapshot_access(&self, input: &RevokeSnapshotAccessMessage) -> Box<Future<Item = RevokeSnapshotAccessResult, Error = RevokeSnapshotAccessError>>;
                 
 
                 #[doc="<p>Rotates the encryption keys for a cluster.</p>"]
-                fn rotate_encryption_key(&self, input: &RotateEncryptionKeyMessage) -> Result<RotateEncryptionKeyResult, RotateEncryptionKeyError>;
+                fn rotate_encryption_key(&self, input: &RotateEncryptionKeyMessage) -> Box<Future<Item = RotateEncryptionKeyResult, Error = RotateEncryptionKeyError>>;
                 
 }
 /// A client for the Amazon Redshift API.
@@ -13839,7 +13849,7 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href=\"http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn authorize_cluster_security_group_ingress(&self, input: &AuthorizeClusterSecurityGroupIngressMessage) -> Result<AuthorizeClusterSecurityGroupIngressResult, AuthorizeClusterSecurityGroupIngressError> {
+                fn authorize_cluster_security_group_ingress(&self, input: &AuthorizeClusterSecurityGroupIngressMessage) -> Box<Future<Item = AuthorizeClusterSecurityGroupIngressResult, Error = AuthorizeClusterSecurityGroupIngressError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -13848,11 +13858,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     AuthorizeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AuthorizeClusterSecurityGroupIngressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AuthorizeClusterSecurityGroupIngressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -13864,23 +13882,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize("AuthorizeClusterSecurityGroupIngressResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize("AuthorizeClusterSecurityGroupIngressResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AuthorizeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AuthorizeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn authorize_snapshot_access(&self, input: &AuthorizeSnapshotAccessMessage) -> Result<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError> {
+                fn authorize_snapshot_access(&self, input: &AuthorizeSnapshotAccessMessage) -> Box<Future<Item = AuthorizeSnapshotAccessResult, Error = AuthorizeSnapshotAccessError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -13889,11 +13908,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     AuthorizeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AuthorizeSnapshotAccessError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AuthorizeSnapshotAccessError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -13905,23 +13932,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(AuthorizeSnapshotAccessResultDeserializer::deserialize("AuthorizeSnapshotAccessResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(AuthorizeSnapshotAccessResultDeserializer::deserialize("AuthorizeSnapshotAccessResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AuthorizeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(AuthorizeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn copy_cluster_snapshot(&self, input: &CopyClusterSnapshotMessage) -> Result<CopyClusterSnapshotResult, CopyClusterSnapshotError> {
+                fn copy_cluster_snapshot(&self, input: &CopyClusterSnapshotMessage) -> Box<Future<Item = CopyClusterSnapshotResult, Error = CopyClusterSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -13930,11 +13958,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CopyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopyClusterSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopyClusterSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -13946,23 +13982,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CopyClusterSnapshotResultDeserializer::deserialize("CopyClusterSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CopyClusterSnapshotResultDeserializer::deserialize("CopyClusterSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CopyClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CopyClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster(&self, input: &CreateClusterMessage) -> Result<CreateClusterResult, CreateClusterError> {
+                fn create_cluster(&self, input: &CreateClusterMessage) -> Box<Future<Item = CreateClusterResult, Error = CreateClusterError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -13971,11 +14008,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -13987,23 +14032,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateClusterResultDeserializer::deserialize("CreateClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateClusterResultDeserializer::deserialize("CreateClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster_parameter_group(&self, input: &CreateClusterParameterGroupMessage) -> Result<CreateClusterParameterGroupResult, CreateClusterParameterGroupError> {
+                fn create_cluster_parameter_group(&self, input: &CreateClusterParameterGroupMessage) -> Box<Future<Item = CreateClusterParameterGroupResult, Error = CreateClusterParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14012,11 +14058,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateClusterParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateClusterParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14028,23 +14082,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateClusterParameterGroupResultDeserializer::deserialize("CreateClusterParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateClusterParameterGroupResultDeserializer::deserialize("CreateClusterParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster_security_group(&self, input: &CreateClusterSecurityGroupMessage) -> Result<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError> {
+                fn create_cluster_security_group(&self, input: &CreateClusterSecurityGroupMessage) -> Box<Future<Item = CreateClusterSecurityGroupResult, Error = CreateClusterSecurityGroupError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14053,11 +14108,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateClusterSecurityGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateClusterSecurityGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14069,23 +14132,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateClusterSecurityGroupResultDeserializer::deserialize("CreateClusterSecurityGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateClusterSecurityGroupResultDeserializer::deserialize("CreateClusterSecurityGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster_snapshot(&self, input: &CreateClusterSnapshotMessage) -> Result<CreateClusterSnapshotResult, CreateClusterSnapshotError> {
+                fn create_cluster_snapshot(&self, input: &CreateClusterSnapshotMessage) -> Box<Future<Item = CreateClusterSnapshotResult, Error = CreateClusterSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14094,11 +14158,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateClusterSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateClusterSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14110,23 +14182,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateClusterSnapshotResultDeserializer::deserialize("CreateClusterSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateClusterSnapshotResultDeserializer::deserialize("CreateClusterSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html\">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn create_cluster_subnet_group(&self, input: &CreateClusterSubnetGroupMessage) -> Result<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError> {
+                fn create_cluster_subnet_group(&self, input: &CreateClusterSubnetGroupMessage) -> Box<Future<Item = CreateClusterSubnetGroupResult, Error = CreateClusterSubnetGroupError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14135,11 +14208,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateClusterSubnetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateClusterSubnetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14151,23 +14232,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateClusterSubnetGroupResultDeserializer::deserialize("CreateClusterSubnetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateClusterSubnetGroupResultDeserializer::deserialize("CreateClusterSubnetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>"]
-                fn create_event_subscription(&self, input: &CreateEventSubscriptionMessage) -> Result<CreateEventSubscriptionResult, CreateEventSubscriptionError> {
+                fn create_event_subscription(&self, input: &CreateEventSubscriptionMessage) -> Box<Future<Item = CreateEventSubscriptionResult, Error = CreateEventSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14176,11 +14258,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateEventSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateEventSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14192,23 +14282,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateEventSubscriptionResultDeserializer::deserialize("CreateEventSubscriptionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateEventSubscriptionResultDeserializer::deserialize("CreateEventSubscriptionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>"]
-                fn create_hsm_client_certificate(&self, input: &CreateHsmClientCertificateMessage) -> Result<CreateHsmClientCertificateResult, CreateHsmClientCertificateError> {
+                fn create_hsm_client_certificate(&self, input: &CreateHsmClientCertificateMessage) -> Box<Future<Item = CreateHsmClientCertificateResult, Error = CreateHsmClientCertificateError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14217,11 +14308,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateHsmClientCertificateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateHsmClientCertificateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14233,23 +14332,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateHsmClientCertificateResultDeserializer::deserialize("CreateHsmClientCertificateResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateHsmClientCertificateResultDeserializer::deserialize("CreateHsmClientCertificateResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>"]
-                fn create_hsm_configuration(&self, input: &CreateHsmConfigurationMessage) -> Result<CreateHsmConfigurationResult, CreateHsmConfigurationError> {
+                fn create_hsm_configuration(&self, input: &CreateHsmConfigurationMessage) -> Box<Future<Item = CreateHsmConfigurationResult, Error = CreateHsmConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14258,11 +14358,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateHsmConfigurationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateHsmConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14274,23 +14382,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateHsmConfigurationResultDeserializer::deserialize("CreateHsmConfigurationResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateHsmConfigurationResultDeserializer::deserialize("CreateHsmConfigurationResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
-                fn create_snapshot_copy_grant(&self, input: &CreateSnapshotCopyGrantMessage) -> Result<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError> {
+                fn create_snapshot_copy_grant(&self, input: &CreateSnapshotCopyGrantMessage) -> Box<Future<Item = CreateSnapshotCopyGrantResult, Error = CreateSnapshotCopyGrantError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14299,11 +14408,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateSnapshotCopyGrantError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateSnapshotCopyGrantError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14315,23 +14432,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateSnapshotCopyGrantResultDeserializer::deserialize("CreateSnapshotCopyGrantResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateSnapshotCopyGrantResultDeserializer::deserialize("CreateSnapshotCopyGrantResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>"]
-                fn create_tags(&self, input: &CreateTagsMessage) -> Result<(), CreateTagsError> {
+                fn create_tags(&self, input: &CreateTagsMessage) -> Box<Future<Item = (), Error = CreateTagsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14340,22 +14458,31 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     CreateTagsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be \"final-snapshot\" while the snapshot is being taken, then it's \"deleting\" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn delete_cluster(&self, input: &DeleteClusterMessage) -> Result<DeleteClusterResult, DeleteClusterError> {
+                fn delete_cluster(&self, input: &DeleteClusterMessage) -> Box<Future<Item = DeleteClusterResult, Error = DeleteClusterError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14364,11 +14491,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14380,23 +14515,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteClusterResultDeserializer::deserialize("DeleteClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteClusterResultDeserializer::deserialize("DeleteClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note>"]
-                fn delete_cluster_parameter_group(&self, input: &DeleteClusterParameterGroupMessage) -> Result<(), DeleteClusterParameterGroupError> {
+                fn delete_cluster_parameter_group(&self, input: &DeleteClusterParameterGroupMessage) -> Box<Future<Item = (), Error = DeleteClusterParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14405,22 +14541,31 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteClusterParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteClusterParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn delete_cluster_security_group(&self, input: &DeleteClusterSecurityGroupMessage) -> Result<(), DeleteClusterSecurityGroupError> {
+                fn delete_cluster_security_group(&self, input: &DeleteClusterSecurityGroupMessage) -> Box<Future<Item = (), Error = DeleteClusterSecurityGroupError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14429,22 +14574,31 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteClusterSecurityGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteClusterSecurityGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>"]
-                fn delete_cluster_snapshot(&self, input: &DeleteClusterSnapshotMessage) -> Result<DeleteClusterSnapshotResult, DeleteClusterSnapshotError> {
+                fn delete_cluster_snapshot(&self, input: &DeleteClusterSnapshotMessage) -> Box<Future<Item = DeleteClusterSnapshotResult, Error = DeleteClusterSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14453,11 +14607,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteClusterSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteClusterSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14469,23 +14631,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteClusterSnapshotResultDeserializer::deserialize("DeleteClusterSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteClusterSnapshotResultDeserializer::deserialize("DeleteClusterSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified cluster subnet group.</p>"]
-                fn delete_cluster_subnet_group(&self, input: &DeleteClusterSubnetGroupMessage) -> Result<(), DeleteClusterSubnetGroupError> {
+                fn delete_cluster_subnet_group(&self, input: &DeleteClusterSubnetGroupMessage) -> Box<Future<Item = (), Error = DeleteClusterSubnetGroupError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14494,22 +14657,31 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteClusterSubnetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteClusterSubnetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an Amazon Redshift event notification subscription.</p>"]
-                fn delete_event_subscription(&self, input: &DeleteEventSubscriptionMessage) -> Result<(), DeleteEventSubscriptionError> {
+                fn delete_event_subscription(&self, input: &DeleteEventSubscriptionMessage) -> Box<Future<Item = (), Error = DeleteEventSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14518,22 +14690,31 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteEventSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteEventSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified HSM client certificate.</p>"]
-                fn delete_hsm_client_certificate(&self, input: &DeleteHsmClientCertificateMessage) -> Result<(), DeleteHsmClientCertificateError> {
+                fn delete_hsm_client_certificate(&self, input: &DeleteHsmClientCertificateMessage) -> Box<Future<Item = (), Error = DeleteHsmClientCertificateError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14542,22 +14723,31 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteHsmClientCertificateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteHsmClientCertificateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified Amazon Redshift HSM configuration.</p>"]
-                fn delete_hsm_configuration(&self, input: &DeleteHsmConfigurationMessage) -> Result<(), DeleteHsmConfigurationError> {
+                fn delete_hsm_configuration(&self, input: &DeleteHsmConfigurationMessage) -> Box<Future<Item = (), Error = DeleteHsmConfigurationError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14566,22 +14756,31 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteHsmConfigurationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteHsmConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified snapshot copy grant.</p>"]
-                fn delete_snapshot_copy_grant(&self, input: &DeleteSnapshotCopyGrantMessage) -> Result<(), DeleteSnapshotCopyGrantError> {
+                fn delete_snapshot_copy_grant(&self, input: &DeleteSnapshotCopyGrantMessage) -> Box<Future<Item = (), Error = DeleteSnapshotCopyGrantError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14590,22 +14789,31 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSnapshotCopyGrantError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSnapshotCopyGrantError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>"]
-                fn delete_tags(&self, input: &DeleteTagsMessage) -> Result<(), DeleteTagsError> {
+                fn delete_tags(&self, input: &DeleteTagsMessage) -> Box<Future<Item = (), Error = DeleteTagsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14614,22 +14822,31 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DeleteTagsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_cluster_parameter_groups(&self, input: &DescribeClusterParameterGroupsMessage) -> Result<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError> {
+                fn describe_cluster_parameter_groups(&self, input: &DescribeClusterParameterGroupsMessage) -> Box<Future<Item = ClusterParameterGroupsMessage, Error = DescribeClusterParameterGroupsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14638,11 +14855,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeClusterParameterGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeClusterParameterGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14654,23 +14879,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ClusterParameterGroupsMessageDeserializer::deserialize("DescribeClusterParameterGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ClusterParameterGroupsMessageDeserializer::deserialize("DescribeClusterParameterGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeClusterParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeClusterParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_cluster_parameters(&self, input: &DescribeClusterParametersMessage) -> Result<ClusterParameterGroupDetails, DescribeClusterParametersError> {
+                fn describe_cluster_parameters(&self, input: &DescribeClusterParametersMessage) -> Box<Future<Item = ClusterParameterGroupDetails, Error = DescribeClusterParametersError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14679,11 +14905,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeClusterParametersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeClusterParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeClusterParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14695,23 +14929,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ClusterParameterGroupDetailsDeserializer::deserialize("DescribeClusterParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ClusterParameterGroupDetailsDeserializer::deserialize("DescribeClusterParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_cluster_security_groups(&self, input: &DescribeClusterSecurityGroupsMessage) -> Result<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError> {
+                fn describe_cluster_security_groups(&self, input: &DescribeClusterSecurityGroupsMessage) -> Box<Future<Item = ClusterSecurityGroupMessage, Error = DescribeClusterSecurityGroupsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14720,11 +14955,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeClusterSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeClusterSecurityGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeClusterSecurityGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14736,23 +14979,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ClusterSecurityGroupMessageDeserializer::deserialize("DescribeClusterSecurityGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ClusterSecurityGroupMessageDeserializer::deserialize("DescribeClusterSecurityGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeClusterSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeClusterSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_cluster_snapshots(&self, input: &DescribeClusterSnapshotsMessage) -> Result<SnapshotMessage, DescribeClusterSnapshotsError> {
+                fn describe_cluster_snapshots(&self, input: &DescribeClusterSnapshotsMessage) -> Box<Future<Item = SnapshotMessage, Error = DescribeClusterSnapshotsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14761,11 +15005,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeClusterSnapshotsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeClusterSnapshotsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14777,23 +15029,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SnapshotMessageDeserializer::deserialize("DescribeClusterSnapshotsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SnapshotMessageDeserializer::deserialize("DescribeClusterSnapshotsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeClusterSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeClusterSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_cluster_subnet_groups(&self, input: &DescribeClusterSubnetGroupsMessage) -> Result<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError> {
+                fn describe_cluster_subnet_groups(&self, input: &DescribeClusterSubnetGroupsMessage) -> Box<Future<Item = ClusterSubnetGroupMessage, Error = DescribeClusterSubnetGroupsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14802,11 +15055,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeClusterSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeClusterSubnetGroupsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeClusterSubnetGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14818,23 +15079,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ClusterSubnetGroupMessageDeserializer::deserialize("DescribeClusterSubnetGroupsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ClusterSubnetGroupMessageDeserializer::deserialize("DescribeClusterSubnetGroupsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeClusterSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeClusterSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_cluster_versions(&self, input: &DescribeClusterVersionsMessage) -> Result<ClusterVersionsMessage, DescribeClusterVersionsError> {
+                fn describe_cluster_versions(&self, input: &DescribeClusterVersionsMessage) -> Box<Future<Item = ClusterVersionsMessage, Error = DescribeClusterVersionsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14843,11 +15105,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeClusterVersionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeClusterVersionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeClusterVersionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14859,23 +15129,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ClusterVersionsMessageDeserializer::deserialize("DescribeClusterVersionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ClusterVersionsMessageDeserializer::deserialize("DescribeClusterVersionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeClusterVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeClusterVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_clusters(&self, input: &DescribeClustersMessage) -> Result<ClustersMessage, DescribeClustersError> {
+                fn describe_clusters(&self, input: &DescribeClustersMessage) -> Box<Future<Item = ClustersMessage, Error = DescribeClustersError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14884,11 +15155,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeClustersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeClustersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeClustersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14900,23 +15179,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ClustersMessageDeserializer::deserialize("DescribeClustersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ClustersMessageDeserializer::deserialize("DescribeClustersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_default_cluster_parameters(&self, input: &DescribeDefaultClusterParametersMessage) -> Result<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError> {
+                fn describe_default_cluster_parameters(&self, input: &DescribeDefaultClusterParametersMessage) -> Box<Future<Item = DescribeDefaultClusterParametersResult, Error = DescribeDefaultClusterParametersError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14925,11 +15205,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDefaultClusterParametersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDefaultClusterParametersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14941,23 +15229,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeDefaultClusterParametersResultDeserializer::deserialize("DescribeDefaultClusterParametersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeDefaultClusterParametersResultDeserializer::deserialize("DescribeDefaultClusterParametersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeDefaultClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeDefaultClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html\">Amazon Redshift Event Notifications</a>.</p>"]
-                fn describe_event_categories(&self, input: &DescribeEventCategoriesMessage) -> Result<EventCategoriesMessage, DescribeEventCategoriesError> {
+                fn describe_event_categories(&self, input: &DescribeEventCategoriesMessage) -> Box<Future<Item = EventCategoriesMessage, Error = DescribeEventCategoriesError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -14966,11 +15255,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEventCategoriesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEventCategoriesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -14982,23 +15279,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EventCategoriesMessageDeserializer::deserialize("DescribeEventCategoriesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EventCategoriesMessageDeserializer::deserialize("DescribeEventCategoriesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists descriptions of all the Amazon Redshift event notifications subscription for a customer account. If you specify a subscription name, lists the description for that subscription.</p>"]
-                fn describe_event_subscriptions(&self, input: &DescribeEventSubscriptionsMessage) -> Result<EventSubscriptionsMessage, DescribeEventSubscriptionsError> {
+                fn describe_event_subscriptions(&self, input: &DescribeEventSubscriptionsMessage) -> Box<Future<Item = EventSubscriptionsMessage, Error = DescribeEventSubscriptionsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15007,11 +15305,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEventSubscriptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEventSubscriptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15023,23 +15329,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EventSubscriptionsMessageDeserializer::deserialize("DescribeEventSubscriptionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EventSubscriptionsMessageDeserializer::deserialize("DescribeEventSubscriptionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>"]
-                fn describe_events(&self, input: &DescribeEventsMessage) -> Result<EventsMessage, DescribeEventsError> {
+                fn describe_events(&self, input: &DescribeEventsMessage) -> Box<Future<Item = EventsMessage, Error = DescribeEventsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15048,11 +15355,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEventsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEventsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15064,23 +15379,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_hsm_client_certificates(&self, input: &DescribeHsmClientCertificatesMessage) -> Result<HsmClientCertificateMessage, DescribeHsmClientCertificatesError> {
+                fn describe_hsm_client_certificates(&self, input: &DescribeHsmClientCertificatesMessage) -> Box<Future<Item = HsmClientCertificateMessage, Error = DescribeHsmClientCertificatesError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15089,11 +15405,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeHsmClientCertificatesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeHsmClientCertificatesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeHsmClientCertificatesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15105,23 +15429,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(HsmClientCertificateMessageDeserializer::deserialize("DescribeHsmClientCertificatesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(HsmClientCertificateMessageDeserializer::deserialize("DescribeHsmClientCertificatesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeHsmClientCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeHsmClientCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_hsm_configurations(&self, input: &DescribeHsmConfigurationsMessage) -> Result<HsmConfigurationMessage, DescribeHsmConfigurationsError> {
+                fn describe_hsm_configurations(&self, input: &DescribeHsmConfigurationsMessage) -> Box<Future<Item = HsmConfigurationMessage, Error = DescribeHsmConfigurationsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15130,11 +15455,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeHsmConfigurationsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeHsmConfigurationsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeHsmConfigurationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15146,23 +15479,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(HsmConfigurationMessageDeserializer::deserialize("DescribeHsmConfigurationsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(HsmConfigurationMessageDeserializer::deserialize("DescribeHsmConfigurationsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeHsmConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeHsmConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>"]
-                fn describe_logging_status(&self, input: &DescribeLoggingStatusMessage) -> Result<LoggingStatus, DescribeLoggingStatusError> {
+                fn describe_logging_status(&self, input: &DescribeLoggingStatusMessage) -> Box<Future<Item = LoggingStatus, Error = DescribeLoggingStatusError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15171,11 +15505,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeLoggingStatusMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLoggingStatusError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLoggingStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15187,23 +15529,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(LoggingStatusDeserializer::deserialize("DescribeLoggingStatusResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(LoggingStatusDeserializer::deserialize("DescribeLoggingStatusResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeLoggingStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeLoggingStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_orderable_cluster_options(&self, input: &DescribeOrderableClusterOptionsMessage) -> Result<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError> {
+                fn describe_orderable_cluster_options(&self, input: &DescribeOrderableClusterOptionsMessage) -> Box<Future<Item = OrderableClusterOptionsMessage, Error = DescribeOrderableClusterOptionsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15212,11 +15555,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeOrderableClusterOptionsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeOrderableClusterOptionsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeOrderableClusterOptionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15228,23 +15579,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(OrderableClusterOptionsMessageDeserializer::deserialize("DescribeOrderableClusterOptionsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(OrderableClusterOptionsMessageDeserializer::deserialize("DescribeOrderableClusterOptionsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeOrderableClusterOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeOrderableClusterOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html\">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn describe_reserved_node_offerings(&self, input: &DescribeReservedNodeOfferingsMessage) -> Result<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError> {
+                fn describe_reserved_node_offerings(&self, input: &DescribeReservedNodeOfferingsMessage) -> Box<Future<Item = ReservedNodeOfferingsMessage, Error = DescribeReservedNodeOfferingsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15253,11 +15605,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeReservedNodeOfferingsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedNodeOfferingsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedNodeOfferingsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15269,23 +15629,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ReservedNodeOfferingsMessageDeserializer::deserialize("DescribeReservedNodeOfferingsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ReservedNodeOfferingsMessageDeserializer::deserialize("DescribeReservedNodeOfferingsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedNodeOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedNodeOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the descriptions of the reserved nodes.</p>"]
-                fn describe_reserved_nodes(&self, input: &DescribeReservedNodesMessage) -> Result<ReservedNodesMessage, DescribeReservedNodesError> {
+                fn describe_reserved_nodes(&self, input: &DescribeReservedNodesMessage) -> Box<Future<Item = ReservedNodesMessage, Error = DescribeReservedNodesError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15294,11 +15655,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeReservedNodesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReservedNodesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReservedNodesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15310,23 +15679,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ReservedNodesMessageDeserializer::deserialize("DescribeReservedNodesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ReservedNodesMessageDeserializer::deserialize("DescribeReservedNodesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReservedNodesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReservedNodesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>"]
-                fn describe_resize(&self, input: &DescribeResizeMessage) -> Result<ResizeProgressMessage, DescribeResizeError> {
+                fn describe_resize(&self, input: &DescribeResizeMessage) -> Box<Future<Item = ResizeProgressMessage, Error = DescribeResizeError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15335,11 +15705,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeResizeMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeResizeError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeResizeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15351,23 +15729,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ResizeProgressMessageDeserializer::deserialize("DescribeResizeResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ResizeProgressMessageDeserializer::deserialize("DescribeResizeResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeResizeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeResizeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
-                fn describe_snapshot_copy_grants(&self, input: &DescribeSnapshotCopyGrantsMessage) -> Result<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError> {
+                fn describe_snapshot_copy_grants(&self, input: &DescribeSnapshotCopyGrantsMessage) -> Box<Future<Item = SnapshotCopyGrantMessage, Error = DescribeSnapshotCopyGrantsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15376,11 +15755,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeSnapshotCopyGrantsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSnapshotCopyGrantsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSnapshotCopyGrantsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15392,23 +15779,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SnapshotCopyGrantMessageDeserializer::deserialize("DescribeSnapshotCopyGrantsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SnapshotCopyGrantMessageDeserializer::deserialize("DescribeSnapshotCopyGrantsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeSnapshotCopyGrantsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeSnapshotCopyGrantsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>"]
-                fn describe_table_restore_status(&self, input: &DescribeTableRestoreStatusMessage) -> Result<TableRestoreStatusMessage, DescribeTableRestoreStatusError> {
+                fn describe_table_restore_status(&self, input: &DescribeTableRestoreStatusMessage) -> Box<Future<Item = TableRestoreStatusMessage, Error = DescribeTableRestoreStatusError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15417,11 +15805,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeTableRestoreStatusMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTableRestoreStatusError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTableRestoreStatusError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15433,23 +15829,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(TableRestoreStatusMessageDeserializer::deserialize("DescribeTableRestoreStatusResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(TableRestoreStatusMessageDeserializer::deserialize("DescribeTableRestoreStatusResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeTableRestoreStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeTableRestoreStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>"]
-                fn describe_tags(&self, input: &DescribeTagsMessage) -> Result<TaggedResourceListMessage, DescribeTagsError> {
+                fn describe_tags(&self, input: &DescribeTagsMessage) -> Box<Future<Item = TaggedResourceListMessage, Error = DescribeTagsError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15458,11 +15855,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DescribeTagsMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeTagsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeTagsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15474,23 +15879,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(TaggedResourceListMessageDeserializer::deserialize("DescribeTagsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(TaggedResourceListMessageDeserializer::deserialize("DescribeTagsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>"]
-                fn disable_logging(&self, input: &DisableLoggingMessage) -> Result<LoggingStatus, DisableLoggingError> {
+                fn disable_logging(&self, input: &DisableLoggingMessage) -> Box<Future<Item = LoggingStatus, Error = DisableLoggingError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15499,11 +15905,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DisableLoggingMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableLoggingError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableLoggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15515,23 +15929,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(LoggingStatusDeserializer::deserialize("DisableLoggingResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(LoggingStatusDeserializer::deserialize("DisableLoggingResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisableLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisableLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>"]
-                fn disable_snapshot_copy(&self, input: &DisableSnapshotCopyMessage) -> Result<DisableSnapshotCopyResult, DisableSnapshotCopyError> {
+                fn disable_snapshot_copy(&self, input: &DisableSnapshotCopyMessage) -> Box<Future<Item = DisableSnapshotCopyResult, Error = DisableSnapshotCopyError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15540,11 +15955,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     DisableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableSnapshotCopyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableSnapshotCopyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15556,23 +15979,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DisableSnapshotCopyResultDeserializer::deserialize("DisableSnapshotCopyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DisableSnapshotCopyResultDeserializer::deserialize("DisableSnapshotCopyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DisableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DisableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>"]
-                fn enable_logging(&self, input: &EnableLoggingMessage) -> Result<LoggingStatus, EnableLoggingError> {
+                fn enable_logging(&self, input: &EnableLoggingMessage) -> Box<Future<Item = LoggingStatus, Error = EnableLoggingError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15581,11 +16005,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     EnableLoggingMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableLoggingError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableLoggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15597,23 +16029,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(LoggingStatusDeserializer::deserialize("EnableLoggingResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(LoggingStatusDeserializer::deserialize("EnableLoggingResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnableLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnableLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>"]
-                fn enable_snapshot_copy(&self, input: &EnableSnapshotCopyMessage) -> Result<EnableSnapshotCopyResult, EnableSnapshotCopyError> {
+                fn enable_snapshot_copy(&self, input: &EnableSnapshotCopyMessage) -> Box<Future<Item = EnableSnapshotCopyResult, Error = EnableSnapshotCopyError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15622,11 +16055,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     EnableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableSnapshotCopyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableSnapshotCopyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15638,23 +16079,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EnableSnapshotCopyResultDeserializer::deserialize("EnableSnapshotCopyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EnableSnapshotCopyResultDeserializer::deserialize("EnableSnapshotCopyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EnableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(EnableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>"]
-                fn modify_cluster(&self, input: &ModifyClusterMessage) -> Result<ModifyClusterResult, ModifyClusterError> {
+                fn modify_cluster(&self, input: &ModifyClusterMessage) -> Box<Future<Item = ModifyClusterResult, Error = ModifyClusterError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15663,11 +16105,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     ModifyClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15679,23 +16129,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyClusterResultDeserializer::deserialize("ModifyClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyClusterResultDeserializer::deserialize("ModifyClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>"]
-                fn modify_cluster_iam_roles(&self, input: &ModifyClusterIamRolesMessage) -> Result<ModifyClusterIamRolesResult, ModifyClusterIamRolesError> {
+                fn modify_cluster_iam_roles(&self, input: &ModifyClusterIamRolesMessage) -> Box<Future<Item = ModifyClusterIamRolesResult, Error = ModifyClusterIamRolesError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15704,11 +16155,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     ModifyClusterIamRolesMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyClusterIamRolesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyClusterIamRolesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15720,23 +16179,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyClusterIamRolesResultDeserializer::deserialize("ModifyClusterIamRolesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyClusterIamRolesResultDeserializer::deserialize("ModifyClusterIamRolesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyClusterIamRolesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyClusterIamRolesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn modify_cluster_parameter_group(&self, input: &ModifyClusterParameterGroupMessage) -> Result<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError> {
+                fn modify_cluster_parameter_group(&self, input: &ModifyClusterParameterGroupMessage) -> Box<Future<Item = ClusterParameterGroupNameMessage, Error = ModifyClusterParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15745,11 +16205,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     ModifyClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyClusterParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyClusterParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15761,23 +16229,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ClusterParameterGroupNameMessageDeserializer::deserialize("ModifyClusterParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ClusterParameterGroupNameMessageDeserializer::deserialize("ModifyClusterParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>"]
-                fn modify_cluster_subnet_group(&self, input: &ModifyClusterSubnetGroupMessage) -> Result<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError> {
+                fn modify_cluster_subnet_group(&self, input: &ModifyClusterSubnetGroupMessage) -> Box<Future<Item = ModifyClusterSubnetGroupResult, Error = ModifyClusterSubnetGroupError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15786,11 +16255,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     ModifyClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyClusterSubnetGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyClusterSubnetGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15802,23 +16279,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyClusterSubnetGroupResultDeserializer::deserialize("ModifyClusterSubnetGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyClusterSubnetGroupResultDeserializer::deserialize("ModifyClusterSubnetGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies an existing Amazon Redshift event notification subscription.</p>"]
-                fn modify_event_subscription(&self, input: &ModifyEventSubscriptionMessage) -> Result<ModifyEventSubscriptionResult, ModifyEventSubscriptionError> {
+                fn modify_event_subscription(&self, input: &ModifyEventSubscriptionMessage) -> Box<Future<Item = ModifyEventSubscriptionResult, Error = ModifyEventSubscriptionError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15827,11 +16305,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyEventSubscriptionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyEventSubscriptionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15843,23 +16329,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifyEventSubscriptionResultDeserializer::deserialize("ModifyEventSubscriptionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifyEventSubscriptionResultDeserializer::deserialize("ModifyEventSubscriptionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>"]
-                fn modify_snapshot_copy_retention_period(&self, input: &ModifySnapshotCopyRetentionPeriodMessage) -> Result<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError> {
+                fn modify_snapshot_copy_retention_period(&self, input: &ModifySnapshotCopyRetentionPeriodMessage) -> Box<Future<Item = ModifySnapshotCopyRetentionPeriodResult, Error = ModifySnapshotCopyRetentionPeriodError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15868,11 +16355,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     ModifySnapshotCopyRetentionPeriodMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifySnapshotCopyRetentionPeriodError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifySnapshotCopyRetentionPeriodError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15884,23 +16379,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize("ModifySnapshotCopyRetentionPeriodResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize("ModifySnapshotCopyRetentionPeriodResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ModifySnapshotCopyRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ModifySnapshotCopyRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html\">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn purchase_reserved_node_offering(&self, input: &PurchaseReservedNodeOfferingMessage) -> Result<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError> {
+                fn purchase_reserved_node_offering(&self, input: &PurchaseReservedNodeOfferingMessage) -> Box<Future<Item = PurchaseReservedNodeOfferingResult, Error = PurchaseReservedNodeOfferingError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15909,11 +16405,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     PurchaseReservedNodeOfferingMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PurchaseReservedNodeOfferingError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PurchaseReservedNodeOfferingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15925,23 +16429,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PurchaseReservedNodeOfferingResultDeserializer::deserialize("PurchaseReservedNodeOfferingResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PurchaseReservedNodeOfferingResultDeserializer::deserialize("PurchaseReservedNodeOfferingResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PurchaseReservedNodeOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PurchaseReservedNodeOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
-                fn reboot_cluster(&self, input: &RebootClusterMessage) -> Result<RebootClusterResult, RebootClusterError> {
+                fn reboot_cluster(&self, input: &RebootClusterMessage) -> Box<Future<Item = RebootClusterResult, Error = RebootClusterError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15950,11 +16455,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     RebootClusterMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RebootClusterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RebootClusterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -15966,23 +16479,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RebootClusterResultDeserializer::deserialize("RebootClusterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RebootClusterResultDeserializer::deserialize("RebootClusterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RebootClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RebootClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to \"engine-default\". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>"]
-                fn reset_cluster_parameter_group(&self, input: &ResetClusterParameterGroupMessage) -> Result<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError> {
+                fn reset_cluster_parameter_group(&self, input: &ResetClusterParameterGroupMessage) -> Box<Future<Item = ClusterParameterGroupNameMessage, Error = ResetClusterParameterGroupError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -15991,11 +16505,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     ResetClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ResetClusterParameterGroupError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ResetClusterParameterGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -16007,23 +16529,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ClusterParameterGroupNameMessageDeserializer::deserialize("ResetClusterParameterGroupResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ClusterParameterGroupNameMessageDeserializer::deserialize("ResetClusterParameterGroupResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ResetClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ResetClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn restore_from_cluster_snapshot(&self, input: &RestoreFromClusterSnapshotMessage) -> Result<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError> {
+                fn restore_from_cluster_snapshot(&self, input: &RestoreFromClusterSnapshotMessage) -> Box<Future<Item = RestoreFromClusterSnapshotResult, Error = RestoreFromClusterSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -16032,11 +16555,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     RestoreFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreFromClusterSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreFromClusterSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -16048,23 +16579,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RestoreFromClusterSnapshotResultDeserializer::deserialize("RestoreFromClusterSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RestoreFromClusterSnapshotResultDeserializer::deserialize("RestoreFromClusterSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RestoreFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RestoreFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>"]
-                fn restore_table_from_cluster_snapshot(&self, input: &RestoreTableFromClusterSnapshotMessage) -> Result<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError> {
+                fn restore_table_from_cluster_snapshot(&self, input: &RestoreTableFromClusterSnapshotMessage) -> Box<Future<Item = RestoreTableFromClusterSnapshotResult, Error = RestoreTableFromClusterSnapshotError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -16073,11 +16605,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     RestoreTableFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreTableFromClusterSnapshotError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreTableFromClusterSnapshotError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -16089,23 +16629,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RestoreTableFromClusterSnapshotResultDeserializer::deserialize("RestoreTableFromClusterSnapshotResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RestoreTableFromClusterSnapshotResultDeserializer::deserialize("RestoreTableFromClusterSnapshotResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RestoreTableFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RestoreTableFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
-                fn revoke_cluster_security_group_ingress(&self, input: &RevokeClusterSecurityGroupIngressMessage) -> Result<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError> {
+                fn revoke_cluster_security_group_ingress(&self, input: &RevokeClusterSecurityGroupIngressMessage) -> Box<Future<Item = RevokeClusterSecurityGroupIngressResult, Error = RevokeClusterSecurityGroupIngressError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -16114,11 +16655,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     RevokeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RevokeClusterSecurityGroupIngressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RevokeClusterSecurityGroupIngressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -16130,23 +16679,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RevokeClusterSecurityGroupIngressResultDeserializer::deserialize("RevokeClusterSecurityGroupIngressResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RevokeClusterSecurityGroupIngressResultDeserializer::deserialize("RevokeClusterSecurityGroupIngressResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RevokeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RevokeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-                fn revoke_snapshot_access(&self, input: &RevokeSnapshotAccessMessage) -> Result<RevokeSnapshotAccessResult, RevokeSnapshotAccessError> {
+                fn revoke_snapshot_access(&self, input: &RevokeSnapshotAccessMessage) -> Box<Future<Item = RevokeSnapshotAccessResult, Error = RevokeSnapshotAccessError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -16155,11 +16705,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     RevokeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RevokeSnapshotAccessError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RevokeSnapshotAccessError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -16171,23 +16729,24 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RevokeSnapshotAccessResultDeserializer::deserialize("RevokeSnapshotAccessResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RevokeSnapshotAccessResultDeserializer::deserialize("RevokeSnapshotAccessResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RevokeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RevokeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Rotates the encryption keys for a cluster.</p>"]
-                fn rotate_encryption_key(&self, input: &RotateEncryptionKeyMessage) -> Result<RotateEncryptionKeyResult, RotateEncryptionKeyError> {
+                fn rotate_encryption_key(&self, input: &RotateEncryptionKeyMessage) -> Box<Future<Item = RotateEncryptionKeyResult, Error = RotateEncryptionKeyError>> {
                     let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
                     let mut params = Params::new();
 
@@ -16196,11 +16755,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
                     RotateEncryptionKeyMessageSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RotateEncryptionKeyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RotateEncryptionKeyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -16212,18 +16779,19 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(RotateEncryptionKeyResultDeserializer::deserialize("RotateEncryptionKeyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(RotateEncryptionKeyResultDeserializer::deserialize("RotateEncryptionKeyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RotateEncryptionKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(RotateEncryptionKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -16240,56 +16808,12 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
             
             
         #[test]
-        fn test_parse_valid_redshift_authorize_cluster_security_group_ingress() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-authorize-cluster-security-group-ingress.xml");
+        fn test_parse_valid_redshift_describe_reserved_node_offerings() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-reserved-node-offerings.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = AuthorizeClusterSecurityGroupIngressMessage::default();
-            let result = client.authorize_cluster_security_group_ingress(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_copy_cluster_snapshot() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-copy-cluster-snapshot.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CopyClusterSnapshotMessage::default();
-            let result = client.copy_cluster_snapshot(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_create_cluster_parameter_group() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-create-cluster-parameter-group.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateClusterParameterGroupMessage::default();
-            let result = client.create_cluster_parameter_group(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_create_cluster_security_group() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-create-cluster-security-group.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateClusterSecurityGroupMessage::default();
-            let result = client.create_cluster_security_group(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_create_cluster_snapshot() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-create-cluster-snapshot.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateClusterSnapshotMessage::default();
-            let result = client.create_cluster_snapshot(&request);
+            let request = DescribeReservedNodeOfferingsMessage::default();
+            let result = client.describe_reserved_node_offerings(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -16306,45 +16830,12 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_redshift_create_cluster() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-create-cluster.xml");
+        fn test_parse_valid_redshift_describe_resize() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-resize.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateClusterMessage::default();
-            let result = client.create_cluster(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_delete_cluster_parameter_group() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-delete-cluster-parameter-group.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DeleteClusterParameterGroupMessage::default();
-            let result = client.delete_cluster_parameter_group(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_delete_cluster_snapshot() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-delete-cluster-snapshot.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DeleteClusterSnapshotMessage::default();
-            let result = client.delete_cluster_snapshot(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_delete_cluster() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-delete-cluster.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DeleteClusterMessage::default();
-            let result = client.delete_cluster(&request);
+            let request = DescribeResizeMessage::default();
+            let result = client.describe_resize(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -16361,45 +16852,23 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_redshift_describe_cluster_parameters() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-cluster-parameters.xml");
+        fn test_parse_valid_redshift_delete_cluster_snapshot() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-delete-cluster-snapshot.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeClusterParametersMessage::default();
-            let result = client.describe_cluster_parameters(&request);
+            let request = DeleteClusterSnapshotMessage::default();
+            let result = client.delete_cluster_snapshot(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
 
         #[test]
-        fn test_parse_valid_redshift_describe_cluster_security_groups() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-cluster-security-groups.xml");
+        fn test_parse_valid_redshift_copy_cluster_snapshot() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-copy-cluster-snapshot.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeClusterSecurityGroupsMessage::default();
-            let result = client.describe_cluster_security_groups(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_describe_cluster_snapshots() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-cluster-snapshots.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeClusterSnapshotsMessage::default();
-            let result = client.describe_cluster_snapshots(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_describe_cluster_subnet_groups() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-cluster-subnet-groups.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeClusterSubnetGroupsMessage::default();
-            let result = client.describe_cluster_subnet_groups(&request);
+            let request = CopyClusterSnapshotMessage::default();
+            let result = client.copy_cluster_snapshot(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -16416,89 +16885,12 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_redshift_describe_clusters() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-clusters.xml");
+        fn test_parse_valid_redshift_describe_cluster_snapshots() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-cluster-snapshots.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeClustersMessage::default();
-            let result = client.describe_clusters(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_describe_events() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-events.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeEventsMessage::default();
-            let result = client.describe_events(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_describe_orderable_cluster_options() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-orderable-cluster-options.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeOrderableClusterOptionsMessage::default();
-            let result = client.describe_orderable_cluster_options(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_describe_reserved_node_offerings() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-reserved-node-offerings.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeReservedNodeOfferingsMessage::default();
-            let result = client.describe_reserved_node_offerings(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_describe_reserved_nodes() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-reserved-nodes.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeReservedNodesMessage::default();
-            let result = client.describe_reserved_nodes(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_describe_resize() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-resize.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DescribeResizeMessage::default();
-            let result = client.describe_resize(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_modify_cluster_parameter_group() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-modify-cluster-parameter-group.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ModifyClusterParameterGroupMessage::default();
-            let result = client.modify_cluster_parameter_group(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_redshift_purchase_reserved_node_offering() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-purchase-reserved-node-offering.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = PurchaseReservedNodeOfferingMessage::default();
-            let result = client.purchase_reserved_node_offering(&request);
+            let request = DescribeClusterSnapshotsMessage::default();
+            let result = client.describe_cluster_snapshots(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -16515,12 +16907,45 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_redshift_reset_cluster_parameter_group() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-reset-cluster-parameter-group.xml");
+        fn test_parse_valid_redshift_delete_cluster_parameter_group() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-delete-cluster-parameter-group.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ResetClusterParameterGroupMessage::default();
-            let result = client.reset_cluster_parameter_group(&request);
+            let request = DeleteClusterParameterGroupMessage::default();
+            let result = client.delete_cluster_parameter_group(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_authorize_cluster_security_group_ingress() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-authorize-cluster-security-group-ingress.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = AuthorizeClusterSecurityGroupIngressMessage::default();
+            let result = client.authorize_cluster_security_group_ingress(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_describe_cluster_subnet_groups() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-cluster-subnet-groups.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeClusterSubnetGroupsMessage::default();
+            let result = client.describe_cluster_subnet_groups(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_create_cluster_parameter_group() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-create-cluster-parameter-group.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateClusterParameterGroupMessage::default();
+            let result = client.create_cluster_parameter_group(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -16537,12 +16962,155 @@ RotateEncryptionKeyError::Unknown(ref cause) => cause
 
 
         #[test]
+        fn test_parse_valid_redshift_purchase_reserved_node_offering() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-purchase-reserved-node-offering.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = PurchaseReservedNodeOfferingMessage::default();
+            let result = client.purchase_reserved_node_offering(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_create_cluster() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-create-cluster.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateClusterMessage::default();
+            let result = client.create_cluster(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_describe_clusters() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-clusters.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeClustersMessage::default();
+            let result = client.describe_clusters(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_reset_cluster_parameter_group() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-reset-cluster-parameter-group.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ResetClusterParameterGroupMessage::default();
+            let result = client.reset_cluster_parameter_group(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_describe_reserved_nodes() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-reserved-nodes.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeReservedNodesMessage::default();
+            let result = client.describe_reserved_nodes(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
         fn test_parse_valid_redshift_revoke_cluster_security_group_ingress() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-revoke-cluster-security-group-ingress.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = RevokeClusterSecurityGroupIngressMessage::default();
             let result = client.revoke_cluster_security_group_ingress(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_describe_cluster_security_groups() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-cluster-security-groups.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeClusterSecurityGroupsMessage::default();
+            let result = client.describe_cluster_security_groups(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_describe_events() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-events.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeEventsMessage::default();
+            let result = client.describe_events(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_delete_cluster() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-delete-cluster.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DeleteClusterMessage::default();
+            let result = client.delete_cluster(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_describe_cluster_parameters() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-cluster-parameters.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeClusterParametersMessage::default();
+            let result = client.describe_cluster_parameters(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_create_cluster_snapshot() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-create-cluster-snapshot.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateClusterSnapshotMessage::default();
+            let result = client.create_cluster_snapshot(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_describe_orderable_cluster_options() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-describe-orderable-cluster-options.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DescribeOrderableClusterOptionsMessage::default();
+            let result = client.describe_orderable_cluster_options(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_modify_cluster_parameter_group() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-modify-cluster-parameter-group.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ModifyClusterParameterGroupMessage::default();
+            let result = client.modify_cluster_parameter_group(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_redshift_create_cluster_security_group() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "redshift-create-cluster-security-group.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = CreateClusterSecurityGroupMessage::default();
+            let result = client.create_cluster_security_group(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

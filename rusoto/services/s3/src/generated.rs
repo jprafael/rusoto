@@ -19,6 +19,17 @@
             use rusoto_core::xmlerror::*;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
+
             enum DeserializerNext {
                 Close,
                 Skip,
@@ -15345,299 +15356,299 @@ UploadPartCopyError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>"]
-                fn abort_multipart_upload(&self, input: &AbortMultipartUploadRequest) -> Result<AbortMultipartUploadOutput, AbortMultipartUploadError>;
+                fn abort_multipart_upload(&self, input: &AbortMultipartUploadRequest) -> Box<Future<Item = AbortMultipartUploadOutput, Error = AbortMultipartUploadError>>;
                 
 
                 #[doc="Completes a multipart upload by assembling previously uploaded parts."]
-                fn complete_multipart_upload(&self, input: &CompleteMultipartUploadRequest) -> Result<CompleteMultipartUploadOutput, CompleteMultipartUploadError>;
+                fn complete_multipart_upload(&self, input: &CompleteMultipartUploadRequest) -> Box<Future<Item = CompleteMultipartUploadOutput, Error = CompleteMultipartUploadError>>;
                 
 
                 #[doc="Creates a copy of an object that is already stored in Amazon S3."]
-                fn copy_object(&self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, CopyObjectError>;
+                fn copy_object(&self, input: &CopyObjectRequest) -> Box<Future<Item = CopyObjectOutput, Error = CopyObjectError>>;
                 
 
                 #[doc="Creates a new bucket."]
-                fn create_bucket(&self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, CreateBucketError>;
+                fn create_bucket(&self, input: &CreateBucketRequest) -> Box<Future<Item = CreateBucketOutput, Error = CreateBucketError>>;
                 
 
                 #[doc="<p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
-                fn create_multipart_upload(&self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, CreateMultipartUploadError>;
+                fn create_multipart_upload(&self, input: &CreateMultipartUploadRequest) -> Box<Future<Item = CreateMultipartUploadOutput, Error = CreateMultipartUploadError>>;
                 
 
                 #[doc="Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted."]
-                fn delete_bucket(&self, input: &DeleteBucketRequest) -> Result<(), DeleteBucketError>;
+                fn delete_bucket(&self, input: &DeleteBucketRequest) -> Box<Future<Item = (), Error = DeleteBucketError>>;
                 
 
                 #[doc="Deletes an analytics configuration for the bucket (specified by the analytics configuration ID)."]
-                fn delete_bucket_analytics_configuration(&self, input: &DeleteBucketAnalyticsConfigurationRequest) -> Result<(), DeleteBucketAnalyticsConfigurationError>;
+                fn delete_bucket_analytics_configuration(&self, input: &DeleteBucketAnalyticsConfigurationRequest) -> Box<Future<Item = (), Error = DeleteBucketAnalyticsConfigurationError>>;
                 
 
                 #[doc="Deletes the cors configuration information set for the bucket."]
-                fn delete_bucket_cors(&self, input: &DeleteBucketCorsRequest) -> Result<(), DeleteBucketCorsError>;
+                fn delete_bucket_cors(&self, input: &DeleteBucketCorsRequest) -> Box<Future<Item = (), Error = DeleteBucketCorsError>>;
                 
 
                 #[doc="Deletes an inventory configuration (identified by the inventory ID) from the bucket."]
-                fn delete_bucket_inventory_configuration(&self, input: &DeleteBucketInventoryConfigurationRequest) -> Result<(), DeleteBucketInventoryConfigurationError>;
+                fn delete_bucket_inventory_configuration(&self, input: &DeleteBucketInventoryConfigurationRequest) -> Box<Future<Item = (), Error = DeleteBucketInventoryConfigurationError>>;
                 
 
                 #[doc="Deletes the lifecycle configuration from the bucket."]
-                fn delete_bucket_lifecycle(&self, input: &DeleteBucketLifecycleRequest) -> Result<(), DeleteBucketLifecycleError>;
+                fn delete_bucket_lifecycle(&self, input: &DeleteBucketLifecycleRequest) -> Box<Future<Item = (), Error = DeleteBucketLifecycleError>>;
                 
 
                 #[doc="Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket."]
-                fn delete_bucket_metrics_configuration(&self, input: &DeleteBucketMetricsConfigurationRequest) -> Result<(), DeleteBucketMetricsConfigurationError>;
+                fn delete_bucket_metrics_configuration(&self, input: &DeleteBucketMetricsConfigurationRequest) -> Box<Future<Item = (), Error = DeleteBucketMetricsConfigurationError>>;
                 
 
                 #[doc="Deletes the policy from the bucket."]
-                fn delete_bucket_policy(&self, input: &DeleteBucketPolicyRequest) -> Result<(), DeleteBucketPolicyError>;
+                fn delete_bucket_policy(&self, input: &DeleteBucketPolicyRequest) -> Box<Future<Item = (), Error = DeleteBucketPolicyError>>;
                 
 
                 #[doc="Deletes the replication configuration from the bucket."]
-                fn delete_bucket_replication(&self, input: &DeleteBucketReplicationRequest) -> Result<(), DeleteBucketReplicationError>;
+                fn delete_bucket_replication(&self, input: &DeleteBucketReplicationRequest) -> Box<Future<Item = (), Error = DeleteBucketReplicationError>>;
                 
 
                 #[doc="Deletes the tags from the bucket."]
-                fn delete_bucket_tagging(&self, input: &DeleteBucketTaggingRequest) -> Result<(), DeleteBucketTaggingError>;
+                fn delete_bucket_tagging(&self, input: &DeleteBucketTaggingRequest) -> Box<Future<Item = (), Error = DeleteBucketTaggingError>>;
                 
 
                 #[doc="This operation removes the website configuration from the bucket."]
-                fn delete_bucket_website(&self, input: &DeleteBucketWebsiteRequest) -> Result<(), DeleteBucketWebsiteError>;
+                fn delete_bucket_website(&self, input: &DeleteBucketWebsiteRequest) -> Box<Future<Item = (), Error = DeleteBucketWebsiteError>>;
                 
 
                 #[doc="Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects."]
-                fn delete_object(&self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, DeleteObjectError>;
+                fn delete_object(&self, input: &DeleteObjectRequest) -> Box<Future<Item = DeleteObjectOutput, Error = DeleteObjectError>>;
                 
 
                 #[doc="Removes the tag-set from an existing object."]
-                fn delete_object_tagging(&self, input: &DeleteObjectTaggingRequest) -> Result<DeleteObjectTaggingOutput, DeleteObjectTaggingError>;
+                fn delete_object_tagging(&self, input: &DeleteObjectTaggingRequest) -> Box<Future<Item = DeleteObjectTaggingOutput, Error = DeleteObjectTaggingError>>;
                 
 
                 #[doc="This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys."]
-                fn delete_objects(&self, input: &DeleteObjectsRequest) -> Result<DeleteObjectsOutput, DeleteObjectsError>;
+                fn delete_objects(&self, input: &DeleteObjectsRequest) -> Box<Future<Item = DeleteObjectsOutput, Error = DeleteObjectsError>>;
                 
 
                 #[doc="Returns the accelerate configuration of a bucket."]
-                fn get_bucket_accelerate_configuration(&self, input: &GetBucketAccelerateConfigurationRequest) -> Result<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError>;
+                fn get_bucket_accelerate_configuration(&self, input: &GetBucketAccelerateConfigurationRequest) -> Box<Future<Item = GetBucketAccelerateConfigurationOutput, Error = GetBucketAccelerateConfigurationError>>;
                 
 
                 #[doc="Gets the access control policy for the bucket."]
-                fn get_bucket_acl(&self, input: &GetBucketAclRequest) -> Result<GetBucketAclOutput, GetBucketAclError>;
+                fn get_bucket_acl(&self, input: &GetBucketAclRequest) -> Box<Future<Item = GetBucketAclOutput, Error = GetBucketAclError>>;
                 
 
                 #[doc="Gets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
-                fn get_bucket_analytics_configuration(&self, input: &GetBucketAnalyticsConfigurationRequest) -> Result<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError>;
+                fn get_bucket_analytics_configuration(&self, input: &GetBucketAnalyticsConfigurationRequest) -> Box<Future<Item = GetBucketAnalyticsConfigurationOutput, Error = GetBucketAnalyticsConfigurationError>>;
                 
 
                 #[doc="Returns the cors configuration for the bucket."]
-                fn get_bucket_cors(&self, input: &GetBucketCorsRequest) -> Result<GetBucketCorsOutput, GetBucketCorsError>;
+                fn get_bucket_cors(&self, input: &GetBucketCorsRequest) -> Box<Future<Item = GetBucketCorsOutput, Error = GetBucketCorsError>>;
                 
 
                 #[doc="Returns an inventory configuration (identified by the inventory ID) from the bucket."]
-                fn get_bucket_inventory_configuration(&self, input: &GetBucketInventoryConfigurationRequest) -> Result<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError>;
+                fn get_bucket_inventory_configuration(&self, input: &GetBucketInventoryConfigurationRequest) -> Box<Future<Item = GetBucketInventoryConfigurationOutput, Error = GetBucketInventoryConfigurationError>>;
                 
 
                 #[doc="Deprecated, see the GetBucketLifecycleConfiguration operation."]
-                fn get_bucket_lifecycle(&self, input: &GetBucketLifecycleRequest) -> Result<GetBucketLifecycleOutput, GetBucketLifecycleError>;
+                fn get_bucket_lifecycle(&self, input: &GetBucketLifecycleRequest) -> Box<Future<Item = GetBucketLifecycleOutput, Error = GetBucketLifecycleError>>;
                 
 
                 #[doc="Returns the lifecycle configuration information set on the bucket."]
-                fn get_bucket_lifecycle_configuration(&self, input: &GetBucketLifecycleConfigurationRequest) -> Result<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError>;
+                fn get_bucket_lifecycle_configuration(&self, input: &GetBucketLifecycleConfigurationRequest) -> Box<Future<Item = GetBucketLifecycleConfigurationOutput, Error = GetBucketLifecycleConfigurationError>>;
                 
 
                 #[doc="Returns the region the bucket resides in."]
-                fn get_bucket_location(&self, input: &GetBucketLocationRequest) -> Result<GetBucketLocationOutput, GetBucketLocationError>;
+                fn get_bucket_location(&self, input: &GetBucketLocationRequest) -> Box<Future<Item = GetBucketLocationOutput, Error = GetBucketLocationError>>;
                 
 
                 #[doc="Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner."]
-                fn get_bucket_logging(&self, input: &GetBucketLoggingRequest) -> Result<GetBucketLoggingOutput, GetBucketLoggingError>;
+                fn get_bucket_logging(&self, input: &GetBucketLoggingRequest) -> Box<Future<Item = GetBucketLoggingOutput, Error = GetBucketLoggingError>>;
                 
 
                 #[doc="Gets a metrics configuration (specified by the metrics configuration ID) from the bucket."]
-                fn get_bucket_metrics_configuration(&self, input: &GetBucketMetricsConfigurationRequest) -> Result<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError>;
+                fn get_bucket_metrics_configuration(&self, input: &GetBucketMetricsConfigurationRequest) -> Box<Future<Item = GetBucketMetricsConfigurationOutput, Error = GetBucketMetricsConfigurationError>>;
                 
 
                 #[doc="Deprecated, see the GetBucketNotificationConfiguration operation."]
-                fn get_bucket_notification(&self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfigurationDeprecated, GetBucketNotificationError>;
+                fn get_bucket_notification(&self, input: &GetBucketNotificationConfigurationRequest) -> Box<Future<Item = NotificationConfigurationDeprecated, Error = GetBucketNotificationError>>;
                 
 
                 #[doc="Returns the notification configuration of a bucket."]
-                fn get_bucket_notification_configuration(&self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfiguration, GetBucketNotificationConfigurationError>;
+                fn get_bucket_notification_configuration(&self, input: &GetBucketNotificationConfigurationRequest) -> Box<Future<Item = NotificationConfiguration, Error = GetBucketNotificationConfigurationError>>;
                 
 
                 #[doc="Returns the policy of a specified bucket."]
-                fn get_bucket_policy(&self, input: &GetBucketPolicyRequest) -> Result<GetBucketPolicyOutput, GetBucketPolicyError>;
+                fn get_bucket_policy(&self, input: &GetBucketPolicyRequest) -> Box<Future<Item = GetBucketPolicyOutput, Error = GetBucketPolicyError>>;
                 
 
                 #[doc="Returns the replication configuration of a bucket."]
-                fn get_bucket_replication(&self, input: &GetBucketReplicationRequest) -> Result<GetBucketReplicationOutput, GetBucketReplicationError>;
+                fn get_bucket_replication(&self, input: &GetBucketReplicationRequest) -> Box<Future<Item = GetBucketReplicationOutput, Error = GetBucketReplicationError>>;
                 
 
                 #[doc="Returns the request payment configuration of a bucket."]
-                fn get_bucket_request_payment(&self, input: &GetBucketRequestPaymentRequest) -> Result<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError>;
+                fn get_bucket_request_payment(&self, input: &GetBucketRequestPaymentRequest) -> Box<Future<Item = GetBucketRequestPaymentOutput, Error = GetBucketRequestPaymentError>>;
                 
 
                 #[doc="Returns the tag set associated with the bucket."]
-                fn get_bucket_tagging(&self, input: &GetBucketTaggingRequest) -> Result<GetBucketTaggingOutput, GetBucketTaggingError>;
+                fn get_bucket_tagging(&self, input: &GetBucketTaggingRequest) -> Box<Future<Item = GetBucketTaggingOutput, Error = GetBucketTaggingError>>;
                 
 
                 #[doc="Returns the versioning state of a bucket."]
-                fn get_bucket_versioning(&self, input: &GetBucketVersioningRequest) -> Result<GetBucketVersioningOutput, GetBucketVersioningError>;
+                fn get_bucket_versioning(&self, input: &GetBucketVersioningRequest) -> Box<Future<Item = GetBucketVersioningOutput, Error = GetBucketVersioningError>>;
                 
 
                 #[doc="Returns the website configuration for a bucket."]
-                fn get_bucket_website(&self, input: &GetBucketWebsiteRequest) -> Result<GetBucketWebsiteOutput, GetBucketWebsiteError>;
+                fn get_bucket_website(&self, input: &GetBucketWebsiteRequest) -> Box<Future<Item = GetBucketWebsiteOutput, Error = GetBucketWebsiteError>>;
                 
 
                 #[doc="Retrieves objects from Amazon S3."]
-                fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, GetObjectError>;
+                fn get_object(&self, input: &GetObjectRequest) -> Box<Future<Item = GetObjectOutput, Error = GetObjectError>>;
                 
 
                 #[doc="Returns the access control list (ACL) of an object."]
-                fn get_object_acl(&self, input: &GetObjectAclRequest) -> Result<GetObjectAclOutput, GetObjectAclError>;
+                fn get_object_acl(&self, input: &GetObjectAclRequest) -> Box<Future<Item = GetObjectAclOutput, Error = GetObjectAclError>>;
                 
 
                 #[doc="Returns the tag-set of an object."]
-                fn get_object_tagging(&self, input: &GetObjectTaggingRequest) -> Result<GetObjectTaggingOutput, GetObjectTaggingError>;
+                fn get_object_tagging(&self, input: &GetObjectTaggingRequest) -> Box<Future<Item = GetObjectTaggingOutput, Error = GetObjectTaggingError>>;
                 
 
                 #[doc="Return torrent files from a bucket."]
-                fn get_object_torrent(&self, input: &GetObjectTorrentRequest) -> Result<GetObjectTorrentOutput, GetObjectTorrentError>;
+                fn get_object_torrent(&self, input: &GetObjectTorrentRequest) -> Box<Future<Item = GetObjectTorrentOutput, Error = GetObjectTorrentError>>;
                 
 
                 #[doc="This operation is useful to determine if a bucket exists and you have permission to access it."]
-                fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), HeadBucketError>;
+                fn head_bucket(&self, input: &HeadBucketRequest) -> Box<Future<Item = (), Error = HeadBucketError>>;
                 
 
                 #[doc="The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object."]
-                fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, HeadObjectError>;
+                fn head_object(&self, input: &HeadObjectRequest) -> Box<Future<Item = HeadObjectOutput, Error = HeadObjectError>>;
                 
 
                 #[doc="Lists the analytics configurations for the bucket."]
-                fn list_bucket_analytics_configurations(&self, input: &ListBucketAnalyticsConfigurationsRequest) -> Result<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError>;
+                fn list_bucket_analytics_configurations(&self, input: &ListBucketAnalyticsConfigurationsRequest) -> Box<Future<Item = ListBucketAnalyticsConfigurationsOutput, Error = ListBucketAnalyticsConfigurationsError>>;
                 
 
                 #[doc="Returns a list of inventory configurations for the bucket."]
-                fn list_bucket_inventory_configurations(&self, input: &ListBucketInventoryConfigurationsRequest) -> Result<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError>;
+                fn list_bucket_inventory_configurations(&self, input: &ListBucketInventoryConfigurationsRequest) -> Box<Future<Item = ListBucketInventoryConfigurationsOutput, Error = ListBucketInventoryConfigurationsError>>;
                 
 
                 #[doc="Lists the metrics configurations for the bucket."]
-                fn list_bucket_metrics_configurations(&self, input: &ListBucketMetricsConfigurationsRequest) -> Result<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError>;
+                fn list_bucket_metrics_configurations(&self, input: &ListBucketMetricsConfigurationsRequest) -> Box<Future<Item = ListBucketMetricsConfigurationsOutput, Error = ListBucketMetricsConfigurationsError>>;
                 
 
                 #[doc="Returns a list of all buckets owned by the authenticated sender of the request."]
-                fn list_buckets(&self) -> Result<ListBucketsOutput, ListBucketsError>;
+                fn list_buckets(&self) -> Box<Future<Item = ListBucketsOutput, Error = ListBucketsError>>;
                 
 
                 #[doc="This operation lists in-progress multipart uploads."]
-                fn list_multipart_uploads(&self, input: &ListMultipartUploadsRequest) -> Result<ListMultipartUploadsOutput, ListMultipartUploadsError>;
+                fn list_multipart_uploads(&self, input: &ListMultipartUploadsRequest) -> Box<Future<Item = ListMultipartUploadsOutput, Error = ListMultipartUploadsError>>;
                 
 
                 #[doc="Returns metadata about all of the versions of objects in a bucket."]
-                fn list_object_versions(&self, input: &ListObjectVersionsRequest) -> Result<ListObjectVersionsOutput, ListObjectVersionsError>;
+                fn list_object_versions(&self, input: &ListObjectVersionsRequest) -> Box<Future<Item = ListObjectVersionsOutput, Error = ListObjectVersionsError>>;
                 
 
                 #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket."]
-                fn list_objects(&self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, ListObjectsError>;
+                fn list_objects(&self, input: &ListObjectsRequest) -> Box<Future<Item = ListObjectsOutput, Error = ListObjectsError>>;
                 
 
                 #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development."]
-                fn list_objects_v2(&self, input: &ListObjectsV2Request) -> Result<ListObjectsV2Output, ListObjectsV2Error>;
+                fn list_objects_v2(&self, input: &ListObjectsV2Request) -> Box<Future<Item = ListObjectsV2Output, Error = ListObjectsV2Error>>;
                 
 
                 #[doc="Lists the parts that have been uploaded for a specific multipart upload."]
-                fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, ListPartsError>;
+                fn list_parts(&self, input: &ListPartsRequest) -> Box<Future<Item = ListPartsOutput, Error = ListPartsError>>;
                 
 
                 #[doc="Sets the accelerate configuration of an existing bucket."]
-                fn put_bucket_accelerate_configuration(&self, input: &PutBucketAccelerateConfigurationRequest) -> Result<(), PutBucketAccelerateConfigurationError>;
+                fn put_bucket_accelerate_configuration(&self, input: &PutBucketAccelerateConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketAccelerateConfigurationError>>;
                 
 
                 #[doc="Sets the permissions on a bucket using access control lists (ACL)."]
-                fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), PutBucketAclError>;
+                fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Box<Future<Item = (), Error = PutBucketAclError>>;
                 
 
                 #[doc="Sets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
-                fn put_bucket_analytics_configuration(&self, input: &PutBucketAnalyticsConfigurationRequest) -> Result<(), PutBucketAnalyticsConfigurationError>;
+                fn put_bucket_analytics_configuration(&self, input: &PutBucketAnalyticsConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketAnalyticsConfigurationError>>;
                 
 
                 #[doc="Sets the cors configuration for a bucket."]
-                fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Result<(), PutBucketCorsError>;
+                fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Box<Future<Item = (), Error = PutBucketCorsError>>;
                 
 
                 #[doc="Adds an inventory configuration (identified by the inventory ID) from the bucket."]
-                fn put_bucket_inventory_configuration(&self, input: &PutBucketInventoryConfigurationRequest) -> Result<(), PutBucketInventoryConfigurationError>;
+                fn put_bucket_inventory_configuration(&self, input: &PutBucketInventoryConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketInventoryConfigurationError>>;
                 
 
                 #[doc="Deprecated, see the PutBucketLifecycleConfiguration operation."]
-                fn put_bucket_lifecycle(&self, input: &PutBucketLifecycleRequest) -> Result<(), PutBucketLifecycleError>;
+                fn put_bucket_lifecycle(&self, input: &PutBucketLifecycleRequest) -> Box<Future<Item = (), Error = PutBucketLifecycleError>>;
                 
 
                 #[doc="Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it."]
-                fn put_bucket_lifecycle_configuration(&self, input: &PutBucketLifecycleConfigurationRequest) -> Result<(), PutBucketLifecycleConfigurationError>;
+                fn put_bucket_lifecycle_configuration(&self, input: &PutBucketLifecycleConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketLifecycleConfigurationError>>;
                 
 
                 #[doc="Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner."]
-                fn put_bucket_logging(&self, input: &PutBucketLoggingRequest) -> Result<(), PutBucketLoggingError>;
+                fn put_bucket_logging(&self, input: &PutBucketLoggingRequest) -> Box<Future<Item = (), Error = PutBucketLoggingError>>;
                 
 
                 #[doc="Sets a metrics configuration (specified by the metrics configuration ID) for the bucket."]
-                fn put_bucket_metrics_configuration(&self, input: &PutBucketMetricsConfigurationRequest) -> Result<(), PutBucketMetricsConfigurationError>;
+                fn put_bucket_metrics_configuration(&self, input: &PutBucketMetricsConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketMetricsConfigurationError>>;
                 
 
                 #[doc="Deprecated, see the PutBucketNotificationConfiguraiton operation."]
-                fn put_bucket_notification(&self, input: &PutBucketNotificationRequest) -> Result<(), PutBucketNotificationError>;
+                fn put_bucket_notification(&self, input: &PutBucketNotificationRequest) -> Box<Future<Item = (), Error = PutBucketNotificationError>>;
                 
 
                 #[doc="Enables notifications of specified events for a bucket."]
-                fn put_bucket_notification_configuration(&self, input: &PutBucketNotificationConfigurationRequest) -> Result<(), PutBucketNotificationConfigurationError>;
+                fn put_bucket_notification_configuration(&self, input: &PutBucketNotificationConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketNotificationConfigurationError>>;
                 
 
                 #[doc="Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it."]
-                fn put_bucket_policy(&self, input: &PutBucketPolicyRequest) -> Result<(), PutBucketPolicyError>;
+                fn put_bucket_policy(&self, input: &PutBucketPolicyRequest) -> Box<Future<Item = (), Error = PutBucketPolicyError>>;
                 
 
                 #[doc="Creates a new replication configuration (or replaces an existing one, if present)."]
-                fn put_bucket_replication(&self, input: &PutBucketReplicationRequest) -> Result<(), PutBucketReplicationError>;
+                fn put_bucket_replication(&self, input: &PutBucketReplicationRequest) -> Box<Future<Item = (), Error = PutBucketReplicationError>>;
                 
 
                 #[doc="Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html"]
-                fn put_bucket_request_payment(&self, input: &PutBucketRequestPaymentRequest) -> Result<(), PutBucketRequestPaymentError>;
+                fn put_bucket_request_payment(&self, input: &PutBucketRequestPaymentRequest) -> Box<Future<Item = (), Error = PutBucketRequestPaymentError>>;
                 
 
                 #[doc="Sets the tags for a bucket."]
-                fn put_bucket_tagging(&self, input: &PutBucketTaggingRequest) -> Result<(), PutBucketTaggingError>;
+                fn put_bucket_tagging(&self, input: &PutBucketTaggingRequest) -> Box<Future<Item = (), Error = PutBucketTaggingError>>;
                 
 
                 #[doc="Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner."]
-                fn put_bucket_versioning(&self, input: &PutBucketVersioningRequest) -> Result<(), PutBucketVersioningError>;
+                fn put_bucket_versioning(&self, input: &PutBucketVersioningRequest) -> Box<Future<Item = (), Error = PutBucketVersioningError>>;
                 
 
                 #[doc="Set the website configuration for a bucket."]
-                fn put_bucket_website(&self, input: &PutBucketWebsiteRequest) -> Result<(), PutBucketWebsiteError>;
+                fn put_bucket_website(&self, input: &PutBucketWebsiteRequest) -> Box<Future<Item = (), Error = PutBucketWebsiteError>>;
                 
 
                 #[doc="Adds an object to a bucket."]
-                fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, PutObjectError>;
+                fn put_object(&self, input: &PutObjectRequest) -> Box<Future<Item = PutObjectOutput, Error = PutObjectError>>;
                 
 
                 #[doc="uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket"]
-                fn put_object_acl(&self, input: &PutObjectAclRequest) -> Result<PutObjectAclOutput, PutObjectAclError>;
+                fn put_object_acl(&self, input: &PutObjectAclRequest) -> Box<Future<Item = PutObjectAclOutput, Error = PutObjectAclError>>;
                 
 
                 #[doc="Sets the supplied tag-set to an object that already exists in a bucket"]
-                fn put_object_tagging(&self, input: &PutObjectTaggingRequest) -> Result<PutObjectTaggingOutput, PutObjectTaggingError>;
+                fn put_object_tagging(&self, input: &PutObjectTaggingRequest) -> Box<Future<Item = PutObjectTaggingOutput, Error = PutObjectTaggingError>>;
                 
 
                 #[doc="Restores an archived copy of an object back into Amazon S3"]
-                fn restore_object(&self, input: &RestoreObjectRequest) -> Result<RestoreObjectOutput, RestoreObjectError>;
+                fn restore_object(&self, input: &RestoreObjectRequest) -> Box<Future<Item = RestoreObjectOutput, Error = RestoreObjectError>>;
                 
 
                 #[doc="<p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
-                fn upload_part(&self, input: &UploadPartRequest) -> Result<UploadPartOutput, UploadPartError>;
+                fn upload_part(&self, input: &UploadPartRequest) -> Box<Future<Item = UploadPartOutput, Error = UploadPartError>>;
                 
 
                 #[doc="Uploads a part by copying data from an existing object as data source."]
-                fn upload_part_copy(&self, input: &UploadPartCopyRequest) -> Result<UploadPartCopyOutput, UploadPartCopyError>;
+                fn upload_part_copy(&self, input: &UploadPartCopyRequest) -> Box<Future<Item = UploadPartCopyOutput, Error = UploadPartCopyError>>;
                 
 }
 /// A client for the Amazon S3 API.
@@ -15661,7 +15672,7 @@ UploadPartCopyError::Unknown(ref cause) => cause
         
 #[doc="<p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn abort_multipart_upload(&self, input: &AbortMultipartUploadRequest) -> Result<AbortMultipartUploadOutput, AbortMultipartUploadError> {
+                fn abort_multipart_upload(&self, input: &AbortMultipartUploadRequest) -> Box<Future<Item = AbortMultipartUploadOutput, Error = AbortMultipartUploadError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -15679,13 +15690,20 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AbortMultipartUploadError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AbortMultipartUploadError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -15697,22 +15715,25 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(AbortMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(AbortMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Completes a multipart upload by assembling previously uploaded parts."]
                 #[allow(unused_variables, warnings)]
-                fn complete_multipart_upload(&self, input: &CompleteMultipartUploadRequest) -> Result<CompleteMultipartUploadOutput, CompleteMultipartUploadError> {
+                fn complete_multipart_upload(&self, input: &CompleteMultipartUploadRequest) -> Box<Future<Item = CompleteMultipartUploadOutput, Error = CompleteMultipartUploadError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -15737,13 +15758,20 @@ if input.multipart_upload.is_some() {
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CompleteMultipartUploadError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CompleteMultipartUploadError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -15755,10 +15783,10 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(expiration) = response.headers.get("x-amz-expiration") {
+                                    if let Some(expiration) = response.headers.get("x-amz-expiration") {
                     let value = expiration.to_owned();
                     result.expiration = Some(value)
                   };
@@ -15778,15 +15806,18 @@ if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Creates a copy of an object that is already stored in Amazon S3."]
                 #[allow(unused_variables, warnings)]
-                fn copy_object(&self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, CopyObjectError> {
+                fn copy_object(&self, input: &CopyObjectRequest) -> Box<Future<Item = CopyObjectOutput, Error = CopyObjectError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -15917,13 +15948,20 @@ request.add_header("x-amz-copy-source", &input.copy_source);
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CopyObjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CopyObjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -15935,10 +15973,10 @@ request.add_header("x-amz-copy-source", &input.copy_source);
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
+                                    if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
                     let value = copy_source_version_id.to_owned();
                     result.copy_source_version_id = Some(value)
                   };
@@ -15970,15 +16008,18 @@ if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CopyObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CopyObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Creates a new bucket."]
                 #[allow(unused_variables, warnings)]
-                fn create_bucket(&self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, CreateBucketError> {
+                fn create_bucket(&self, input: &CreateBucketRequest) -> Box<Future<Item = CreateBucketOutput, Error = CreateBucketError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16022,13 +16063,20 @@ if input.create_bucket_configuration.is_some() {
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateBucketError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateBucketError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16040,22 +16088,25 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateBucketOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateBucketOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(location) = response.headers.get("Location") {
+                                    if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CreateBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn create_multipart_upload(&self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, CreateMultipartUploadError> {
+                fn create_multipart_upload(&self, input: &CreateMultipartUploadRequest) -> Box<Future<Item = CreateMultipartUploadOutput, Error = CreateMultipartUploadError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -16145,13 +16196,20 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateMultipartUploadError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateMultipartUploadError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16163,10 +16221,10 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
+                                    if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
                     let value = abort_date.to_owned();
                     result.abort_date = Some(value)
                   };
@@ -16194,15 +16252,18 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(CreateMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(CreateMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket(&self, input: &DeleteBucketRequest) -> Result<(), DeleteBucketError> {
+                fn delete_bucket(&self, input: &DeleteBucketRequest) -> Box<Future<Item = (), Error = DeleteBucketError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16216,23 +16277,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deletes an analytics configuration for the bucket (specified by the analytics configuration ID)."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket_analytics_configuration(&self, input: &DeleteBucketAnalyticsConfigurationRequest) -> Result<(), DeleteBucketAnalyticsConfigurationError> {
+                fn delete_bucket_analytics_configuration(&self, input: &DeleteBucketAnalyticsConfigurationRequest) -> Box<Future<Item = (), Error = DeleteBucketAnalyticsConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16246,23 +16317,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketAnalyticsConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketAnalyticsConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deletes the cors configuration information set for the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket_cors(&self, input: &DeleteBucketCorsRequest) -> Result<(), DeleteBucketCorsError> {
+                fn delete_bucket_cors(&self, input: &DeleteBucketCorsRequest) -> Box<Future<Item = (), Error = DeleteBucketCorsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16276,23 +16357,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketCorsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketCorsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deletes an inventory configuration (identified by the inventory ID) from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket_inventory_configuration(&self, input: &DeleteBucketInventoryConfigurationRequest) -> Result<(), DeleteBucketInventoryConfigurationError> {
+                fn delete_bucket_inventory_configuration(&self, input: &DeleteBucketInventoryConfigurationRequest) -> Box<Future<Item = (), Error = DeleteBucketInventoryConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16306,23 +16397,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketInventoryConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketInventoryConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deletes the lifecycle configuration from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket_lifecycle(&self, input: &DeleteBucketLifecycleRequest) -> Result<(), DeleteBucketLifecycleError> {
+                fn delete_bucket_lifecycle(&self, input: &DeleteBucketLifecycleRequest) -> Box<Future<Item = (), Error = DeleteBucketLifecycleError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16336,23 +16437,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketLifecycleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketLifecycleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket_metrics_configuration(&self, input: &DeleteBucketMetricsConfigurationRequest) -> Result<(), DeleteBucketMetricsConfigurationError> {
+                fn delete_bucket_metrics_configuration(&self, input: &DeleteBucketMetricsConfigurationRequest) -> Box<Future<Item = (), Error = DeleteBucketMetricsConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16366,23 +16477,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketMetricsConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketMetricsConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deletes the policy from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket_policy(&self, input: &DeleteBucketPolicyRequest) -> Result<(), DeleteBucketPolicyError> {
+                fn delete_bucket_policy(&self, input: &DeleteBucketPolicyRequest) -> Box<Future<Item = (), Error = DeleteBucketPolicyError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16396,23 +16517,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deletes the replication configuration from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket_replication(&self, input: &DeleteBucketReplicationRequest) -> Result<(), DeleteBucketReplicationError> {
+                fn delete_bucket_replication(&self, input: &DeleteBucketReplicationRequest) -> Box<Future<Item = (), Error = DeleteBucketReplicationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16426,23 +16557,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketReplicationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketReplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketReplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketReplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deletes the tags from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket_tagging(&self, input: &DeleteBucketTaggingRequest) -> Result<(), DeleteBucketTaggingError> {
+                fn delete_bucket_tagging(&self, input: &DeleteBucketTaggingRequest) -> Box<Future<Item = (), Error = DeleteBucketTaggingError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16456,23 +16597,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketTaggingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketTaggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="This operation removes the website configuration from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn delete_bucket_website(&self, input: &DeleteBucketWebsiteRequest) -> Result<(), DeleteBucketWebsiteError> {
+                fn delete_bucket_website(&self, input: &DeleteBucketWebsiteRequest) -> Box<Future<Item = (), Error = DeleteBucketWebsiteError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16486,23 +16637,33 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteBucketWebsiteError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(DeleteBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteBucketWebsiteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects."]
                 #[allow(unused_variables, warnings)]
-                fn delete_object(&self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, DeleteObjectError> {
+                fn delete_object(&self, input: &DeleteObjectRequest) -> Box<Future<Item = DeleteObjectOutput, Error = DeleteObjectError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -16527,13 +16688,20 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteObjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteObjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16545,10 +16713,10 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
+                                    if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
                     let value = delete_marker.to_owned();
                     result.delete_marker = Some(bool::from_str(&value).unwrap())
                   };
@@ -16560,15 +16728,18 @@ if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(DeleteObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Removes the tag-set from an existing object."]
                 #[allow(unused_variables, warnings)]
-                fn delete_object_tagging(&self, input: &DeleteObjectTaggingRequest) -> Result<DeleteObjectTaggingOutput, DeleteObjectTaggingError> {
+                fn delete_object_tagging(&self, input: &DeleteObjectTaggingRequest) -> Box<Future<Item = DeleteObjectTaggingOutput, Error = DeleteObjectTaggingError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -16586,13 +16757,20 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteObjectTaggingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteObjectTaggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16604,22 +16782,25 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(DeleteObjectTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteObjectTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys."]
                 #[allow(unused_variables, warnings)]
-                fn delete_objects(&self, input: &DeleteObjectsRequest) -> Result<DeleteObjectsOutput, DeleteObjectsError> {
+                fn delete_objects(&self, input: &DeleteObjectsRequest) -> Box<Future<Item = DeleteObjectsOutput, Error = DeleteObjectsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16650,13 +16831,20 @@ let digest = md5::compute(&payload);
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteObjectsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteObjectsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16668,22 +16856,25 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(DeleteObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(DeleteObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the accelerate configuration of a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_accelerate_configuration(&self, input: &GetBucketAccelerateConfigurationRequest) -> Result<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError> {
+                fn get_bucket_accelerate_configuration(&self, input: &GetBucketAccelerateConfigurationRequest) -> Box<Future<Item = GetBucketAccelerateConfigurationOutput, Error = GetBucketAccelerateConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16697,13 +16888,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketAccelerateConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketAccelerateConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16715,19 +16913,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketAccelerateConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketAccelerateConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Gets the access control policy for the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_acl(&self, input: &GetBucketAclRequest) -> Result<GetBucketAclOutput, GetBucketAclError> {
+                fn get_bucket_acl(&self, input: &GetBucketAclRequest) -> Box<Future<Item = GetBucketAclOutput, Error = GetBucketAclError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16741,13 +16942,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketAclError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketAclError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16759,19 +16967,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Gets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_analytics_configuration(&self, input: &GetBucketAnalyticsConfigurationRequest) -> Result<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError> {
+                fn get_bucket_analytics_configuration(&self, input: &GetBucketAnalyticsConfigurationRequest) -> Box<Future<Item = GetBucketAnalyticsConfigurationOutput, Error = GetBucketAnalyticsConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16785,13 +16996,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketAnalyticsConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketAnalyticsConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16803,19 +17021,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the cors configuration for the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_cors(&self, input: &GetBucketCorsRequest) -> Result<GetBucketCorsOutput, GetBucketCorsError> {
+                fn get_bucket_cors(&self, input: &GetBucketCorsRequest) -> Box<Future<Item = GetBucketCorsOutput, Error = GetBucketCorsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16829,13 +17050,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketCorsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketCorsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16847,19 +17075,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns an inventory configuration (identified by the inventory ID) from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_inventory_configuration(&self, input: &GetBucketInventoryConfigurationRequest) -> Result<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError> {
+                fn get_bucket_inventory_configuration(&self, input: &GetBucketInventoryConfigurationRequest) -> Box<Future<Item = GetBucketInventoryConfigurationOutput, Error = GetBucketInventoryConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16873,13 +17104,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketInventoryConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketInventoryConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16891,19 +17129,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketInventoryConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketInventoryConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deprecated, see the GetBucketLifecycleConfiguration operation."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_lifecycle(&self, input: &GetBucketLifecycleRequest) -> Result<GetBucketLifecycleOutput, GetBucketLifecycleError> {
+                fn get_bucket_lifecycle(&self, input: &GetBucketLifecycleRequest) -> Box<Future<Item = GetBucketLifecycleOutput, Error = GetBucketLifecycleError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16917,13 +17158,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketLifecycleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketLifecycleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16935,19 +17183,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketLifecycleOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketLifecycleOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the lifecycle configuration information set on the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_lifecycle_configuration(&self, input: &GetBucketLifecycleConfigurationRequest) -> Result<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError> {
+                fn get_bucket_lifecycle_configuration(&self, input: &GetBucketLifecycleConfigurationRequest) -> Box<Future<Item = GetBucketLifecycleConfigurationOutput, Error = GetBucketLifecycleConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -16961,13 +17212,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketLifecycleConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketLifecycleConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -16979,19 +17237,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketLifecycleConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketLifecycleConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the region the bucket resides in."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_location(&self, input: &GetBucketLocationRequest) -> Result<GetBucketLocationOutput, GetBucketLocationError> {
+                fn get_bucket_location(&self, input: &GetBucketLocationRequest) -> Box<Future<Item = GetBucketLocationOutput, Error = GetBucketLocationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17005,13 +17266,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketLocationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketLocationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17023,19 +17291,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketLocationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketLocationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketLocationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketLocationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_logging(&self, input: &GetBucketLoggingRequest) -> Result<GetBucketLoggingOutput, GetBucketLoggingError> {
+                fn get_bucket_logging(&self, input: &GetBucketLoggingRequest) -> Box<Future<Item = GetBucketLoggingOutput, Error = GetBucketLoggingError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17049,13 +17320,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketLoggingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketLoggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17067,19 +17345,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketLoggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketLoggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Gets a metrics configuration (specified by the metrics configuration ID) from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_metrics_configuration(&self, input: &GetBucketMetricsConfigurationRequest) -> Result<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError> {
+                fn get_bucket_metrics_configuration(&self, input: &GetBucketMetricsConfigurationRequest) -> Box<Future<Item = GetBucketMetricsConfigurationOutput, Error = GetBucketMetricsConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17093,13 +17374,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketMetricsConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketMetricsConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17111,19 +17399,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketMetricsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketMetricsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deprecated, see the GetBucketNotificationConfiguration operation."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_notification(&self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfigurationDeprecated, GetBucketNotificationError> {
+                fn get_bucket_notification(&self, input: &GetBucketNotificationConfigurationRequest) -> Box<Future<Item = NotificationConfigurationDeprecated, Error = GetBucketNotificationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17137,13 +17428,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketNotificationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketNotificationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17155,19 +17453,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(NotificationConfigurationDeprecatedDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(NotificationConfigurationDeprecatedDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketNotificationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketNotificationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the notification configuration of a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_notification_configuration(&self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfiguration, GetBucketNotificationConfigurationError> {
+                fn get_bucket_notification_configuration(&self, input: &GetBucketNotificationConfigurationRequest) -> Box<Future<Item = NotificationConfiguration, Error = GetBucketNotificationConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17181,13 +17482,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketNotificationConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketNotificationConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17199,19 +17507,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(NotificationConfigurationDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(NotificationConfigurationDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the policy of a specified bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_policy(&self, input: &GetBucketPolicyRequest) -> Result<GetBucketPolicyOutput, GetBucketPolicyError> {
+                fn get_bucket_policy(&self, input: &GetBucketPolicyRequest) -> Box<Future<Item = GetBucketPolicyOutput, Error = GetBucketPolicyError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17225,26 +17536,36 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result = GetBucketPolicyOutput::default();
         result.policy = Some(String::from_utf8_lossy(&response.body).into_owned());
         
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the replication configuration of a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_replication(&self, input: &GetBucketReplicationRequest) -> Result<GetBucketReplicationOutput, GetBucketReplicationError> {
+                fn get_bucket_replication(&self, input: &GetBucketReplicationRequest) -> Box<Future<Item = GetBucketReplicationOutput, Error = GetBucketReplicationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17258,13 +17579,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketReplicationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketReplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17276,19 +17604,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketReplicationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketReplicationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketReplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketReplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the request payment configuration of a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_request_payment(&self, input: &GetBucketRequestPaymentRequest) -> Result<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError> {
+                fn get_bucket_request_payment(&self, input: &GetBucketRequestPaymentRequest) -> Box<Future<Item = GetBucketRequestPaymentOutput, Error = GetBucketRequestPaymentError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17302,13 +17633,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketRequestPaymentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketRequestPaymentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17320,19 +17658,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketRequestPaymentOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketRequestPaymentOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the tag set associated with the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_tagging(&self, input: &GetBucketTaggingRequest) -> Result<GetBucketTaggingOutput, GetBucketTaggingError> {
+                fn get_bucket_tagging(&self, input: &GetBucketTaggingRequest) -> Box<Future<Item = GetBucketTaggingOutput, Error = GetBucketTaggingError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17346,13 +17687,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketTaggingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketTaggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17364,19 +17712,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the versioning state of a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_versioning(&self, input: &GetBucketVersioningRequest) -> Result<GetBucketVersioningOutput, GetBucketVersioningError> {
+                fn get_bucket_versioning(&self, input: &GetBucketVersioningRequest) -> Box<Future<Item = GetBucketVersioningOutput, Error = GetBucketVersioningError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17390,13 +17741,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketVersioningError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketVersioningError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17408,19 +17766,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketVersioningOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketVersioningOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketVersioningError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketVersioningError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the website configuration for a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_bucket_website(&self, input: &GetBucketWebsiteRequest) -> Result<GetBucketWebsiteOutput, GetBucketWebsiteError> {
+                fn get_bucket_website(&self, input: &GetBucketWebsiteRequest) -> Box<Future<Item = GetBucketWebsiteOutput, Error = GetBucketWebsiteError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17434,13 +17795,20 @@ request.set_payload(Some(payload));
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetBucketWebsiteError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetBucketWebsiteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17452,19 +17820,22 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetBucketWebsiteOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetBucketWebsiteOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(GetBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Retrieves objects from Amazon S3."]
                 #[allow(unused_variables, warnings)]
-                fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, GetObjectError> {
+                fn get_object(&self, input: &GetObjectRequest) -> Box<Future<Item = GetObjectOutput, Error = GetObjectError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -17545,17 +17916,24 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetObjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetObjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result = GetObjectOutput::default();
         result.body = Some(response.body);
         
-                            if let Some(accept_ranges) = response.headers.get("accept-ranges") {
+                                    if let Some(accept_ranges) = response.headers.get("accept-ranges") {
                     let value = accept_ranges.to_owned();
                     result.accept_ranges = Some(value)
                   };
@@ -17666,15 +18044,18 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     let value = website_redirect_location.to_owned();
                     result.website_redirect_location = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the access control list (ACL) of an object."]
                 #[allow(unused_variables, warnings)]
-                fn get_object_acl(&self, input: &GetObjectAclRequest) -> Result<GetObjectAclOutput, GetObjectAclError> {
+                fn get_object_acl(&self, input: &GetObjectAclRequest) -> Box<Future<Item = GetObjectAclOutput, Error = GetObjectAclError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -17695,13 +18076,20 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetObjectAclError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetObjectAclError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17713,22 +18101,25 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns the tag-set of an object."]
                 #[allow(unused_variables, warnings)]
-                fn get_object_tagging(&self, input: &GetObjectTaggingRequest) -> Result<GetObjectTaggingOutput, GetObjectTaggingError> {
+                fn get_object_tagging(&self, input: &GetObjectTaggingRequest) -> Box<Future<Item = GetObjectTaggingOutput, Error = GetObjectTaggingError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -17746,13 +18137,20 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetObjectTaggingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetObjectTaggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17764,22 +18162,25 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetObjectTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetObjectTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Return torrent files from a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn get_object_torrent(&self, input: &GetObjectTorrentRequest) -> Result<GetObjectTorrentOutput, GetObjectTorrentError> {
+                fn get_object_torrent(&self, input: &GetObjectTorrentRequest) -> Box<Future<Item = GetObjectTorrentOutput, Error = GetObjectTorrentError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -17797,29 +18198,39 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetObjectTorrentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetObjectTorrentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result = GetObjectTorrentOutput::default();
         result.body = Some(response.body);
         
-                            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(GetObjectTorrentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(GetObjectTorrentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="This operation is useful to determine if a bucket exists and you have permission to access it."]
                 #[allow(unused_variables, warnings)]
-                fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), HeadBucketError> {
+                fn head_bucket(&self, input: &HeadBucketRequest) -> Box<Future<Item = (), Error = HeadBucketError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -17833,23 +18244,33 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(HeadBucketError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(HeadBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| HeadBucketError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(HeadBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object."]
                 #[allow(unused_variables, warnings)]
-                fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, HeadObjectError> {
+                fn head_object(&self, input: &HeadObjectRequest) -> Box<Future<Item = HeadObjectOutput, Error = HeadObjectError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -17906,13 +18327,20 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(HeadObjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| HeadObjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -17924,10 +18352,10 @@ request_uri = request_uri.replace("{Key}", &input.key.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(HeadObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(HeadObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(accept_ranges) = response.headers.get("accept-ranges") {
+                                    if let Some(accept_ranges) = response.headers.get("accept-ranges") {
                     let value = accept_ranges.to_owned();
                     result.accept_ranges = Some(value)
                   };
@@ -18030,15 +18458,18 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     let value = website_redirect_location.to_owned();
                     result.website_redirect_location = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(HeadObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(HeadObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Lists the analytics configurations for the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn list_bucket_analytics_configurations(&self, input: &ListBucketAnalyticsConfigurationsRequest) -> Result<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError> {
+                fn list_bucket_analytics_configurations(&self, input: &ListBucketAnalyticsConfigurationsRequest) -> Box<Future<Item = ListBucketAnalyticsConfigurationsOutput, Error = ListBucketAnalyticsConfigurationsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18055,13 +18486,20 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListBucketAnalyticsConfigurationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListBucketAnalyticsConfigurationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -18073,19 +18511,22 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListBucketAnalyticsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListBucketAnalyticsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns a list of inventory configurations for the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn list_bucket_inventory_configurations(&self, input: &ListBucketInventoryConfigurationsRequest) -> Result<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError> {
+                fn list_bucket_inventory_configurations(&self, input: &ListBucketInventoryConfigurationsRequest) -> Box<Future<Item = ListBucketInventoryConfigurationsOutput, Error = ListBucketInventoryConfigurationsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18102,13 +18543,20 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListBucketInventoryConfigurationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListBucketInventoryConfigurationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -18120,19 +18568,22 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListBucketInventoryConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListBucketInventoryConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListBucketInventoryConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListBucketInventoryConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Lists the metrics configurations for the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn list_bucket_metrics_configurations(&self, input: &ListBucketMetricsConfigurationsRequest) -> Result<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError> {
+                fn list_bucket_metrics_configurations(&self, input: &ListBucketMetricsConfigurationsRequest) -> Box<Future<Item = ListBucketMetricsConfigurationsOutput, Error = ListBucketMetricsConfigurationsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18149,13 +18600,20 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListBucketMetricsConfigurationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListBucketMetricsConfigurationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -18167,19 +18625,22 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListBucketMetricsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListBucketMetricsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListBucketMetricsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListBucketMetricsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns a list of all buckets owned by the authenticated sender of the request."]
                 #[allow(unused_variables, warnings)]
-                fn list_buckets(&self) -> Result<ListBucketsOutput, ListBucketsError> {
+                fn list_buckets(&self) -> Box<Future<Item = ListBucketsOutput, Error = ListBucketsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/".to_string();
 
@@ -18193,13 +18654,20 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListBucketsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListBucketsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -18211,19 +18679,22 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListBucketsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListBucketsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="This operation lists in-progress multipart uploads."]
                 #[allow(unused_variables, warnings)]
-                fn list_multipart_uploads(&self, input: &ListMultipartUploadsRequest) -> Result<ListMultipartUploadsOutput, ListMultipartUploadsError> {
+                fn list_multipart_uploads(&self, input: &ListMultipartUploadsRequest) -> Box<Future<Item = ListMultipartUploadsOutput, Error = ListMultipartUploadsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18260,13 +18731,20 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListMultipartUploadsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListMultipartUploadsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -18278,19 +18756,22 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListMultipartUploadsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListMultipartUploadsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns metadata about all of the versions of objects in a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn list_object_versions(&self, input: &ListObjectVersionsRequest) -> Result<ListObjectVersionsOutput, ListObjectVersionsError> {
+                fn list_object_versions(&self, input: &ListObjectVersionsRequest) -> Box<Future<Item = ListObjectVersionsOutput, Error = ListObjectVersionsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18327,13 +18808,20 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListObjectVersionsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListObjectVersionsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -18345,19 +18833,22 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListObjectVersionsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListObjectVersionsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListObjectVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListObjectVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn list_objects(&self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, ListObjectsError> {
+                fn list_objects(&self, input: &ListObjectsRequest) -> Box<Future<Item = ListObjectsOutput, Error = ListObjectsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18393,13 +18884,20 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListObjectsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListObjectsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -18411,19 +18909,22 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development."]
                 #[allow(unused_variables, warnings)]
-                fn list_objects_v2(&self, input: &ListObjectsV2Request) -> Result<ListObjectsV2Output, ListObjectsV2Error> {
+                fn list_objects_v2(&self, input: &ListObjectsV2Request) -> Box<Future<Item = ListObjectsV2Output, Error = ListObjectsV2Error>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18467,13 +18968,20 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListObjectsV2Error::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListObjectsV2Error::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -18485,19 +18993,22 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            
-                            Ok(result)
-                        },
-                        _ => Err(ListObjectsV2Error::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListObjectsV2Error::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Lists the parts that have been uploaded for a specific multipart upload."]
                 #[allow(unused_variables, warnings)]
-                fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, ListPartsError> {
+                fn list_parts(&self, input: &ListPartsRequest) -> Box<Future<Item = ListPartsOutput, Error = ListPartsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -18523,13 +19034,20 @@ params.put("uploadId", &input.upload_id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPartsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPartsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -18541,10 +19059,10 @@ params.put("uploadId", &input.upload_id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
+                                    if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
                     let value = abort_date.to_owned();
                     result.abort_date = Some(value)
                   };
@@ -18556,15 +19074,18 @@ if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(ListPartsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(ListPartsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets the accelerate configuration of an existing bucket."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_accelerate_configuration(&self, input: &PutBucketAccelerateConfigurationRequest) -> Result<(), PutBucketAccelerateConfigurationError> {
+                fn put_bucket_accelerate_configuration(&self, input: &PutBucketAccelerateConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketAccelerateConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18581,23 +19102,33 @@ payload = AccelerateConfigurationSerializer::serialize("AccelerateConfiguration"
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketAccelerateConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketAccelerateConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets the permissions on a bucket using access control lists (ACL)."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), PutBucketAclError> {
+                fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Box<Future<Item = (), Error = PutBucketAclError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18645,23 +19176,33 @@ if input.access_control_policy.is_some() {
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketAclError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketAclError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_analytics_configuration(&self, input: &PutBucketAnalyticsConfigurationRequest) -> Result<(), PutBucketAnalyticsConfigurationError> {
+                fn put_bucket_analytics_configuration(&self, input: &PutBucketAnalyticsConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketAnalyticsConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18678,23 +19219,33 @@ payload = AnalyticsConfigurationSerializer::serialize("AnalyticsConfiguration", 
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketAnalyticsConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketAnalyticsConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets the cors configuration for a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Result<(), PutBucketCorsError> {
+                fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Box<Future<Item = (), Error = PutBucketCorsError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18721,23 +19272,33 @@ let digest = md5::compute(&payload);
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketCorsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketCorsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Adds an inventory configuration (identified by the inventory ID) from the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_inventory_configuration(&self, input: &PutBucketInventoryConfigurationRequest) -> Result<(), PutBucketInventoryConfigurationError> {
+                fn put_bucket_inventory_configuration(&self, input: &PutBucketInventoryConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketInventoryConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18754,23 +19315,33 @@ payload = InventoryConfigurationSerializer::serialize("InventoryConfiguration", 
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketInventoryConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketInventoryConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deprecated, see the PutBucketLifecycleConfiguration operation."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_lifecycle(&self, input: &PutBucketLifecycleRequest) -> Result<(), PutBucketLifecycleError> {
+                fn put_bucket_lifecycle(&self, input: &PutBucketLifecycleRequest) -> Box<Future<Item = (), Error = PutBucketLifecycleError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18801,23 +19372,33 @@ let digest = md5::compute(&payload);
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketLifecycleError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketLifecycleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_lifecycle_configuration(&self, input: &PutBucketLifecycleConfigurationRequest) -> Result<(), PutBucketLifecycleConfigurationError> {
+                fn put_bucket_lifecycle_configuration(&self, input: &PutBucketLifecycleConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketLifecycleConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18845,23 +19426,33 @@ let digest = md5::compute(&payload);
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketLifecycleConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketLifecycleConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_logging(&self, input: &PutBucketLoggingRequest) -> Result<(), PutBucketLoggingError> {
+                fn put_bucket_logging(&self, input: &PutBucketLoggingRequest) -> Box<Future<Item = (), Error = PutBucketLoggingError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18881,23 +19472,33 @@ payload = BucketLoggingStatusSerializer::serialize("BucketLoggingStatus", &input
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketLoggingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketLoggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets a metrics configuration (specified by the metrics configuration ID) for the bucket."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_metrics_configuration(&self, input: &PutBucketMetricsConfigurationRequest) -> Result<(), PutBucketMetricsConfigurationError> {
+                fn put_bucket_metrics_configuration(&self, input: &PutBucketMetricsConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketMetricsConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18914,23 +19515,33 @@ payload = MetricsConfigurationSerializer::serialize("MetricsConfiguration", &inp
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketMetricsConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketMetricsConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Deprecated, see the PutBucketNotificationConfiguraiton operation."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_notification(&self, input: &PutBucketNotificationRequest) -> Result<(), PutBucketNotificationError> {
+                fn put_bucket_notification(&self, input: &PutBucketNotificationRequest) -> Box<Future<Item = (), Error = PutBucketNotificationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18950,23 +19561,33 @@ payload = NotificationConfigurationDeprecatedSerializer::serialize("Notification
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketNotificationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketNotificationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketNotificationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketNotificationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Enables notifications of specified events for a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_notification_configuration(&self, input: &PutBucketNotificationConfigurationRequest) -> Result<(), PutBucketNotificationConfigurationError> {
+                fn put_bucket_notification_configuration(&self, input: &PutBucketNotificationConfigurationRequest) -> Box<Future<Item = (), Error = PutBucketNotificationConfigurationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -18983,23 +19604,33 @@ payload = NotificationConfigurationSerializer::serialize("NotificationConfigurat
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketNotificationConfigurationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketNotificationConfigurationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_policy(&self, input: &PutBucketPolicyRequest) -> Result<(), PutBucketPolicyError> {
+                fn put_bucket_policy(&self, input: &PutBucketPolicyRequest) -> Box<Future<Item = (), Error = PutBucketPolicyError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -19019,23 +19650,33 @@ payload = PolicySerializer::serialize("Policy", &input.policy).into_bytes();
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Creates a new replication configuration (or replaces an existing one, if present)."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_replication(&self, input: &PutBucketReplicationRequest) -> Result<(), PutBucketReplicationError> {
+                fn put_bucket_replication(&self, input: &PutBucketReplicationRequest) -> Box<Future<Item = (), Error = PutBucketReplicationError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -19062,23 +19703,33 @@ let digest = md5::compute(&payload);
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketReplicationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketReplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketReplicationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketReplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html"]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_request_payment(&self, input: &PutBucketRequestPaymentRequest) -> Result<(), PutBucketRequestPaymentError> {
+                fn put_bucket_request_payment(&self, input: &PutBucketRequestPaymentRequest) -> Box<Future<Item = (), Error = PutBucketRequestPaymentError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -19098,23 +19749,33 @@ payload = RequestPaymentConfigurationSerializer::serialize("RequestPaymentConfig
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketRequestPaymentError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketRequestPaymentError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets the tags for a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_tagging(&self, input: &PutBucketTaggingRequest) -> Result<(), PutBucketTaggingError> {
+                fn put_bucket_tagging(&self, input: &PutBucketTaggingRequest) -> Box<Future<Item = (), Error = PutBucketTaggingError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -19141,23 +19802,33 @@ let digest = md5::compute(&payload);
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketTaggingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketTaggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_versioning(&self, input: &PutBucketVersioningRequest) -> Result<(), PutBucketVersioningError> {
+                fn put_bucket_versioning(&self, input: &PutBucketVersioningRequest) -> Box<Future<Item = (), Error = PutBucketVersioningError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -19181,23 +19852,33 @@ payload = VersioningConfigurationSerializer::serialize("VersioningConfiguration"
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketVersioningError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketVersioningError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketVersioningError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketVersioningError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Set the website configuration for a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn put_bucket_website(&self, input: &PutBucketWebsiteRequest) -> Result<(), PutBucketWebsiteError> {
+                fn put_bucket_website(&self, input: &PutBucketWebsiteRequest) -> Box<Future<Item = (), Error = PutBucketWebsiteError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
@@ -19217,23 +19898,33 @@ payload = WebsiteConfigurationSerializer::serialize("WebsiteConfiguration", &inp
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutBucketWebsiteError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            let result = ();
-                            
-                            Ok(result)
-                        },
-                        _ => Err(PutBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutBucketWebsiteError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    let result = ();
+                                    
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Adds an object to a bucket."]
                 #[allow(unused_variables, warnings)]
-                fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, PutObjectError> {
+                fn put_object(&self, input: &PutObjectRequest) -> Box<Future<Item = PutObjectOutput, Error = PutObjectError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -19338,13 +20029,20 @@ payload = input.body.clone().unwrap();
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutObjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutObjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -19356,10 +20054,10 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(PutObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(PutObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
@@ -19391,15 +20089,18 @@ if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(PutObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket"]
                 #[allow(unused_variables, warnings)]
-                fn put_object_acl(&self, input: &PutObjectAclRequest) -> Result<PutObjectAclOutput, PutObjectAclError> {
+                fn put_object_acl(&self, input: &PutObjectAclRequest) -> Box<Future<Item = PutObjectAclOutput, Error = PutObjectAclError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -19455,13 +20156,20 @@ if input.access_control_policy.is_some() {
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutObjectAclError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutObjectAclError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -19473,22 +20181,25 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(PutObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(PutObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(PutObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Sets the supplied tag-set to an object that already exists in a bucket"]
                 #[allow(unused_variables, warnings)]
-                fn put_object_tagging(&self, input: &PutObjectTaggingRequest) -> Result<PutObjectTaggingOutput, PutObjectTaggingError> {
+                fn put_object_tagging(&self, input: &PutObjectTaggingRequest) -> Box<Future<Item = PutObjectTaggingOutput, Error = PutObjectTaggingError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -19512,13 +20223,20 @@ payload = TaggingSerializer::serialize("Tagging", &input.tagging).into_bytes();
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutObjectTaggingError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutObjectTaggingError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -19530,22 +20248,25 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(PutObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(PutObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(PutObjectTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(PutObjectTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Restores an archived copy of an object back into Amazon S3"]
                 #[allow(unused_variables, warnings)]
-                fn restore_object(&self, input: &RestoreObjectRequest) -> Result<RestoreObjectOutput, RestoreObjectError> {
+                fn restore_object(&self, input: &RestoreObjectRequest) -> Box<Future<Item = RestoreObjectOutput, Error = RestoreObjectError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -19573,13 +20294,20 @@ if input.restore_request.is_some() {
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RestoreObjectError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RestoreObjectError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -19591,22 +20319,25 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(RestoreObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(RestoreObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(RestoreObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(RestoreObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="<p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
                 #[allow(unused_variables, warnings)]
-                fn upload_part(&self, input: &UploadPartRequest) -> Result<UploadPartOutput, UploadPartError> {
+                fn upload_part(&self, input: &UploadPartRequest) -> Box<Future<Item = UploadPartOutput, Error = UploadPartError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -19648,13 +20379,20 @@ payload = input.body.clone().unwrap();
 request.set_payload(Some(payload));
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UploadPartError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UploadPartError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -19666,10 +20404,10 @@ request.set_payload(Some(payload));
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UploadPartOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UploadPartOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(e_tag) = response.headers.get("ETag") {
+                                    if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                   };
@@ -19693,15 +20431,18 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(UploadPartError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(UploadPartError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 #[doc="Uploads a part by copying data from an existing object as data source."]
                 #[allow(unused_variables, warnings)]
-                fn upload_part_copy(&self, input: &UploadPartCopyRequest) -> Result<UploadPartCopyOutput, UploadPartCopyError> {
+                fn upload_part_copy(&self, input: &UploadPartCopyRequest) -> Box<Future<Item = UploadPartCopyOutput, Error = UploadPartCopyError>> {
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}/{Key}".to_string();
 
@@ -19765,13 +20506,20 @@ params.put("uploadId", &input.upload_id.to_string());
                     
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UploadPartCopyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
-                            
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UploadPartCopyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {
+                                    
         let mut result;
 
         if response.body.is_empty() {
@@ -19783,10 +20531,10 @@ params.put("uploadId", &input.upload_id.to_string());
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!(UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            result = try_future!(UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
         }
-                            if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
+                                    if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
                     let value = copy_source_version_id.to_owned();
                     result.copy_source_version_id = Some(value)
                   };
@@ -19810,10 +20558,13 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
                   };
-                            Ok(result)
-                        },
-                        _ => Err(UploadPartCopyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }
+                                    future::ok(result)
+                                },
+                                _ => future::err(UploadPartCopyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -19850,34 +20601,23 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
         }
             
         #[test]
+        fn test_parse_valid_s3_list_buckets() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "s3-list-buckets.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            
+            let result = client.list_buckets();
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
         fn test_parse_valid_s3_get_bucket_acl() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "s3-get-bucket-acl.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = GetBucketAclRequest::default();
             let result = client.get_bucket_acl(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_s3_get_bucket_location() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "s3-get-bucket-location.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetBucketLocationRequest::default();
-            let result = client.get_bucket_location(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_s3_get_bucket_logging() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "s3-get-bucket-logging.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetBucketLoggingRequest::default();
-            let result = client.get_bucket_logging(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -19894,23 +20634,23 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
 
 
         #[test]
-        fn test_parse_valid_s3_list_buckets() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "s3-list-buckets.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            
-            let result = client.list_buckets();
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
         fn test_parse_valid_s3_list_multipart_uploads() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "s3-list-multipart-uploads.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = ListMultipartUploadsRequest::default();
             let result = client.list_multipart_uploads(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_s3_get_bucket_logging() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "s3-get-bucket-logging.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = GetBucketLoggingRequest::default();
+            let result = client.get_bucket_logging(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -19933,6 +20673,17 @@ if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-en
             let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = ListObjectsRequest::default();
             let result = client.list_objects(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_s3_get_bucket_location() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "s3-get-bucket-location.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = GetBucketLocationRequest::default();
+            let result = client.get_bucket_location(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type AZ = String;
 pub type AZList = Vec<AZ>;
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1986,83 +1987,83 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Result<AddTagsToResourceResponse, AddTagsToResourceError>;
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Box<Future<Item = AddTagsToResourceResponse, Error = AddTagsToResourceError>>;
                 
 
                 #[doc="<p>Creates a high-availability partition group. A high-availability partition group is a group of partitions that spans multiple physical HSMs.</p>"]
-                fn create_hapg(&self, input: &CreateHapgRequest)  -> Result<CreateHapgResponse, CreateHapgError>;
+                fn create_hapg(&self, input: &CreateHapgRequest)  -> Box<Future<Item = CreateHapgResponse, Error = CreateHapgError>>;
                 
 
                 #[doc="<p>Creates an uninitialized HSM instance.</p> <p>There is an upfront fee charged for each HSM instance that you create with the <a>CreateHsm</a> operation. If you accidentally provision an HSM and want to request a refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>, create a new case, and select <b>Account and Billing Support</b>.</p> <important> <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be initialized when the status changes to <code>RUNNING</code>.</p> </important>"]
-                fn create_hsm(&self, input: &CreateHsmRequest)  -> Result<CreateHsmResponse, CreateHsmError>;
+                fn create_hsm(&self, input: &CreateHsmRequest)  -> Box<Future<Item = CreateHsmResponse, Error = CreateHsmError>>;
                 
 
                 #[doc="<p>Creates an HSM client.</p>"]
-                fn create_luna_client(&self, input: &CreateLunaClientRequest)  -> Result<CreateLunaClientResponse, CreateLunaClientError>;
+                fn create_luna_client(&self, input: &CreateLunaClientRequest)  -> Box<Future<Item = CreateLunaClientResponse, Error = CreateLunaClientError>>;
                 
 
                 #[doc="<p>Deletes a high-availability partition group.</p>"]
-                fn delete_hapg(&self, input: &DeleteHapgRequest)  -> Result<DeleteHapgResponse, DeleteHapgError>;
+                fn delete_hapg(&self, input: &DeleteHapgRequest)  -> Box<Future<Item = DeleteHapgResponse, Error = DeleteHapgError>>;
                 
 
                 #[doc="<p>Deletes an HSM. After completion, this operation cannot be undone and your key material cannot be recovered.</p>"]
-                fn delete_hsm(&self, input: &DeleteHsmRequest)  -> Result<DeleteHsmResponse, DeleteHsmError>;
+                fn delete_hsm(&self, input: &DeleteHsmRequest)  -> Box<Future<Item = DeleteHsmResponse, Error = DeleteHsmError>>;
                 
 
                 #[doc="<p>Deletes a client.</p>"]
-                fn delete_luna_client(&self, input: &DeleteLunaClientRequest)  -> Result<DeleteLunaClientResponse, DeleteLunaClientError>;
+                fn delete_luna_client(&self, input: &DeleteLunaClientRequest)  -> Box<Future<Item = DeleteLunaClientResponse, Error = DeleteLunaClientError>>;
                 
 
                 #[doc="<p>Retrieves information about a high-availability partition group.</p>"]
-                fn describe_hapg(&self, input: &DescribeHapgRequest)  -> Result<DescribeHapgResponse, DescribeHapgError>;
+                fn describe_hapg(&self, input: &DescribeHapgRequest)  -> Box<Future<Item = DescribeHapgResponse, Error = DescribeHapgError>>;
                 
 
                 #[doc="<p>Retrieves information about an HSM. You can identify the HSM by its ARN or its serial number.</p>"]
-                fn describe_hsm(&self, input: &DescribeHsmRequest)  -> Result<DescribeHsmResponse, DescribeHsmError>;
+                fn describe_hsm(&self, input: &DescribeHsmRequest)  -> Box<Future<Item = DescribeHsmResponse, Error = DescribeHsmError>>;
                 
 
                 #[doc="<p>Retrieves information about an HSM client.</p>"]
-                fn describe_luna_client(&self, input: &DescribeLunaClientRequest)  -> Result<DescribeLunaClientResponse, DescribeLunaClientError>;
+                fn describe_luna_client(&self, input: &DescribeLunaClientRequest)  -> Box<Future<Item = DescribeLunaClientResponse, Error = DescribeLunaClientError>>;
                 
 
                 #[doc="<p>Gets the configuration files necessary to connect to all high availability partition groups the client is associated with.</p>"]
-                fn get_config(&self, input: &GetConfigRequest)  -> Result<GetConfigResponse, GetConfigError>;
+                fn get_config(&self, input: &GetConfigRequest)  -> Box<Future<Item = GetConfigResponse, Error = GetConfigError>>;
                 
 
                 #[doc="<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
-                fn list_available_zones(&self, input: &ListAvailableZonesRequest)  -> Result<ListAvailableZonesResponse, ListAvailableZonesError>;
+                fn list_available_zones(&self, input: &ListAvailableZonesRequest)  -> Box<Future<Item = ListAvailableZonesResponse, Error = ListAvailableZonesError>>;
                 
 
                 #[doc="<p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
-                fn list_hapgs(&self, input: &ListHapgsRequest)  -> Result<ListHapgsResponse, ListHapgsError>;
+                fn list_hapgs(&self, input: &ListHapgsRequest)  -> Box<Future<Item = ListHapgsResponse, Error = ListHapgsError>>;
                 
 
                 #[doc="<p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHsms</a> to retrieve the next set of items.</p>"]
-                fn list_hsms(&self, input: &ListHsmsRequest)  -> Result<ListHsmsResponse, ListHsmsError>;
+                fn list_hsms(&self, input: &ListHsmsRequest)  -> Box<Future<Item = ListHsmsResponse, Error = ListHsmsError>>;
                 
 
                 #[doc="<p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListLunaClients</a> to retrieve the next set of items.</p>"]
-                fn list_luna_clients(&self, input: &ListLunaClientsRequest)  -> Result<ListLunaClientsResponse, ListLunaClientsError>;
+                fn list_luna_clients(&self, input: &ListLunaClientsRequest)  -> Box<Future<Item = ListLunaClientsResponse, Error = ListLunaClientsError>>;
                 
 
                 #[doc="<p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Box<Future<Item = ListTagsForResourceResponse, Error = ListTagsForResourceError>>;
                 
 
                 #[doc="<p>Modifies an existing high-availability partition group.</p>"]
-                fn modify_hapg(&self, input: &ModifyHapgRequest)  -> Result<ModifyHapgResponse, ModifyHapgError>;
+                fn modify_hapg(&self, input: &ModifyHapgRequest)  -> Box<Future<Item = ModifyHapgResponse, Error = ModifyHapgError>>;
                 
 
                 #[doc="<p>Modifies an HSM.</p> <important> <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure that your AWS CloudHSM service is configured for high availability, and consider executing this operation during a maintenance window.</p> </important>"]
-                fn modify_hsm(&self, input: &ModifyHsmRequest)  -> Result<ModifyHsmResponse, ModifyHsmError>;
+                fn modify_hsm(&self, input: &ModifyHsmRequest)  -> Box<Future<Item = ModifyHsmResponse, Error = ModifyHsmError>>;
                 
 
                 #[doc="<p>Modifies the certificate used by the client.</p> <p>This action can potentially start a workflow to install the new certificate on the client's HSMs.</p>"]
-                fn modify_luna_client(&self, input: &ModifyLunaClientRequest)  -> Result<ModifyLunaClientResponse, ModifyLunaClientError>;
+                fn modify_luna_client(&self, input: &ModifyLunaClientRequest)  -> Box<Future<Item = ModifyLunaClientResponse, Error = ModifyLunaClientError>>;
                 
 
                 #[doc="<p>Removes one or more tags from the specified AWS CloudHSM resource.</p> <p>To remove a tag, specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Box<Future<Item = RemoveTagsFromResourceResponse, Error = RemoveTagsFromResourceError>>;
                 
 }
 /// A client for the CloudHSM API.
@@ -2086,7 +2087,7 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>"]
-                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Result<AddTagsToResourceResponse, AddTagsToResourceError> {
+                fn add_tags_to_resource(&self, input: &AddTagsToResourceRequest)  -> Box<Future<Item = AddTagsToResourceResponse, Error = AddTagsToResourceError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2094,21 +2095,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AddTagsToResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AddTagsToResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a high-availability partition group. A high-availability partition group is a group of partitions that spans multiple physical HSMs.</p>"]
-                fn create_hapg(&self, input: &CreateHapgRequest)  -> Result<CreateHapgResponse, CreateHapgError> {
+                fn create_hapg(&self, input: &CreateHapgRequest)  -> Box<Future<Item = CreateHapgResponse, Error = CreateHapgError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2116,21 +2127,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateHapgError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateHapgError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an uninitialized HSM instance.</p> <p>There is an upfront fee charged for each HSM instance that you create with the <a>CreateHsm</a> operation. If you accidentally provision an HSM and want to request a refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>, create a new case, and select <b>Account and Billing Support</b>.</p> <important> <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be initialized when the status changes to <code>RUNNING</code>.</p> </important>"]
-                fn create_hsm(&self, input: &CreateHsmRequest)  -> Result<CreateHsmResponse, CreateHsmError> {
+                fn create_hsm(&self, input: &CreateHsmRequest)  -> Box<Future<Item = CreateHsmResponse, Error = CreateHsmError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2138,21 +2159,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateHsmError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateHsmError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an HSM client.</p>"]
-                fn create_luna_client(&self, input: &CreateLunaClientRequest)  -> Result<CreateLunaClientResponse, CreateLunaClientError> {
+                fn create_luna_client(&self, input: &CreateLunaClientRequest)  -> Box<Future<Item = CreateLunaClientResponse, Error = CreateLunaClientError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2160,21 +2191,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateLunaClientError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateLunaClientError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateLunaClientError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateLunaClientError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a high-availability partition group.</p>"]
-                fn delete_hapg(&self, input: &DeleteHapgRequest)  -> Result<DeleteHapgResponse, DeleteHapgError> {
+                fn delete_hapg(&self, input: &DeleteHapgRequest)  -> Box<Future<Item = DeleteHapgResponse, Error = DeleteHapgError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2182,21 +2223,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteHapgError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteHapgError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes an HSM. After completion, this operation cannot be undone and your key material cannot be recovered.</p>"]
-                fn delete_hsm(&self, input: &DeleteHsmRequest)  -> Result<DeleteHsmResponse, DeleteHsmError> {
+                fn delete_hsm(&self, input: &DeleteHsmRequest)  -> Box<Future<Item = DeleteHsmResponse, Error = DeleteHsmError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2204,21 +2255,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteHsmError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteHsmError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a client.</p>"]
-                fn delete_luna_client(&self, input: &DeleteLunaClientRequest)  -> Result<DeleteLunaClientResponse, DeleteLunaClientError> {
+                fn delete_luna_client(&self, input: &DeleteLunaClientRequest)  -> Box<Future<Item = DeleteLunaClientResponse, Error = DeleteLunaClientError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2226,21 +2287,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteLunaClientError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DeleteLunaClientError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteLunaClientError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DeleteLunaClientError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about a high-availability partition group.</p>"]
-                fn describe_hapg(&self, input: &DescribeHapgRequest)  -> Result<DescribeHapgResponse, DescribeHapgError> {
+                fn describe_hapg(&self, input: &DescribeHapgRequest)  -> Box<Future<Item = DescribeHapgResponse, Error = DescribeHapgError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2248,21 +2319,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeHapgError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeHapgError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about an HSM. You can identify the HSM by its ARN or its serial number.</p>"]
-                fn describe_hsm(&self, input: &DescribeHsmRequest)  -> Result<DescribeHsmResponse, DescribeHsmError> {
+                fn describe_hsm(&self, input: &DescribeHsmRequest)  -> Box<Future<Item = DescribeHsmResponse, Error = DescribeHsmError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2270,21 +2351,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeHsmError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeHsmError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves information about an HSM client.</p>"]
-                fn describe_luna_client(&self, input: &DescribeLunaClientRequest)  -> Result<DescribeLunaClientResponse, DescribeLunaClientError> {
+                fn describe_luna_client(&self, input: &DescribeLunaClientRequest)  -> Box<Future<Item = DescribeLunaClientResponse, Error = DescribeLunaClientError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2292,21 +2383,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLunaClientError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeLunaClientError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLunaClientError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeLunaClientError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the configuration files necessary to connect to all high availability partition groups the client is associated with.</p>"]
-                fn get_config(&self, input: &GetConfigRequest)  -> Result<GetConfigResponse, GetConfigError> {
+                fn get_config(&self, input: &GetConfigRequest)  -> Box<Future<Item = GetConfigResponse, Error = GetConfigError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2314,21 +2415,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetConfigError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetConfigResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetConfigError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetConfigResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
-                fn list_available_zones(&self, input: &ListAvailableZonesRequest)  -> Result<ListAvailableZonesResponse, ListAvailableZonesError> {
+                fn list_available_zones(&self, input: &ListAvailableZonesRequest)  -> Box<Future<Item = ListAvailableZonesResponse, Error = ListAvailableZonesError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2336,21 +2447,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListAvailableZonesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAvailableZonesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListAvailableZonesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListAvailableZonesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListAvailableZonesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListAvailableZonesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
-                fn list_hapgs(&self, input: &ListHapgsRequest)  -> Result<ListHapgsResponse, ListHapgsError> {
+                fn list_hapgs(&self, input: &ListHapgsRequest)  -> Box<Future<Item = ListHapgsResponse, Error = ListHapgsError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2358,21 +2479,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListHapgsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListHapgsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListHapgsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListHapgsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListHapgsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListHapgsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHsms</a> to retrieve the next set of items.</p>"]
-                fn list_hsms(&self, input: &ListHsmsRequest)  -> Result<ListHsmsResponse, ListHsmsError> {
+                fn list_hsms(&self, input: &ListHsmsRequest)  -> Box<Future<Item = ListHsmsResponse, Error = ListHsmsError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2380,21 +2511,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListHsmsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListHsmsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListHsmsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListHsmsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListHsmsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListHsmsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListLunaClients</a> to retrieve the next set of items.</p>"]
-                fn list_luna_clients(&self, input: &ListLunaClientsRequest)  -> Result<ListLunaClientsResponse, ListLunaClientsError> {
+                fn list_luna_clients(&self, input: &ListLunaClientsRequest)  -> Box<Future<Item = ListLunaClientsResponse, Error = ListLunaClientsError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2402,21 +2543,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListLunaClientsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListLunaClientsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListLunaClientsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListLunaClientsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListLunaClientsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListLunaClientsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>"]
-                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
+                fn list_tags_for_resource(&self, input: &ListTagsForResourceRequest)  -> Box<Future<Item = ListTagsForResourceResponse, Error = ListTagsForResourceError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2424,21 +2575,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsForResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsForResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies an existing high-availability partition group.</p>"]
-                fn modify_hapg(&self, input: &ModifyHapgRequest)  -> Result<ModifyHapgResponse, ModifyHapgError> {
+                fn modify_hapg(&self, input: &ModifyHapgRequest)  -> Box<Future<Item = ModifyHapgResponse, Error = ModifyHapgError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2446,21 +2607,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyHapgError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ModifyHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyHapgError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ModifyHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ModifyHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies an HSM.</p> <important> <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure that your AWS CloudHSM service is configured for high availability, and consider executing this operation during a maintenance window.</p> </important>"]
-                fn modify_hsm(&self, input: &ModifyHsmRequest)  -> Result<ModifyHsmResponse, ModifyHsmError> {
+                fn modify_hsm(&self, input: &ModifyHsmRequest)  -> Box<Future<Item = ModifyHsmResponse, Error = ModifyHsmError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2468,21 +2639,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyHsmError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ModifyHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyHsmError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ModifyHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ModifyHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Modifies the certificate used by the client.</p> <p>This action can potentially start a workflow to install the new certificate on the client's HSMs.</p>"]
-                fn modify_luna_client(&self, input: &ModifyLunaClientRequest)  -> Result<ModifyLunaClientResponse, ModifyLunaClientError> {
+                fn modify_luna_client(&self, input: &ModifyLunaClientRequest)  -> Box<Future<Item = ModifyLunaClientResponse, Error = ModifyLunaClientError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2490,21 +2671,31 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ModifyLunaClientError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ModifyLunaClientError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ModifyLunaClientError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ModifyLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ModifyLunaClientError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes one or more tags from the specified AWS CloudHSM resource.</p> <p>To remove a tag, specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>"]
-                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
+                fn remove_tags_from_resource(&self, input: &RemoveTagsFromResourceRequest)  -> Box<Future<Item = RemoveTagsFromResourceResponse, Error = RemoveTagsFromResourceError>> {
                     let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2512,16 +2703,26 @@ RemoveTagsFromResourceError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RemoveTagsFromResourceError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RemoveTagsFromResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

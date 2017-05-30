@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 #[doc="<p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
             pub struct AWSSessionCredentials {
@@ -3033,107 +3034,107 @@ UpdatePipelineError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>"]
-                fn acknowledge_job(&self, input: &AcknowledgeJobInput)  -> Result<AcknowledgeJobOutput, AcknowledgeJobError>;
+                fn acknowledge_job(&self, input: &AcknowledgeJobInput)  -> Box<Future<Item = AcknowledgeJobOutput, Error = AcknowledgeJobError>>;
                 
 
                 #[doc="<p>Confirms a job worker has received the specified job. Only used for partner actions.</p>"]
-                fn acknowledge_third_party_job(&self, input: &AcknowledgeThirdPartyJobInput)  -> Result<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError>;
+                fn acknowledge_third_party_job(&self, input: &AcknowledgeThirdPartyJobInput)  -> Box<Future<Item = AcknowledgeThirdPartyJobOutput, Error = AcknowledgeThirdPartyJobError>>;
                 
 
                 #[doc="<p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>"]
-                fn create_custom_action_type(&self, input: &CreateCustomActionTypeInput)  -> Result<CreateCustomActionTypeOutput, CreateCustomActionTypeError>;
+                fn create_custom_action_type(&self, input: &CreateCustomActionTypeInput)  -> Box<Future<Item = CreateCustomActionTypeOutput, Error = CreateCustomActionTypeError>>;
                 
 
                 #[doc="<p>Creates a pipeline.</p>"]
-                fn create_pipeline(&self, input: &CreatePipelineInput)  -> Result<CreatePipelineOutput, CreatePipelineError>;
+                fn create_pipeline(&self, input: &CreatePipelineInput)  -> Box<Future<Item = CreatePipelineOutput, Error = CreatePipelineError>>;
                 
 
                 #[doc="<p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important>"]
-                fn delete_custom_action_type(&self, input: &DeleteCustomActionTypeInput)  -> Result<(), DeleteCustomActionTypeError>;
+                fn delete_custom_action_type(&self, input: &DeleteCustomActionTypeInput)  -> Box<Future<Item = (), Error = DeleteCustomActionTypeError>>;
                 
 
                 #[doc="<p>Deletes the specified pipeline.</p>"]
-                fn delete_pipeline(&self, input: &DeletePipelineInput)  -> Result<(), DeletePipelineError>;
+                fn delete_pipeline(&self, input: &DeletePipelineInput)  -> Box<Future<Item = (), Error = DeletePipelineError>>;
                 
 
                 #[doc="<p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>"]
-                fn disable_stage_transition(&self, input: &DisableStageTransitionInput)  -> Result<(), DisableStageTransitionError>;
+                fn disable_stage_transition(&self, input: &DisableStageTransitionInput)  -> Box<Future<Item = (), Error = DisableStageTransitionError>>;
                 
 
                 #[doc="<p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>"]
-                fn enable_stage_transition(&self, input: &EnableStageTransitionInput)  -> Result<(), EnableStageTransitionError>;
+                fn enable_stage_transition(&self, input: &EnableStageTransitionInput)  -> Box<Future<Item = (), Error = EnableStageTransitionError>>;
                 
 
                 #[doc="<p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
-                fn get_job_details(&self, input: &GetJobDetailsInput)  -> Result<GetJobDetailsOutput, GetJobDetailsError>;
+                fn get_job_details(&self, input: &GetJobDetailsInput)  -> Box<Future<Item = GetJobDetailsOutput, Error = GetJobDetailsError>>;
                 
 
                 #[doc="<p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>"]
-                fn get_pipeline(&self, input: &GetPipelineInput)  -> Result<GetPipelineOutput, GetPipelineError>;
+                fn get_pipeline(&self, input: &GetPipelineInput)  -> Box<Future<Item = GetPipelineOutput, Error = GetPipelineError>>;
                 
 
                 #[doc="<p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>"]
-                fn get_pipeline_execution(&self, input: &GetPipelineExecutionInput)  -> Result<GetPipelineExecutionOutput, GetPipelineExecutionError>;
+                fn get_pipeline_execution(&self, input: &GetPipelineExecutionInput)  -> Box<Future<Item = GetPipelineExecutionOutput, Error = GetPipelineExecutionError>>;
                 
 
                 #[doc="<p>Returns information about the state of a pipeline, including the stages and actions.</p>"]
-                fn get_pipeline_state(&self, input: &GetPipelineStateInput)  -> Result<GetPipelineStateOutput, GetPipelineStateError>;
+                fn get_pipeline_state(&self, input: &GetPipelineStateInput)  -> Box<Future<Item = GetPipelineStateOutput, Error = GetPipelineStateError>>;
                 
 
                 #[doc="<p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
-                fn get_third_party_job_details(&self, input: &GetThirdPartyJobDetailsInput)  -> Result<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError>;
+                fn get_third_party_job_details(&self, input: &GetThirdPartyJobDetailsInput)  -> Box<Future<Item = GetThirdPartyJobDetailsOutput, Error = GetThirdPartyJobDetailsError>>;
                 
 
                 #[doc="<p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>"]
-                fn list_action_types(&self, input: &ListActionTypesInput)  -> Result<ListActionTypesOutput, ListActionTypesError>;
+                fn list_action_types(&self, input: &ListActionTypesInput)  -> Box<Future<Item = ListActionTypesOutput, Error = ListActionTypesError>>;
                 
 
                 #[doc="<p>Gets a summary of all of the pipelines associated with your account.</p>"]
-                fn list_pipelines(&self, input: &ListPipelinesInput)  -> Result<ListPipelinesOutput, ListPipelinesError>;
+                fn list_pipelines(&self, input: &ListPipelinesInput)  -> Box<Future<Item = ListPipelinesOutput, Error = ListPipelinesError>>;
                 
 
                 #[doc="<p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
-                fn poll_for_jobs(&self, input: &PollForJobsInput)  -> Result<PollForJobsOutput, PollForJobsError>;
+                fn poll_for_jobs(&self, input: &PollForJobsInput)  -> Box<Future<Item = PollForJobsOutput, Error = PollForJobsError>>;
                 
 
                 #[doc="<p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important>"]
-                fn poll_for_third_party_jobs(&self, input: &PollForThirdPartyJobsInput)  -> Result<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError>;
+                fn poll_for_third_party_jobs(&self, input: &PollForThirdPartyJobsInput)  -> Box<Future<Item = PollForThirdPartyJobsOutput, Error = PollForThirdPartyJobsError>>;
                 
 
                 #[doc="<p>Provides information to AWS CodePipeline about new revisions to a source.</p>"]
-                fn put_action_revision(&self, input: &PutActionRevisionInput)  -> Result<PutActionRevisionOutput, PutActionRevisionError>;
+                fn put_action_revision(&self, input: &PutActionRevisionInput)  -> Box<Future<Item = PutActionRevisionOutput, Error = PutActionRevisionError>>;
                 
 
                 #[doc="<p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>"]
-                fn put_approval_result(&self, input: &PutApprovalResultInput)  -> Result<PutApprovalResultOutput, PutApprovalResultError>;
+                fn put_approval_result(&self, input: &PutApprovalResultInput)  -> Box<Future<Item = PutApprovalResultOutput, Error = PutApprovalResultError>>;
                 
 
                 #[doc="<p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
-                fn put_job_failure_result(&self, input: &PutJobFailureResultInput)  -> Result<(), PutJobFailureResultError>;
+                fn put_job_failure_result(&self, input: &PutJobFailureResultInput)  -> Box<Future<Item = (), Error = PutJobFailureResultError>>;
                 
 
                 #[doc="<p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
-                fn put_job_success_result(&self, input: &PutJobSuccessResultInput)  -> Result<(), PutJobSuccessResultError>;
+                fn put_job_success_result(&self, input: &PutJobSuccessResultInput)  -> Box<Future<Item = (), Error = PutJobSuccessResultError>>;
                 
 
                 #[doc="<p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
-                fn put_third_party_job_failure_result(&self, input: &PutThirdPartyJobFailureResultInput)  -> Result<(), PutThirdPartyJobFailureResultError>;
+                fn put_third_party_job_failure_result(&self, input: &PutThirdPartyJobFailureResultInput)  -> Box<Future<Item = (), Error = PutThirdPartyJobFailureResultError>>;
                 
 
                 #[doc="<p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
-                fn put_third_party_job_success_result(&self, input: &PutThirdPartyJobSuccessResultInput)  -> Result<(), PutThirdPartyJobSuccessResultError>;
+                fn put_third_party_job_success_result(&self, input: &PutThirdPartyJobSuccessResultInput)  -> Box<Future<Item = (), Error = PutThirdPartyJobSuccessResultError>>;
                 
 
                 #[doc="<p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>"]
-                fn retry_stage_execution(&self, input: &RetryStageExecutionInput)  -> Result<RetryStageExecutionOutput, RetryStageExecutionError>;
+                fn retry_stage_execution(&self, input: &RetryStageExecutionInput)  -> Box<Future<Item = RetryStageExecutionOutput, Error = RetryStageExecutionError>>;
                 
 
                 #[doc="<p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>"]
-                fn start_pipeline_execution(&self, input: &StartPipelineExecutionInput)  -> Result<StartPipelineExecutionOutput, StartPipelineExecutionError>;
+                fn start_pipeline_execution(&self, input: &StartPipelineExecutionInput)  -> Box<Future<Item = StartPipelineExecutionOutput, Error = StartPipelineExecutionError>>;
                 
 
                 #[doc="<p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>"]
-                fn update_pipeline(&self, input: &UpdatePipelineInput)  -> Result<UpdatePipelineOutput, UpdatePipelineError>;
+                fn update_pipeline(&self, input: &UpdatePipelineInput)  -> Box<Future<Item = UpdatePipelineOutput, Error = UpdatePipelineError>>;
                 
 }
 /// A client for the CodePipeline API.
@@ -3157,7 +3158,7 @@ UpdatePipelineError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>"]
-                fn acknowledge_job(&self, input: &AcknowledgeJobInput)  -> Result<AcknowledgeJobOutput, AcknowledgeJobError> {
+                fn acknowledge_job(&self, input: &AcknowledgeJobInput)  -> Box<Future<Item = AcknowledgeJobOutput, Error = AcknowledgeJobError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3165,21 +3166,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AcknowledgeJobError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AcknowledgeJobOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AcknowledgeJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AcknowledgeJobError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AcknowledgeJobOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AcknowledgeJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Confirms a job worker has received the specified job. Only used for partner actions.</p>"]
-                fn acknowledge_third_party_job(&self, input: &AcknowledgeThirdPartyJobInput)  -> Result<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError> {
+                fn acknowledge_third_party_job(&self, input: &AcknowledgeThirdPartyJobInput)  -> Box<Future<Item = AcknowledgeThirdPartyJobOutput, Error = AcknowledgeThirdPartyJobError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3187,21 +3198,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AcknowledgeThirdPartyJobError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AcknowledgeThirdPartyJobOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(AcknowledgeThirdPartyJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AcknowledgeThirdPartyJobError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AcknowledgeThirdPartyJobOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(AcknowledgeThirdPartyJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>"]
-                fn create_custom_action_type(&self, input: &CreateCustomActionTypeInput)  -> Result<CreateCustomActionTypeOutput, CreateCustomActionTypeError> {
+                fn create_custom_action_type(&self, input: &CreateCustomActionTypeInput)  -> Box<Future<Item = CreateCustomActionTypeOutput, Error = CreateCustomActionTypeError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3209,21 +3230,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateCustomActionTypeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateCustomActionTypeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateCustomActionTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateCustomActionTypeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateCustomActionTypeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateCustomActionTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a pipeline.</p>"]
-                fn create_pipeline(&self, input: &CreatePipelineInput)  -> Result<CreatePipelineOutput, CreatePipelineError> {
+                fn create_pipeline(&self, input: &CreatePipelineInput)  -> Box<Future<Item = CreatePipelineOutput, Error = CreatePipelineError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3231,21 +3262,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePipelineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreatePipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePipelineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreatePipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important>"]
-                fn delete_custom_action_type(&self, input: &DeleteCustomActionTypeInput)  -> Result<(), DeleteCustomActionTypeError> {
+                fn delete_custom_action_type(&self, input: &DeleteCustomActionTypeInput)  -> Box<Future<Item = (), Error = DeleteCustomActionTypeError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3253,21 +3294,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteCustomActionTypeError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteCustomActionTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteCustomActionTypeError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteCustomActionTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified pipeline.</p>"]
-                fn delete_pipeline(&self, input: &DeletePipelineInput)  -> Result<(), DeletePipelineError> {
+                fn delete_pipeline(&self, input: &DeletePipelineInput)  -> Box<Future<Item = (), Error = DeletePipelineError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3275,21 +3326,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePipelineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeletePipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePipelineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeletePipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>"]
-                fn disable_stage_transition(&self, input: &DisableStageTransitionInput)  -> Result<(), DisableStageTransitionError> {
+                fn disable_stage_transition(&self, input: &DisableStageTransitionInput)  -> Box<Future<Item = (), Error = DisableStageTransitionError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3297,21 +3358,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableStageTransitionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DisableStageTransitionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableStageTransitionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DisableStageTransitionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>"]
-                fn enable_stage_transition(&self, input: &EnableStageTransitionInput)  -> Result<(), EnableStageTransitionError> {
+                fn enable_stage_transition(&self, input: &EnableStageTransitionInput)  -> Box<Future<Item = (), Error = EnableStageTransitionError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3319,21 +3390,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableStageTransitionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(EnableStageTransitionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableStageTransitionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(EnableStageTransitionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
-                fn get_job_details(&self, input: &GetJobDetailsInput)  -> Result<GetJobDetailsOutput, GetJobDetailsError> {
+                fn get_job_details(&self, input: &GetJobDetailsInput)  -> Box<Future<Item = GetJobDetailsOutput, Error = GetJobDetailsError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3341,21 +3422,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetJobDetailsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetJobDetailsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetJobDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetJobDetailsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetJobDetailsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetJobDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>"]
-                fn get_pipeline(&self, input: &GetPipelineInput)  -> Result<GetPipelineOutput, GetPipelineError> {
+                fn get_pipeline(&self, input: &GetPipelineInput)  -> Box<Future<Item = GetPipelineOutput, Error = GetPipelineError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3363,21 +3454,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPipelineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetPipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPipelineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetPipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetPipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>"]
-                fn get_pipeline_execution(&self, input: &GetPipelineExecutionInput)  -> Result<GetPipelineExecutionOutput, GetPipelineExecutionError> {
+                fn get_pipeline_execution(&self, input: &GetPipelineExecutionInput)  -> Box<Future<Item = GetPipelineExecutionOutput, Error = GetPipelineExecutionError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3385,21 +3486,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPipelineExecutionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPipelineExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetPipelineExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPipelineExecutionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetPipelineExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetPipelineExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about the state of a pipeline, including the stages and actions.</p>"]
-                fn get_pipeline_state(&self, input: &GetPipelineStateInput)  -> Result<GetPipelineStateOutput, GetPipelineStateError> {
+                fn get_pipeline_state(&self, input: &GetPipelineStateInput)  -> Box<Future<Item = GetPipelineStateOutput, Error = GetPipelineStateError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3407,21 +3518,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPipelineStateError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPipelineStateOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetPipelineStateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPipelineStateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetPipelineStateOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetPipelineStateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
-                fn get_third_party_job_details(&self, input: &GetThirdPartyJobDetailsInput)  -> Result<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError> {
+                fn get_third_party_job_details(&self, input: &GetThirdPartyJobDetailsInput)  -> Box<Future<Item = GetThirdPartyJobDetailsOutput, Error = GetThirdPartyJobDetailsError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3429,21 +3550,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetThirdPartyJobDetailsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetThirdPartyJobDetailsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetThirdPartyJobDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetThirdPartyJobDetailsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetThirdPartyJobDetailsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetThirdPartyJobDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>"]
-                fn list_action_types(&self, input: &ListActionTypesInput)  -> Result<ListActionTypesOutput, ListActionTypesError> {
+                fn list_action_types(&self, input: &ListActionTypesInput)  -> Box<Future<Item = ListActionTypesOutput, Error = ListActionTypesError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3451,21 +3582,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListActionTypesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListActionTypesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListActionTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListActionTypesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListActionTypesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListActionTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets a summary of all of the pipelines associated with your account.</p>"]
-                fn list_pipelines(&self, input: &ListPipelinesInput)  -> Result<ListPipelinesOutput, ListPipelinesError> {
+                fn list_pipelines(&self, input: &ListPipelinesInput)  -> Box<Future<Item = ListPipelinesOutput, Error = ListPipelinesError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3473,21 +3614,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPipelinesError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListPipelinesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPipelinesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListPipelinesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
-                fn poll_for_jobs(&self, input: &PollForJobsInput)  -> Result<PollForJobsOutput, PollForJobsError> {
+                fn poll_for_jobs(&self, input: &PollForJobsInput)  -> Box<Future<Item = PollForJobsOutput, Error = PollForJobsError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3495,21 +3646,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PollForJobsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PollForJobsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PollForJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PollForJobsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PollForJobsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PollForJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important>"]
-                fn poll_for_third_party_jobs(&self, input: &PollForThirdPartyJobsInput)  -> Result<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError> {
+                fn poll_for_third_party_jobs(&self, input: &PollForThirdPartyJobsInput)  -> Box<Future<Item = PollForThirdPartyJobsOutput, Error = PollForThirdPartyJobsError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3517,21 +3678,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PollForThirdPartyJobsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PollForThirdPartyJobsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PollForThirdPartyJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PollForThirdPartyJobsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PollForThirdPartyJobsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PollForThirdPartyJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides information to AWS CodePipeline about new revisions to a source.</p>"]
-                fn put_action_revision(&self, input: &PutActionRevisionInput)  -> Result<PutActionRevisionOutput, PutActionRevisionError> {
+                fn put_action_revision(&self, input: &PutActionRevisionInput)  -> Box<Future<Item = PutActionRevisionOutput, Error = PutActionRevisionError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3539,21 +3710,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutActionRevisionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutActionRevisionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutActionRevisionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutActionRevisionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutActionRevisionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutActionRevisionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>"]
-                fn put_approval_result(&self, input: &PutApprovalResultInput)  -> Result<PutApprovalResultOutput, PutApprovalResultError> {
+                fn put_approval_result(&self, input: &PutApprovalResultInput)  -> Box<Future<Item = PutApprovalResultOutput, Error = PutApprovalResultError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3561,21 +3742,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutApprovalResultError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutApprovalResultOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutApprovalResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutApprovalResultError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutApprovalResultOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutApprovalResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
-                fn put_job_failure_result(&self, input: &PutJobFailureResultInput)  -> Result<(), PutJobFailureResultError> {
+                fn put_job_failure_result(&self, input: &PutJobFailureResultInput)  -> Box<Future<Item = (), Error = PutJobFailureResultError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3583,21 +3774,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutJobFailureResultError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutJobFailureResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutJobFailureResultError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutJobFailureResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
-                fn put_job_success_result(&self, input: &PutJobSuccessResultInput)  -> Result<(), PutJobSuccessResultError> {
+                fn put_job_success_result(&self, input: &PutJobSuccessResultInput)  -> Box<Future<Item = (), Error = PutJobSuccessResultError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3605,21 +3806,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutJobSuccessResultError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutJobSuccessResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutJobSuccessResultError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutJobSuccessResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
-                fn put_third_party_job_failure_result(&self, input: &PutThirdPartyJobFailureResultInput)  -> Result<(), PutThirdPartyJobFailureResultError> {
+                fn put_third_party_job_failure_result(&self, input: &PutThirdPartyJobFailureResultInput)  -> Box<Future<Item = (), Error = PutThirdPartyJobFailureResultError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3627,21 +3838,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutThirdPartyJobFailureResultError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutThirdPartyJobFailureResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutThirdPartyJobFailureResultError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutThirdPartyJobFailureResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
-                fn put_third_party_job_success_result(&self, input: &PutThirdPartyJobSuccessResultInput)  -> Result<(), PutThirdPartyJobSuccessResultError> {
+                fn put_third_party_job_success_result(&self, input: &PutThirdPartyJobSuccessResultInput)  -> Box<Future<Item = (), Error = PutThirdPartyJobSuccessResultError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3649,21 +3870,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutThirdPartyJobSuccessResultError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutThirdPartyJobSuccessResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutThirdPartyJobSuccessResultError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutThirdPartyJobSuccessResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>"]
-                fn retry_stage_execution(&self, input: &RetryStageExecutionInput)  -> Result<RetryStageExecutionOutput, RetryStageExecutionError> {
+                fn retry_stage_execution(&self, input: &RetryStageExecutionInput)  -> Box<Future<Item = RetryStageExecutionOutput, Error = RetryStageExecutionError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3671,21 +3902,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RetryStageExecutionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetryStageExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(RetryStageExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RetryStageExecutionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RetryStageExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(RetryStageExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>"]
-                fn start_pipeline_execution(&self, input: &StartPipelineExecutionInput)  -> Result<StartPipelineExecutionOutput, StartPipelineExecutionError> {
+                fn start_pipeline_execution(&self, input: &StartPipelineExecutionInput)  -> Box<Future<Item = StartPipelineExecutionOutput, Error = StartPipelineExecutionError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3693,21 +3934,31 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(StartPipelineExecutionError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartPipelineExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(StartPipelineExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| StartPipelineExecutionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<StartPipelineExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(StartPipelineExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>"]
-                fn update_pipeline(&self, input: &UpdatePipelineInput)  -> Result<UpdatePipelineOutput, UpdatePipelineError> {
+                fn update_pipeline(&self, input: &UpdatePipelineInput)  -> Box<Future<Item = UpdatePipelineOutput, Error = UpdatePipelineError>> {
                     let mut request = SignedRequest::new("POST", "codepipeline", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3715,16 +3966,26 @@ UpdatePipelineError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdatePipelineError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdatePipelineError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdatePipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(UpdatePipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

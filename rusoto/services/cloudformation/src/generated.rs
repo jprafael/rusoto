@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -6739,107 +6749,107 @@ ValidateTemplateError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE_IN_PROGRESS state.</p> </note>"]
-                fn cancel_update_stack(&self, input: &CancelUpdateStackInput) -> Result<(), CancelUpdateStackError>;
+                fn cancel_update_stack(&self, input: &CancelUpdateStackInput) -> Box<Future<Item = (), Error = CancelUpdateStackError>>;
                 
 
                 #[doc="<p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed\"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>"]
-                fn continue_update_rollback(&self, input: &ContinueUpdateRollbackInput) -> Result<ContinueUpdateRollbackOutput, ContinueUpdateRollbackError>;
+                fn continue_update_rollback(&self, input: &ContinueUpdateRollbackInput) -> Box<Future<Item = ContinueUpdateRollbackOutput, Error = ContinueUpdateRollbackError>>;
                 
 
                 #[doc="<p>Creates a list of changes for a stack. AWS CloudFormation generates the change set by comparing the template's information with the information that you submit. A change set can help you understand which resources AWS CloudFormation will change, and how it will change them, before you update your stack. Change sets allow you to check before making a change to avoid deleting or replacing critical resources.</p> <p>AWS CloudFormation doesn't make any changes to the stack when you create a change set. To make the specified changes, you must execute the change set by using the <a>ExecuteChangeSet</a> action.</p> <p>After the call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set, use the <a>DescribeChangeSet</a> action.</p>"]
-                fn create_change_set(&self, input: &CreateChangeSetInput) -> Result<CreateChangeSetOutput, CreateChangeSetError>;
+                fn create_change_set(&self, input: &CreateChangeSetInput) -> Box<Future<Item = CreateChangeSetOutput, Error = CreateChangeSetError>>;
                 
 
                 #[doc="<p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>"]
-                fn create_stack(&self, input: &CreateStackInput) -> Result<CreateStackOutput, CreateStackError>;
+                fn create_stack(&self, input: &CreateStackInput) -> Box<Future<Item = CreateStackOutput, Error = CreateStackError>>;
                 
 
                 #[doc="<p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>"]
-                fn delete_change_set(&self, input: &DeleteChangeSetInput) -> Result<DeleteChangeSetOutput, DeleteChangeSetError>;
+                fn delete_change_set(&self, input: &DeleteChangeSetInput) -> Box<Future<Item = DeleteChangeSetOutput, Error = DeleteChangeSetError>>;
                 
 
                 #[doc="<p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>"]
-                fn delete_stack(&self, input: &DeleteStackInput) -> Result<(), DeleteStackError>;
+                fn delete_stack(&self, input: &DeleteStackInput) -> Box<Future<Item = (), Error = DeleteStackError>>;
                 
 
                 #[doc="<p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>"]
-                fn describe_account_limits(&self, input: &DescribeAccountLimitsInput) -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
+                fn describe_account_limits(&self, input: &DescribeAccountLimitsInput) -> Box<Future<Item = DescribeAccountLimitsOutput, Error = DescribeAccountLimitsError>>;
                 
 
                 #[doc="<p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html\">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>"]
-                fn describe_change_set(&self, input: &DescribeChangeSetInput) -> Result<DescribeChangeSetOutput, DescribeChangeSetError>;
+                fn describe_change_set(&self, input: &DescribeChangeSetInput) -> Box<Future<Item = DescribeChangeSetOutput, Error = DescribeChangeSetError>>;
                 
 
                 #[doc="<p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack's event history, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html\">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note>"]
-                fn describe_stack_events(&self, input: &DescribeStackEventsInput) -> Result<DescribeStackEventsOutput, DescribeStackEventsError>;
+                fn describe_stack_events(&self, input: &DescribeStackEventsInput) -> Box<Future<Item = DescribeStackEventsOutput, Error = DescribeStackEventsError>>;
                 
 
                 #[doc="<p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>"]
-                fn describe_stack_resource(&self, input: &DescribeStackResourceInput) -> Result<DescribeStackResourceOutput, DescribeStackResourceError>;
+                fn describe_stack_resource(&self, input: &DescribeStackResourceInput) -> Box<Future<Item = DescribeStackResourceOutput, Error = DescribeStackResourceError>>;
                 
 
                 #[doc="<p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/\">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note>"]
-                fn describe_stack_resources(&self, input: &DescribeStackResourcesInput) -> Result<DescribeStackResourcesOutput, DescribeStackResourcesError>;
+                fn describe_stack_resources(&self, input: &DescribeStackResourcesInput) -> Box<Future<Item = DescribeStackResourcesOutput, Error = DescribeStackResourcesError>>;
                 
 
                 #[doc="<p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note>"]
-                fn describe_stacks(&self, input: &DescribeStacksInput) -> Result<DescribeStacksOutput, DescribeStacksError>;
+                fn describe_stacks(&self, input: &DescribeStacksInput) -> Box<Future<Item = DescribeStacksOutput, Error = DescribeStacksError>>;
                 
 
                 #[doc="<p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>"]
-                fn estimate_template_cost(&self, input: &EstimateTemplateCostInput) -> Result<EstimateTemplateCostOutput, EstimateTemplateCostError>;
+                fn estimate_template_cost(&self, input: &EstimateTemplateCostInput) -> Box<Future<Item = EstimateTemplateCostOutput, Error = EstimateTemplateCostError>>;
                 
 
                 #[doc="<p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>"]
-                fn execute_change_set(&self, input: &ExecuteChangeSetInput) -> Result<ExecuteChangeSetOutput, ExecuteChangeSetError>;
+                fn execute_change_set(&self, input: &ExecuteChangeSetInput) -> Box<Future<Item = ExecuteChangeSetOutput, Error = ExecuteChangeSetError>>;
                 
 
                 #[doc="<p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>"]
-                fn get_stack_policy(&self, input: &GetStackPolicyInput) -> Result<GetStackPolicyOutput, GetStackPolicyError>;
+                fn get_stack_policy(&self, input: &GetStackPolicyInput) -> Box<Future<Item = GetStackPolicyOutput, Error = GetStackPolicyError>>;
                 
 
                 #[doc="<p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note>"]
-                fn get_template(&self, input: &GetTemplateInput) -> Result<GetTemplateOutput, GetTemplateError>;
+                fn get_template(&self, input: &GetTemplateInput) -> Box<Future<Item = GetTemplateOutput, Error = GetTemplateError>>;
                 
 
                 #[doc="<p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>"]
-                fn get_template_summary(&self, input: &GetTemplateSummaryInput) -> Result<GetTemplateSummaryOutput, GetTemplateSummaryError>;
+                fn get_template_summary(&self, input: &GetTemplateSummaryInput) -> Box<Future<Item = GetTemplateSummaryOutput, Error = GetTemplateSummaryError>>;
                 
 
                 #[doc="<p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>"]
-                fn list_change_sets(&self, input: &ListChangeSetsInput) -> Result<ListChangeSetsOutput, ListChangeSetsError>;
+                fn list_change_sets(&self, input: &ListChangeSetsInput) -> Box<Future<Item = ListChangeSetsOutput, Error = ListChangeSetsError>>;
                 
 
                 #[doc="<p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html\"> AWS CloudFormation Export Stack Output Values</a>.</p>"]
-                fn list_exports(&self, input: &ListExportsInput) -> Result<ListExportsOutput, ListExportsError>;
+                fn list_exports(&self, input: &ListExportsInput) -> Box<Future<Item = ListExportsOutput, Error = ListExportsError>>;
                 
 
                 #[doc="<p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p>"]
-                fn list_imports(&self, input: &ListImportsInput) -> Result<ListImportsOutput, ListImportsError>;
+                fn list_imports(&self, input: &ListImportsInput) -> Box<Future<Item = ListImportsOutput, Error = ListImportsError>>;
                 
 
                 #[doc="<p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>"]
-                fn list_stack_resources(&self, input: &ListStackResourcesInput) -> Result<ListStackResourcesOutput, ListStackResourcesError>;
+                fn list_stack_resources(&self, input: &ListStackResourcesInput) -> Box<Future<Item = ListStackResourcesOutput, Error = ListStackResourcesError>>;
                 
 
                 #[doc="<p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>"]
-                fn list_stacks(&self, input: &ListStacksInput) -> Result<ListStacksOutput, ListStacksError>;
+                fn list_stacks(&self, input: &ListStacksInput) -> Box<Future<Item = ListStacksOutput, Error = ListStacksError>>;
                 
 
                 #[doc="<p>Sets a stack policy for a specified stack.</p>"]
-                fn set_stack_policy(&self, input: &SetStackPolicyInput) -> Result<(), SetStackPolicyError>;
+                fn set_stack_policy(&self, input: &SetStackPolicyInput) -> Box<Future<Item = (), Error = SetStackPolicyError>>;
                 
 
                 #[doc="<p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>"]
-                fn signal_resource(&self, input: &SignalResourceInput) -> Result<(), SignalResourceError>;
+                fn signal_resource(&self, input: &SignalResourceInput) -> Box<Future<Item = (), Error = SignalResourceError>>;
                 
 
                 #[doc="<p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html\">Updating a Stack</a>.</p>"]
-                fn update_stack(&self, input: &UpdateStackInput) -> Result<UpdateStackOutput, UpdateStackError>;
+                fn update_stack(&self, input: &UpdateStackInput) -> Box<Future<Item = UpdateStackOutput, Error = UpdateStackError>>;
                 
 
                 #[doc="<p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>"]
-                fn validate_template(&self, input: &ValidateTemplateInput) -> Result<ValidateTemplateOutput, ValidateTemplateError>;
+                fn validate_template(&self, input: &ValidateTemplateInput) -> Box<Future<Item = ValidateTemplateOutput, Error = ValidateTemplateError>>;
                 
 }
 /// A client for the AWS CloudFormation API.
@@ -6863,7 +6873,7 @@ ValidateTemplateError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE_IN_PROGRESS state.</p> </note>"]
-                fn cancel_update_stack(&self, input: &CancelUpdateStackInput) -> Result<(), CancelUpdateStackError> {
+                fn cancel_update_stack(&self, input: &CancelUpdateStackInput) -> Box<Future<Item = (), Error = CancelUpdateStackError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -6872,22 +6882,31 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     CancelUpdateStackInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CancelUpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelUpdateStackError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelUpdateStackError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(CancelUpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed\"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>"]
-                fn continue_update_rollback(&self, input: &ContinueUpdateRollbackInput) -> Result<ContinueUpdateRollbackOutput, ContinueUpdateRollbackError> {
+                fn continue_update_rollback(&self, input: &ContinueUpdateRollbackInput) -> Box<Future<Item = ContinueUpdateRollbackOutput, Error = ContinueUpdateRollbackError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -6896,11 +6915,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     ContinueUpdateRollbackInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ContinueUpdateRollbackError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ContinueUpdateRollbackError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6912,23 +6939,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ContinueUpdateRollbackOutputDeserializer::deserialize("ContinueUpdateRollbackResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ContinueUpdateRollbackOutputDeserializer::deserialize("ContinueUpdateRollbackResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ContinueUpdateRollbackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ContinueUpdateRollbackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a list of changes for a stack. AWS CloudFormation generates the change set by comparing the template's information with the information that you submit. A change set can help you understand which resources AWS CloudFormation will change, and how it will change them, before you update your stack. Change sets allow you to check before making a change to avoid deleting or replacing critical resources.</p> <p>AWS CloudFormation doesn't make any changes to the stack when you create a change set. To make the specified changes, you must execute the change set by using the <a>ExecuteChangeSet</a> action.</p> <p>After the call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set, use the <a>DescribeChangeSet</a> action.</p>"]
-                fn create_change_set(&self, input: &CreateChangeSetInput) -> Result<CreateChangeSetOutput, CreateChangeSetError> {
+                fn create_change_set(&self, input: &CreateChangeSetInput) -> Box<Future<Item = CreateChangeSetOutput, Error = CreateChangeSetError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -6937,11 +6965,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     CreateChangeSetInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateChangeSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateChangeSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6953,23 +6989,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateChangeSetOutputDeserializer::deserialize("CreateChangeSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateChangeSetOutputDeserializer::deserialize("CreateChangeSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>"]
-                fn create_stack(&self, input: &CreateStackInput) -> Result<CreateStackOutput, CreateStackError> {
+                fn create_stack(&self, input: &CreateStackInput) -> Box<Future<Item = CreateStackOutput, Error = CreateStackError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -6978,11 +7015,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     CreateStackInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateStackError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateStackError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -6994,23 +7039,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateStackOutputDeserializer::deserialize("CreateStackResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateStackOutputDeserializer::deserialize("CreateStackResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>"]
-                fn delete_change_set(&self, input: &DeleteChangeSetInput) -> Result<DeleteChangeSetOutput, DeleteChangeSetError> {
+                fn delete_change_set(&self, input: &DeleteChangeSetInput) -> Box<Future<Item = DeleteChangeSetOutput, Error = DeleteChangeSetError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7019,11 +7065,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     DeleteChangeSetInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteChangeSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteChangeSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7035,23 +7089,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteChangeSetOutputDeserializer::deserialize("DeleteChangeSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteChangeSetOutputDeserializer::deserialize("DeleteChangeSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>"]
-                fn delete_stack(&self, input: &DeleteStackInput) -> Result<(), DeleteStackError> {
+                fn delete_stack(&self, input: &DeleteStackInput) -> Box<Future<Item = (), Error = DeleteStackError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7060,22 +7115,31 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     DeleteStackInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteStackError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteStackError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>"]
-                fn describe_account_limits(&self, input: &DescribeAccountLimitsInput) -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
+                fn describe_account_limits(&self, input: &DescribeAccountLimitsInput) -> Box<Future<Item = DescribeAccountLimitsOutput, Error = DescribeAccountLimitsError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7084,11 +7148,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeAccountLimitsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeAccountLimitsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7100,23 +7172,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeAccountLimitsOutputDeserializer::deserialize("DescribeAccountLimitsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeAccountLimitsOutputDeserializer::deserialize("DescribeAccountLimitsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html\">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>"]
-                fn describe_change_set(&self, input: &DescribeChangeSetInput) -> Result<DescribeChangeSetOutput, DescribeChangeSetError> {
+                fn describe_change_set(&self, input: &DescribeChangeSetInput) -> Box<Future<Item = DescribeChangeSetOutput, Error = DescribeChangeSetError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7125,11 +7198,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     DescribeChangeSetInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeChangeSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeChangeSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7141,23 +7222,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeChangeSetOutputDeserializer::deserialize("DescribeChangeSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeChangeSetOutputDeserializer::deserialize("DescribeChangeSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack's event history, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html\">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note>"]
-                fn describe_stack_events(&self, input: &DescribeStackEventsInput) -> Result<DescribeStackEventsOutput, DescribeStackEventsError> {
+                fn describe_stack_events(&self, input: &DescribeStackEventsInput) -> Box<Future<Item = DescribeStackEventsOutput, Error = DescribeStackEventsError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7166,11 +7248,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     DescribeStackEventsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeStackEventsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeStackEventsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7182,23 +7272,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeStackEventsOutputDeserializer::deserialize("DescribeStackEventsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeStackEventsOutputDeserializer::deserialize("DescribeStackEventsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeStackEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeStackEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>"]
-                fn describe_stack_resource(&self, input: &DescribeStackResourceInput) -> Result<DescribeStackResourceOutput, DescribeStackResourceError> {
+                fn describe_stack_resource(&self, input: &DescribeStackResourceInput) -> Box<Future<Item = DescribeStackResourceOutput, Error = DescribeStackResourceError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7207,11 +7298,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     DescribeStackResourceInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeStackResourceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeStackResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7223,23 +7322,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeStackResourceOutputDeserializer::deserialize("DescribeStackResourceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeStackResourceOutputDeserializer::deserialize("DescribeStackResourceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeStackResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeStackResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/\">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note>"]
-                fn describe_stack_resources(&self, input: &DescribeStackResourcesInput) -> Result<DescribeStackResourcesOutput, DescribeStackResourcesError> {
+                fn describe_stack_resources(&self, input: &DescribeStackResourcesInput) -> Box<Future<Item = DescribeStackResourcesOutput, Error = DescribeStackResourcesError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7248,11 +7348,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     DescribeStackResourcesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeStackResourcesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeStackResourcesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7264,23 +7372,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeStackResourcesOutputDeserializer::deserialize("DescribeStackResourcesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeStackResourcesOutputDeserializer::deserialize("DescribeStackResourcesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeStackResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeStackResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note>"]
-                fn describe_stacks(&self, input: &DescribeStacksInput) -> Result<DescribeStacksOutput, DescribeStacksError> {
+                fn describe_stacks(&self, input: &DescribeStacksInput) -> Box<Future<Item = DescribeStacksOutput, Error = DescribeStacksError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7289,11 +7398,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     DescribeStacksInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeStacksError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeStacksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7305,23 +7422,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeStacksOutputDeserializer::deserialize("DescribeStacksResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeStacksOutputDeserializer::deserialize("DescribeStacksResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>"]
-                fn estimate_template_cost(&self, input: &EstimateTemplateCostInput) -> Result<EstimateTemplateCostOutput, EstimateTemplateCostError> {
+                fn estimate_template_cost(&self, input: &EstimateTemplateCostInput) -> Box<Future<Item = EstimateTemplateCostOutput, Error = EstimateTemplateCostError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7330,11 +7448,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     EstimateTemplateCostInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EstimateTemplateCostError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EstimateTemplateCostError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7346,23 +7472,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(EstimateTemplateCostOutputDeserializer::deserialize("EstimateTemplateCostResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(EstimateTemplateCostOutputDeserializer::deserialize("EstimateTemplateCostResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(EstimateTemplateCostError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(EstimateTemplateCostError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>"]
-                fn execute_change_set(&self, input: &ExecuteChangeSetInput) -> Result<ExecuteChangeSetOutput, ExecuteChangeSetError> {
+                fn execute_change_set(&self, input: &ExecuteChangeSetInput) -> Box<Future<Item = ExecuteChangeSetOutput, Error = ExecuteChangeSetError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7371,11 +7498,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     ExecuteChangeSetInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ExecuteChangeSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ExecuteChangeSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7387,23 +7522,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ExecuteChangeSetOutputDeserializer::deserialize("ExecuteChangeSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ExecuteChangeSetOutputDeserializer::deserialize("ExecuteChangeSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ExecuteChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ExecuteChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>"]
-                fn get_stack_policy(&self, input: &GetStackPolicyInput) -> Result<GetStackPolicyOutput, GetStackPolicyError> {
+                fn get_stack_policy(&self, input: &GetStackPolicyInput) -> Box<Future<Item = GetStackPolicyOutput, Error = GetStackPolicyError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7412,11 +7548,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     GetStackPolicyInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetStackPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetStackPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7428,23 +7572,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetStackPolicyOutputDeserializer::deserialize("GetStackPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetStackPolicyOutputDeserializer::deserialize("GetStackPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetStackPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetStackPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note>"]
-                fn get_template(&self, input: &GetTemplateInput) -> Result<GetTemplateOutput, GetTemplateError> {
+                fn get_template(&self, input: &GetTemplateInput) -> Box<Future<Item = GetTemplateOutput, Error = GetTemplateError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7453,11 +7598,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     GetTemplateInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetTemplateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetTemplateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7469,23 +7622,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetTemplateOutputDeserializer::deserialize("GetTemplateResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetTemplateOutputDeserializer::deserialize("GetTemplateResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>"]
-                fn get_template_summary(&self, input: &GetTemplateSummaryInput) -> Result<GetTemplateSummaryOutput, GetTemplateSummaryError> {
+                fn get_template_summary(&self, input: &GetTemplateSummaryInput) -> Box<Future<Item = GetTemplateSummaryOutput, Error = GetTemplateSummaryError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7494,11 +7648,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     GetTemplateSummaryInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetTemplateSummaryError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetTemplateSummaryError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7510,23 +7672,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetTemplateSummaryOutputDeserializer::deserialize("GetTemplateSummaryResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetTemplateSummaryOutputDeserializer::deserialize("GetTemplateSummaryResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetTemplateSummaryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetTemplateSummaryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>"]
-                fn list_change_sets(&self, input: &ListChangeSetsInput) -> Result<ListChangeSetsOutput, ListChangeSetsError> {
+                fn list_change_sets(&self, input: &ListChangeSetsInput) -> Box<Future<Item = ListChangeSetsOutput, Error = ListChangeSetsError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7535,11 +7698,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     ListChangeSetsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListChangeSetsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListChangeSetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7551,23 +7722,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListChangeSetsOutputDeserializer::deserialize("ListChangeSetsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListChangeSetsOutputDeserializer::deserialize("ListChangeSetsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListChangeSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListChangeSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html\"> AWS CloudFormation Export Stack Output Values</a>.</p>"]
-                fn list_exports(&self, input: &ListExportsInput) -> Result<ListExportsOutput, ListExportsError> {
+                fn list_exports(&self, input: &ListExportsInput) -> Box<Future<Item = ListExportsOutput, Error = ListExportsError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7576,11 +7748,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     ListExportsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListExportsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListExportsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7592,23 +7772,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListExportsOutputDeserializer::deserialize("ListExportsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListExportsOutputDeserializer::deserialize("ListExportsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListExportsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListExportsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p>"]
-                fn list_imports(&self, input: &ListImportsInput) -> Result<ListImportsOutput, ListImportsError> {
+                fn list_imports(&self, input: &ListImportsInput) -> Box<Future<Item = ListImportsOutput, Error = ListImportsError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7617,11 +7798,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     ListImportsInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListImportsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListImportsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7633,23 +7822,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListImportsOutputDeserializer::deserialize("ListImportsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListImportsOutputDeserializer::deserialize("ListImportsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListImportsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListImportsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>"]
-                fn list_stack_resources(&self, input: &ListStackResourcesInput) -> Result<ListStackResourcesOutput, ListStackResourcesError> {
+                fn list_stack_resources(&self, input: &ListStackResourcesInput) -> Box<Future<Item = ListStackResourcesOutput, Error = ListStackResourcesError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7658,11 +7848,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     ListStackResourcesInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListStackResourcesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListStackResourcesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7674,23 +7872,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListStackResourcesOutputDeserializer::deserialize("ListStackResourcesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListStackResourcesOutputDeserializer::deserialize("ListStackResourcesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListStackResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListStackResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>"]
-                fn list_stacks(&self, input: &ListStacksInput) -> Result<ListStacksOutput, ListStacksError> {
+                fn list_stacks(&self, input: &ListStacksInput) -> Box<Future<Item = ListStacksOutput, Error = ListStacksError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7699,11 +7898,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     ListStacksInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListStacksError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListStacksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7715,23 +7922,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListStacksOutputDeserializer::deserialize("ListStacksResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListStacksOutputDeserializer::deserialize("ListStacksResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets a stack policy for a specified stack.</p>"]
-                fn set_stack_policy(&self, input: &SetStackPolicyInput) -> Result<(), SetStackPolicyError> {
+                fn set_stack_policy(&self, input: &SetStackPolicyInput) -> Box<Future<Item = (), Error = SetStackPolicyError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7740,22 +7948,31 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     SetStackPolicyInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetStackPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetStackPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetStackPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetStackPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>"]
-                fn signal_resource(&self, input: &SignalResourceInput) -> Result<(), SignalResourceError> {
+                fn signal_resource(&self, input: &SignalResourceInput) -> Box<Future<Item = (), Error = SignalResourceError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7764,22 +7981,31 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     SignalResourceInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SignalResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SignalResourceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SignalResourceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(SignalResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html\">Updating a Stack</a>.</p>"]
-                fn update_stack(&self, input: &UpdateStackInput) -> Result<UpdateStackOutput, UpdateStackError> {
+                fn update_stack(&self, input: &UpdateStackInput) -> Box<Future<Item = UpdateStackOutput, Error = UpdateStackError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7788,11 +8014,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     UpdateStackInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateStackError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateStackError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7804,23 +8038,24 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UpdateStackOutputDeserializer::deserialize("UpdateStackResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UpdateStackOutputDeserializer::deserialize("UpdateStackResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>"]
-                fn validate_template(&self, input: &ValidateTemplateInput) -> Result<ValidateTemplateOutput, ValidateTemplateError> {
+                fn validate_template(&self, input: &ValidateTemplateInput) -> Box<Future<Item = ValidateTemplateOutput, Error = ValidateTemplateError>> {
                     let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
                     let mut params = Params::new();
 
@@ -7829,11 +8064,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
                     ValidateTemplateInputSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ValidateTemplateError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ValidateTemplateError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -7845,18 +8088,19 @@ ValidateTemplateError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ValidateTemplateOutputDeserializer::deserialize("ValidateTemplateResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ValidateTemplateOutputDeserializer::deserialize("ValidateTemplateResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ValidateTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ValidateTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -7882,6 +8126,17 @@ ValidateTemplateError::Unknown(ref cause) => cause
         }
             
         #[test]
+        fn test_parse_valid_cloudformation_list_stacks() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudformation-list-stacks.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ListStacksInput::default();
+            let result = client.list_stacks(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
         fn test_parse_valid_cloudformation_describe_stacks() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudformation-describe-stacks.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
@@ -7899,17 +8154,6 @@ ValidateTemplateError::Unknown(ref cause) => cause
             let client = CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = GetTemplateInput::default();
             let result = client.get_template(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_cloudformation_list_stacks() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "cloudformation-list-stacks.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListStacksInput::default();
-            let result = client.list_stacks(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }

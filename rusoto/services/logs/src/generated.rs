@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type AccessPolicy = String;
 pub type Arn = String;
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2949,115 +2950,115 @@ UntagLogGroupError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>"]
-                fn cancel_export_task(&self, input: &CancelExportTaskRequest)  -> Result<(), CancelExportTaskError>;
+                fn cancel_export_task(&self, input: &CancelExportTaskRequest)  -> Box<Future<Item = (), Error = CancelExportTaskError>>;
                 
 
                 #[doc="<p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix that will be used as the Amazon S3 key prefix for all exported objects.</p>"]
-                fn create_export_task(&self, input: &CreateExportTaskRequest)  -> Result<CreateExportTaskResponse, CreateExportTaskError>;
+                fn create_export_task(&self, input: &CreateExportTaskRequest)  -> Box<Future<Item = CreateExportTaskResponse, Error = CreateExportTaskError>>;
                 
 
                 #[doc="<p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul>"]
-                fn create_log_group(&self, input: &CreateLogGroupRequest)  -> Result<(), CreateLogGroupError>;
+                fn create_log_group(&self, input: &CreateLogGroupRequest)  -> Box<Future<Item = (), Error = CreateLogGroupError>>;
                 
 
                 #[doc="<p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The ':' (colon) and '*' (asterisk) characters are not allowed.</p> </li> </ul>"]
-                fn create_log_stream(&self, input: &CreateLogStreamRequest)  -> Result<(), CreateLogStreamError>;
+                fn create_log_stream(&self, input: &CreateLogStreamRequest)  -> Box<Future<Item = (), Error = CreateLogStreamError>>;
                 
 
                 #[doc="<p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>"]
-                fn delete_destination(&self, input: &DeleteDestinationRequest)  -> Result<(), DeleteDestinationError>;
+                fn delete_destination(&self, input: &DeleteDestinationRequest)  -> Box<Future<Item = (), Error = DeleteDestinationError>>;
                 
 
                 #[doc="<p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>"]
-                fn delete_log_group(&self, input: &DeleteLogGroupRequest)  -> Result<(), DeleteLogGroupError>;
+                fn delete_log_group(&self, input: &DeleteLogGroupRequest)  -> Box<Future<Item = (), Error = DeleteLogGroupError>>;
                 
 
                 #[doc="<p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>"]
-                fn delete_log_stream(&self, input: &DeleteLogStreamRequest)  -> Result<(), DeleteLogStreamError>;
+                fn delete_log_stream(&self, input: &DeleteLogStreamRequest)  -> Box<Future<Item = (), Error = DeleteLogStreamError>>;
                 
 
                 #[doc="<p>Deletes the specified metric filter.</p>"]
-                fn delete_metric_filter(&self, input: &DeleteMetricFilterRequest)  -> Result<(), DeleteMetricFilterError>;
+                fn delete_metric_filter(&self, input: &DeleteMetricFilterRequest)  -> Box<Future<Item = (), Error = DeleteMetricFilterError>>;
                 
 
                 #[doc="<p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>"]
-                fn delete_retention_policy(&self, input: &DeleteRetentionPolicyRequest)  -> Result<(), DeleteRetentionPolicyError>;
+                fn delete_retention_policy(&self, input: &DeleteRetentionPolicyRequest)  -> Box<Future<Item = (), Error = DeleteRetentionPolicyError>>;
                 
 
                 #[doc="<p>Deletes the specified subscription filter.</p>"]
-                fn delete_subscription_filter(&self, input: &DeleteSubscriptionFilterRequest)  -> Result<(), DeleteSubscriptionFilterError>;
+                fn delete_subscription_filter(&self, input: &DeleteSubscriptionFilterRequest)  -> Box<Future<Item = (), Error = DeleteSubscriptionFilterError>>;
                 
 
                 #[doc="<p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>"]
-                fn describe_destinations(&self, input: &DescribeDestinationsRequest)  -> Result<DescribeDestinationsResponse, DescribeDestinationsError>;
+                fn describe_destinations(&self, input: &DescribeDestinationsRequest)  -> Box<Future<Item = DescribeDestinationsResponse, Error = DescribeDestinationsError>>;
                 
 
                 #[doc="<p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>"]
-                fn describe_export_tasks(&self, input: &DescribeExportTasksRequest)  -> Result<DescribeExportTasksResponse, DescribeExportTasksError>;
+                fn describe_export_tasks(&self, input: &DescribeExportTasksRequest)  -> Box<Future<Item = DescribeExportTasksResponse, Error = DescribeExportTasksError>>;
                 
 
                 #[doc="<p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>"]
-                fn describe_log_groups(&self, input: &DescribeLogGroupsRequest)  -> Result<DescribeLogGroupsResponse, DescribeLogGroupsError>;
+                fn describe_log_groups(&self, input: &DescribeLogGroupsRequest)  -> Box<Future<Item = DescribeLogGroupsResponse, Error = DescribeLogGroupsError>>;
                 
 
                 #[doc="<p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>"]
-                fn describe_log_streams(&self, input: &DescribeLogStreamsRequest)  -> Result<DescribeLogStreamsResponse, DescribeLogStreamsError>;
+                fn describe_log_streams(&self, input: &DescribeLogStreamsRequest)  -> Box<Future<Item = DescribeLogStreamsResponse, Error = DescribeLogStreamsError>>;
                 
 
                 #[doc="<p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, and metric namespace. The results are ASCII-sorted by filter name.</p>"]
-                fn describe_metric_filters(&self, input: &DescribeMetricFiltersRequest)  -> Result<DescribeMetricFiltersResponse, DescribeMetricFiltersError>;
+                fn describe_metric_filters(&self, input: &DescribeMetricFiltersRequest)  -> Box<Future<Item = DescribeMetricFiltersResponse, Error = DescribeMetricFiltersError>>;
                 
 
                 #[doc="<p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>"]
-                fn describe_subscription_filters(&self, input: &DescribeSubscriptionFiltersRequest)  -> Result<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError>;
+                fn describe_subscription_filters(&self, input: &DescribeSubscriptionFiltersRequest)  -> Box<Future<Item = DescribeSubscriptionFiltersResponse, Error = DescribeSubscriptionFiltersError>>;
                 
 
                 #[doc="<p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>"]
-                fn filter_log_events(&self, input: &FilterLogEventsRequest)  -> Result<FilterLogEventsResponse, FilterLogEventsError>;
+                fn filter_log_events(&self, input: &FilterLogEventsRequest)  -> Box<Future<Item = FilterLogEventsResponse, Error = FilterLogEventsError>>;
                 
 
                 #[doc="<p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). If the results include tokens, there are more log events available. You can get additional log events by specifying one of the tokens in a subsequent call.</p>"]
-                fn get_log_events(&self, input: &GetLogEventsRequest)  -> Result<GetLogEventsResponse, GetLogEventsError>;
+                fn get_log_events(&self, input: &GetLogEventsRequest)  -> Box<Future<Item = GetLogEventsResponse, Error = GetLogEventsError>>;
                 
 
                 #[doc="<p>Lists the tags for the specified log group.</p> <p>To add tags, use <a>TagLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p>"]
-                fn list_tags_log_group(&self, input: &ListTagsLogGroupRequest)  -> Result<ListTagsLogGroupResponse, ListTagsLogGroupError>;
+                fn list_tags_log_group(&self, input: &ListTagsLogGroupRequest)  -> Box<Future<Item = ListTagsLogGroupResponse, Error = ListTagsLogGroupError>>;
                 
 
                 #[doc="<p>Creates or updates a destination. A destination encapsulates a physical resource (such as a Kinesis stream) and enables you to subscribe to a real-time stream of log events of a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Amazon Kinesis stream belonging to the same account as the destination.</p> <p>A destination controls what is written to its Amazon Kinesis stream through an access policy. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>"]
-                fn put_destination(&self, input: &PutDestinationRequest)  -> Result<PutDestinationResponse, PutDestinationError>;
+                fn put_destination(&self, input: &PutDestinationRequest)  -> Box<Future<Item = PutDestinationResponse, Error = PutDestinationError>>;
                 
 
                 #[doc="<p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html\">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>"]
-                fn put_destination_policy(&self, input: &PutDestinationPolicyRequest)  -> Result<(), PutDestinationPolicyError>;
+                fn put_destination_policy(&self, input: &PutDestinationPolicyRequest)  -> Box<Future<Item = (), Error = PutDestinationPolicyError>>;
                 
 
                 #[doc="<p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp (the time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul>"]
-                fn put_log_events(&self, input: &PutLogEventsRequest)  -> Result<PutLogEventsResponse, PutLogEventsError>;
+                fn put_log_events(&self, input: &PutLogEventsRequest)  -> Box<Future<Item = PutLogEventsResponse, Error = PutLogEventsError>>;
                 
 
                 #[doc="<p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>"]
-                fn put_metric_filter(&self, input: &PutMetricFilterRequest)  -> Result<(), PutMetricFilterError>;
+                fn put_metric_filter(&self, input: &PutMetricFilterRequest)  -> Box<Future<Item = (), Error = PutMetricFilterError>>;
                 
 
                 #[doc="<p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days you want to retain log events in the specified log group.</p>"]
-                fn put_retention_policy(&self, input: &PutRetentionPolicyRequest)  -> Result<(), PutRetentionPolicyError>;
+                fn put_retention_policy(&self, input: &PutRetentionPolicyRequest)  -> Box<Future<Item = (), Error = PutRetentionPolicyError>>;
                 
 
                 #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group.</p>"]
-                fn put_subscription_filter(&self, input: &PutSubscriptionFilterRequest)  -> Result<(), PutSubscriptionFilterError>;
+                fn put_subscription_filter(&self, input: &PutSubscriptionFilterRequest)  -> Box<Future<Item = (), Error = PutSubscriptionFilterError>>;
                 
 
                 #[doc="<p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html\">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>"]
-                fn tag_log_group(&self, input: &TagLogGroupRequest)  -> Result<(), TagLogGroupError>;
+                fn tag_log_group(&self, input: &TagLogGroupRequest)  -> Box<Future<Item = (), Error = TagLogGroupError>>;
                 
 
                 #[doc="<p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>"]
-                fn test_metric_filter(&self, input: &TestMetricFilterRequest)  -> Result<TestMetricFilterResponse, TestMetricFilterError>;
+                fn test_metric_filter(&self, input: &TestMetricFilterRequest)  -> Box<Future<Item = TestMetricFilterResponse, Error = TestMetricFilterError>>;
                 
 
                 #[doc="<p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>"]
-                fn untag_log_group(&self, input: &UntagLogGroupRequest)  -> Result<(), UntagLogGroupError>;
+                fn untag_log_group(&self, input: &UntagLogGroupRequest)  -> Box<Future<Item = (), Error = UntagLogGroupError>>;
                 
 }
 /// A client for the Amazon CloudWatch Logs API.
@@ -3081,7 +3082,7 @@ UntagLogGroupError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>"]
-                fn cancel_export_task(&self, input: &CancelExportTaskRequest)  -> Result<(), CancelExportTaskError> {
+                fn cancel_export_task(&self, input: &CancelExportTaskRequest)  -> Box<Future<Item = (), Error = CancelExportTaskError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3089,21 +3090,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelExportTaskError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelExportTaskError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(CancelExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix that will be used as the Amazon S3 key prefix for all exported objects.</p>"]
-                fn create_export_task(&self, input: &CreateExportTaskRequest)  -> Result<CreateExportTaskResponse, CreateExportTaskError> {
+                fn create_export_task(&self, input: &CreateExportTaskRequest)  -> Box<Future<Item = CreateExportTaskResponse, Error = CreateExportTaskError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3111,21 +3122,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateExportTaskError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(CreateExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateExportTaskError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(CreateExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul>"]
-                fn create_log_group(&self, input: &CreateLogGroupRequest)  -> Result<(), CreateLogGroupError> {
+                fn create_log_group(&self, input: &CreateLogGroupRequest)  -> Box<Future<Item = (), Error = CreateLogGroupError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3133,21 +3154,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateLogGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(CreateLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateLogGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(CreateLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The ':' (colon) and '*' (asterisk) characters are not allowed.</p> </li> </ul>"]
-                fn create_log_stream(&self, input: &CreateLogStreamRequest)  -> Result<(), CreateLogStreamError> {
+                fn create_log_stream(&self, input: &CreateLogStreamRequest)  -> Box<Future<Item = (), Error = CreateLogStreamError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3155,21 +3186,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateLogStreamError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(CreateLogStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateLogStreamError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(CreateLogStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>"]
-                fn delete_destination(&self, input: &DeleteDestinationRequest)  -> Result<(), DeleteDestinationError> {
+                fn delete_destination(&self, input: &DeleteDestinationRequest)  -> Box<Future<Item = (), Error = DeleteDestinationError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3177,21 +3218,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteDestinationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteDestinationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>"]
-                fn delete_log_group(&self, input: &DeleteLogGroupRequest)  -> Result<(), DeleteLogGroupError> {
+                fn delete_log_group(&self, input: &DeleteLogGroupRequest)  -> Box<Future<Item = (), Error = DeleteLogGroupError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3199,21 +3250,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteLogGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteLogGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>"]
-                fn delete_log_stream(&self, input: &DeleteLogStreamRequest)  -> Result<(), DeleteLogStreamError> {
+                fn delete_log_stream(&self, input: &DeleteLogStreamRequest)  -> Box<Future<Item = (), Error = DeleteLogStreamError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3221,21 +3282,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteLogStreamError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteLogStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteLogStreamError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteLogStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified metric filter.</p>"]
-                fn delete_metric_filter(&self, input: &DeleteMetricFilterRequest)  -> Result<(), DeleteMetricFilterError> {
+                fn delete_metric_filter(&self, input: &DeleteMetricFilterRequest)  -> Box<Future<Item = (), Error = DeleteMetricFilterError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3243,21 +3314,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteMetricFilterError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteMetricFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteMetricFilterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteMetricFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>"]
-                fn delete_retention_policy(&self, input: &DeleteRetentionPolicyRequest)  -> Result<(), DeleteRetentionPolicyError> {
+                fn delete_retention_policy(&self, input: &DeleteRetentionPolicyRequest)  -> Box<Future<Item = (), Error = DeleteRetentionPolicyError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3265,21 +3346,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRetentionPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRetentionPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified subscription filter.</p>"]
-                fn delete_subscription_filter(&self, input: &DeleteSubscriptionFilterRequest)  -> Result<(), DeleteSubscriptionFilterError> {
+                fn delete_subscription_filter(&self, input: &DeleteSubscriptionFilterRequest)  -> Box<Future<Item = (), Error = DeleteSubscriptionFilterError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3287,21 +3378,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteSubscriptionFilterError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(DeleteSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteSubscriptionFilterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(DeleteSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>"]
-                fn describe_destinations(&self, input: &DescribeDestinationsRequest)  -> Result<DescribeDestinationsResponse, DescribeDestinationsError> {
+                fn describe_destinations(&self, input: &DescribeDestinationsRequest)  -> Box<Future<Item = DescribeDestinationsResponse, Error = DescribeDestinationsError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3309,21 +3410,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeDestinationsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeDestinationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeDestinationsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeDestinationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>"]
-                fn describe_export_tasks(&self, input: &DescribeExportTasksRequest)  -> Result<DescribeExportTasksResponse, DescribeExportTasksError> {
+                fn describe_export_tasks(&self, input: &DescribeExportTasksRequest)  -> Box<Future<Item = DescribeExportTasksResponse, Error = DescribeExportTasksError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3331,21 +3442,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeExportTasksError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeExportTasksError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>"]
-                fn describe_log_groups(&self, input: &DescribeLogGroupsRequest)  -> Result<DescribeLogGroupsResponse, DescribeLogGroupsError> {
+                fn describe_log_groups(&self, input: &DescribeLogGroupsRequest)  -> Box<Future<Item = DescribeLogGroupsResponse, Error = DescribeLogGroupsError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3353,21 +3474,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLogGroupsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeLogGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLogGroupsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeLogGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>"]
-                fn describe_log_streams(&self, input: &DescribeLogStreamsRequest)  -> Result<DescribeLogStreamsResponse, DescribeLogStreamsError> {
+                fn describe_log_streams(&self, input: &DescribeLogStreamsRequest)  -> Box<Future<Item = DescribeLogStreamsResponse, Error = DescribeLogStreamsError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3375,21 +3506,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeLogStreamsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeLogStreamsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeLogStreamsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeLogStreamsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, and metric namespace. The results are ASCII-sorted by filter name.</p>"]
-                fn describe_metric_filters(&self, input: &DescribeMetricFiltersRequest)  -> Result<DescribeMetricFiltersResponse, DescribeMetricFiltersError> {
+                fn describe_metric_filters(&self, input: &DescribeMetricFiltersRequest)  -> Box<Future<Item = DescribeMetricFiltersResponse, Error = DescribeMetricFiltersError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3397,21 +3538,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeMetricFiltersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeMetricFiltersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeMetricFiltersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeMetricFiltersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>"]
-                fn describe_subscription_filters(&self, input: &DescribeSubscriptionFiltersRequest)  -> Result<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError> {
+                fn describe_subscription_filters(&self, input: &DescribeSubscriptionFiltersRequest)  -> Box<Future<Item = DescribeSubscriptionFiltersResponse, Error = DescribeSubscriptionFiltersError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3419,21 +3570,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeSubscriptionFiltersError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeSubscriptionFiltersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeSubscriptionFiltersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeSubscriptionFiltersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>"]
-                fn filter_log_events(&self, input: &FilterLogEventsRequest)  -> Result<FilterLogEventsResponse, FilterLogEventsError> {
+                fn filter_log_events(&self, input: &FilterLogEventsRequest)  -> Box<Future<Item = FilterLogEventsResponse, Error = FilterLogEventsError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3441,21 +3602,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(FilterLogEventsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(FilterLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| FilterLogEventsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(FilterLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). If the results include tokens, there are more log events available. You can get additional log events by specifying one of the tokens in a subsequent call.</p>"]
-                fn get_log_events(&self, input: &GetLogEventsRequest)  -> Result<GetLogEventsResponse, GetLogEventsError> {
+                fn get_log_events(&self, input: &GetLogEventsRequest)  -> Box<Future<Item = GetLogEventsResponse, Error = GetLogEventsError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3463,21 +3634,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetLogEventsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetLogEventsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the tags for the specified log group.</p> <p>To add tags, use <a>TagLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p>"]
-                fn list_tags_log_group(&self, input: &ListTagsLogGroupRequest)  -> Result<ListTagsLogGroupResponse, ListTagsLogGroupError> {
+                fn list_tags_log_group(&self, input: &ListTagsLogGroupRequest)  -> Box<Future<Item = ListTagsLogGroupResponse, Error = ListTagsLogGroupError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3485,21 +3666,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTagsLogGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListTagsLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTagsLogGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListTagsLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates a destination. A destination encapsulates a physical resource (such as a Kinesis stream) and enables you to subscribe to a real-time stream of log events of a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Amazon Kinesis stream belonging to the same account as the destination.</p> <p>A destination controls what is written to its Amazon Kinesis stream through an access policy. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>"]
-                fn put_destination(&self, input: &PutDestinationRequest)  -> Result<PutDestinationResponse, PutDestinationError> {
+                fn put_destination(&self, input: &PutDestinationRequest)  -> Box<Future<Item = PutDestinationResponse, Error = PutDestinationError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3507,21 +3698,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutDestinationError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutDestinationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html\">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>"]
-                fn put_destination_policy(&self, input: &PutDestinationPolicyRequest)  -> Result<(), PutDestinationPolicyError> {
+                fn put_destination_policy(&self, input: &PutDestinationPolicyRequest)  -> Box<Future<Item = (), Error = PutDestinationPolicyError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3529,21 +3730,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutDestinationPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutDestinationPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutDestinationPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutDestinationPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp (the time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul>"]
-                fn put_log_events(&self, input: &PutLogEventsRequest)  -> Result<PutLogEventsResponse, PutLogEventsError> {
+                fn put_log_events(&self, input: &PutLogEventsRequest)  -> Box<Future<Item = PutLogEventsResponse, Error = PutLogEventsError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3551,21 +3762,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutLogEventsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(PutLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutLogEventsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(PutLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>"]
-                fn put_metric_filter(&self, input: &PutMetricFilterRequest)  -> Result<(), PutMetricFilterError> {
+                fn put_metric_filter(&self, input: &PutMetricFilterRequest)  -> Box<Future<Item = (), Error = PutMetricFilterError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3573,21 +3794,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutMetricFilterError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutMetricFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutMetricFilterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutMetricFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days you want to retain log events in the specified log group.</p>"]
-                fn put_retention_policy(&self, input: &PutRetentionPolicyRequest)  -> Result<(), PutRetentionPolicyError> {
+                fn put_retention_policy(&self, input: &PutRetentionPolicyRequest)  -> Box<Future<Item = (), Error = PutRetentionPolicyError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3595,21 +3826,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutRetentionPolicyError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutRetentionPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group.</p>"]
-                fn put_subscription_filter(&self, input: &PutSubscriptionFilterRequest)  -> Result<(), PutSubscriptionFilterError> {
+                fn put_subscription_filter(&self, input: &PutSubscriptionFilterRequest)  -> Box<Future<Item = (), Error = PutSubscriptionFilterError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3617,21 +3858,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutSubscriptionFilterError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(PutSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutSubscriptionFilterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(PutSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html\">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>"]
-                fn tag_log_group(&self, input: &TagLogGroupRequest)  -> Result<(), TagLogGroupError> {
+                fn tag_log_group(&self, input: &TagLogGroupRequest)  -> Box<Future<Item = (), Error = TagLogGroupError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3639,21 +3890,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TagLogGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(TagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TagLogGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(TagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>"]
-                fn test_metric_filter(&self, input: &TestMetricFilterRequest)  -> Result<TestMetricFilterResponse, TestMetricFilterError> {
+                fn test_metric_filter(&self, input: &TestMetricFilterRequest)  -> Box<Future<Item = TestMetricFilterResponse, Error = TestMetricFilterError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3661,21 +3922,31 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TestMetricFilterError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(TestMetricFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TestMetricFilterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(TestMetricFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>"]
-                fn untag_log_group(&self, input: &UntagLogGroupRequest)  -> Result<(), UntagLogGroupError> {
+                fn untag_log_group(&self, input: &UntagLogGroupRequest)  -> Box<Future<Item = (), Error = UntagLogGroupError>> {
                     let mut request = SignedRequest::new("POST", "logs", self.region, "/");
                     
                     request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3683,16 +3954,26 @@ UntagLogGroupError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UntagLogGroupError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                        _ => Err(UntagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UntagLogGroupError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                _ => future::err(UntagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

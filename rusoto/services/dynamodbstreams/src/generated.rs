@@ -13,6 +13,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;
+        use futures::{Future, future};
 pub type AttributeMap = ::std::collections::HashMap<AttributeName, AttributeValue>;
 pub type AttributeName = String;
 #[doc="<p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>"]
@@ -608,19 +609,19 @@ ListStreamsError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <i>DescribeStream</i> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>"]
-                fn describe_stream(&self, input: &DescribeStreamInput)  -> Result<DescribeStreamOutput, DescribeStreamError>;
+                fn describe_stream(&self, input: &DescribeStreamInput)  -> Box<Future<Item = DescribeStreamOutput, Error = DescribeStreamError>>;
                 
 
                 #[doc="<p>Retrieves the stream records from a given shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading stream records sequentially. If there are no stream records available in the portion of the shard that the iterator points to, <code>GetRecords</code> returns an empty list. Note that it might take multiple calls to get to a portion of the shard that contains stream records.</p> <note> <p> <code>GetRecords</code> can retrieve a maximum of 1 MB of data or 1000 stream records, whichever comes first.</p> </note>"]
-                fn get_records(&self, input: &GetRecordsInput)  -> Result<GetRecordsOutput, GetRecordsError>;
+                fn get_records(&self, input: &GetRecordsInput)  -> Box<Future<Item = GetRecordsOutput, Error = GetRecordsError>>;
                 
 
                 #[doc="<p>Returns a shard iterator. A shard iterator provides information about how to retrieve the stream records from within a shard. Use the shard iterator in a subsequent <code>GetRecords</code> request to read the stream records from the shard.</p> <note> <p>A shard iterator expires 15 minutes after it is returned to the requester.</p> </note>"]
-                fn get_shard_iterator(&self, input: &GetShardIteratorInput)  -> Result<GetShardIteratorOutput, GetShardIteratorError>;
+                fn get_shard_iterator(&self, input: &GetShardIteratorInput)  -> Box<Future<Item = GetShardIteratorOutput, Error = GetShardIteratorError>>;
                 
 
                 #[doc="<p>Returns an array of stream ARNs associated with the current account and endpoint. If the <code>TableName</code> parameter is present, then <i>ListStreams</i> will return only the streams ARNs for that table.</p> <note> <p>You can call <i>ListStreams</i> at a maximum rate of 5 times per second.</p> </note>"]
-                fn list_streams(&self, input: &ListStreamsInput)  -> Result<ListStreamsOutput, ListStreamsError>;
+                fn list_streams(&self, input: &ListStreamsInput)  -> Box<Future<Item = ListStreamsOutput, Error = ListStreamsError>>;
                 
 }
 /// A client for the Amazon DynamoDB Streams API.
@@ -644,7 +645,7 @@ ListStreamsError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <i>DescribeStream</i> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>"]
-                fn describe_stream(&self, input: &DescribeStreamInput)  -> Result<DescribeStreamOutput, DescribeStreamError> {
+                fn describe_stream(&self, input: &DescribeStreamInput)  -> Box<Future<Item = DescribeStreamOutput, Error = DescribeStreamError>> {
                     let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
                     request.set_endpoint_prefix("streams.dynamodb".to_string());
                     request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -652,21 +653,31 @@ ListStreamsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeStreamError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(DescribeStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeStreamError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(DescribeStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Retrieves the stream records from a given shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading stream records sequentially. If there are no stream records available in the portion of the shard that the iterator points to, <code>GetRecords</code> returns an empty list. Note that it might take multiple calls to get to a portion of the shard that contains stream records.</p> <note> <p> <code>GetRecords</code> can retrieve a maximum of 1 MB of data or 1000 stream records, whichever comes first.</p> </note>"]
-                fn get_records(&self, input: &GetRecordsInput)  -> Result<GetRecordsOutput, GetRecordsError> {
+                fn get_records(&self, input: &GetRecordsInput)  -> Box<Future<Item = GetRecordsOutput, Error = GetRecordsError>> {
                     let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
                     request.set_endpoint_prefix("streams.dynamodb".to_string());
                     request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -674,21 +685,31 @@ ListStreamsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetRecordsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRecordsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetRecordsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetRecordsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a shard iterator. A shard iterator provides information about how to retrieve the stream records from within a shard. Use the shard iterator in a subsequent <code>GetRecords</code> request to read the stream records from the shard.</p> <note> <p>A shard iterator expires 15 minutes after it is returned to the requester.</p> </note>"]
-                fn get_shard_iterator(&self, input: &GetShardIteratorInput)  -> Result<GetShardIteratorOutput, GetShardIteratorError> {
+                fn get_shard_iterator(&self, input: &GetShardIteratorInput)  -> Box<Future<Item = GetShardIteratorOutput, Error = GetShardIteratorError>> {
                     let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
                     request.set_endpoint_prefix("streams.dynamodb".to_string());
                     request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -696,21 +717,31 @@ ListStreamsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetShardIteratorError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetShardIteratorOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(GetShardIteratorError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetShardIteratorError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetShardIteratorOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(GetShardIteratorError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns an array of stream ARNs associated with the current account and endpoint. If the <code>TableName</code> parameter is present, then <i>ListStreams</i> will return only the streams ARNs for that table.</p> <note> <p>You can call <i>ListStreams</i> at a maximum rate of 5 times per second.</p> </note>"]
-                fn list_streams(&self, input: &ListStreamsInput)  -> Result<ListStreamsOutput, ListStreamsError> {
+                fn list_streams(&self, input: &ListStreamsInput)  -> Box<Future<Item = ListStreamsOutput, Error = ListStreamsError>> {
                     let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
                     request.set_endpoint_prefix("streams.dynamodb".to_string());
                     request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -718,16 +749,26 @@ ListStreamsError::Unknown(ref cause) => cause
                     let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListStreamsError::from(err)))
+                    };
 
-                    match response.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListStreamsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-                        _ => Err(ListStreamsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListStreamsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListStreamsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                                }
+                                _ => future::err(ListStreamsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }

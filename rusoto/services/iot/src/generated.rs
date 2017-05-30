@@ -14,6 +14,7 @@ use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::from_str;
         use serde_json::Value as SerdeJsonValue;
+        use futures::{Future, future};
 #[doc="<p>The input for the AcceptCertificateTransfer operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
             pub struct AcceptCertificateTransferRequest {
@@ -6557,231 +6558,231 @@ UpdateThingError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>"]
-                fn accept_certificate_transfer(&self, input: &AcceptCertificateTransferRequest) -> Result<(), AcceptCertificateTransferError>;
+                fn accept_certificate_transfer(&self, input: &AcceptCertificateTransferRequest) -> Box<Future<Item = (), Error = AcceptCertificateTransferError>>;
                 
 
                 #[doc="<p>Attaches the specified policy to the specified principal (certificate or other credential).</p>"]
-                fn attach_principal_policy(&self, input: &AttachPrincipalPolicyRequest) -> Result<(), AttachPrincipalPolicyError>;
+                fn attach_principal_policy(&self, input: &AttachPrincipalPolicyRequest) -> Box<Future<Item = (), Error = AttachPrincipalPolicyError>>;
                 
 
                 #[doc="<p>Attaches the specified principal to the specified thing.</p>"]
-                fn attach_thing_principal(&self, input: &AttachThingPrincipalRequest) -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError>;
+                fn attach_thing_principal(&self, input: &AttachThingPrincipalRequest) -> Box<Future<Item = AttachThingPrincipalResponse, Error = AttachThingPrincipalError>>;
                 
 
                 #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p><b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
-                fn cancel_certificate_transfer(&self, input: &CancelCertificateTransferRequest) -> Result<(), CancelCertificateTransferError>;
+                fn cancel_certificate_transfer(&self, input: &CancelCertificateTransferRequest) -> Box<Future<Item = (), Error = CancelCertificateTransferError>>;
                 
 
                 #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p><b>Note</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs. </p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p> This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR. </p> <p> The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process: </p> <p> $ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{} </p> <p> On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is: </p> <p> &gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_} </p> <p> On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is: </p> <p> &gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
-                fn create_certificate_from_csr(&self, input: &CreateCertificateFromCsrRequest) -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
+                fn create_certificate_from_csr(&self, input: &CreateCertificateFromCsrRequest) -> Box<Future<Item = CreateCertificateFromCsrResponse, Error = CreateCertificateFromCsrError>>;
                 
 
                 #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p><b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
-                fn create_keys_and_certificate(&self, input: &CreateKeysAndCertificateRequest) -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
+                fn create_keys_and_certificate(&self, input: &CreateKeysAndCertificateRequest) -> Box<Future<Item = CreateKeysAndCertificateResponse, Error = CreateKeysAndCertificateError>>;
                 
 
                 #[doc="<p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>"]
-                fn create_policy(&self, input: &CreatePolicyRequest) -> Result<CreatePolicyResponse, CreatePolicyError>;
+                fn create_policy(&self, input: &CreatePolicyRequest) -> Box<Future<Item = CreatePolicyResponse, Error = CreatePolicyError>>;
                 
 
                 #[doc="<p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>"]
-                fn create_policy_version(&self, input: &CreatePolicyVersionRequest) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError>;
+                fn create_policy_version(&self, input: &CreatePolicyVersionRequest) -> Box<Future<Item = CreatePolicyVersionResponse, Error = CreatePolicyVersionError>>;
                 
 
                 #[doc="<p>Creates a thing record in the thing registry.</p>"]
-                fn create_thing(&self, input: &CreateThingRequest) -> Result<CreateThingResponse, CreateThingError>;
+                fn create_thing(&self, input: &CreateThingRequest) -> Box<Future<Item = CreateThingResponse, Error = CreateThingError>>;
                 
 
                 #[doc="<p>Creates a new thing type.</p>"]
-                fn create_thing_type(&self, input: &CreateThingTypeRequest) -> Result<CreateThingTypeResponse, CreateThingTypeError>;
+                fn create_thing_type(&self, input: &CreateThingTypeRequest) -> Box<Future<Item = CreateThingTypeResponse, Error = CreateThingTypeError>>;
                 
 
                 #[doc="<p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
-                fn create_topic_rule(&self, input: &CreateTopicRuleRequest) -> Result<(), CreateTopicRuleError>;
+                fn create_topic_rule(&self, input: &CreateTopicRuleRequest) -> Box<Future<Item = (), Error = CreateTopicRuleError>>;
                 
 
                 #[doc="<p>Deletes a registered CA certificate.</p>"]
-                fn delete_ca_certificate(&self, input: &DeleteCACertificateRequest) -> Result<DeleteCACertificateResponse, DeleteCACertificateError>;
+                fn delete_ca_certificate(&self, input: &DeleteCACertificateRequest) -> Box<Future<Item = DeleteCACertificateResponse, Error = DeleteCACertificateError>>;
                 
 
                 #[doc="<p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>"]
-                fn delete_certificate(&self, input: &DeleteCertificateRequest) -> Result<(), DeleteCertificateError>;
+                fn delete_certificate(&self, input: &DeleteCertificateRequest) -> Box<Future<Item = (), Error = DeleteCertificateError>>;
                 
 
                 #[doc="<p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>"]
-                fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError>;
+                fn delete_policy(&self, input: &DeletePolicyRequest) -> Box<Future<Item = (), Error = DeletePolicyError>>;
                 
 
                 #[doc="<p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>"]
-                fn delete_policy_version(&self, input: &DeletePolicyVersionRequest) -> Result<(), DeletePolicyVersionError>;
+                fn delete_policy_version(&self, input: &DeletePolicyVersionRequest) -> Box<Future<Item = (), Error = DeletePolicyVersionError>>;
                 
 
                 #[doc="<p>Deletes a CA certificate registration code.</p>"]
-                fn delete_registration_code(&self) -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError>;
+                fn delete_registration_code(&self) -> Box<Future<Item = DeleteRegistrationCodeResponse, Error = DeleteRegistrationCodeError>>;
                 
 
                 #[doc="<p>Deletes the specified thing.</p>"]
-                fn delete_thing(&self, input: &DeleteThingRequest) -> Result<DeleteThingResponse, DeleteThingError>;
+                fn delete_thing(&self, input: &DeleteThingRequest) -> Box<Future<Item = DeleteThingResponse, Error = DeleteThingError>>;
                 
 
                 #[doc="<p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>"]
-                fn delete_thing_type(&self, input: &DeleteThingTypeRequest) -> Result<DeleteThingTypeResponse, DeleteThingTypeError>;
+                fn delete_thing_type(&self, input: &DeleteThingTypeRequest) -> Box<Future<Item = DeleteThingTypeResponse, Error = DeleteThingTypeError>>;
                 
 
                 #[doc="<p>Deletes the specified rule.</p>"]
-                fn delete_topic_rule(&self, input: &DeleteTopicRuleRequest) -> Result<(), DeleteTopicRuleError>;
+                fn delete_topic_rule(&self, input: &DeleteTopicRuleRequest) -> Box<Future<Item = (), Error = DeleteTopicRuleError>>;
                 
 
                 #[doc="<p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>"]
-                fn deprecate_thing_type(&self, input: &DeprecateThingTypeRequest) -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError>;
+                fn deprecate_thing_type(&self, input: &DeprecateThingTypeRequest) -> Box<Future<Item = DeprecateThingTypeResponse, Error = DeprecateThingTypeError>>;
                 
 
                 #[doc="<p>Describes a registered CA certificate.</p>"]
-                fn describe_ca_certificate(&self, input: &DescribeCACertificateRequest) -> Result<DescribeCACertificateResponse, DescribeCACertificateError>;
+                fn describe_ca_certificate(&self, input: &DescribeCACertificateRequest) -> Box<Future<Item = DescribeCACertificateResponse, Error = DescribeCACertificateError>>;
                 
 
                 #[doc="<p>Gets information about the specified certificate.</p>"]
-                fn describe_certificate(&self, input: &DescribeCertificateRequest) -> Result<DescribeCertificateResponse, DescribeCertificateError>;
+                fn describe_certificate(&self, input: &DescribeCertificateRequest) -> Box<Future<Item = DescribeCertificateResponse, Error = DescribeCertificateError>>;
                 
 
                 #[doc="<p>Returns a unique endpoint specific to the AWS account making the call.</p>"]
-                fn describe_endpoint(&self) -> Result<DescribeEndpointResponse, DescribeEndpointError>;
+                fn describe_endpoint(&self) -> Box<Future<Item = DescribeEndpointResponse, Error = DescribeEndpointError>>;
                 
 
                 #[doc="<p>Gets information about the specified thing.</p>"]
-                fn describe_thing(&self, input: &DescribeThingRequest) -> Result<DescribeThingResponse, DescribeThingError>;
+                fn describe_thing(&self, input: &DescribeThingRequest) -> Box<Future<Item = DescribeThingResponse, Error = DescribeThingError>>;
                 
 
                 #[doc="<p>Gets information about the specified thing type.</p>"]
-                fn describe_thing_type(&self, input: &DescribeThingTypeRequest) -> Result<DescribeThingTypeResponse, DescribeThingTypeError>;
+                fn describe_thing_type(&self, input: &DescribeThingTypeRequest) -> Box<Future<Item = DescribeThingTypeResponse, Error = DescribeThingTypeError>>;
                 
 
                 #[doc="<p>Removes the specified policy from the specified certificate.</p>"]
-                fn detach_principal_policy(&self, input: &DetachPrincipalPolicyRequest) -> Result<(), DetachPrincipalPolicyError>;
+                fn detach_principal_policy(&self, input: &DetachPrincipalPolicyRequest) -> Box<Future<Item = (), Error = DetachPrincipalPolicyError>>;
                 
 
                 #[doc="<p>Detaches the specified principal from the specified thing.</p>"]
-                fn detach_thing_principal(&self, input: &DetachThingPrincipalRequest) -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError>;
+                fn detach_thing_principal(&self, input: &DetachThingPrincipalRequest) -> Box<Future<Item = DetachThingPrincipalResponse, Error = DetachThingPrincipalError>>;
                 
 
                 #[doc="<p>Disables the specified rule.</p>"]
-                fn disable_topic_rule(&self, input: &DisableTopicRuleRequest) -> Result<(), DisableTopicRuleError>;
+                fn disable_topic_rule(&self, input: &DisableTopicRuleRequest) -> Box<Future<Item = (), Error = DisableTopicRuleError>>;
                 
 
                 #[doc="<p>Enables the specified rule.</p>"]
-                fn enable_topic_rule(&self, input: &EnableTopicRuleRequest) -> Result<(), EnableTopicRuleError>;
+                fn enable_topic_rule(&self, input: &EnableTopicRuleRequest) -> Box<Future<Item = (), Error = EnableTopicRuleError>>;
                 
 
                 #[doc="<p>Gets the logging options.</p>"]
-                fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError>;
+                fn get_logging_options(&self) -> Box<Future<Item = GetLoggingOptionsResponse, Error = GetLoggingOptionsError>>;
                 
 
                 #[doc="<p>Gets information about the specified policy with the policy document of the default version.</p>"]
-                fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
+                fn get_policy(&self, input: &GetPolicyRequest) -> Box<Future<Item = GetPolicyResponse, Error = GetPolicyError>>;
                 
 
                 #[doc="<p>Gets information about the specified policy version.</p>"]
-                fn get_policy_version(&self, input: &GetPolicyVersionRequest) -> Result<GetPolicyVersionResponse, GetPolicyVersionError>;
+                fn get_policy_version(&self, input: &GetPolicyVersionRequest) -> Box<Future<Item = GetPolicyVersionResponse, Error = GetPolicyVersionError>>;
                 
 
                 #[doc="<p>Gets a registration code used to register a CA certificate with AWS IoT.</p>"]
-                fn get_registration_code(&self) -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError>;
+                fn get_registration_code(&self) -> Box<Future<Item = GetRegistrationCodeResponse, Error = GetRegistrationCodeError>>;
                 
 
                 #[doc="<p>Gets information about the specified rule.</p>"]
-                fn get_topic_rule(&self, input: &GetTopicRuleRequest) -> Result<GetTopicRuleResponse, GetTopicRuleError>;
+                fn get_topic_rule(&self, input: &GetTopicRuleRequest) -> Box<Future<Item = GetTopicRuleResponse, Error = GetTopicRuleError>>;
                 
 
                 #[doc="<p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
-                fn list_ca_certificates(&self, input: &ListCACertificatesRequest) -> Result<ListCACertificatesResponse, ListCACertificatesError>;
+                fn list_ca_certificates(&self, input: &ListCACertificatesRequest) -> Box<Future<Item = ListCACertificatesResponse, Error = ListCACertificatesError>>;
                 
 
                 #[doc="<p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
-                fn list_certificates(&self, input: &ListCertificatesRequest) -> Result<ListCertificatesResponse, ListCertificatesError>;
+                fn list_certificates(&self, input: &ListCertificatesRequest) -> Box<Future<Item = ListCertificatesResponse, Error = ListCertificatesError>>;
                 
 
                 #[doc="<p>List the device certificates signed by the specified CA certificate.</p>"]
-                fn list_certificates_by_ca(&self, input: &ListCertificatesByCARequest) -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError>;
+                fn list_certificates_by_ca(&self, input: &ListCertificatesByCARequest) -> Box<Future<Item = ListCertificatesByCAResponse, Error = ListCertificatesByCAError>>;
                 
 
                 #[doc="<p>Lists certificates that are being transfered but not yet accepted.</p>"]
-                fn list_outgoing_certificates(&self, input: &ListOutgoingCertificatesRequest) -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError>;
+                fn list_outgoing_certificates(&self, input: &ListOutgoingCertificatesRequest) -> Box<Future<Item = ListOutgoingCertificatesResponse, Error = ListOutgoingCertificatesError>>;
                 
 
                 #[doc="<p>Lists your policies.</p>"]
-                fn list_policies(&self, input: &ListPoliciesRequest) -> Result<ListPoliciesResponse, ListPoliciesError>;
+                fn list_policies(&self, input: &ListPoliciesRequest) -> Box<Future<Item = ListPoliciesResponse, Error = ListPoliciesError>>;
                 
 
                 #[doc="<p>Lists the principals associated with the specified policy.</p>"]
-                fn list_policy_principals(&self, input: &ListPolicyPrincipalsRequest) -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError>;
+                fn list_policy_principals(&self, input: &ListPolicyPrincipalsRequest) -> Box<Future<Item = ListPolicyPrincipalsResponse, Error = ListPolicyPrincipalsError>>;
                 
 
                 #[doc="<p>Lists the versions of the specified policy and identifies the default version.</p>"]
-                fn list_policy_versions(&self, input: &ListPolicyVersionsRequest) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError>;
+                fn list_policy_versions(&self, input: &ListPolicyVersionsRequest) -> Box<Future<Item = ListPolicyVersionsResponse, Error = ListPolicyVersionsError>>;
                 
 
                 #[doc="<p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href=\"http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax\">AmazonCognito Identity format</a>.</p>"]
-                fn list_principal_policies(&self, input: &ListPrincipalPoliciesRequest) -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
+                fn list_principal_policies(&self, input: &ListPrincipalPoliciesRequest) -> Box<Future<Item = ListPrincipalPoliciesResponse, Error = ListPrincipalPoliciesError>>;
                 
 
                 #[doc="<p>Lists the things associated with the specified principal.</p>"]
-                fn list_principal_things(&self, input: &ListPrincipalThingsRequest) -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError>;
+                fn list_principal_things(&self, input: &ListPrincipalThingsRequest) -> Box<Future<Item = ListPrincipalThingsResponse, Error = ListPrincipalThingsError>>;
                 
 
                 #[doc="<p>Lists the principals associated with the specified thing.</p>"]
-                fn list_thing_principals(&self, input: &ListThingPrincipalsRequest) -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError>;
+                fn list_thing_principals(&self, input: &ListThingPrincipalsRequest) -> Box<Future<Item = ListThingPrincipalsResponse, Error = ListThingPrincipalsError>>;
                 
 
                 #[doc="<p>Lists the existing thing types.</p>"]
-                fn list_thing_types(&self, input: &ListThingTypesRequest) -> Result<ListThingTypesResponse, ListThingTypesError>;
+                fn list_thing_types(&self, input: &ListThingTypesRequest) -> Box<Future<Item = ListThingTypesResponse, Error = ListThingTypesError>>;
                 
 
                 #[doc="<p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>"]
-                fn list_things(&self, input: &ListThingsRequest) -> Result<ListThingsResponse, ListThingsError>;
+                fn list_things(&self, input: &ListThingsRequest) -> Box<Future<Item = ListThingsResponse, Error = ListThingsError>>;
                 
 
                 #[doc="<p>Lists the rules for the specific topic.</p>"]
-                fn list_topic_rules(&self, input: &ListTopicRulesRequest) -> Result<ListTopicRulesResponse, ListTopicRulesError>;
+                fn list_topic_rules(&self, input: &ListTopicRulesRequest) -> Box<Future<Item = ListTopicRulesResponse, Error = ListTopicRulesError>>;
                 
 
                 #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field and public key. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
-                fn register_ca_certificate(&self, input: &RegisterCACertificateRequest) -> Result<RegisterCACertificateResponse, RegisterCACertificateError>;
+                fn register_ca_certificate(&self, input: &RegisterCACertificateRequest) -> Box<Future<Item = RegisterCACertificateResponse, Error = RegisterCACertificateError>>;
                 
 
                 #[doc="<p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>"]
-                fn register_certificate(&self, input: &RegisterCertificateRequest) -> Result<RegisterCertificateResponse, RegisterCertificateError>;
+                fn register_certificate(&self, input: &RegisterCertificateRequest) -> Box<Future<Item = RegisterCertificateResponse, Error = RegisterCertificateError>>;
                 
 
                 #[doc="<p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>"]
-                fn reject_certificate_transfer(&self, input: &RejectCertificateTransferRequest) -> Result<(), RejectCertificateTransferError>;
+                fn reject_certificate_transfer(&self, input: &RejectCertificateTransferRequest) -> Box<Future<Item = (), Error = RejectCertificateTransferError>>;
                 
 
                 #[doc="<p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
-                fn replace_topic_rule(&self, input: &ReplaceTopicRuleRequest) -> Result<(), ReplaceTopicRuleError>;
+                fn replace_topic_rule(&self, input: &ReplaceTopicRuleRequest) -> Box<Future<Item = (), Error = ReplaceTopicRuleError>>;
                 
 
                 #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>"]
-                fn set_default_policy_version(&self, input: &SetDefaultPolicyVersionRequest) -> Result<(), SetDefaultPolicyVersionError>;
+                fn set_default_policy_version(&self, input: &SetDefaultPolicyVersionRequest) -> Box<Future<Item = (), Error = SetDefaultPolicyVersionError>>;
                 
 
                 #[doc="<p>Sets the logging options.</p>"]
-                fn set_logging_options(&self, input: &SetLoggingOptionsRequest) -> Result<(), SetLoggingOptionsError>;
+                fn set_logging_options(&self, input: &SetLoggingOptionsRequest) -> Box<Future<Item = (), Error = SetLoggingOptionsError>>;
                 
 
                 #[doc="<p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>"]
-                fn transfer_certificate(&self, input: &TransferCertificateRequest) -> Result<TransferCertificateResponse, TransferCertificateError>;
+                fn transfer_certificate(&self, input: &TransferCertificateRequest) -> Box<Future<Item = TransferCertificateResponse, Error = TransferCertificateError>>;
                 
 
                 #[doc="<p>Updates a registered CA certificate.</p>"]
-                fn update_ca_certificate(&self, input: &UpdateCACertificateRequest) -> Result<(), UpdateCACertificateError>;
+                fn update_ca_certificate(&self, input: &UpdateCACertificateRequest) -> Box<Future<Item = (), Error = UpdateCACertificateError>>;
                 
 
                 #[doc="<p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>"]
-                fn update_certificate(&self, input: &UpdateCertificateRequest) -> Result<(), UpdateCertificateError>;
+                fn update_certificate(&self, input: &UpdateCertificateRequest) -> Box<Future<Item = (), Error = UpdateCertificateError>>;
                 
 
                 #[doc="<p>Updates the data for a thing.</p>"]
-                fn update_thing(&self, input: &UpdateThingRequest) -> Result<UpdateThingResponse, UpdateThingError>;
+                fn update_thing(&self, input: &UpdateThingRequest) -> Box<Future<Item = UpdateThingResponse, Error = UpdateThingError>>;
                 
 }
 /// A client for the AWS IoT API.
@@ -6805,7 +6806,7 @@ UpdateThingError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>"]
-                fn accept_certificate_transfer(&self, input: &AcceptCertificateTransferRequest) -> Result<(), AcceptCertificateTransferError> {
+                fn accept_certificate_transfer(&self, input: &AcceptCertificateTransferRequest) -> Box<Future<Item = (), Error = AcceptCertificateTransferError>> {
                     
 
                     let request_uri = format!("/accept-certificate-transfer/{certificate_id}", certificate_id = input.certificate_id);
@@ -6821,32 +6822,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AcceptCertificateTransferError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AcceptCertificateTransferError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(AcceptCertificateTransferError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(AcceptCertificateTransferError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches the specified policy to the specified principal (certificate or other credential).</p>"]
-                fn attach_principal_policy(&self, input: &AttachPrincipalPolicyRequest) -> Result<(), AttachPrincipalPolicyError> {
+                fn attach_principal_policy(&self, input: &AttachPrincipalPolicyRequest) -> Box<Future<Item = (), Error = AttachPrincipalPolicyError>> {
                     
 
                     let request_uri = format!("/principal-policies/{policy_name}", policy_name = input.policy_name);
@@ -6857,32 +6868,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachPrincipalPolicyError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachPrincipalPolicyError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(AttachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(AttachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Attaches the specified principal to the specified thing.</p>"]
-                fn attach_thing_principal(&self, input: &AttachThingPrincipalRequest) -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError> {
+                fn attach_thing_principal(&self, input: &AttachThingPrincipalRequest) -> Box<Future<Item = AttachThingPrincipalResponse, Error = AttachThingPrincipalError>> {
                     
 
                     let request_uri = format!("/things/{thing_name}/principals", thing_name = input.thing_name);
@@ -6893,32 +6914,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(AttachThingPrincipalError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| AttachThingPrincipalError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AttachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(AttachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<AttachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(AttachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p><b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
-                fn cancel_certificate_transfer(&self, input: &CancelCertificateTransferRequest) -> Result<(), CancelCertificateTransferError> {
+                fn cancel_certificate_transfer(&self, input: &CancelCertificateTransferRequest) -> Box<Future<Item = (), Error = CancelCertificateTransferError>> {
                     
 
                     let request_uri = format!("/cancel-certificate-transfer/{certificate_id}", certificate_id = input.certificate_id);
@@ -6929,32 +6960,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CancelCertificateTransferError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CancelCertificateTransferError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(CancelCertificateTransferError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(CancelCertificateTransferError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p><b>Note</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs. </p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p> This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR. </p> <p> The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process: </p> <p> $ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{} </p> <p> On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is: </p> <p> &gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_} </p> <p> On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is: </p> <p> &gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
-                fn create_certificate_from_csr(&self, input: &CreateCertificateFromCsrRequest) -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
+                fn create_certificate_from_csr(&self, input: &CreateCertificateFromCsrRequest) -> Box<Future<Item = CreateCertificateFromCsrResponse, Error = CreateCertificateFromCsrError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/certificates";
@@ -6970,32 +7011,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateCertificateFromCsrError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateCertificateFromCsrError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateCertificateFromCsrResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreateCertificateFromCsrError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateCertificateFromCsrResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreateCertificateFromCsrError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p><b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
-                fn create_keys_and_certificate(&self, input: &CreateKeysAndCertificateRequest) -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
+                fn create_keys_and_certificate(&self, input: &CreateKeysAndCertificateRequest) -> Box<Future<Item = CreateKeysAndCertificateResponse, Error = CreateKeysAndCertificateError>> {
                     
 
                     let request_uri = "/keys-and-certificate";
@@ -7011,32 +7062,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateKeysAndCertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateKeysAndCertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateKeysAndCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreateKeysAndCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateKeysAndCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreateKeysAndCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>"]
-                fn create_policy(&self, input: &CreatePolicyRequest) -> Result<CreatePolicyResponse, CreatePolicyError> {
+                fn create_policy(&self, input: &CreatePolicyRequest) -> Box<Future<Item = CreatePolicyResponse, Error = CreatePolicyError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
@@ -7047,32 +7108,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePolicyError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePolicyError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreatePolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>"]
-                fn create_policy_version(&self, input: &CreatePolicyVersionRequest) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError> {
+                fn create_policy_version(&self, input: &CreatePolicyVersionRequest) -> Box<Future<Item = CreatePolicyVersionResponse, Error = CreatePolicyVersionError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/policies/{policy_name}/version", policy_name = input.policy_name);
@@ -7088,32 +7159,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreatePolicyVersionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreatePolicyVersionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePolicyVersionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreatePolicyVersionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a thing record in the thing registry.</p>"]
-                fn create_thing(&self, input: &CreateThingRequest) -> Result<CreateThingResponse, CreateThingError> {
+                fn create_thing(&self, input: &CreateThingRequest) -> Box<Future<Item = CreateThingResponse, Error = CreateThingError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
@@ -7124,32 +7205,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateThingError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateThingError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateThingResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreateThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateThingResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreateThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new thing type.</p>"]
-                fn create_thing_type(&self, input: &CreateThingTypeRequest) -> Result<CreateThingTypeResponse, CreateThingTypeError> {
+                fn create_thing_type(&self, input: &CreateThingTypeRequest) -> Box<Future<Item = CreateThingTypeResponse, Error = CreateThingTypeError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/thing-types/{thing_type_name}", thing_type_name = input.thing_type_name);
@@ -7160,32 +7251,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateThingTypeError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateThingTypeError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(CreateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<CreateThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(CreateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
-                fn create_topic_rule(&self, input: &CreateTopicRuleRequest) -> Result<(), CreateTopicRuleError> {
+                fn create_topic_rule(&self, input: &CreateTopicRuleRequest) -> Box<Future<Item = (), Error = CreateTopicRuleError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
@@ -7196,32 +7297,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateTopicRuleError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateTopicRuleError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(CreateTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(CreateTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a registered CA certificate.</p>"]
-                fn delete_ca_certificate(&self, input: &DeleteCACertificateRequest) -> Result<DeleteCACertificateResponse, DeleteCACertificateError> {
+                fn delete_ca_certificate(&self, input: &DeleteCACertificateRequest) -> Box<Future<Item = DeleteCACertificateResponse, Error = DeleteCACertificateError>> {
                     
 
                     let request_uri = format!("/cacertificate/{ca_certificate_id}", ca_certificate_id = input.certificate_id);
@@ -7232,32 +7343,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteCACertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteCACertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DeleteCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DeleteCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>"]
-                fn delete_certificate(&self, input: &DeleteCertificateRequest) -> Result<(), DeleteCertificateError> {
+                fn delete_certificate(&self, input: &DeleteCertificateRequest) -> Box<Future<Item = (), Error = DeleteCertificateError>> {
                     
 
                     let request_uri = format!("/certificates/{certificate_id}", certificate_id = input.certificate_id);
@@ -7268,32 +7389,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteCertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteCertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(DeleteCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>"]
-                fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError> {
+                fn delete_policy(&self, input: &DeletePolicyRequest) -> Box<Future<Item = (), Error = DeletePolicyError>> {
                     
 
                     let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
@@ -7304,32 +7435,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePolicyError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePolicyError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>"]
-                fn delete_policy_version(&self, input: &DeletePolicyVersionRequest) -> Result<(), DeletePolicyVersionError> {
+                fn delete_policy_version(&self, input: &DeletePolicyVersionRequest) -> Box<Future<Item = (), Error = DeletePolicyVersionError>> {
                     
 
                     let request_uri = format!("/policies/{policy_name}/version/{policy_version_id}", policy_name = input.policy_name, policy_version_id = input.policy_version_id);
@@ -7340,32 +7481,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeletePolicyVersionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeletePolicyVersionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a CA certificate registration code.</p>"]
-                fn delete_registration_code(&self) -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
+                fn delete_registration_code(&self) -> Box<Future<Item = DeleteRegistrationCodeResponse, Error = DeleteRegistrationCodeError>> {
                     
 
                     let request_uri = "/registrationcode";
@@ -7376,32 +7527,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteRegistrationCodeError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteRegistrationCodeError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DeleteRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DeleteRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified thing.</p>"]
-                fn delete_thing(&self, input: &DeleteThingRequest) -> Result<DeleteThingResponse, DeleteThingError> {
+                fn delete_thing(&self, input: &DeleteThingRequest) -> Box<Future<Item = DeleteThingResponse, Error = DeleteThingError>> {
                     
 
                     let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
@@ -7417,32 +7578,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteThingError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteThingError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteThingResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DeleteThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteThingResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DeleteThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>"]
-                fn delete_thing_type(&self, input: &DeleteThingTypeRequest) -> Result<DeleteThingTypeResponse, DeleteThingTypeError> {
+                fn delete_thing_type(&self, input: &DeleteThingTypeRequest) -> Box<Future<Item = DeleteThingTypeResponse, Error = DeleteThingTypeError>> {
                     
 
                     let request_uri = format!("/thing-types/{thing_type_name}", thing_type_name = input.thing_type_name);
@@ -7453,32 +7624,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteThingTypeError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteThingTypeError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DeleteThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeleteThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DeleteThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified rule.</p>"]
-                fn delete_topic_rule(&self, input: &DeleteTopicRuleRequest) -> Result<(), DeleteTopicRuleError> {
+                fn delete_topic_rule(&self, input: &DeleteTopicRuleRequest) -> Box<Future<Item = (), Error = DeleteTopicRuleError>> {
                     
 
                     let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
@@ -7489,32 +7670,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteTopicRuleError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteTopicRuleError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(DeleteTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(DeleteTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>"]
-                fn deprecate_thing_type(&self, input: &DeprecateThingTypeRequest) -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError> {
+                fn deprecate_thing_type(&self, input: &DeprecateThingTypeRequest) -> Box<Future<Item = DeprecateThingTypeResponse, Error = DeprecateThingTypeError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/thing-types/{thing_type_name}/deprecate", thing_type_name = input.thing_type_name);
@@ -7525,32 +7716,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeprecateThingTypeError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeprecateThingTypeError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeprecateThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DeprecateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DeprecateThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DeprecateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Describes a registered CA certificate.</p>"]
-                fn describe_ca_certificate(&self, input: &DescribeCACertificateRequest) -> Result<DescribeCACertificateResponse, DescribeCACertificateError> {
+                fn describe_ca_certificate(&self, input: &DescribeCACertificateRequest) -> Box<Future<Item = DescribeCACertificateResponse, Error = DescribeCACertificateError>> {
                     
 
                     let request_uri = format!("/cacertificate/{ca_certificate_id}", ca_certificate_id = input.certificate_id);
@@ -7561,32 +7762,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCACertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCACertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DescribeCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DescribeCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about the specified certificate.</p>"]
-                fn describe_certificate(&self, input: &DescribeCertificateRequest) -> Result<DescribeCertificateResponse, DescribeCertificateError> {
+                fn describe_certificate(&self, input: &DescribeCertificateRequest) -> Box<Future<Item = DescribeCertificateResponse, Error = DescribeCertificateError>> {
                     
 
                     let request_uri = format!("/certificates/{certificate_id}", certificate_id = input.certificate_id);
@@ -7597,32 +7808,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeCertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeCertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DescribeCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DescribeCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a unique endpoint specific to the AWS account making the call.</p>"]
-                fn describe_endpoint(&self) -> Result<DescribeEndpointResponse, DescribeEndpointError> {
+                fn describe_endpoint(&self) -> Box<Future<Item = DescribeEndpointResponse, Error = DescribeEndpointError>> {
                     
 
                     let request_uri = "/endpoint";
@@ -7633,32 +7854,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeEndpointError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeEndpointError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DescribeEndpointError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DescribeEndpointError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about the specified thing.</p>"]
-                fn describe_thing(&self, input: &DescribeThingRequest) -> Result<DescribeThingResponse, DescribeThingError> {
+                fn describe_thing(&self, input: &DescribeThingRequest) -> Box<Future<Item = DescribeThingResponse, Error = DescribeThingError>> {
                     
 
                     let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
@@ -7669,32 +7900,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeThingError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeThingError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeThingResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DescribeThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeThingResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DescribeThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about the specified thing type.</p>"]
-                fn describe_thing_type(&self, input: &DescribeThingTypeRequest) -> Result<DescribeThingTypeResponse, DescribeThingTypeError> {
+                fn describe_thing_type(&self, input: &DescribeThingTypeRequest) -> Box<Future<Item = DescribeThingTypeResponse, Error = DescribeThingTypeError>> {
                     
 
                     let request_uri = format!("/thing-types/{thing_type_name}", thing_type_name = input.thing_type_name);
@@ -7705,32 +7946,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeThingTypeError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeThingTypeError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DescribeThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DescribeThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DescribeThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Removes the specified policy from the specified certificate.</p>"]
-                fn detach_principal_policy(&self, input: &DetachPrincipalPolicyRequest) -> Result<(), DetachPrincipalPolicyError> {
+                fn detach_principal_policy(&self, input: &DetachPrincipalPolicyRequest) -> Box<Future<Item = (), Error = DetachPrincipalPolicyError>> {
                     
 
                     let request_uri = format!("/principal-policies/{policy_name}", policy_name = input.policy_name);
@@ -7741,32 +7992,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachPrincipalPolicyError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachPrincipalPolicyError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(DetachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(DetachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Detaches the specified principal from the specified thing.</p>"]
-                fn detach_thing_principal(&self, input: &DetachThingPrincipalRequest) -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError> {
+                fn detach_thing_principal(&self, input: &DetachThingPrincipalRequest) -> Box<Future<Item = DetachThingPrincipalResponse, Error = DetachThingPrincipalError>> {
                     
 
                     let request_uri = format!("/things/{thing_name}/principals", thing_name = input.thing_name);
@@ -7777,32 +8038,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DetachThingPrincipalError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DetachThingPrincipalError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DetachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(DetachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<DetachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(DetachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Disables the specified rule.</p>"]
-                fn disable_topic_rule(&self, input: &DisableTopicRuleRequest) -> Result<(), DisableTopicRuleError> {
+                fn disable_topic_rule(&self, input: &DisableTopicRuleRequest) -> Box<Future<Item = (), Error = DisableTopicRuleError>> {
                     
 
                     let request_uri = format!("/rules/{rule_name}/disable", rule_name = input.rule_name);
@@ -7813,32 +8084,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DisableTopicRuleError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DisableTopicRuleError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(DisableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(DisableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables the specified rule.</p>"]
-                fn enable_topic_rule(&self, input: &EnableTopicRuleRequest) -> Result<(), EnableTopicRuleError> {
+                fn enable_topic_rule(&self, input: &EnableTopicRuleRequest) -> Box<Future<Item = (), Error = EnableTopicRuleError>> {
                     
 
                     let request_uri = format!("/rules/{rule_name}/enable", rule_name = input.rule_name);
@@ -7849,32 +8130,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(EnableTopicRuleError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| EnableTopicRuleError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(EnableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(EnableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets the logging options.</p>"]
-                fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError> {
+                fn get_logging_options(&self) -> Box<Future<Item = GetLoggingOptionsResponse, Error = GetLoggingOptionsError>> {
                     
 
                     let request_uri = "/loggingOptions";
@@ -7885,32 +8176,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetLoggingOptionsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetLoggingOptionsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetLoggingOptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetLoggingOptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about the specified policy with the policy document of the default version.</p>"]
-                fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
+                fn get_policy(&self, input: &GetPolicyRequest) -> Box<Future<Item = GetPolicyResponse, Error = GetPolicyError>> {
                     
 
                     let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
@@ -7921,32 +8222,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPolicyError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPolicyError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about the specified policy version.</p>"]
-                fn get_policy_version(&self, input: &GetPolicyVersionRequest) -> Result<GetPolicyVersionResponse, GetPolicyVersionError> {
+                fn get_policy_version(&self, input: &GetPolicyVersionRequest) -> Box<Future<Item = GetPolicyVersionResponse, Error = GetPolicyVersionError>> {
                     
 
                     let request_uri = format!("/policies/{policy_name}/version/{policy_version_id}", policy_name = input.policy_name, policy_version_id = input.policy_version_id);
@@ -7957,32 +8268,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetPolicyVersionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetPolicyVersionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPolicyVersionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetPolicyVersionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets a registration code used to register a CA certificate with AWS IoT.</p>"]
-                fn get_registration_code(&self) -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError> {
+                fn get_registration_code(&self) -> Box<Future<Item = GetRegistrationCodeResponse, Error = GetRegistrationCodeError>> {
                     
 
                     let request_uri = "/registrationcode";
@@ -7993,32 +8314,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetRegistrationCodeError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetRegistrationCodeError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Gets information about the specified rule.</p>"]
-                fn get_topic_rule(&self, input: &GetTopicRuleRequest) -> Result<GetTopicRuleResponse, GetTopicRuleError> {
+                fn get_topic_rule(&self, input: &GetTopicRuleRequest) -> Box<Future<Item = GetTopicRuleResponse, Error = GetTopicRuleError>> {
                     
 
                     let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
@@ -8029,32 +8360,42 @@ UpdateThingError::Unknown(ref cause) => cause
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetTopicRuleError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetTopicRuleError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetTopicRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(GetTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<GetTopicRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(GetTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
-                fn list_ca_certificates(&self, input: &ListCACertificatesRequest) -> Result<ListCACertificatesResponse, ListCACertificatesError> {
+                fn list_ca_certificates(&self, input: &ListCACertificatesRequest) -> Box<Future<Item = ListCACertificatesResponse, Error = ListCACertificatesError>> {
                     
 
                     let request_uri = "/cacertificates";
@@ -8078,32 +8419,42 @@ match input.page_size {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListCACertificatesError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListCACertificatesError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCACertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListCACertificatesError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListCACertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListCACertificatesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
-                fn list_certificates(&self, input: &ListCertificatesRequest) -> Result<ListCertificatesResponse, ListCertificatesError> {
+                fn list_certificates(&self, input: &ListCertificatesRequest) -> Box<Future<Item = ListCertificatesResponse, Error = ListCertificatesError>> {
                     
 
                     let request_uri = "/certificates";
@@ -8127,32 +8478,42 @@ match input.page_size {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListCertificatesError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListCertificatesError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>List the device certificates signed by the specified CA certificate.</p>"]
-                fn list_certificates_by_ca(&self, input: &ListCertificatesByCARequest) -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError> {
+                fn list_certificates_by_ca(&self, input: &ListCertificatesByCARequest) -> Box<Future<Item = ListCertificatesByCAResponse, Error = ListCertificatesByCAError>> {
                     
 
                     let request_uri = format!("/certificates-by-ca/{ca_certificate_id}", ca_certificate_id = input.ca_certificate_id);
@@ -8176,32 +8537,42 @@ match input.page_size {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListCertificatesByCAError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListCertificatesByCAError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCertificatesByCAResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListCertificatesByCAError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListCertificatesByCAResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListCertificatesByCAError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists certificates that are being transfered but not yet accepted.</p>"]
-                fn list_outgoing_certificates(&self, input: &ListOutgoingCertificatesRequest) -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
+                fn list_outgoing_certificates(&self, input: &ListOutgoingCertificatesRequest) -> Box<Future<Item = ListOutgoingCertificatesResponse, Error = ListOutgoingCertificatesError>> {
                     
 
                     let request_uri = "/certificates-out-going";
@@ -8225,32 +8596,42 @@ match input.page_size {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListOutgoingCertificatesError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListOutgoingCertificatesError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOutgoingCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListOutgoingCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListOutgoingCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListOutgoingCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists your policies.</p>"]
-                fn list_policies(&self, input: &ListPoliciesRequest) -> Result<ListPoliciesResponse, ListPoliciesError> {
+                fn list_policies(&self, input: &ListPoliciesRequest) -> Box<Future<Item = ListPoliciesResponse, Error = ListPoliciesError>> {
                     
 
                     let request_uri = "/policies";
@@ -8274,32 +8655,42 @@ match input.page_size {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPoliciesError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPoliciesError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPoliciesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListPoliciesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the principals associated with the specified policy.</p>"]
-                fn list_policy_principals(&self, input: &ListPolicyPrincipalsRequest) -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
+                fn list_policy_principals(&self, input: &ListPolicyPrincipalsRequest) -> Box<Future<Item = ListPolicyPrincipalsResponse, Error = ListPolicyPrincipalsError>> {
                     
 
                     let request_uri = "/policy-principals";
@@ -8323,32 +8714,42 @@ match input.page_size {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPolicyPrincipalsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPolicyPrincipalsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPolicyPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListPolicyPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListPolicyPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListPolicyPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the versions of the specified policy and identifies the default version.</p>"]
-                fn list_policy_versions(&self, input: &ListPolicyVersionsRequest) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError> {
+                fn list_policy_versions(&self, input: &ListPolicyVersionsRequest) -> Box<Future<Item = ListPolicyVersionsResponse, Error = ListPolicyVersionsError>> {
                     
 
                     let request_uri = format!("/policies/{policy_name}/version", policy_name = input.policy_name);
@@ -8359,32 +8760,42 @@ match input.page_size {
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPolicyVersionsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPolicyVersionsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPolicyVersionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListPolicyVersionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href=\"http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax\">AmazonCognito Identity format</a>.</p>"]
-                fn list_principal_policies(&self, input: &ListPrincipalPoliciesRequest) -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
+                fn list_principal_policies(&self, input: &ListPrincipalPoliciesRequest) -> Box<Future<Item = ListPrincipalPoliciesResponse, Error = ListPrincipalPoliciesError>> {
                     
 
                     let request_uri = "/principal-policies";
@@ -8408,32 +8819,42 @@ match input.page_size {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPrincipalPoliciesError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPrincipalPoliciesError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPrincipalPoliciesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListPrincipalPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListPrincipalPoliciesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListPrincipalPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the things associated with the specified principal.</p>"]
-                fn list_principal_things(&self, input: &ListPrincipalThingsRequest) -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError> {
+                fn list_principal_things(&self, input: &ListPrincipalThingsRequest) -> Box<Future<Item = ListPrincipalThingsResponse, Error = ListPrincipalThingsError>> {
                     
 
                     let request_uri = "/principals/things";
@@ -8453,32 +8874,42 @@ match input.next_token {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListPrincipalThingsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListPrincipalThingsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPrincipalThingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListPrincipalThingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListPrincipalThingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListPrincipalThingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the principals associated with the specified thing.</p>"]
-                fn list_thing_principals(&self, input: &ListThingPrincipalsRequest) -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError> {
+                fn list_thing_principals(&self, input: &ListThingPrincipalsRequest) -> Box<Future<Item = ListThingPrincipalsResponse, Error = ListThingPrincipalsError>> {
                     
 
                     let request_uri = format!("/things/{thing_name}/principals", thing_name = input.thing_name);
@@ -8489,32 +8920,42 @@ match input.next_token {
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListThingPrincipalsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListThingPrincipalsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListThingPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListThingPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListThingPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListThingPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the existing thing types.</p>"]
-                fn list_thing_types(&self, input: &ListThingTypesRequest) -> Result<ListThingTypesResponse, ListThingTypesError> {
+                fn list_thing_types(&self, input: &ListThingTypesRequest) -> Box<Future<Item = ListThingTypesResponse, Error = ListThingTypesError>> {
                     
 
                     let request_uri = "/thing-types";
@@ -8538,32 +8979,42 @@ match input.thing_type_name {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListThingTypesError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListThingTypesError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListThingTypesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListThingTypesError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListThingTypesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListThingTypesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>"]
-                fn list_things(&self, input: &ListThingsRequest) -> Result<ListThingsResponse, ListThingsError> {
+                fn list_things(&self, input: &ListThingsRequest) -> Box<Future<Item = ListThingsResponse, Error = ListThingsError>> {
                     
 
                     let request_uri = "/things";
@@ -8595,32 +9046,42 @@ match input.thing_type_name {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListThingsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListThingsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListThingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListThingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListThingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListThingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the rules for the specific topic.</p>"]
-                fn list_topic_rules(&self, input: &ListTopicRulesRequest) -> Result<ListTopicRulesResponse, ListTopicRulesError> {
+                fn list_topic_rules(&self, input: &ListTopicRulesRequest) -> Box<Future<Item = ListTopicRulesResponse, Error = ListTopicRulesError>> {
                     
 
                     let request_uri = "/rules";
@@ -8648,32 +9109,42 @@ match input.topic {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListTopicRulesError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListTopicRulesError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTopicRulesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(ListTopicRulesError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<ListTopicRulesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(ListTopicRulesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field and public key. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
-                fn register_ca_certificate(&self, input: &RegisterCACertificateRequest) -> Result<RegisterCACertificateResponse, RegisterCACertificateError> {
+                fn register_ca_certificate(&self, input: &RegisterCACertificateRequest) -> Box<Future<Item = RegisterCACertificateResponse, Error = RegisterCACertificateError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/cacertificate";
@@ -8693,32 +9164,42 @@ match input.set_as_active {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterCACertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterCACertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(RegisterCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RegisterCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(RegisterCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>"]
-                fn register_certificate(&self, input: &RegisterCertificateRequest) -> Result<RegisterCertificateResponse, RegisterCertificateError> {
+                fn register_certificate(&self, input: &RegisterCertificateRequest) -> Box<Future<Item = RegisterCertificateResponse, Error = RegisterCertificateError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/certificate/register";
@@ -8729,32 +9210,42 @@ match input.set_as_active {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RegisterCertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RegisterCertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(RegisterCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<RegisterCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(RegisterCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>"]
-                fn reject_certificate_transfer(&self, input: &RejectCertificateTransferRequest) -> Result<(), RejectCertificateTransferError> {
+                fn reject_certificate_transfer(&self, input: &RejectCertificateTransferRequest) -> Box<Future<Item = (), Error = RejectCertificateTransferError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/reject-certificate-transfer/{certificate_id}", certificate_id = input.certificate_id);
@@ -8765,32 +9256,42 @@ match input.set_as_active {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(RejectCertificateTransferError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| RejectCertificateTransferError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(RejectCertificateTransferError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(RejectCertificateTransferError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
-                fn replace_topic_rule(&self, input: &ReplaceTopicRuleRequest) -> Result<(), ReplaceTopicRuleError> {
+                fn replace_topic_rule(&self, input: &ReplaceTopicRuleRequest) -> Box<Future<Item = (), Error = ReplaceTopicRuleError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
@@ -8801,32 +9302,42 @@ match input.set_as_active {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReplaceTopicRuleError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReplaceTopicRuleError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(ReplaceTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(ReplaceTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>"]
-                fn set_default_policy_version(&self, input: &SetDefaultPolicyVersionRequest) -> Result<(), SetDefaultPolicyVersionError> {
+                fn set_default_policy_version(&self, input: &SetDefaultPolicyVersionRequest) -> Box<Future<Item = (), Error = SetDefaultPolicyVersionError>> {
                     
 
                     let request_uri = format!("/policies/{policy_name}/version/{policy_version_id}", policy_name = input.policy_name, policy_version_id = input.policy_version_id);
@@ -8837,32 +9348,42 @@ match input.set_as_active {
                     
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetDefaultPolicyVersionError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetDefaultPolicyVersionError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the logging options.</p>"]
-                fn set_logging_options(&self, input: &SetLoggingOptionsRequest) -> Result<(), SetLoggingOptionsError> {
+                fn set_logging_options(&self, input: &SetLoggingOptionsRequest) -> Box<Future<Item = (), Error = SetLoggingOptionsError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = "/loggingOptions";
@@ -8873,32 +9394,42 @@ match input.set_as_active {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetLoggingOptionsError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetLoggingOptionsError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(SetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(SetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>"]
-                fn transfer_certificate(&self, input: &TransferCertificateRequest) -> Result<TransferCertificateResponse, TransferCertificateError> {
+                fn transfer_certificate(&self, input: &TransferCertificateRequest) -> Box<Future<Item = TransferCertificateResponse, Error = TransferCertificateError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/transfer-certificate/{certificate_id}", certificate_id = input.certificate_id);
@@ -8911,32 +9442,42 @@ match input.set_as_active {
                 params.put("targetAwsAccount", &input.target_aws_account.to_string());
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(TransferCertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| TransferCertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TransferCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(TransferCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<TransferCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(TransferCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a registered CA certificate.</p>"]
-                fn update_ca_certificate(&self, input: &UpdateCACertificateRequest) -> Result<(), UpdateCACertificateError> {
+                fn update_ca_certificate(&self, input: &UpdateCACertificateRequest) -> Box<Future<Item = (), Error = UpdateCACertificateError>> {
                     
 
                     let request_uri = format!("/cacertificate/{ca_certificate_id}", ca_certificate_id = input.certificate_id);
@@ -8956,32 +9497,42 @@ match input.new_status {
                     }
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateCACertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateCACertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(UpdateCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(UpdateCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>"]
-                fn update_certificate(&self, input: &UpdateCertificateRequest) -> Result<(), UpdateCertificateError> {
+                fn update_certificate(&self, input: &UpdateCertificateRequest) -> Box<Future<Item = (), Error = UpdateCertificateError>> {
                     
 
                     let request_uri = format!("/certificates/{certificate_id}", certificate_id = input.certificate_id);
@@ -8994,32 +9545,42 @@ match input.new_status {
                 params.put("newStatus", &input.new_status.to_string());
                 request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateCertificateError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateCertificateError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(())
-                        }
-                         _ => Err(UpdateCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(())
+                                }
+                                 _ => future::err(UpdateCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the data for a thing.</p>"]
-                fn update_thing(&self, input: &UpdateThingRequest) -> Result<UpdateThingResponse, UpdateThingError> {
+                fn update_thing(&self, input: &UpdateThingRequest) -> Box<Future<Item = UpdateThingResponse, Error = UpdateThingError>> {
                     let encoded = serde_json::to_string(input).unwrap();
 
                     let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
@@ -9030,27 +9591,37 @@ match input.new_status {
                     request.set_payload(Some(encoded.into_bytes()));
                     
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateThingError::from(err)))
+                    };
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as "null", but AWS returns
-                    // "{}" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b"{}" {
-                        body = b"null".to_vec();
-                    }
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateThingError::from(dispatch_err))
+                        .and_then(|result| {
+                            let mut body = result.body;
 
-                    debug!("Response body: {:?}", body);
-                    debug!("Response status: {}", result.status);
+                            // `serde-json` serializes field-less structs as "null", but AWS returns
+                            // "{}" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == b"{}" {
+                                body = b"null".to_vec();
+                            }
 
-                    match result.status {
-                        StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateThingResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-                         _ => Err(UpdateThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }
+                            debug!("Response body: {:?}", body);
+                            debug!("Response status: {}", result.status);
+
+                            match result.status {
+                                StatusCode::Ok => {
+                                    future::ok(serde_json::from_str::<UpdateThingResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                                }
+                                 _ => future::err(UpdateThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                            }
+                        });
+
+                    Box::new(res)
                 }
                 
 }

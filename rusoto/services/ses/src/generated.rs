@@ -18,6 +18,16 @@ use std::str::FromStr;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
             use rusoto_core::xmlerror::*;
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
 
             enum DeserializerNext {
                 Close,
@@ -9147,199 +9157,199 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn clone_receipt_rule_set(&self, input: &CloneReceiptRuleSetRequest) -> Result<CloneReceiptRuleSetResponse, CloneReceiptRuleSetError>;
+                fn clone_receipt_rule_set(&self, input: &CloneReceiptRuleSetRequest) -> Box<Future<Item = CloneReceiptRuleSetResponse, Error = CloneReceiptRuleSetError>>;
                 
 
                 #[doc="<p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_configuration_set(&self, input: &CreateConfigurationSetRequest) -> Result<CreateConfigurationSetResponse, CreateConfigurationSetError>;
+                fn create_configuration_set(&self, input: &CreateConfigurationSetRequest) -> Box<Future<Item = CreateConfigurationSetResponse, Error = CreateConfigurationSetError>>;
                 
 
                 #[doc="<p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be either Amazon CloudWatch or Amazon Kinesis Firehose.</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_configuration_set_event_destination(&self, input: &CreateConfigurationSetEventDestinationRequest) -> Result<CreateConfigurationSetEventDestinationResponse, CreateConfigurationSetEventDestinationError>;
+                fn create_configuration_set_event_destination(&self, input: &CreateConfigurationSetEventDestinationRequest) -> Box<Future<Item = CreateConfigurationSetEventDestinationResponse, Error = CreateConfigurationSetEventDestinationError>>;
                 
 
                 #[doc="<p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_receipt_filter(&self, input: &CreateReceiptFilterRequest) -> Result<CreateReceiptFilterResponse, CreateReceiptFilterError>;
+                fn create_receipt_filter(&self, input: &CreateReceiptFilterRequest) -> Box<Future<Item = CreateReceiptFilterResponse, Error = CreateReceiptFilterError>>;
                 
 
                 #[doc="<p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_receipt_rule(&self, input: &CreateReceiptRuleRequest) -> Result<CreateReceiptRuleResponse, CreateReceiptRuleError>;
+                fn create_receipt_rule(&self, input: &CreateReceiptRuleRequest) -> Box<Future<Item = CreateReceiptRuleResponse, Error = CreateReceiptRuleError>>;
                 
 
                 #[doc="<p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_receipt_rule_set(&self, input: &CreateReceiptRuleSetRequest) -> Result<CreateReceiptRuleSetResponse, CreateReceiptRuleSetError>;
+                fn create_receipt_rule_set(&self, input: &CreateReceiptRuleSetRequest) -> Box<Future<Item = CreateReceiptRuleSetResponse, Error = CreateReceiptRuleSetError>>;
                 
 
                 #[doc="<p>Deletes a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_configuration_set(&self, input: &DeleteConfigurationSetRequest) -> Result<DeleteConfigurationSetResponse, DeleteConfigurationSetError>;
+                fn delete_configuration_set(&self, input: &DeleteConfigurationSetRequest) -> Box<Future<Item = DeleteConfigurationSetResponse, Error = DeleteConfigurationSetError>>;
                 
 
                 #[doc="<p>Deletes a configuration set event destination.</p> <p>Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_configuration_set_event_destination(&self, input: &DeleteConfigurationSetEventDestinationRequest) -> Result<DeleteConfigurationSetEventDestinationResponse, DeleteConfigurationSetEventDestinationError>;
+                fn delete_configuration_set_event_destination(&self, input: &DeleteConfigurationSetEventDestinationRequest) -> Box<Future<Item = DeleteConfigurationSetEventDestinationResponse, Error = DeleteConfigurationSetEventDestinationError>>;
                 
 
                 #[doc="<p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_identity(&self, input: &DeleteIdentityRequest) -> Result<DeleteIdentityResponse, DeleteIdentityError>;
+                fn delete_identity(&self, input: &DeleteIdentityRequest) -> Box<Future<Item = DeleteIdentityResponse, Error = DeleteIdentityError>>;
                 
 
                 #[doc="<p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_identity_policy(&self, input: &DeleteIdentityPolicyRequest) -> Result<DeleteIdentityPolicyResponse, DeleteIdentityPolicyError>;
+                fn delete_identity_policy(&self, input: &DeleteIdentityPolicyRequest) -> Box<Future<Item = DeleteIdentityPolicyResponse, Error = DeleteIdentityPolicyError>>;
                 
 
                 #[doc="<p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_receipt_filter(&self, input: &DeleteReceiptFilterRequest) -> Result<DeleteReceiptFilterResponse, DeleteReceiptFilterError>;
+                fn delete_receipt_filter(&self, input: &DeleteReceiptFilterRequest) -> Box<Future<Item = DeleteReceiptFilterResponse, Error = DeleteReceiptFilterError>>;
                 
 
                 #[doc="<p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_receipt_rule(&self, input: &DeleteReceiptRuleRequest) -> Result<DeleteReceiptRuleResponse, DeleteReceiptRuleError>;
+                fn delete_receipt_rule(&self, input: &DeleteReceiptRuleRequest) -> Box<Future<Item = DeleteReceiptRuleResponse, Error = DeleteReceiptRuleError>>;
                 
 
                 #[doc="<p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_receipt_rule_set(&self, input: &DeleteReceiptRuleSetRequest) -> Result<DeleteReceiptRuleSetResponse, DeleteReceiptRuleSetError>;
+                fn delete_receipt_rule_set(&self, input: &DeleteReceiptRuleSetRequest) -> Box<Future<Item = DeleteReceiptRuleSetResponse, Error = DeleteReceiptRuleSetError>>;
                 
 
                 #[doc="<p>Deletes the specified email address from the list of verified addresses.</p> <important> <p>The DeleteVerifiedEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The DeleteIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
-                fn delete_verified_email_address(&self, input: &DeleteVerifiedEmailAddressRequest) -> Result<(), DeleteVerifiedEmailAddressError>;
+                fn delete_verified_email_address(&self, input: &DeleteVerifiedEmailAddressRequest) -> Box<Future<Item = (), Error = DeleteVerifiedEmailAddressError>>;
                 
 
                 #[doc="<p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn describe_active_receipt_rule_set(&self, input: &DescribeActiveReceiptRuleSetRequest) -> Result<DescribeActiveReceiptRuleSetResponse, DescribeActiveReceiptRuleSetError>;
+                fn describe_active_receipt_rule_set(&self, input: &DescribeActiveReceiptRuleSetRequest) -> Box<Future<Item = DescribeActiveReceiptRuleSetResponse, Error = DescribeActiveReceiptRuleSetError>>;
                 
 
                 #[doc="<p>Returns the details of the specified configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn describe_configuration_set(&self, input: &DescribeConfigurationSetRequest) -> Result<DescribeConfigurationSetResponse, DescribeConfigurationSetError>;
+                fn describe_configuration_set(&self, input: &DescribeConfigurationSetRequest) -> Box<Future<Item = DescribeConfigurationSetResponse, Error = DescribeConfigurationSetError>>;
                 
 
                 #[doc="<p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn describe_receipt_rule(&self, input: &DescribeReceiptRuleRequest) -> Result<DescribeReceiptRuleResponse, DescribeReceiptRuleError>;
+                fn describe_receipt_rule(&self, input: &DescribeReceiptRuleRequest) -> Box<Future<Item = DescribeReceiptRuleResponse, Error = DescribeReceiptRuleError>>;
                 
 
                 #[doc="<p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn describe_receipt_rule_set(&self, input: &DescribeReceiptRuleSetRequest) -> Result<DescribeReceiptRuleSetResponse, DescribeReceiptRuleSetError>;
+                fn describe_receipt_rule_set(&self, input: &DescribeReceiptRuleSetRequest) -> Box<Future<Item = DescribeReceiptRuleSetResponse, Error = DescribeReceiptRuleSetError>>;
                 
 
                 #[doc="<p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this action also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This action takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This action is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn get_identity_dkim_attributes(&self, input: &GetIdentityDkimAttributesRequest) -> Result<GetIdentityDkimAttributesResponse, GetIdentityDkimAttributesError>;
+                fn get_identity_dkim_attributes(&self, input: &GetIdentityDkimAttributesRequest) -> Box<Future<Item = GetIdentityDkimAttributesResponse, Error = GetIdentityDkimAttributesError>>;
                 
 
                 #[doc="<p>Returns the custom MAIL FROM attributes for a list of identities (email addresses and/or domains).</p> <p>This action is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>"]
-                fn get_identity_mail_from_domain_attributes(&self, input: &GetIdentityMailFromDomainAttributesRequest) -> Result<GetIdentityMailFromDomainAttributesResponse, GetIdentityMailFromDomainAttributesError>;
+                fn get_identity_mail_from_domain_attributes(&self, input: &GetIdentityMailFromDomainAttributesRequest) -> Box<Future<Item = GetIdentityMailFromDomainAttributesResponse, Error = GetIdentityMailFromDomainAttributesError>>;
                 
 
                 #[doc="<p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This action is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn get_identity_notification_attributes(&self, input: &GetIdentityNotificationAttributesRequest) -> Result<GetIdentityNotificationAttributesResponse, GetIdentityNotificationAttributesError>;
+                fn get_identity_notification_attributes(&self, input: &GetIdentityNotificationAttributesRequest) -> Box<Future<Item = GetIdentityNotificationAttributesResponse, Error = GetIdentityNotificationAttributesError>>;
                 
 
                 #[doc="<p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn get_identity_policies(&self, input: &GetIdentityPoliciesRequest) -> Result<GetIdentityPoliciesResponse, GetIdentityPoliciesError>;
+                fn get_identity_policies(&self, input: &GetIdentityPoliciesRequest) -> Box<Future<Item = GetIdentityPoliciesResponse, Error = GetIdentityPoliciesError>>;
                 
 
                 #[doc="<p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>"]
-                fn get_identity_verification_attributes(&self, input: &GetIdentityVerificationAttributesRequest) -> Result<GetIdentityVerificationAttributesResponse, GetIdentityVerificationAttributesError>;
+                fn get_identity_verification_attributes(&self, input: &GetIdentityVerificationAttributesRequest) -> Box<Future<Item = GetIdentityVerificationAttributesResponse, Error = GetIdentityVerificationAttributesError>>;
                 
 
                 #[doc="<p>Returns the user's current sending limits.</p> <p>This action is throttled at one request per second.</p>"]
-                fn get_send_quota(&self) -> Result<GetSendQuotaResponse, GetSendQuotaError>;
+                fn get_send_quota(&self) -> Box<Future<Item = GetSendQuotaResponse, Error = GetSendQuotaError>>;
                 
 
                 #[doc="<p>Returns the user's sending statistics. The result is a list of data points, representing the last two weeks of sending activity.</p> <p>Each data point in the list contains statistics for a 15-minute interval.</p> <p>This action is throttled at one request per second.</p>"]
-                fn get_send_statistics(&self) -> Result<GetSendStatisticsResponse, GetSendStatisticsError>;
+                fn get_send_statistics(&self) -> Box<Future<Item = GetSendStatisticsResponse, Error = GetSendStatisticsError>>;
                 
 
                 #[doc="<p>Lists the configuration sets associated with your AWS account.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second and can return up to 50 configuration sets at a time.</p>"]
-                fn list_configuration_sets(&self, input: &ListConfigurationSetsRequest) -> Result<ListConfigurationSetsResponse, ListConfigurationSetsError>;
+                fn list_configuration_sets(&self, input: &ListConfigurationSetsRequest) -> Box<Future<Item = ListConfigurationSetsResponse, Error = ListConfigurationSetsError>>;
                 
 
                 #[doc="<p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>This action is throttled at one request per second.</p>"]
-                fn list_identities(&self, input: &ListIdentitiesRequest) -> Result<ListIdentitiesResponse, ListIdentitiesError>;
+                fn list_identities(&self, input: &ListIdentitiesRequest) -> Box<Future<Item = ListIdentitiesResponse, Error = ListIdentitiesError>>;
                 
 
                 #[doc="<p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn list_identity_policies(&self, input: &ListIdentityPoliciesRequest) -> Result<ListIdentityPoliciesResponse, ListIdentityPoliciesError>;
+                fn list_identity_policies(&self, input: &ListIdentityPoliciesRequest) -> Box<Future<Item = ListIdentityPoliciesResponse, Error = ListIdentityPoliciesError>>;
                 
 
                 #[doc="<p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn list_receipt_filters(&self, input: &ListReceiptFiltersRequest) -> Result<ListReceiptFiltersResponse, ListReceiptFiltersError>;
+                fn list_receipt_filters(&self, input: &ListReceiptFiltersRequest) -> Box<Future<Item = ListReceiptFiltersResponse, Error = ListReceiptFiltersError>>;
                 
 
                 #[doc="<p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn list_receipt_rule_sets(&self, input: &ListReceiptRuleSetsRequest) -> Result<ListReceiptRuleSetsResponse, ListReceiptRuleSetsError>;
+                fn list_receipt_rule_sets(&self, input: &ListReceiptRuleSetsRequest) -> Box<Future<Item = ListReceiptRuleSetsResponse, Error = ListReceiptRuleSetsError>>;
                 
 
                 #[doc="<p>Returns a list containing all of the email addresses that have been verified.</p> <important> <p>The ListVerifiedEmailAddresses action is deprecated as of the May 15, 2012 release of Domain Verification. The ListIdentities action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
-                fn list_verified_email_addresses(&self) -> Result<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError>;
+                fn list_verified_email_addresses(&self) -> Box<Future<Item = ListVerifiedEmailAddressesResponse, Error = ListVerifiedEmailAddressesError>>;
                 
 
                 #[doc="<p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn put_identity_policy(&self, input: &PutIdentityPolicyRequest) -> Result<PutIdentityPolicyResponse, PutIdentityPolicyError>;
+                fn put_identity_policy(&self, input: &PutIdentityPolicyRequest) -> Box<Future<Item = PutIdentityPolicyResponse, Error = PutIdentityPolicyError>>;
                 
 
                 #[doc="<p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn reorder_receipt_rule_set(&self, input: &ReorderReceiptRuleSetRequest) -> Result<ReorderReceiptRuleSetResponse, ReorderReceiptRuleSetError>;
+                fn reorder_receipt_rule_set(&self, input: &ReorderReceiptRuleSetRequest) -> Box<Future<Item = ReorderReceiptRuleSetResponse, Error = ReorderReceiptRuleSetError>>;
                 
 
                 #[doc="<p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn send_bounce(&self, input: &SendBounceRequest) -> Result<SendBounceResponse, SendBounceError>;
+                fn send_bounce(&self, input: &SendBounceRequest) -> Box<Future<Item = SendBounceResponse, Error = SendBounceError>>;
                 
 
                 #[doc="<p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
-                fn send_email(&self, input: &SendEmailRequest) -> Result<SendEmailResponse, SendEmailError>;
+                fn send_email(&self, input: &SendEmailRequest) -> Box<Future<Item = SendEmailResponse, Error = SendEmailError>>;
                 
 
                 #[doc="<p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email's \"Source,\" \"From,\" and \"Return-Path\" parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the \"From\" address and the \"Return Path\" address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
-                fn send_raw_email(&self, input: &SendRawEmailRequest) -> Result<SendRawEmailResponse, SendRawEmailError>;
+                fn send_raw_email(&self, input: &SendRawEmailRequest) -> Box<Future<Item = SendRawEmailResponse, Error = SendRawEmailError>>;
                 
 
                 #[doc="<p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn set_active_receipt_rule_set(&self, input: &SetActiveReceiptRuleSetRequest) -> Result<SetActiveReceiptRuleSetResponse, SetActiveReceiptRuleSetError>;
+                fn set_active_receipt_rule_set(&self, input: &SetActiveReceiptRuleSetRequest) -> Box<Future<Item = SetActiveReceiptRuleSetResponse, Error = SetActiveReceiptRuleSetError>>;
                 
 
                 #[doc="<p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (e.g., <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (e.g., <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (e.g., <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (e.g., <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> action.</p> <p>This action is throttled at one request per second.</p> <p>For more information about Easy DKIM signing, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn set_identity_dkim_enabled(&self, input: &SetIdentityDkimEnabledRequest) -> Result<SetIdentityDkimEnabledResponse, SetIdentityDkimEnabledError>;
+                fn set_identity_dkim_enabled(&self, input: &SetIdentityDkimEnabledRequest) -> Box<Future<Item = SetIdentityDkimEnabledResponse, Error = SetIdentityDkimEnabledError>>;
                 
 
                 #[doc="<p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn set_identity_feedback_forwarding_enabled(&self, input: &SetIdentityFeedbackForwardingEnabledRequest) -> Result<SetIdentityFeedbackForwardingEnabledResponse, SetIdentityFeedbackForwardingEnabledError>;
+                fn set_identity_feedback_forwarding_enabled(&self, input: &SetIdentityFeedbackForwardingEnabledRequest) -> Box<Future<Item = SetIdentityFeedbackForwardingEnabledResponse, Error = SetIdentityFeedbackForwardingEnabledError>>;
                 
 
                 #[doc="<p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeadersInNotificationsEnabledRequest) -> Result<SetIdentityHeadersInNotificationsEnabledResponse, SetIdentityHeadersInNotificationsEnabledError>;
+                fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeadersInNotificationsEnabledRequest) -> Box<Future<Item = SetIdentityHeadersInNotificationsEnabledResponse, Error = SetIdentityHeadersInNotificationsEnabledError>>;
                 
 
                 #[doc="<p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html\">Amazon SES Developer Guide</a>.</p> </important> <p>This action is throttled at one request per second.</p>"]
-                fn set_identity_mail_from_domain(&self, input: &SetIdentityMailFromDomainRequest) -> Result<SetIdentityMailFromDomainResponse, SetIdentityMailFromDomainError>;
+                fn set_identity_mail_from_domain(&self, input: &SetIdentityMailFromDomainRequest) -> Box<Future<Item = SetIdentityMailFromDomainResponse, Error = SetIdentityMailFromDomainError>>;
                 
 
                 #[doc="<p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about feedback notification, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn set_identity_notification_topic(&self, input: &SetIdentityNotificationTopicRequest) -> Result<SetIdentityNotificationTopicResponse, SetIdentityNotificationTopicError>;
+                fn set_identity_notification_topic(&self, input: &SetIdentityNotificationTopicRequest) -> Box<Future<Item = SetIdentityNotificationTopicResponse, Error = SetIdentityNotificationTopicError>>;
                 
 
                 #[doc="<p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn set_receipt_rule_position(&self, input: &SetReceiptRulePositionRequest) -> Result<SetReceiptRulePositionResponse, SetReceiptRulePositionError>;
+                fn set_receipt_rule_position(&self, input: &SetReceiptRulePositionRequest) -> Box<Future<Item = SetReceiptRulePositionResponse, Error = SetReceiptRulePositionError>>;
                 
 
                 #[doc="<p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be either Amazon CloudWatch or Amazon Kinesis Firehose.</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch or Amazon Kinesis Firehose. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn update_configuration_set_event_destination(&self, input: &UpdateConfigurationSetEventDestinationRequest) -> Result<UpdateConfigurationSetEventDestinationResponse, UpdateConfigurationSetEventDestinationError>;
+                fn update_configuration_set_event_destination(&self, input: &UpdateConfigurationSetEventDestinationRequest) -> Box<Future<Item = UpdateConfigurationSetEventDestinationResponse, Error = UpdateConfigurationSetEventDestinationError>>;
                 
 
                 #[doc="<p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn update_receipt_rule(&self, input: &UpdateReceiptRuleRequest) -> Result<UpdateReceiptRuleResponse, UpdateReceiptRuleError>;
+                fn update_receipt_rule(&self, input: &UpdateReceiptRuleRequest) -> Box<Future<Item = UpdateReceiptRuleResponse, Error = UpdateReceiptRuleError>>;
                 
 
                 #[doc="<p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>This action is throttled at one request per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> action.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn verify_domain_dkim(&self, input: &VerifyDomainDkimRequest) -> Result<VerifyDomainDkimResponse, VerifyDomainDkimError>;
+                fn verify_domain_dkim(&self, input: &VerifyDomainDkimRequest) -> Box<Future<Item = VerifyDomainDkimResponse, Error = VerifyDomainDkimError>>;
                 
 
                 #[doc="<p>Verifies a domain.</p> <p>This action is throttled at one request per second.</p>"]
-                fn verify_domain_identity(&self, input: &VerifyDomainIdentityRequest) -> Result<VerifyDomainIdentityResponse, VerifyDomainIdentityError>;
+                fn verify_domain_identity(&self, input: &VerifyDomainIdentityRequest) -> Box<Future<Item = VerifyDomainIdentityResponse, Error = VerifyDomainIdentityError>>;
                 
 
                 #[doc="<p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <important> <p>The VerifyEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The VerifyEmailIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
-                fn verify_email_address(&self, input: &VerifyEmailAddressRequest) -> Result<(), VerifyEmailAddressError>;
+                fn verify_email_address(&self, input: &VerifyEmailAddressRequest) -> Box<Future<Item = (), Error = VerifyEmailAddressError>>;
                 
 
                 #[doc="<p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <p>This action is throttled at one request per second.</p>"]
-                fn verify_email_identity(&self, input: &VerifyEmailIdentityRequest) -> Result<VerifyEmailIdentityResponse, VerifyEmailIdentityError>;
+                fn verify_email_identity(&self, input: &VerifyEmailIdentityRequest) -> Box<Future<Item = VerifyEmailIdentityResponse, Error = VerifyEmailIdentityError>>;
                 
 }
 /// A client for the Amazon SES API.
@@ -9363,7 +9373,7 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
         
 
                 #[doc="<p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn clone_receipt_rule_set(&self, input: &CloneReceiptRuleSetRequest) -> Result<CloneReceiptRuleSetResponse, CloneReceiptRuleSetError> {
+                fn clone_receipt_rule_set(&self, input: &CloneReceiptRuleSetRequest) -> Box<Future<Item = CloneReceiptRuleSetResponse, Error = CloneReceiptRuleSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9372,11 +9382,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     CloneReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CloneReceiptRuleSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CloneReceiptRuleSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9388,23 +9406,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CloneReceiptRuleSetResponseDeserializer::deserialize("CloneReceiptRuleSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CloneReceiptRuleSetResponseDeserializer::deserialize("CloneReceiptRuleSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CloneReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CloneReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_configuration_set(&self, input: &CreateConfigurationSetRequest) -> Result<CreateConfigurationSetResponse, CreateConfigurationSetError> {
+                fn create_configuration_set(&self, input: &CreateConfigurationSetRequest) -> Box<Future<Item = CreateConfigurationSetResponse, Error = CreateConfigurationSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9413,11 +9432,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     CreateConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateConfigurationSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateConfigurationSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9429,23 +9456,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateConfigurationSetResponseDeserializer::deserialize("CreateConfigurationSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateConfigurationSetResponseDeserializer::deserialize("CreateConfigurationSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateConfigurationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateConfigurationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be either Amazon CloudWatch or Amazon Kinesis Firehose.</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_configuration_set_event_destination(&self, input: &CreateConfigurationSetEventDestinationRequest) -> Result<CreateConfigurationSetEventDestinationResponse, CreateConfigurationSetEventDestinationError> {
+                fn create_configuration_set_event_destination(&self, input: &CreateConfigurationSetEventDestinationRequest) -> Box<Future<Item = CreateConfigurationSetEventDestinationResponse, Error = CreateConfigurationSetEventDestinationError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9454,11 +9482,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     CreateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateConfigurationSetEventDestinationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateConfigurationSetEventDestinationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9470,23 +9506,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateConfigurationSetEventDestinationResponseDeserializer::deserialize("CreateConfigurationSetEventDestinationResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateConfigurationSetEventDestinationResponseDeserializer::deserialize("CreateConfigurationSetEventDestinationResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_receipt_filter(&self, input: &CreateReceiptFilterRequest) -> Result<CreateReceiptFilterResponse, CreateReceiptFilterError> {
+                fn create_receipt_filter(&self, input: &CreateReceiptFilterRequest) -> Box<Future<Item = CreateReceiptFilterResponse, Error = CreateReceiptFilterError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9495,11 +9532,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     CreateReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateReceiptFilterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateReceiptFilterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9511,23 +9556,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateReceiptFilterResponseDeserializer::deserialize("CreateReceiptFilterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateReceiptFilterResponseDeserializer::deserialize("CreateReceiptFilterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateReceiptFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateReceiptFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_receipt_rule(&self, input: &CreateReceiptRuleRequest) -> Result<CreateReceiptRuleResponse, CreateReceiptRuleError> {
+                fn create_receipt_rule(&self, input: &CreateReceiptRuleRequest) -> Box<Future<Item = CreateReceiptRuleResponse, Error = CreateReceiptRuleError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9536,11 +9582,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     CreateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateReceiptRuleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateReceiptRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9552,23 +9606,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateReceiptRuleResponseDeserializer::deserialize("CreateReceiptRuleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateReceiptRuleResponseDeserializer::deserialize("CreateReceiptRuleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateReceiptRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateReceiptRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn create_receipt_rule_set(&self, input: &CreateReceiptRuleSetRequest) -> Result<CreateReceiptRuleSetResponse, CreateReceiptRuleSetError> {
+                fn create_receipt_rule_set(&self, input: &CreateReceiptRuleSetRequest) -> Box<Future<Item = CreateReceiptRuleSetResponse, Error = CreateReceiptRuleSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9577,11 +9632,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     CreateReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(CreateReceiptRuleSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| CreateReceiptRuleSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9593,23 +9656,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateReceiptRuleSetResponseDeserializer::deserialize("CreateReceiptRuleSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(CreateReceiptRuleSetResponseDeserializer::deserialize("CreateReceiptRuleSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(CreateReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_configuration_set(&self, input: &DeleteConfigurationSetRequest) -> Result<DeleteConfigurationSetResponse, DeleteConfigurationSetError> {
+                fn delete_configuration_set(&self, input: &DeleteConfigurationSetRequest) -> Box<Future<Item = DeleteConfigurationSetResponse, Error = DeleteConfigurationSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9618,11 +9682,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DeleteConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteConfigurationSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteConfigurationSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9634,23 +9706,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteConfigurationSetResponseDeserializer::deserialize("DeleteConfigurationSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteConfigurationSetResponseDeserializer::deserialize("DeleteConfigurationSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteConfigurationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteConfigurationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes a configuration set event destination.</p> <p>Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_configuration_set_event_destination(&self, input: &DeleteConfigurationSetEventDestinationRequest) -> Result<DeleteConfigurationSetEventDestinationResponse, DeleteConfigurationSetEventDestinationError> {
+                fn delete_configuration_set_event_destination(&self, input: &DeleteConfigurationSetEventDestinationRequest) -> Box<Future<Item = DeleteConfigurationSetEventDestinationResponse, Error = DeleteConfigurationSetEventDestinationError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9659,11 +9732,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DeleteConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteConfigurationSetEventDestinationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteConfigurationSetEventDestinationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9675,23 +9756,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteConfigurationSetEventDestinationResponseDeserializer::deserialize("DeleteConfigurationSetEventDestinationResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteConfigurationSetEventDestinationResponseDeserializer::deserialize("DeleteConfigurationSetEventDestinationResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_identity(&self, input: &DeleteIdentityRequest) -> Result<DeleteIdentityResponse, DeleteIdentityError> {
+                fn delete_identity(&self, input: &DeleteIdentityRequest) -> Box<Future<Item = DeleteIdentityResponse, Error = DeleteIdentityError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9700,11 +9782,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DeleteIdentityRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteIdentityError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteIdentityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9716,23 +9806,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteIdentityResponseDeserializer::deserialize("DeleteIdentityResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteIdentityResponseDeserializer::deserialize("DeleteIdentityResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_identity_policy(&self, input: &DeleteIdentityPolicyRequest) -> Result<DeleteIdentityPolicyResponse, DeleteIdentityPolicyError> {
+                fn delete_identity_policy(&self, input: &DeleteIdentityPolicyRequest) -> Box<Future<Item = DeleteIdentityPolicyResponse, Error = DeleteIdentityPolicyError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9741,11 +9832,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DeleteIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteIdentityPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteIdentityPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9757,23 +9856,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteIdentityPolicyResponseDeserializer::deserialize("DeleteIdentityPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteIdentityPolicyResponseDeserializer::deserialize("DeleteIdentityPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteIdentityPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteIdentityPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_receipt_filter(&self, input: &DeleteReceiptFilterRequest) -> Result<DeleteReceiptFilterResponse, DeleteReceiptFilterError> {
+                fn delete_receipt_filter(&self, input: &DeleteReceiptFilterRequest) -> Box<Future<Item = DeleteReceiptFilterResponse, Error = DeleteReceiptFilterError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9782,11 +9882,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DeleteReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteReceiptFilterError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteReceiptFilterError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9798,23 +9906,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteReceiptFilterResponseDeserializer::deserialize("DeleteReceiptFilterResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteReceiptFilterResponseDeserializer::deserialize("DeleteReceiptFilterResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteReceiptFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteReceiptFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_receipt_rule(&self, input: &DeleteReceiptRuleRequest) -> Result<DeleteReceiptRuleResponse, DeleteReceiptRuleError> {
+                fn delete_receipt_rule(&self, input: &DeleteReceiptRuleRequest) -> Box<Future<Item = DeleteReceiptRuleResponse, Error = DeleteReceiptRuleError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9823,11 +9932,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DeleteReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteReceiptRuleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteReceiptRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9839,23 +9956,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteReceiptRuleResponseDeserializer::deserialize("DeleteReceiptRuleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteReceiptRuleResponseDeserializer::deserialize("DeleteReceiptRuleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteReceiptRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteReceiptRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn delete_receipt_rule_set(&self, input: &DeleteReceiptRuleSetRequest) -> Result<DeleteReceiptRuleSetResponse, DeleteReceiptRuleSetError> {
+                fn delete_receipt_rule_set(&self, input: &DeleteReceiptRuleSetRequest) -> Box<Future<Item = DeleteReceiptRuleSetResponse, Error = DeleteReceiptRuleSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9864,11 +9982,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DeleteReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteReceiptRuleSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteReceiptRuleSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9880,23 +10006,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteReceiptRuleSetResponseDeserializer::deserialize("DeleteReceiptRuleSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DeleteReceiptRuleSetResponseDeserializer::deserialize("DeleteReceiptRuleSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Deletes the specified email address from the list of verified addresses.</p> <important> <p>The DeleteVerifiedEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The DeleteIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
-                fn delete_verified_email_address(&self, input: &DeleteVerifiedEmailAddressRequest) -> Result<(), DeleteVerifiedEmailAddressError> {
+                fn delete_verified_email_address(&self, input: &DeleteVerifiedEmailAddressRequest) -> Box<Future<Item = (), Error = DeleteVerifiedEmailAddressError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9905,22 +10032,31 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DeleteVerifiedEmailAddressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteVerifiedEmailAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DeleteVerifiedEmailAddressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DeleteVerifiedEmailAddressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(DeleteVerifiedEmailAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn describe_active_receipt_rule_set(&self, input: &DescribeActiveReceiptRuleSetRequest) -> Result<DescribeActiveReceiptRuleSetResponse, DescribeActiveReceiptRuleSetError> {
+                fn describe_active_receipt_rule_set(&self, input: &DescribeActiveReceiptRuleSetRequest) -> Box<Future<Item = DescribeActiveReceiptRuleSetResponse, Error = DescribeActiveReceiptRuleSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9929,11 +10065,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DescribeActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeActiveReceiptRuleSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeActiveReceiptRuleSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9945,23 +10089,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeActiveReceiptRuleSetResponseDeserializer::deserialize("DescribeActiveReceiptRuleSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeActiveReceiptRuleSetResponseDeserializer::deserialize("DescribeActiveReceiptRuleSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeActiveReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeActiveReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the details of the specified configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn describe_configuration_set(&self, input: &DescribeConfigurationSetRequest) -> Result<DescribeConfigurationSetResponse, DescribeConfigurationSetError> {
+                fn describe_configuration_set(&self, input: &DescribeConfigurationSetRequest) -> Box<Future<Item = DescribeConfigurationSetResponse, Error = DescribeConfigurationSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -9970,11 +10115,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DescribeConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeConfigurationSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeConfigurationSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -9986,23 +10139,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeConfigurationSetResponseDeserializer::deserialize("DescribeConfigurationSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeConfigurationSetResponseDeserializer::deserialize("DescribeConfigurationSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeConfigurationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeConfigurationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn describe_receipt_rule(&self, input: &DescribeReceiptRuleRequest) -> Result<DescribeReceiptRuleResponse, DescribeReceiptRuleError> {
+                fn describe_receipt_rule(&self, input: &DescribeReceiptRuleRequest) -> Box<Future<Item = DescribeReceiptRuleResponse, Error = DescribeReceiptRuleError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10011,11 +10165,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DescribeReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReceiptRuleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReceiptRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10027,23 +10189,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeReceiptRuleResponseDeserializer::deserialize("DescribeReceiptRuleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeReceiptRuleResponseDeserializer::deserialize("DescribeReceiptRuleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReceiptRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReceiptRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn describe_receipt_rule_set(&self, input: &DescribeReceiptRuleSetRequest) -> Result<DescribeReceiptRuleSetResponse, DescribeReceiptRuleSetError> {
+                fn describe_receipt_rule_set(&self, input: &DescribeReceiptRuleSetRequest) -> Box<Future<Item = DescribeReceiptRuleSetResponse, Error = DescribeReceiptRuleSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10052,11 +10215,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     DescribeReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(DescribeReceiptRuleSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| DescribeReceiptRuleSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10068,23 +10239,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DescribeReceiptRuleSetResponseDeserializer::deserialize("DescribeReceiptRuleSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(DescribeReceiptRuleSetResponseDeserializer::deserialize("DescribeReceiptRuleSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DescribeReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(DescribeReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this action also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This action takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This action is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn get_identity_dkim_attributes(&self, input: &GetIdentityDkimAttributesRequest) -> Result<GetIdentityDkimAttributesResponse, GetIdentityDkimAttributesError> {
+                fn get_identity_dkim_attributes(&self, input: &GetIdentityDkimAttributesRequest) -> Box<Future<Item = GetIdentityDkimAttributesResponse, Error = GetIdentityDkimAttributesError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10093,11 +10265,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     GetIdentityDkimAttributesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetIdentityDkimAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetIdentityDkimAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10109,23 +10289,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetIdentityDkimAttributesResponseDeserializer::deserialize("GetIdentityDkimAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetIdentityDkimAttributesResponseDeserializer::deserialize("GetIdentityDkimAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetIdentityDkimAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetIdentityDkimAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the custom MAIL FROM attributes for a list of identities (email addresses and/or domains).</p> <p>This action is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>"]
-                fn get_identity_mail_from_domain_attributes(&self, input: &GetIdentityMailFromDomainAttributesRequest) -> Result<GetIdentityMailFromDomainAttributesResponse, GetIdentityMailFromDomainAttributesError> {
+                fn get_identity_mail_from_domain_attributes(&self, input: &GetIdentityMailFromDomainAttributesRequest) -> Box<Future<Item = GetIdentityMailFromDomainAttributesResponse, Error = GetIdentityMailFromDomainAttributesError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10134,11 +10315,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     GetIdentityMailFromDomainAttributesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetIdentityMailFromDomainAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetIdentityMailFromDomainAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10150,23 +10339,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize("GetIdentityMailFromDomainAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize("GetIdentityMailFromDomainAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetIdentityMailFromDomainAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetIdentityMailFromDomainAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This action is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn get_identity_notification_attributes(&self, input: &GetIdentityNotificationAttributesRequest) -> Result<GetIdentityNotificationAttributesResponse, GetIdentityNotificationAttributesError> {
+                fn get_identity_notification_attributes(&self, input: &GetIdentityNotificationAttributesRequest) -> Box<Future<Item = GetIdentityNotificationAttributesResponse, Error = GetIdentityNotificationAttributesError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10175,11 +10365,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     GetIdentityNotificationAttributesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetIdentityNotificationAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetIdentityNotificationAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10191,23 +10389,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetIdentityNotificationAttributesResponseDeserializer::deserialize("GetIdentityNotificationAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetIdentityNotificationAttributesResponseDeserializer::deserialize("GetIdentityNotificationAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetIdentityNotificationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetIdentityNotificationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn get_identity_policies(&self, input: &GetIdentityPoliciesRequest) -> Result<GetIdentityPoliciesResponse, GetIdentityPoliciesError> {
+                fn get_identity_policies(&self, input: &GetIdentityPoliciesRequest) -> Box<Future<Item = GetIdentityPoliciesResponse, Error = GetIdentityPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10216,11 +10415,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     GetIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetIdentityPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetIdentityPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10232,23 +10439,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetIdentityPoliciesResponseDeserializer::deserialize("GetIdentityPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetIdentityPoliciesResponseDeserializer::deserialize("GetIdentityPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetIdentityPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetIdentityPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>"]
-                fn get_identity_verification_attributes(&self, input: &GetIdentityVerificationAttributesRequest) -> Result<GetIdentityVerificationAttributesResponse, GetIdentityVerificationAttributesError> {
+                fn get_identity_verification_attributes(&self, input: &GetIdentityVerificationAttributesRequest) -> Box<Future<Item = GetIdentityVerificationAttributesResponse, Error = GetIdentityVerificationAttributesError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10257,11 +10465,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     GetIdentityVerificationAttributesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetIdentityVerificationAttributesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetIdentityVerificationAttributesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10273,23 +10489,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetIdentityVerificationAttributesResponseDeserializer::deserialize("GetIdentityVerificationAttributesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetIdentityVerificationAttributesResponseDeserializer::deserialize("GetIdentityVerificationAttributesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetIdentityVerificationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetIdentityVerificationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the user's current sending limits.</p> <p>This action is throttled at one request per second.</p>"]
-                fn get_send_quota(&self) -> Result<GetSendQuotaResponse, GetSendQuotaError> {
+                fn get_send_quota(&self) -> Box<Future<Item = GetSendQuotaResponse, Error = GetSendQuotaError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10298,11 +10515,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetSendQuotaError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetSendQuotaError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10314,23 +10539,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetSendQuotaResponseDeserializer::deserialize("GetSendQuotaResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetSendQuotaResponseDeserializer::deserialize("GetSendQuotaResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetSendQuotaError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetSendQuotaError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns the user's sending statistics. The result is a list of data points, representing the last two weeks of sending activity.</p> <p>Each data point in the list contains statistics for a 15-minute interval.</p> <p>This action is throttled at one request per second.</p>"]
-                fn get_send_statistics(&self) -> Result<GetSendStatisticsResponse, GetSendStatisticsError> {
+                fn get_send_statistics(&self) -> Box<Future<Item = GetSendStatisticsResponse, Error = GetSendStatisticsError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10339,11 +10565,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(GetSendStatisticsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| GetSendStatisticsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10355,23 +10589,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetSendStatisticsResponseDeserializer::deserialize("GetSendStatisticsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(GetSendStatisticsResponseDeserializer::deserialize("GetSendStatisticsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetSendStatisticsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(GetSendStatisticsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the configuration sets associated with your AWS account.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second and can return up to 50 configuration sets at a time.</p>"]
-                fn list_configuration_sets(&self, input: &ListConfigurationSetsRequest) -> Result<ListConfigurationSetsResponse, ListConfigurationSetsError> {
+                fn list_configuration_sets(&self, input: &ListConfigurationSetsRequest) -> Box<Future<Item = ListConfigurationSetsResponse, Error = ListConfigurationSetsError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10380,11 +10615,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     ListConfigurationSetsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListConfigurationSetsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListConfigurationSetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10396,23 +10639,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListConfigurationSetsResponseDeserializer::deserialize("ListConfigurationSetsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListConfigurationSetsResponseDeserializer::deserialize("ListConfigurationSetsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListConfigurationSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListConfigurationSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>This action is throttled at one request per second.</p>"]
-                fn list_identities(&self, input: &ListIdentitiesRequest) -> Result<ListIdentitiesResponse, ListIdentitiesError> {
+                fn list_identities(&self, input: &ListIdentitiesRequest) -> Box<Future<Item = ListIdentitiesResponse, Error = ListIdentitiesError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10421,11 +10665,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     ListIdentitiesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListIdentitiesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListIdentitiesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10437,23 +10689,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListIdentitiesResponseDeserializer::deserialize("ListIdentitiesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListIdentitiesResponseDeserializer::deserialize("ListIdentitiesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn list_identity_policies(&self, input: &ListIdentityPoliciesRequest) -> Result<ListIdentityPoliciesResponse, ListIdentityPoliciesError> {
+                fn list_identity_policies(&self, input: &ListIdentityPoliciesRequest) -> Box<Future<Item = ListIdentityPoliciesResponse, Error = ListIdentityPoliciesError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10462,11 +10715,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     ListIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListIdentityPoliciesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListIdentityPoliciesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10478,23 +10739,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListIdentityPoliciesResponseDeserializer::deserialize("ListIdentityPoliciesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListIdentityPoliciesResponseDeserializer::deserialize("ListIdentityPoliciesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListIdentityPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListIdentityPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn list_receipt_filters(&self, input: &ListReceiptFiltersRequest) -> Result<ListReceiptFiltersResponse, ListReceiptFiltersError> {
+                fn list_receipt_filters(&self, input: &ListReceiptFiltersRequest) -> Box<Future<Item = ListReceiptFiltersResponse, Error = ListReceiptFiltersError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10503,11 +10765,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     ListReceiptFiltersRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListReceiptFiltersError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListReceiptFiltersError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10519,23 +10789,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListReceiptFiltersResponseDeserializer::deserialize("ListReceiptFiltersResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListReceiptFiltersResponseDeserializer::deserialize("ListReceiptFiltersResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListReceiptFiltersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListReceiptFiltersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn list_receipt_rule_sets(&self, input: &ListReceiptRuleSetsRequest) -> Result<ListReceiptRuleSetsResponse, ListReceiptRuleSetsError> {
+                fn list_receipt_rule_sets(&self, input: &ListReceiptRuleSetsRequest) -> Box<Future<Item = ListReceiptRuleSetsResponse, Error = ListReceiptRuleSetsError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10544,11 +10815,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     ListReceiptRuleSetsRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListReceiptRuleSetsError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListReceiptRuleSetsError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10560,23 +10839,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListReceiptRuleSetsResponseDeserializer::deserialize("ListReceiptRuleSetsResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListReceiptRuleSetsResponseDeserializer::deserialize("ListReceiptRuleSetsResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListReceiptRuleSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListReceiptRuleSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a list containing all of the email addresses that have been verified.</p> <important> <p>The ListVerifiedEmailAddresses action is deprecated as of the May 15, 2012 release of Domain Verification. The ListIdentities action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
-                fn list_verified_email_addresses(&self) -> Result<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError> {
+                fn list_verified_email_addresses(&self) -> Box<Future<Item = ListVerifiedEmailAddressesResponse, Error = ListVerifiedEmailAddressesError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10585,11 +10865,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ListVerifiedEmailAddressesError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ListVerifiedEmailAddressesError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10601,23 +10889,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListVerifiedEmailAddressesResponseDeserializer::deserialize("ListVerifiedEmailAddressesResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ListVerifiedEmailAddressesResponseDeserializer::deserialize("ListVerifiedEmailAddressesResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListVerifiedEmailAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ListVerifiedEmailAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn put_identity_policy(&self, input: &PutIdentityPolicyRequest) -> Result<PutIdentityPolicyResponse, PutIdentityPolicyError> {
+                fn put_identity_policy(&self, input: &PutIdentityPolicyRequest) -> Box<Future<Item = PutIdentityPolicyResponse, Error = PutIdentityPolicyError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10626,11 +10915,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     PutIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(PutIdentityPolicyError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| PutIdentityPolicyError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10642,23 +10939,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PutIdentityPolicyResponseDeserializer::deserialize("PutIdentityPolicyResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(PutIdentityPolicyResponseDeserializer::deserialize("PutIdentityPolicyResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PutIdentityPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(PutIdentityPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn reorder_receipt_rule_set(&self, input: &ReorderReceiptRuleSetRequest) -> Result<ReorderReceiptRuleSetResponse, ReorderReceiptRuleSetError> {
+                fn reorder_receipt_rule_set(&self, input: &ReorderReceiptRuleSetRequest) -> Box<Future<Item = ReorderReceiptRuleSetResponse, Error = ReorderReceiptRuleSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10667,11 +10965,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     ReorderReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(ReorderReceiptRuleSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| ReorderReceiptRuleSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10683,23 +10989,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ReorderReceiptRuleSetResponseDeserializer::deserialize("ReorderReceiptRuleSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(ReorderReceiptRuleSetResponseDeserializer::deserialize("ReorderReceiptRuleSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ReorderReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(ReorderReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn send_bounce(&self, input: &SendBounceRequest) -> Result<SendBounceResponse, SendBounceError> {
+                fn send_bounce(&self, input: &SendBounceRequest) -> Box<Future<Item = SendBounceResponse, Error = SendBounceError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10708,11 +11015,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SendBounceRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SendBounceError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SendBounceError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10724,23 +11039,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SendBounceResponseDeserializer::deserialize("SendBounceResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SendBounceResponseDeserializer::deserialize("SendBounceResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SendBounceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SendBounceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
-                fn send_email(&self, input: &SendEmailRequest) -> Result<SendEmailResponse, SendEmailError> {
+                fn send_email(&self, input: &SendEmailRequest) -> Box<Future<Item = SendEmailResponse, Error = SendEmailError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10749,11 +11065,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SendEmailRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SendEmailError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SendEmailError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10765,23 +11089,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SendEmailResponseDeserializer::deserialize("SendEmailResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SendEmailResponseDeserializer::deserialize("SendEmailResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SendEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SendEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email's \"Source,\" \"From,\" and \"Return-Path\" parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the \"From\" address and the \"Return Path\" address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
-                fn send_raw_email(&self, input: &SendRawEmailRequest) -> Result<SendRawEmailResponse, SendRawEmailError> {
+                fn send_raw_email(&self, input: &SendRawEmailRequest) -> Box<Future<Item = SendRawEmailResponse, Error = SendRawEmailError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10790,11 +11115,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SendRawEmailRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SendRawEmailError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SendRawEmailError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10806,23 +11139,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SendRawEmailResponseDeserializer::deserialize("SendRawEmailResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SendRawEmailResponseDeserializer::deserialize("SendRawEmailResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SendRawEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SendRawEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn set_active_receipt_rule_set(&self, input: &SetActiveReceiptRuleSetRequest) -> Result<SetActiveReceiptRuleSetResponse, SetActiveReceiptRuleSetError> {
+                fn set_active_receipt_rule_set(&self, input: &SetActiveReceiptRuleSetRequest) -> Box<Future<Item = SetActiveReceiptRuleSetResponse, Error = SetActiveReceiptRuleSetError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10831,11 +11165,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SetActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetActiveReceiptRuleSetError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetActiveReceiptRuleSetError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10847,23 +11189,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetActiveReceiptRuleSetResponseDeserializer::deserialize("SetActiveReceiptRuleSetResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetActiveReceiptRuleSetResponseDeserializer::deserialize("SetActiveReceiptRuleSetResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetActiveReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetActiveReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (e.g., <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (e.g., <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (e.g., <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (e.g., <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> action.</p> <p>This action is throttled at one request per second.</p> <p>For more information about Easy DKIM signing, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn set_identity_dkim_enabled(&self, input: &SetIdentityDkimEnabledRequest) -> Result<SetIdentityDkimEnabledResponse, SetIdentityDkimEnabledError> {
+                fn set_identity_dkim_enabled(&self, input: &SetIdentityDkimEnabledRequest) -> Box<Future<Item = SetIdentityDkimEnabledResponse, Error = SetIdentityDkimEnabledError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10872,11 +11215,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SetIdentityDkimEnabledRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetIdentityDkimEnabledError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetIdentityDkimEnabledError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10888,23 +11239,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetIdentityDkimEnabledResponseDeserializer::deserialize("SetIdentityDkimEnabledResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetIdentityDkimEnabledResponseDeserializer::deserialize("SetIdentityDkimEnabledResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetIdentityDkimEnabledError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetIdentityDkimEnabledError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn set_identity_feedback_forwarding_enabled(&self, input: &SetIdentityFeedbackForwardingEnabledRequest) -> Result<SetIdentityFeedbackForwardingEnabledResponse, SetIdentityFeedbackForwardingEnabledError> {
+                fn set_identity_feedback_forwarding_enabled(&self, input: &SetIdentityFeedbackForwardingEnabledRequest) -> Box<Future<Item = SetIdentityFeedbackForwardingEnabledResponse, Error = SetIdentityFeedbackForwardingEnabledError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10913,11 +11265,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SetIdentityFeedbackForwardingEnabledRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetIdentityFeedbackForwardingEnabledError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetIdentityFeedbackForwardingEnabledError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10929,23 +11289,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetIdentityFeedbackForwardingEnabledResponseDeserializer::deserialize("SetIdentityFeedbackForwardingEnabledResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetIdentityFeedbackForwardingEnabledResponseDeserializer::deserialize("SetIdentityFeedbackForwardingEnabledResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetIdentityFeedbackForwardingEnabledError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetIdentityFeedbackForwardingEnabledError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeadersInNotificationsEnabledRequest) -> Result<SetIdentityHeadersInNotificationsEnabledResponse, SetIdentityHeadersInNotificationsEnabledError> {
+                fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeadersInNotificationsEnabledRequest) -> Box<Future<Item = SetIdentityHeadersInNotificationsEnabledResponse, Error = SetIdentityHeadersInNotificationsEnabledError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10954,11 +11315,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SetIdentityHeadersInNotificationsEnabledRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetIdentityHeadersInNotificationsEnabledError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetIdentityHeadersInNotificationsEnabledError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -10970,23 +11339,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetIdentityHeadersInNotificationsEnabledResponseDeserializer::deserialize("SetIdentityHeadersInNotificationsEnabledResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetIdentityHeadersInNotificationsEnabledResponseDeserializer::deserialize("SetIdentityHeadersInNotificationsEnabledResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetIdentityHeadersInNotificationsEnabledError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetIdentityHeadersInNotificationsEnabledError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html\">Amazon SES Developer Guide</a>.</p> </important> <p>This action is throttled at one request per second.</p>"]
-                fn set_identity_mail_from_domain(&self, input: &SetIdentityMailFromDomainRequest) -> Result<SetIdentityMailFromDomainResponse, SetIdentityMailFromDomainError> {
+                fn set_identity_mail_from_domain(&self, input: &SetIdentityMailFromDomainRequest) -> Box<Future<Item = SetIdentityMailFromDomainResponse, Error = SetIdentityMailFromDomainError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -10995,11 +11365,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SetIdentityMailFromDomainRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetIdentityMailFromDomainError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetIdentityMailFromDomainError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11011,23 +11389,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetIdentityMailFromDomainResponseDeserializer::deserialize("SetIdentityMailFromDomainResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetIdentityMailFromDomainResponseDeserializer::deserialize("SetIdentityMailFromDomainResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetIdentityMailFromDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetIdentityMailFromDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about feedback notification, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn set_identity_notification_topic(&self, input: &SetIdentityNotificationTopicRequest) -> Result<SetIdentityNotificationTopicResponse, SetIdentityNotificationTopicError> {
+                fn set_identity_notification_topic(&self, input: &SetIdentityNotificationTopicRequest) -> Box<Future<Item = SetIdentityNotificationTopicResponse, Error = SetIdentityNotificationTopicError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -11036,11 +11415,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SetIdentityNotificationTopicRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetIdentityNotificationTopicError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetIdentityNotificationTopicError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11052,23 +11439,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetIdentityNotificationTopicResponseDeserializer::deserialize("SetIdentityNotificationTopicResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetIdentityNotificationTopicResponseDeserializer::deserialize("SetIdentityNotificationTopicResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetIdentityNotificationTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetIdentityNotificationTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn set_receipt_rule_position(&self, input: &SetReceiptRulePositionRequest) -> Result<SetReceiptRulePositionResponse, SetReceiptRulePositionError> {
+                fn set_receipt_rule_position(&self, input: &SetReceiptRulePositionRequest) -> Box<Future<Item = SetReceiptRulePositionResponse, Error = SetReceiptRulePositionError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -11077,11 +11465,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     SetReceiptRulePositionRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(SetReceiptRulePositionError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| SetReceiptRulePositionError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11093,23 +11489,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetReceiptRulePositionResponseDeserializer::deserialize("SetReceiptRulePositionResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(SetReceiptRulePositionResponseDeserializer::deserialize("SetReceiptRulePositionResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetReceiptRulePositionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(SetReceiptRulePositionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be either Amazon CloudWatch or Amazon Kinesis Firehose.</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch or Amazon Kinesis Firehose. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn update_configuration_set_event_destination(&self, input: &UpdateConfigurationSetEventDestinationRequest) -> Result<UpdateConfigurationSetEventDestinationResponse, UpdateConfigurationSetEventDestinationError> {
+                fn update_configuration_set_event_destination(&self, input: &UpdateConfigurationSetEventDestinationRequest) -> Box<Future<Item = UpdateConfigurationSetEventDestinationResponse, Error = UpdateConfigurationSetEventDestinationError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -11118,11 +11515,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     UpdateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateConfigurationSetEventDestinationError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateConfigurationSetEventDestinationError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11134,23 +11539,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UpdateConfigurationSetEventDestinationResponseDeserializer::deserialize("UpdateConfigurationSetEventDestinationResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UpdateConfigurationSetEventDestinationResponseDeserializer::deserialize("UpdateConfigurationSetEventDestinationResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
-                fn update_receipt_rule(&self, input: &UpdateReceiptRuleRequest) -> Result<UpdateReceiptRuleResponse, UpdateReceiptRuleError> {
+                fn update_receipt_rule(&self, input: &UpdateReceiptRuleRequest) -> Box<Future<Item = UpdateReceiptRuleResponse, Error = UpdateReceiptRuleError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -11159,11 +11565,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     UpdateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(UpdateReceiptRuleError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| UpdateReceiptRuleError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11175,23 +11589,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(UpdateReceiptRuleResponseDeserializer::deserialize("UpdateReceiptRuleResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(UpdateReceiptRuleResponseDeserializer::deserialize("UpdateReceiptRuleResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UpdateReceiptRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(UpdateReceiptRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>This action is throttled at one request per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> action.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
-                fn verify_domain_dkim(&self, input: &VerifyDomainDkimRequest) -> Result<VerifyDomainDkimResponse, VerifyDomainDkimError> {
+                fn verify_domain_dkim(&self, input: &VerifyDomainDkimRequest) -> Box<Future<Item = VerifyDomainDkimResponse, Error = VerifyDomainDkimError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -11200,11 +11615,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     VerifyDomainDkimRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(VerifyDomainDkimError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| VerifyDomainDkimError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11216,23 +11639,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(VerifyDomainDkimResponseDeserializer::deserialize("VerifyDomainDkimResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(VerifyDomainDkimResponseDeserializer::deserialize("VerifyDomainDkimResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(VerifyDomainDkimError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(VerifyDomainDkimError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Verifies a domain.</p> <p>This action is throttled at one request per second.</p>"]
-                fn verify_domain_identity(&self, input: &VerifyDomainIdentityRequest) -> Result<VerifyDomainIdentityResponse, VerifyDomainIdentityError> {
+                fn verify_domain_identity(&self, input: &VerifyDomainIdentityRequest) -> Box<Future<Item = VerifyDomainIdentityResponse, Error = VerifyDomainIdentityError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -11241,11 +11665,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     VerifyDomainIdentityRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(VerifyDomainIdentityError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| VerifyDomainIdentityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11257,23 +11689,24 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(VerifyDomainIdentityResponseDeserializer::deserialize("VerifyDomainIdentityResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(VerifyDomainIdentityResponseDeserializer::deserialize("VerifyDomainIdentityResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(VerifyDomainIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(VerifyDomainIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <important> <p>The VerifyEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The VerifyEmailIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
-                fn verify_email_address(&self, input: &VerifyEmailAddressRequest) -> Result<(), VerifyEmailAddressError> {
+                fn verify_email_address(&self, input: &VerifyEmailAddressRequest) -> Box<Future<Item = (), Error = VerifyEmailAddressError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -11282,22 +11715,31 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     VerifyEmailAddressRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(VerifyEmailAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(VerifyEmailAddressError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| VerifyEmailAddressError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    let result = ();
+                                    future::ok(result)
+                                }
+                                _ => future::err(VerifyEmailAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 
                 #[doc="<p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <p>This action is throttled at one request per second.</p>"]
-                fn verify_email_identity(&self, input: &VerifyEmailIdentityRequest) -> Result<VerifyEmailIdentityResponse, VerifyEmailIdentityError> {
+                fn verify_email_identity(&self, input: &VerifyEmailIdentityRequest) -> Box<Future<Item = VerifyEmailIdentityResponse, Error = VerifyEmailIdentityError>> {
                     let mut request = SignedRequest::new("POST", "email", self.region, "/");
                     let mut params = Params::new();
 
@@ -11306,11 +11748,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
                     VerifyEmailIdentityRequestSerializer::serialize(&mut params, "", &input);
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
+                    let credentials = match self.credentials_provider.credentials() {
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err(VerifyEmailIdentityError::from(err)))
+                    };
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| VerifyEmailIdentityError::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {
+                                StatusCode::Ok => {
+                                    
         let result;
 
         if response.body.is_empty() {
@@ -11322,18 +11772,19 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(VerifyEmailIdentityResponseDeserializer::deserialize("VerifyEmailIdentityResult", &mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
+            try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!(VerifyEmailIdentityResponseDeserializer::deserialize("VerifyEmailIdentityResult", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
+                     try_future!(end_element(&actual_tag_name, &mut stack));
         }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(VerifyEmailIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
+                                    future::ok(result)
+                                }
+                                _ => future::err(VerifyEmailIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }
+                        );
+
+                    Box::new(res)
                 }
                 
 }
@@ -11359,45 +11810,12 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
         }
             
         #[test]
-        fn test_parse_valid_ses_delete_identity() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-delete-identity.xml");
+        fn test_parse_valid_ses_get_send_statistics() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-get-send-statistics.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DeleteIdentityRequest::default();
-            let result = client.delete_identity(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ses_get_identity_dkim_attributes() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-get-identity-dkim-attributes.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetIdentityDkimAttributesRequest::default();
-            let result = client.get_identity_dkim_attributes(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ses_get_identity_notification_attributes() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-get-identity-notification-attributes.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetIdentityNotificationAttributesRequest::default();
-            let result = client.get_identity_notification_attributes(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ses_get_identity_verification_attributes() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-get-identity-verification-attributes.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetIdentityVerificationAttributesRequest::default();
-            let result = client.get_identity_verification_attributes(&request);
+            
+            let result = client.get_send_statistics();
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -11414,45 +11832,12 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ses_get_send_statistics() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-get-send-statistics.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            
-            let result = client.get_send_statistics();
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ses_list_identities() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-list-identities.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListIdentitiesRequest::default();
-            let result = client.list_identities(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
         fn test_parse_valid_ses_send_email() {
             let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-send-email.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = SendEmailRequest::default();
             let result = client.send_email(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_ses_send_raw_email() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-send-raw-email.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = SendRawEmailRequest::default();
-            let result = client.send_raw_email(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -11469,12 +11854,34 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
 
 
         #[test]
-        fn test_parse_valid_ses_verify_domain_dkim() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-verify-domain-dkim.xml");
+        fn test_parse_valid_ses_send_raw_email() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-send-raw-email.xml");
             let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
             let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = VerifyDomainDkimRequest::default();
-            let result = client.verify_domain_dkim(&request);
+            let request = SendRawEmailRequest::default();
+            let result = client.send_raw_email(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ses_get_identity_notification_attributes() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-get-identity-notification-attributes.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = GetIdentityNotificationAttributesRequest::default();
+            let result = client.get_identity_notification_attributes(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ses_delete_identity() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-delete-identity.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = DeleteIdentityRequest::default();
+            let result = client.delete_identity(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
 
@@ -11486,6 +11893,50 @@ VerifyEmailIdentityError::Unknown(ref cause) => cause
             let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             let request = VerifyDomainIdentityRequest::default();
             let result = client.verify_domain_identity(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ses_verify_domain_dkim() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-verify-domain-dkim.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = VerifyDomainDkimRequest::default();
+            let result = client.verify_domain_dkim(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ses_get_identity_verification_attributes() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-get-identity-verification-attributes.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = GetIdentityVerificationAttributesRequest::default();
+            let result = client.get_identity_verification_attributes(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ses_get_identity_dkim_attributes() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-get-identity-dkim-attributes.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = GetIdentityDkimAttributesRequest::default();
+            let result = client.get_identity_dkim_attributes(&request);
+            assert!(result.is_ok(), "parse error: {:?}", result);
+        }
+
+
+        #[test]
+        fn test_parse_valid_ses_list_identities() {
+            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "ses-list-identities.xml");
+            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            let request = ListIdentitiesRequest::default();
+            let result = client.list_identities(&request);
             assert!(result.is_ok(), "parse error: {:?}", result);
         }
             }
